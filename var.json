@@ -1,6 +1,7 @@
 {
   "light": {},
   "dark": {
-    "--maincolor": "#fff"
+    "--maincolor": "#fff",
+    "--bg": "#1e1e1e"
   }
 }
