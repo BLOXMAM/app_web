@@ -11,19 +11,29 @@
             -moz-user-select: none !important;
             -ms-user-select: none !important;
         }
+body {
+background-color: var(--bg);
+color: var(--maincolor)} 
+
     </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style id="admin-styles">
         :root {
             --drawer-bg-light: #ffffff;
             --drawer-text-light: #333333;
             --drawer-bg: var(--drawer-bg-light);
             --drawer-text: var(--drawer-text-light);
+        --maincolor: #000;
+        --bg: #fff;
         }
         [data-user-theme="dark"] {
             --drawer-bg-dark: #1e1e1e;
             --drawer-text-dark: #e0e0e0;
             --drawer-bg: var(--drawer-bg-dark);
             --drawer-text: var(--drawer-text-dark);
+        --maincolor: #fff;
+        --bg: #1e1e1e;
         }
         * {
             -webkit-user-select: none !important;
@@ -120,10 +130,12 @@
 </nav>
 <!-- END ADMIN DRAWER -->
 
+
 <main style="padding: 20px;">
     <h1 id="pageContentTitle">صفحة home</h1>
     <p>محتوى الصفحة الافتراضي المخصص لك.</p>
 </main>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
