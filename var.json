@@ -1,5 +1,7 @@
 {
-  "light": {},
+  "light": {
+    "--maincolor": "#000"
+  },
   "dark": {
     "--maincolor": "#fff",
     "--bg": "#1e1e1e"
