@@ -12,6 +12,12 @@
     "hidden": false
   },
   {
+    "file": "bill.html",
+    "title": "bill",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "home.html",
     "title": "home",
     "icon": "fa-solid fa-file",
