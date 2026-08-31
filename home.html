@@ -143,6 +143,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -297,6 +301,7 @@
 
 
 
+
 <div class="page">
   <div class="page-header">
     <h1>🎯 منصة التحديات</h1>
@@ -394,8 +399,16 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadData);
+  // ملاحظة: لا نستخدم DOMContentLoaded هنا لأن هذا الحدث يصير مرة واحدة فقط
+  // على صفحة الـ SPA loader نفسها، وبوقت حقن هذه الصفحة يكون قد فات فعلاً
+  // فلا ينفذ أبدًا. عناصر الـ DOM أصلًا جاهزة وقت تنفيذ هذا السكربت، فنستدعي مباشرة.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadData);
+  } else {
+    loadData();
+  }
 </script>
+
 
 
 
