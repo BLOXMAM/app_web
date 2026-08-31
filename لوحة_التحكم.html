@@ -30,7 +30,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
-    body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 110px; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 170px; }
 
     /* ===== شريط علوي ثابت ===== */
     .topbar {
@@ -267,15 +267,15 @@
       min-width: 0;
       padding: 10px 12px;
       border-radius: 10px;
-      border: 1.5px solid transparent;
-      background: transparent;
+      border: 1.5px solid var(--w2);
+      background: #fff;
       font-family: 'Tajawal', sans-serif;
       font-weight: 700;
       font-size: 0.95rem;
       color: var(--text);
     }
-    .chapter-title-input:hover { background: #fff; border-color: var(--w2); }
-    .chapter-title-input:focus { outline: none; background: #fff; border-color: var(--primary); }
+    .chapter-title-input:hover { border-color: var(--muted); }
+    .chapter-title-input:focus { outline: none; background: #fff; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(79,70,229,0.08); }
 
     .lesson-count-badge {
       font-size: 0.72rem;
@@ -830,12 +830,20 @@
       el.className = 'dirty-indicator';
       text.innerText = 'لا توجد تغييرات';
     }
+    requestAnimationFrame(adjustBodyPadding);
   }
 
   function toggleSettingsForm() {
     document.getElementById('settings-form').style.display = 'block';
     document.getElementById('connection-summary').style.display = 'none';
   }
+
+  function adjustBodyPadding() {
+    const bar = document.getElementById('save-bar');
+    if (bar.style.display === 'none' || !bar.offsetHeight) return;
+    document.body.style.paddingBottom = (bar.offsetHeight + 28) + 'px';
+  }
+  window.addEventListener('resize', adjustBodyPadding);
 
   // ============ التخزين المحلي ============
   function saveSettingsToStorage() {
@@ -931,6 +939,7 @@
     pill.innerHTML = '<span class="status-dot"></span> متصل';
 
     updateDirtyIndicator();
+    requestAnimationFrame(adjustBodyPadding);
   }
 
   function renderConfigSnippet() {
@@ -972,6 +981,7 @@
                  value="${escapeAttr(chapter.title)}" placeholder="اسم الفصل">
           <span class="lesson-count-badge">${lessonsCount} ${lessonsCount === 1 ? 'درس' : 'دروس'}</span>
           <div class="header-actions">
+            <button class="icon-btn" title="تعديل الاسم" data-action="focus-chapter-title" data-ci="${ci}">✏️</button>
             <button class="icon-btn" title="نقل لأعلى" data-action="move-chapter-up" data-ci="${ci}">⬆️</button>
             <button class="icon-btn" title="نقل لأسفل" data-action="move-chapter-down" data-ci="${ci}">⬇️</button>
             <button class="icon-btn danger" title="حذف الفصل" data-action="delete-chapter" data-ci="${ci}">🗑️</button>
@@ -1008,6 +1018,7 @@
           <input type="text" class="lesson-name-input" data-ci="${ci}" data-li="${li}" data-field="lesson-name"
                  value="${escapeAttr(lesson.name)}" placeholder="اسم الدرس">
           <div class="row-actions">
+            <button class="icon-btn" title="تعديل الاسم" data-action="focus-lesson-name" data-ci="${ci}" data-li="${li}">✏️</button>
             <button class="icon-btn" title="نقل لأعلى" data-action="move-lesson-up" data-ci="${ci}" data-li="${li}">⬆️</button>
             <button class="icon-btn" title="نقل لأسفل" data-action="move-lesson-down" data-ci="${ci}" data-li="${li}">⬇️</button>
             <button class="icon-btn danger" title="حذف الدرس" data-action="delete-lesson" data-ci="${ci}" data-li="${li}">🗑️</button>
@@ -1056,6 +1067,19 @@
     if (action === 'toggle-chapter') {
       if (collapsedChapters.has(ci)) collapsedChapters.delete(ci); else collapsedChapters.add(ci);
       renderEditor();
+    } else if (action === 'focus-chapter-title') {
+      const input = btn.closest('.chapter-editor-header').querySelector('.chapter-title-input');
+      if (collapsedChapters.has(ci)) { collapsedChapters.delete(ci); renderEditor(); }
+      requestAnimationFrame(() => {
+        const el = document.querySelector(`.chapter-title-input[data-ci="${ci}"]`);
+        if (el) { el.focus(); el.select(); }
+      });
+    } else if (action === 'focus-lesson-name') {
+      const li = Number(btn.dataset.li);
+      requestAnimationFrame(() => {
+        const el = document.querySelector(`.lesson-name-input[data-ci="${ci}"][data-li="${li}"]`);
+        if (el) { el.focus(); el.select(); }
+      });
     } else if (action === 'delete-chapter') {
       if (confirm('هل تريد حذف هذا الفصل وجميع دروسه؟')) { chapters.splice(ci, 1); markDirty(); renderEditor(); }
     } else if (action === 'move-chapter-up' && ci > 0) {
