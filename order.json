@@ -1,5 +1,11 @@
 [
   {
+    "file": "لوحة_التحكم.html",
+    "title": "-الإدارة-",
+    "icon": "fa-solid fa-cog",
+    "hidden": false
+  },
+  {
     "file": "home.html",
     "title": "home",
     "icon": "fa-solid fa-file",
