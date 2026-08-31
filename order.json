@@ -7,9 +7,9 @@
   },
   {
     "file": "drajcmath.html",
-    "title": "drajcmath",
-    "icon": "fa-solid fa-file",
-    "hidden": false
+    "title": "التبرير الإستقرائي والتخمين",
+    "icon": "fa fa-book",
+    "hidden": true
   },
   {
     "file": "home.html",
