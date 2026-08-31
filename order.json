@@ -18,6 +18,12 @@
     "hidden": false
   },
   {
+    "file": "drajcmath.html",
+    "title": "drajcmath",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "home.html",
     "title": "home",
     "icon": "fa-solid fa-file",
