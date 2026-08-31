@@ -135,6 +135,10 @@
     .toast.toast-error { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); }
     .toast.toast-warning { background: linear-gradient(135deg, var(--warning), var(--warning-dark)); }
   </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -145,20 +149,26 @@
             --drawer-text-light: #333333;
             --drawer-bg: var(--drawer-bg-light);
             --drawer-text: var(--drawer-text-light);
-        --maincolor: #000;
-        --bg: #fff;
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
         }
         [data-user-theme="dark"] {
-            --header-bg-dark: #1e1e1e;
-            --header-text-dark: #e0e0e0;
+            --header-bg-dark: #ffffff;
+            --header-text-dark: #333333;
             --header-bg: var(--header-bg-dark);
             --header-text: var(--header-text-dark);
-            --drawer-bg-dark: #1e1e1e;
-            --drawer-text-dark: #e0e0e0;
+            --drawer-bg-dark: #ffffff;
+            --drawer-text-dark: #333333;
             --drawer-bg: var(--drawer-bg-dark);
             --drawer-text: var(--drawer-text-dark);
-        --maincolor: #fff;
-        --bg: #1e1e1e;
         }
         html {
             width: 100% !important;
@@ -267,7 +277,6 @@
         </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">home</span>
     </div>
-    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
 </header>
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
 <nav class="drawer" id="drawer">
@@ -281,6 +290,7 @@
     <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
 </nav>
 <!-- END ADMIN DRAWER -->
+
 
 <div class="page">
   <div class="page-header">
@@ -381,6 +391,7 @@
 
   document.addEventListener('DOMContentLoaded', loadData);
 </script>
+
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
