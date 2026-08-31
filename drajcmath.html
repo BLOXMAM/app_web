@@ -410,14 +410,7 @@
     }
   }
 
-  // ملاحظة: لا نستخدم DOMContentLoaded هنا لأن هذا الحدث يصير مرة واحدة فقط
-  // على صفحة الـ SPA loader نفسها، وبوقت حقن هذه الصفحة يكون قد فات فعلاً
-  // فلا ينفذ أبدًا. عناصر الـ DOM أصلًا جاهزة وقت تنفيذ هذا السكربت، فنستدعي مباشرة.
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadData);
-  } else {
-    loadData();
-  }
+  document.addEventListener('DOMContentLoaded', loadData);
 </script>
 
 
