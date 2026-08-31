@@ -7,71 +7,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #EEF2FF;
+      --bg: #F3F4FB;
       --card-bg: #FFFFFF;
       --text: #1E1B4B;
       --subtext: #64748B;
+      --muted: #94A3B8;
       --w1: #F1F5F9;
       --w2: #E2E8F0;
       --primary: #4F46E5;
       --primary-dark: #4338CA;
+      --primary-light: #EEF2FF;
       --success: #16A34A;
       --success-dark: #15803D;
+      --success-bg: #F0FDF4;
       --danger: #DC2626;
       --danger-dark: #B91C1C;
+      --danger-bg: #FEF2F2;
       --warning: #D97706;
       --warning-dark: #B45309;
+      --warning-bg: #FFFBEB;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 28px 16px 110px;
+    body { background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 110px; }
+
+    /* ===== شريط علوي ثابت ===== */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 400;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--w2);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .page { width: 100%; max-width: 720px; margin: 0 auto; }
+    .topbar-inner {
+      width: 100%;
+      max-width: 760px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
 
-    .page-header { text-align: center; margin-bottom: 24px; }
-    .page-header h1 { font-size: 1.7rem; margin-bottom: 6px; }
-    .page-header p { color: var(--subtext); font-size: 0.9rem; }
+    .topbar-title { display: flex; align-items: center; gap: 10px; font-size: 1.15rem; font-weight: 900; }
+    .topbar-title span.emoji { font-size: 1.3rem; }
 
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: var(--w1);
+      color: var(--subtext);
+    }
+    .status-pill.online { background: var(--success-bg); color: var(--success-dark); }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+    .page { width: 100%; max-width: 760px; margin: 0 auto; padding: 24px 16px 0; }
+
+    /* ===== بطاقات عامة ===== */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--w2);
       border-radius: 20px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 20px -8px rgba(30, 27, 75, 0.08);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 24px -12px rgba(30, 27, 75, 0.10);
     }
 
-    .card h2 {
+    .card-title {
       font-size: 1.05rem;
-      margin-bottom: 16px;
+      font-weight: 800;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
+    .card-subtitle { font-size: 0.85rem; color: var(--subtext); margin-bottom: 18px; line-height: 1.6; }
+
     .field { margin-bottom: 14px; }
-    .field label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px; color: var(--subtext); }
-    .field input, .field select {
+    .field label { display: block; font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; color: var(--subtext); }
+    .field input {
       width: 100%;
-      padding: 11px 14px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
       border: 1.5px solid var(--w2);
       background: var(--w1);
       color: var(--text);
       font-family: 'Tajawal', sans-serif;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
+      transition: all 0.15s;
     }
-    .field input:focus, .field select:focus { outline: none; border-color: var(--primary); background: #fff; }
-    .field-hint { font-size: 0.75rem; color: var(--subtext); margin-top: 5px; }
+    .field input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(79,70,229,0.08); }
+    .field-hint { font-size: 0.75rem; color: var(--subtext); margin-top: 6px; line-height: 1.6; }
+    .field-hint b { color: var(--text); }
 
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
 
+    /* ===== أزرار ===== */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -79,68 +122,131 @@
       gap: 8px;
       border: none;
       border-radius: 12px;
-      padding: 12px 18px;
+      padding: 13px 18px;
       font-family: 'Tajawal', sans-serif;
       font-weight: 700;
       font-size: 0.92rem;
       cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.2s, opacity 0.15s;
+      transition: transform 0.1s, box-shadow 0.2s, opacity 0.15s, background 0.15s;
     }
     .btn:active { transform: scale(0.98); }
-    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; width: 100%; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; width: 100%; box-shadow: 0 8px 18px -8px rgba(79,70,229,0.55); }
     .btn-secondary { background: var(--w1); color: var(--text); border: 1.5px solid var(--w2); }
-    .btn-danger-outline { background: #FEF2F2; color: var(--danger); border: 1.5px solid #FCA5A5; }
-    .btn-sm { padding: 8px 12px; font-size: 0.82rem; border-radius: 10px; }
-    .btn-icon { background: transparent; border: none; cursor: pointer; font-size: 1.05rem; padding: 6px; border-radius: 8px; }
-    .btn-icon:hover { background: var(--w2); }
+    .btn-secondary:hover { background: var(--w2); }
+    .btn-danger-outline { background: var(--danger-bg); color: var(--danger); border: 1.5px solid #FCA5A5; }
+    .btn-danger-outline:hover { background: #FEE2E2; }
+    .btn-sm { padding: 9px 14px; font-size: 0.82rem; border-radius: 10px; }
+    .btn-block { width: 100%; }
 
-    /* شريط حالة الاتصال بعد النجاح */
+    .icon-btn {
+      background: var(--w1);
+      border: 1px solid var(--w2);
+      cursor: pointer;
+      font-size: 0.95rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .icon-btn:hover { background: var(--w2); }
+    .icon-btn.danger:hover { background: var(--danger-bg); border-color: #FCA5A5; }
+
+    /* ===== ملخص الاتصال ===== */
     .connection-summary {
       display: none;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      background: #F0FDF4;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: var(--success-bg);
       border: 1px solid #BBF7D0;
       color: var(--success-dark);
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 14px 18px;
+      border-radius: 14px;
       font-size: 0.88rem;
-      font-weight: 600;
+      font-weight: 700;
     }
+    .connection-summary-actions { display: flex; gap: 8px; }
 
     .snippet-box {
       background: #0F172A;
       color: #E2E8F0;
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-family: monospace;
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
       font-size: 0.78rem;
-      line-height: 1.7;
+      line-height: 1.75;
       white-space: pre-wrap;
       direction: ltr;
       text-align: left;
-      margin-top: 10px;
+      margin-top: 14px;
       display: none;
+      position: relative;
     }
+    .snippet-label { display: block; direction: rtl; text-align: right; color: #94A3B8; font-family: 'Tajawal', sans-serif; font-size: 0.78rem; margin-bottom: 8px; }
 
-    /* ===== محرر الفصول ===== */
+    /* ===== قسم إضافة فصل ===== */
+    .section-heading {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .section-heading h2 { font-size: 1.05rem; font-weight: 800; }
+
     #chapters-editor { display: none; }
 
+    .empty-state {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--card-bg);
+      border: 1.5px dashed var(--w2);
+      border-radius: 18px;
+      color: var(--subtext);
+    }
+    .empty-state .emoji { font-size: 2.2rem; margin-bottom: 10px; }
+    .empty-state p { font-size: 0.9rem; margin-bottom: 16px; }
+
+    /* ===== محرر الفصل ===== */
     .chapter-editor {
-      background: var(--w1);
-      border: 1.5px solid var(--w2);
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--w2);
+      border-radius: 18px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 18px -12px rgba(30, 27, 75, 0.12);
     }
 
     .chapter-editor-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 14px;
+      padding: 14px 16px;
+      background: var(--w1);
+      border-bottom: 1px solid var(--w2);
     }
+
+    .chevron-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--subtext);
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+    .chevron-btn:hover { background: var(--w2); }
 
     .chapter-badge {
       display: inline-flex;
@@ -148,7 +254,7 @@
       justify-content: center;
       min-width: 30px;
       height: 30px;
-      border-radius: 8px;
+      border-radius: 9px;
       background: var(--primary);
       color: #fff;
       font-weight: 900;
@@ -158,33 +264,95 @@
 
     .chapter-title-input {
       flex: 1;
+      min-width: 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid transparent;
+      background: transparent;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+    .chapter-title-input:hover { background: #fff; border-color: var(--w2); }
+    .chapter-title-input:focus { outline: none; background: #fff; border-color: var(--primary); }
+
+    .lesson-count-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--subtext);
+      background: #fff;
+      border: 1px solid var(--w2);
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .header-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+    .chapter-body { padding: 16px; }
+    .chapter-body.is-hidden { display: none; }
+
+    .lessons-editor { display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; }
+
+    .lesson-row {
+      background: var(--w1);
+      border: 1.5px solid var(--w2);
+      border-radius: 14px;
+      padding: 12px;
+      border-inline-end: 4px solid var(--status-color, var(--w2));
+    }
+
+    .lesson-row-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+
+    .lesson-name-input {
+      flex: 1;
+      min-width: 0;
       padding: 10px 12px;
       border-radius: 10px;
       border: 1.5px solid var(--w2);
       background: #fff;
       font-family: 'Tajawal', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-    .chapter-title-input:focus { outline: none; border-color: var(--primary); }
+    .lesson-name-input:focus { outline: none; border-color: var(--primary); }
 
-    .lessons-editor { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+    .row-actions { display: flex; gap: 5px; flex-shrink: 0; }
 
-    .lesson-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
+    .lesson-type-toggle { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+
+    .type-btn {
+      flex: 1 1 auto;
       background: #fff;
       border: 1.5px solid var(--w2);
-      border-radius: 12px;
-      padding: 10px;
+      color: var(--subtext);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
     }
+    .type-btn:hover { border-color: var(--muted); }
+    .type-btn.active.type-link { background: var(--success); border-color: var(--success); color: #fff; }
+    .type-btn.active.type-empty { background: var(--warning); border-color: var(--warning); color: #fff; }
+    .type-btn.active.type-false { background: var(--subtext); border-color: var(--subtext); color: #fff; }
 
-    .lesson-name-input { flex: 1 1 160px; padding: 9px 12px; border-radius: 9px; border: 1.5px solid var(--w2); font-family: 'Tajawal', sans-serif; font-size: 0.88rem; }
-    .lesson-type-select { flex: 1 1 170px; padding: 9px 10px; border-radius: 9px; border: 1.5px solid var(--w2); font-family: 'Tajawal', sans-serif; font-size: 0.85rem; background: #fff; }
-    .lesson-href-input { flex: 1 1 100%; padding: 9px 12px; border-radius: 9px; border: 1.5px solid var(--w2); font-family: 'Tajawal', sans-serif; font-size: 0.85rem; direction: ltr; text-align: left; }
-    .lesson-name-input:focus, .lesson-type-select:focus, .lesson-href-input:focus { outline: none; border-color: var(--primary); }
+    .lesson-href-input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--w2);
+      background: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.85rem;
+      direction: ltr;
+      text-align: left;
+    }
+    .lesson-href-input:focus { outline: none; border-color: var(--primary); }
 
     /* ===== شريط الحفظ الثابت ===== */
     .save-bar {
@@ -195,36 +363,46 @@
       background: var(--card-bg);
       border-top: 1px solid var(--w2);
       padding: 14px 16px;
-      box-shadow: 0 -10px 25px -10px rgba(30, 27, 75, 0.15);
+      box-shadow: 0 -12px 28px -12px rgba(30, 27, 75, 0.18);
       display: none;
       z-index: 500;
     }
-    .save-bar-inner { max-width: 720px; margin: 0 auto; display: flex; gap: 10px; }
-    .save-bar-inner .btn-primary { background: linear-gradient(135deg, var(--success), var(--success-dark)); }
+    .save-bar-inner { max-width: 760px; margin: 0 auto; }
+    .dirty-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--subtext);
+      margin-bottom: 10px;
+    }
+    .dirty-indicator .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--w2); }
+    .dirty-indicator.dirty { color: var(--warning-dark); }
+    .dirty-indicator.dirty .dot { background: var(--warning); }
+    .dirty-indicator.saved { color: var(--success-dark); }
+    .dirty-indicator.saved .dot { background: var(--success); }
+
+    .save-bar-buttons { display: flex; gap: 10px; }
+    .save-bar-buttons .btn-primary { background: linear-gradient(135deg, var(--success), var(--success-dark)); box-shadow: 0 8px 18px -8px rgba(22,163,74,0.5); }
+    .save-bar-buttons .btn-secondary { flex: 0 0 auto; }
+    .save-bar-buttons #btn-save { flex: 1; }
 
     /* ===== Toast ===== */
     .toast {
-      position: fixed; bottom: -120px; left: 50%; transform: translateX(-50%) scale(0.92);
+      position: fixed; bottom: -140px; left: 50%; transform: translateX(-50%) scale(0.92);
       display: flex; align-items: center; gap: 12px; padding: 15px 22px; border-radius: 16px;
       font-size: 0.95rem; font-weight: 600; color: #fff; z-index: 1000; opacity: 0; pointer-events: none;
       max-width: min(90vw, 420px);
       transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
       box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
     }
-    .toast.show { bottom: 110px; opacity: 1; transform: translateX(-50%) scale(1); }
+    .toast.show { bottom: 130px; opacity: 1; transform: translateX(-50%) scale(1); }
     .toast-icon { font-size: 1.25rem; line-height: 1; flex-shrink: 0; }
     .toast.toast-success { background: linear-gradient(135deg, var(--success), var(--success-dark)); }
     .toast.toast-error { background: linear-gradient(135deg, var(--danger), var(--danger-dark)); }
     .toast.toast-warning { background: linear-gradient(135deg, var(--warning), var(--warning-dark)); }
   </style>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
 <style id="admin-styles">
         :root {
             --header-bg-light: #ffffff;
@@ -510,28 +688,25 @@
 <!-- END PASSWORD PROTECTION -->
 
 
-
-
-
-
-
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-title"><span class="emoji">⚙️</span> لوحة تحكم التحديات</div>
+    <span class="status-pill" id="status-pill"><span class="status-dot"></span> غير متصل</span>
+  </div>
+</div>
 
 <div class="page">
 
-  <div class="page-header">
-    <h1>⚙️ لوحة تحكم التحديات</h1>
-    <p>أضف الفصول والدروس هنا، واحفظها مباشرة إلى GitHub</p>
-  </div>
-
   <!-- ===== بطاقة الاتصال بـ GitHub ===== -->
   <div class="card" id="connection-card">
-    <h2>🔗 الاتصال بمستودع GitHub</h2>
+    <div class="card-title">🔗 الاتصال بمستودع GitHub</div>
+    <div class="card-subtitle">أدخل بيانات المستودع مرة واحدة، وسيتم حفظها في متصفحك للمرات القادمة.</div>
 
     <div class="connection-summary" id="connection-summary">
       <span id="connection-summary-text"></span>
-      <div style="display:flex; gap:8px;">
+      <div class="connection-summary-actions">
         <button class="btn btn-sm btn-secondary" onclick="toggleSettingsForm()">تعديل الإعدادات</button>
-        <button class="btn btn-sm btn-danger-outline" onclick="clearSavedSettings()">نسيان البيانات المحفوظة</button>
+        <button class="btn btn-sm btn-danger-outline" onclick="clearSavedSettings()">نسيان البيانات</button>
       </div>
     </div>
 
@@ -560,21 +735,30 @@
         <label>Personal Access Token</label>
         <input type="password" id="input-token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
         <div class="field-hint">
-          يلزم صلاحية <b>Contents: Read and write</b>. ⚠️ يتم حفظ هذه البيانات (بما فيها التوكن) في متصفحك محليًا
-          حتى لا تُعيد كتابتها كل مرة — لا تستخدم هذا على جهاز عام أو مشترك، واستخدم زر "نسيان البيانات المحفوظة"
-          عند الانتهاء إذا كان الجهاز غير خاص بك.
+          يلزم صلاحية <b>Contents: Read and write</b>. ⚠️ تُحفظ هذه البيانات (بما فيها التوكن) محليًا في متصفحك —
+          لا تستخدمها على جهاز عام، واستخدم زر "نسيان البيانات" عند الانتهاء إن لزم.
         </div>
       </div>
       <button class="btn btn-primary" onclick="connectAndLoad()">🔌 اتصال وتحميل البيانات</button>
     </div>
 
-    <div class="snippet-box" id="config-snippet"></div>
+    <div class="snippet-box" id="config-snippet">
+      <span class="snippet-label">📋 الصق هذا في أعلى سكربت الصفحة الرئيسية (يستبدل CONFIG الحالي):</span>
+      <span id="snippet-code"></span>
+    </div>
   </div>
 
-  <!-- ===== محرر الفصول والدروس ===== -->
-  <button class="btn btn-primary" id="btn-add-chapter" style="display:none; margin-bottom: 16px;" onclick="addChapter()">
-    ＋ إضافة فصل جديد
-  </button>
+  <!-- ===== قسم الفصول ===== -->
+  <div class="section-heading" id="section-heading">
+    <h2>📚 الفصول والدروس</h2>
+    <button class="btn btn-primary btn-sm" style="width:auto;" onclick="addChapter()">＋ فصل جديد</button>
+  </div>
+
+  <div class="empty-state" id="empty-state">
+    <div class="emoji">🗂️</div>
+    <p>ما فيه أي فصول لسه. ابدأ بإضافة أول فصل.</p>
+    <button class="btn btn-primary" style="width:auto; margin: 0 auto;" onclick="addChapter()">＋ إضافة أول فصل</button>
+  </div>
 
   <div id="chapters-editor"></div>
 
@@ -582,8 +766,11 @@
 
 <div class="save-bar" id="save-bar">
   <div class="save-bar-inner">
-    <button class="btn btn-secondary" style="flex: 0 0 auto;" onclick="connectAndLoad(true)">↻ تحديث من GitHub</button>
-    <button class="btn btn-primary" style="flex: 1;" id="btn-save" onclick="saveToGitHub()">💾 حفظ جميع التغييرات على GitHub</button>
+    <div class="dirty-indicator" id="dirty-indicator"><span class="dot"></span><span id="dirty-text">لا توجد تغييرات</span></div>
+    <div class="save-bar-buttons">
+      <button class="btn btn-secondary" onclick="connectAndLoad(true)">↻ تحديث</button>
+      <button class="btn btn-primary" id="btn-save" onclick="saveToGitHub()">💾 حفظ كل التغييرات</button>
+    </div>
   </div>
 </div>
 
@@ -593,46 +780,10 @@
   // ============ حالة التطبيق ============
   let settings = { owner: '', repo: '', branch: 'main', path: 'data/lessons.json', token: '' };
   let state = { sha: null, data: { chapters: [] }, fileExists: false };
+  let collapsedChapters = new Set();
+  let isDirty = false;
 
   const STORAGE_KEY = 'challenges_admin_settings';
-
-  function saveSettingsToStorage() {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-    } catch (e) {
-      // بعض البيئات (مثل معاينة claude.ai) تمنع localStorage — نتجاهل الخطأ بصمت
-    }
-  }
-
-  function loadSettingsFromStorage() {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) return;
-      const parsed = JSON.parse(saved);
-      settings = { ...settings, ...parsed };
-      document.getElementById('input-owner').value = settings.owner || '';
-      document.getElementById('input-repo').value = settings.repo || '';
-      document.getElementById('input-branch').value = settings.branch || 'main';
-      document.getElementById('input-path').value = settings.path || 'data/lessons.json';
-      document.getElementById('input-token').value = settings.token || '';
-    } catch (e) {
-      // تجاهل بصمت إذا تعذّرت القراءة
-    }
-  }
-
-  function clearSavedSettings() {
-    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    settings = { owner: '', repo: '', branch: 'main', path: 'data/lessons.json', token: '' };
-    document.getElementById('input-owner').value = '';
-    document.getElementById('input-repo').value = '';
-    document.getElementById('input-branch').value = 'main';
-    document.getElementById('input-path').value = 'data/lessons.json';
-    document.getElementById('input-token').value = '';
-    toggleSettingsForm();
-    showToast('تم نسيان بيانات الاتصال المحفوظة', 'warning', '🧹');
-  }
-
-  document.addEventListener('DOMContentLoaded', loadSettingsFromStorage);
 
   // ============ أدوات مساعدة ============
   function showToast(message, type, icon) {
@@ -661,10 +812,63 @@
     return new TextDecoder().decode(bytes);
   }
 
+  function markDirty() {
+    isDirty = true;
+    updateDirtyIndicator();
+  }
+
+  function updateDirtyIndicator() {
+    const el = document.getElementById('dirty-indicator');
+    const text = document.getElementById('dirty-text');
+    if (isDirty) {
+      el.className = 'dirty-indicator dirty';
+      text.innerText = 'توجد تغييرات غير محفوظة';
+    } else if (state.fileExists || state.sha) {
+      el.className = 'dirty-indicator saved';
+      text.innerText = 'كل التغييرات محفوظة على GitHub';
+    } else {
+      el.className = 'dirty-indicator';
+      text.innerText = 'لا توجد تغييرات';
+    }
+  }
+
   function toggleSettingsForm() {
     document.getElementById('settings-form').style.display = 'block';
     document.getElementById('connection-summary').style.display = 'none';
   }
+
+  // ============ التخزين المحلي ============
+  function saveSettingsToStorage() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); } catch (e) {}
+  }
+
+  function loadSettingsFromStorage() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+      const parsed = JSON.parse(saved);
+      settings = { ...settings, ...parsed };
+      document.getElementById('input-owner').value = settings.owner || '';
+      document.getElementById('input-repo').value = settings.repo || '';
+      document.getElementById('input-branch').value = settings.branch || 'main';
+      document.getElementById('input-path').value = settings.path || 'data/lessons.json';
+      document.getElementById('input-token').value = settings.token || '';
+    } catch (e) {}
+  }
+
+  function clearSavedSettings() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    settings = { owner: '', repo: '', branch: 'main', path: 'data/lessons.json', token: '' };
+    document.getElementById('input-owner').value = '';
+    document.getElementById('input-repo').value = '';
+    document.getElementById('input-branch').value = 'main';
+    document.getElementById('input-path').value = 'data/lessons.json';
+    document.getElementById('input-token').value = '';
+    toggleSettingsForm();
+    showToast('تم نسيان بيانات الاتصال المحفوظة', 'warning', '🧹');
+  }
+
+  document.addEventListener('DOMContentLoaded', loadSettingsFromStorage);
 
   // ============ الاتصال بـ GitHub وتحميل البيانات ============
   async function connectAndLoad(isRefresh) {
@@ -683,10 +887,7 @@
     try {
       const url = `https://api.github.com/repos/${settings.owner}/${settings.repo}/contents/${settings.path}?ref=${settings.branch}`;
       const res = await fetch(url, {
-        headers: {
-          'Authorization': `token ${settings.token}`,
-          'Accept': 'application/vnd.github+json'
-        }
+        headers: { 'Authorization': `token ${settings.token}`, 'Accept': 'application/vnd.github+json' }
       });
 
       if (res.status === 404) {
@@ -704,11 +905,14 @@
         else showToast('تم تحديث البيانات من GitHub', 'success', '🔄');
       }
 
+      isDirty = false;
       saveSettingsToStorage();
       showConnectedUI();
       renderEditor();
       renderConfigSnippet();
     } catch (err) {
+      document.getElementById('status-pill').className = 'status-pill';
+      document.getElementById('status-pill').innerHTML = '<span class="status-dot"></span> غير متصل';
       showToast(err.message || 'تعذّر الاتصال بالمستودع، تأكد من صحة البيانات', 'error', '❌');
     }
   }
@@ -718,18 +922,21 @@
     const summary = document.getElementById('connection-summary');
     summary.style.display = 'flex';
     document.getElementById('connection-summary-text').innerText = `✅ متصل بـ ${settings.owner}/${settings.repo}`;
-    document.getElementById('btn-add-chapter').style.display = 'inline-flex';
+    document.getElementById('section-heading').style.display = 'flex';
     document.getElementById('chapters-editor').style.display = 'block';
     document.getElementById('save-bar').style.display = 'block';
+
+    const pill = document.getElementById('status-pill');
+    pill.className = 'status-pill online';
+    pill.innerHTML = '<span class="status-dot"></span> متصل';
+
+    updateDirtyIndicator();
   }
 
   function renderConfigSnippet() {
-    const box = document.getElementById('config-snippet');
-    box.style.display = 'block';
-    box.innerText =
-`الصق هذا في أعلى سكربت الصفحة الرئيسية (يستبدل CONFIG الحالي):
-
-const CONFIG = {
+    document.getElementById('config-snippet').style.display = 'block';
+    document.getElementById('snippet-code').innerText =
+`const CONFIG = {
   owner: '${settings.owner}',
   repo: '${settings.repo}',
   branch: '${settings.branch}',
@@ -740,28 +947,48 @@ const CONFIG = {
   // ============ محرر الفصول والدروس ============
   function renderEditor() {
     const container = document.getElementById('chapters-editor');
+    const emptyState = document.getElementById('empty-state');
     container.innerHTML = '';
 
+    if (state.data.chapters.length === 0) {
+      emptyState.style.display = 'block';
+      updateDirtyIndicator();
+      return;
+    }
+    emptyState.style.display = 'none';
+
     state.data.chapters.forEach((chapter, ci) => {
+      const collapsed = collapsedChapters.has(ci);
       const chDiv = document.createElement('div');
       chDiv.className = 'chapter-editor';
 
+      const lessonsCount = (chapter.lessons || []).length;
+
       chDiv.innerHTML = `
         <div class="chapter-editor-header">
+          <button class="chevron-btn" data-action="toggle-chapter" data-ci="${ci}">${collapsed ? '◂' : '▾'}</button>
           <span class="chapter-badge">${ci + 1}</span>
           <input type="text" class="chapter-title-input" data-ci="${ci}" data-field="chapter-title"
                  value="${escapeAttr(chapter.title)}" placeholder="اسم الفصل">
-          <button class="btn-icon" title="نقل لأعلى" data-action="move-chapter-up" data-ci="${ci}">⬆️</button>
-          <button class="btn-icon" title="نقل لأسفل" data-action="move-chapter-down" data-ci="${ci}">⬇️</button>
-          <button class="btn-icon" title="حذف الفصل" data-action="delete-chapter" data-ci="${ci}">🗑️</button>
+          <span class="lesson-count-badge">${lessonsCount} ${lessonsCount === 1 ? 'درس' : 'دروس'}</span>
+          <div class="header-actions">
+            <button class="icon-btn" title="نقل لأعلى" data-action="move-chapter-up" data-ci="${ci}">⬆️</button>
+            <button class="icon-btn" title="نقل لأسفل" data-action="move-chapter-down" data-ci="${ci}">⬇️</button>
+            <button class="icon-btn danger" title="حذف الفصل" data-action="delete-chapter" data-ci="${ci}">🗑️</button>
+          </div>
         </div>
-        <div class="lessons-editor" data-ci="${ci}">
-          ${(chapter.lessons || []).map((lesson, li) => renderLessonRow(chapter, ci, lesson, li)).join('')}
+        <div class="chapter-body ${collapsed ? 'is-hidden' : ''}">
+          <div class="lessons-editor">
+            ${(chapter.lessons || []).map((lesson, li) => renderLessonRow(ci, lesson, li)).join('') ||
+              `<p style="color:var(--subtext); font-size:0.85rem; text-align:center; padding:10px;">لا توجد دروس في هذا الفصل بعد</p>`}
+          </div>
+          <button class="btn btn-secondary btn-sm btn-block" data-action="add-lesson" data-ci="${ci}">＋ إضافة درس</button>
         </div>
-        <button class="btn btn-secondary btn-sm" data-action="add-lesson" data-ci="${ci}">＋ إضافة درس</button>
       `;
       container.appendChild(chDiv);
     });
+
+    updateDirtyIndicator();
   }
 
   function lessonType(href) {
@@ -770,34 +997,39 @@ const CONFIG = {
     return 'link';
   }
 
-  function renderLessonRow(chapter, ci, lesson, li) {
+  const typeStatusColor = { link: 'var(--success)', empty: 'var(--warning)', false: 'var(--muted)' };
+  const typeLabels = { link: '🚀 رابط فعلي', empty: '⏳ لم يُضف بعد', false: '🔒 غير متاح' };
+
+  function renderLessonRow(ci, lesson, li) {
     const type = lessonType(lesson.href);
-    const showHrefInput = type === 'link';
     return `
-      <div class="lesson-row" data-ci="${ci}" data-li="${li}">
-        <input type="text" class="lesson-name-input" data-ci="${ci}" data-li="${li}" data-field="lesson-name"
-               value="${escapeAttr(lesson.name)}" placeholder="اسم الدرس">
-        <select class="lesson-type-select" data-ci="${ci}" data-li="${li}" data-field="lesson-type">
-          <option value="link" ${type === 'link' ? 'selected' : ''}>🚀 رابط فعلي (تحدٍ جاهز)</option>
-          <option value="empty" ${type === 'empty' ? 'selected' : ''}>⏳ لم يُضف تحدٍ بعد</option>
-          <option value="false" ${type === 'false' ? 'selected' : ''}>🔒 لا يمكن إنتاج تحدٍ له</option>
-        </select>
-        <input type="text" class="lesson-href-input" data-ci="${ci}" data-li="${li}" data-field="lesson-href"
-               value="${escapeAttr(type === 'link' ? lesson.href : '')}" placeholder="https://..."
-               style="display:${showHrefInput ? 'block' : 'none'};">
-        <button class="btn-icon" title="نقل لأعلى" data-action="move-lesson-up" data-ci="${ci}" data-li="${li}">⬆️</button>
-        <button class="btn-icon" title="نقل لأسفل" data-action="move-lesson-down" data-ci="${ci}" data-li="${li}">⬇️</button>
-        <button class="btn-icon" title="حذف الدرس" data-action="delete-lesson" data-ci="${ci}" data-li="${li}">🗑️</button>
+      <div class="lesson-row" data-ci="${ci}" data-li="${li}" style="--status-color:${typeStatusColor[type]}">
+        <div class="lesson-row-top">
+          <input type="text" class="lesson-name-input" data-ci="${ci}" data-li="${li}" data-field="lesson-name"
+                 value="${escapeAttr(lesson.name)}" placeholder="اسم الدرس">
+          <div class="row-actions">
+            <button class="icon-btn" title="نقل لأعلى" data-action="move-lesson-up" data-ci="${ci}" data-li="${li}">⬆️</button>
+            <button class="icon-btn" title="نقل لأسفل" data-action="move-lesson-down" data-ci="${ci}" data-li="${li}">⬇️</button>
+            <button class="icon-btn danger" title="حذف الدرس" data-action="delete-lesson" data-ci="${ci}" data-li="${li}">🗑️</button>
+          </div>
+        </div>
+        <div class="lesson-type-toggle">
+          <button class="type-btn type-link ${type === 'link' ? 'active' : ''}" data-action="set-lesson-type" data-type="link" data-ci="${ci}" data-li="${li}">${typeLabels.link}</button>
+          <button class="type-btn type-empty ${type === 'empty' ? 'active' : ''}" data-action="set-lesson-type" data-type="empty" data-ci="${ci}" data-li="${li}">${typeLabels.empty}</button>
+          <button class="type-btn type-false ${type === 'false' ? 'active' : ''}" data-action="set-lesson-type" data-type="false" data-ci="${ci}" data-li="${li}">${typeLabels.false}</button>
+        </div>
+        ${type === 'link' ? `<input type="text" class="lesson-href-input" data-ci="${ci}" data-li="${li}" data-field="lesson-href" value="${escapeAttr(lesson.href)}" placeholder="https://...">` : ''}
       </div>
     `;
   }
 
   function addChapter() {
     state.data.chapters.push({ title: 'فصل جديد', lessons: [] });
+    markDirty();
     renderEditor();
   }
 
-  // ============ تفويض الأحداث (event delegation) ============
+  // ============ تفويض الأحداث ============
   document.getElementById('chapters-editor').addEventListener('input', (e) => {
     const t = e.target;
     const field = t.dataset.field;
@@ -807,25 +1039,11 @@ const CONFIG = {
     if (field === 'chapter-title') {
       state.data.chapters[ci].title = t.value;
     } else if (field === 'lesson-name') {
-      const li = Number(t.dataset.li);
-      state.data.chapters[ci].lessons[li].name = t.value;
+      state.data.chapters[ci].lessons[Number(t.dataset.li)].name = t.value;
     } else if (field === 'lesson-href') {
-      const li = Number(t.dataset.li);
-      state.data.chapters[ci].lessons[li].href = t.value;
+      state.data.chapters[ci].lessons[Number(t.dataset.li)].href = t.value;
     }
-  });
-
-  document.getElementById('chapters-editor').addEventListener('change', (e) => {
-    const t = e.target;
-    if (t.dataset.field !== 'lesson-type') return;
-    const ci = Number(t.dataset.ci), li = Number(t.dataset.li);
-    const lesson = state.data.chapters[ci].lessons[li];
-
-    if (t.value === 'false') lesson.href = 'false';
-    else if (t.value === 'empty') lesson.href = '';
-    else lesson.href = lesson.href && lesson.href !== 'false' ? lesson.href : '';
-
-    renderEditor();
+    markDirty();
   });
 
   document.getElementById('chapters-editor').addEventListener('click', (e) => {
@@ -835,24 +1053,35 @@ const CONFIG = {
     const ci = Number(btn.dataset.ci);
     const chapters = state.data.chapters;
 
-    if (action === 'delete-chapter') {
-      if (confirm('هل تريد حذف هذا الفصل وجميع دروسه؟')) { chapters.splice(ci, 1); renderEditor(); }
+    if (action === 'toggle-chapter') {
+      if (collapsedChapters.has(ci)) collapsedChapters.delete(ci); else collapsedChapters.add(ci);
+      renderEditor();
+    } else if (action === 'delete-chapter') {
+      if (confirm('هل تريد حذف هذا الفصل وجميع دروسه؟')) { chapters.splice(ci, 1); markDirty(); renderEditor(); }
     } else if (action === 'move-chapter-up' && ci > 0) {
-      [chapters[ci - 1], chapters[ci]] = [chapters[ci], chapters[ci - 1]]; renderEditor();
+      [chapters[ci - 1], chapters[ci]] = [chapters[ci], chapters[ci - 1]]; markDirty(); renderEditor();
     } else if (action === 'move-chapter-down' && ci < chapters.length - 1) {
-      [chapters[ci + 1], chapters[ci]] = [chapters[ci], chapters[ci + 1]]; renderEditor();
+      [chapters[ci + 1], chapters[ci]] = [chapters[ci], chapters[ci + 1]]; markDirty(); renderEditor();
     } else if (action === 'add-lesson') {
-      chapters[ci].lessons.push({ name: 'درس جديد', href: '' }); renderEditor();
+      chapters[ci].lessons.push({ name: 'درس جديد', href: '' }); markDirty(); renderEditor();
     } else if (action === 'delete-lesson') {
-      const li = Number(btn.dataset.li);
-      chapters[ci].lessons.splice(li, 1); renderEditor();
+      chapters[ci].lessons.splice(Number(btn.dataset.li), 1); markDirty(); renderEditor();
     } else if (action === 'move-lesson-up') {
       const li = Number(btn.dataset.li);
-      if (li > 0) { const l = chapters[ci].lessons; [l[li - 1], l[li]] = [l[li], l[li - 1]]; renderEditor(); }
+      if (li > 0) { const l = chapters[ci].lessons; [l[li - 1], l[li]] = [l[li], l[li - 1]]; markDirty(); renderEditor(); }
     } else if (action === 'move-lesson-down') {
       const li = Number(btn.dataset.li);
       const l = chapters[ci].lessons;
-      if (li < l.length - 1) { [l[li + 1], l[li]] = [l[li], l[li + 1]]; renderEditor(); }
+      if (li < l.length - 1) { [l[li + 1], l[li]] = [l[li], l[li + 1]]; markDirty(); renderEditor(); }
+    } else if (action === 'set-lesson-type') {
+      const li = Number(btn.dataset.li);
+      const lesson = chapters[ci].lessons[li];
+      const newType = btn.dataset.type;
+      if (newType === 'false') lesson.href = 'false';
+      else if (newType === 'empty') lesson.href = '';
+      else lesson.href = lesson.href && lesson.href !== 'false' ? lesson.href : '';
+      markDirty();
+      renderEditor();
     }
   });
 
@@ -889,17 +1118,17 @@ const CONFIG = {
 
       state.sha = resJson.content.sha;
       state.fileExists = true;
+      isDirty = false;
+      updateDirtyIndicator();
       showToast('تم الحفظ بنجاح — التغييرات ستظهر خلال دقيقة أو دقيقتين', 'success', '✅');
     } catch (err) {
       showToast(err.message || 'تعذّر الحفظ على GitHub', 'error', '❌');
     } finally {
       btn.disabled = false;
-      btn.innerText = '💾 حفظ جميع التغييرات على GitHub';
+      btn.innerText = '💾 حفظ كل التغييرات';
     }
   }
 </script>
-
-
 
 <script id="admin-scripts">
     const username = "BLOXMAM";
