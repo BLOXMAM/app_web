@@ -1,6 +1,8 @@
 [
   {
-    "file": "Symbol.html",
-    "title": "Symbol"
+    "file": "home.html",
+    "title": "home",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   }
 ]
