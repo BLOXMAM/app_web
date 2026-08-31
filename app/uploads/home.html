@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة التحديات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF2FF;
+      --card-bg: #FFFFFF;
+      --text: #1E1B4B;
+      --subtext: #64748B;
+      --w1: #F1F5F9;
+      --w2: #E2E8F0;
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --danger: #DC2626;
+      --danger-dark: #B91C1C;
+      --warning: #D97706;
+      --warning-dark: #B45309;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px 80px;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* ===== رأس الصفحة ===== */
+    .page-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .page-header p {
+      color: var(--subtext);
+      font-size: 0.95rem;
+    }
+
+    /* ===== الفصول ===== */
+    .chapter {
+      background: var(--card-bg);
+      border: 1px solid var(--w2);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px -8px rgba(30, 27, 75, 0.08);
+    }
+
+    .chapter-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--w2);
+    }
+
+    .chapter-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 8px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .lessons-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ===== الدرس (رابط) — مظهر موحّد لجميع الدروس ===== */
+    .lesson-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--w1);
+      border: 1.5px solid transparent;
+      border-radius: 14px;
+      padding: 15px 18px;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .lesson-name {
+      font-size: 0.98rem;
+      font-weight: 500;
+    }
+
+    .lesson-arrow {
+      color: var(--subtext);
+      font-size: 1rem;
+      flex-shrink: 0;
+      transition: transform 0.18s ease, color 0.18s ease;
+    }
+
+    .lesson-link:hover {
+      background: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 8px 16px -6px rgba(79, 70, 229, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .lesson-link:hover .lesson-arrow {
+      transform: translateX(-3px);
+      color: var(--primary);
+    }
+
+    .lesson-link:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    /* ===== Toast / Snackbar احترافي ===== */
+    .toast {
+      position: fixed;
+      bottom: -120px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.92);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 22px;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      max-width: min(90vw, 420px);
+      transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.35s ease,
+                  transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.35),
+                  0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+
+    .toast.show {
+      bottom: 34px;
+      opacity: 1;
+      transform: translateX(-50%) scale(1);
+    }
+
+    .toast-icon {
+      font-size: 1.25rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .toast-text {
+      line-height: 1.5;
+    }
+
+    .toast.toast-error {
+      background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    }
+
+    .toast.toast-warning {
+      background: linear-gradient(135deg, var(--warning), var(--warning-dark));
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="page-header">
+    <h1>🎯 منصة التحديات</h1>
+    <p>اختر ما تريد التحدي فيه وابدأ فورًا</p>
+  </div>
+
+  <!--
+    ==================================================================
+    الفصول تُضاف هنا يدويًا — لصق قالب الفصل بالأسفل لكل فصل جديد،
+    وبداخل كل فصل، قالب الدرس لكل درس.
+
+    قيمة href في كل درس تُحدّد سلوكه تلقائيًا عند الضغط:
+      • رابط حقيقي (مثل "lesson1.html") → ينتقل بشكل طبيعي
+      • href="false" → لا ينتقل، ويظهر Toast: "لا يمكن إنشاء تحدٍ لهذا
+        الدرس" (أي لا توجد أصلاً طريقة لتوليد تحدٍ لهذا الدرس)
+      • href=""      → لا ينتقل، ويظهر Toast: "لم يُضف تحدٍ لهذا
+        الدرس بعد" (أي يمكن إضافته لاحقًا لكنه غير موجود حاليًا)
+    ==================================================================
+  -->
+
+  <div id="chapters-container">
+
+    <!-- ============ قالب الفصل — انسخ هذا البلوك لكل فصل جديد ============
+
+    <section class="chapter">
+      <h2 class="chapter-title">
+        <span class="chapter-badge">1</span>
+        اسم الفصل هنا
+      </h2>
+      <div class="lessons-list">
+
+        [ضع قوالب الدروس هنا]
+
+      </div>
+    </section>
+
+    ===================================================================== -->
+
+    <!-- ============ قالب الدرس — انسخ هذا لكل درس داخل lessons-list ============
+
+    <a href="القيمة_هنا" class="lesson-link">
+      <span class="lesson-name">اسم الدرس هنا</span>
+      <span class="lesson-arrow">‹</span>
+    </a>
+
+    ===================================================================== -->
+
+  </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  function showToast(message, type, icon) {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = `<span class="toast-icon">${icon}</span><span class="toast-text">${message}</span>`;
+    toast.className = `toast toast-${type} show`;
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  }
+
+  function bindLessonLinks(scope) {
+    scope.querySelectorAll('.lesson-link').forEach(link => {
+      if (link.dataset.bound) return;
+      link.dataset.bound = '1';
+
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+
+        if (href === 'false') {
+          e.preventDefault();
+          showToast('لا يمكن إنشاء تحدٍ لهذا الدرس', 'error', '❌');
+        } else if (href === '') {
+          e.preventDefault();
+          showToast('لم يُضف تحدٍ لهذا الدرس بعد', 'warning', '⏳');
+        }
+        // أي رابط حقيقي غير هاتين الحالتين يُترك لسلوك المتصفح الطبيعي
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    bindLessonLinks(document);
+  });
+</script>
+
+</body>
+</html>
