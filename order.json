@@ -2,13 +2,19 @@
   {
     "file": "لوحة_التحكم.html",
     "title": "-الإدارة-",
-    "icon": "fa-solid fa-cog",
+    "icon": "fa-solid fa-wrench",
     "hidden": false
   },
   {
     "file": "Games.html",
     "title": "الألعاب🎮",
-    "icon": "fa-solid fa-file",
+    "icon": "fa-solid fa-gamepad",
+    "hidden": false
+  },
+  {
+    "file": "Admingames.html",
+    "title": "-الإدارة2-",
+    "icon": "fa-solid fa-wrench",
     "hidden": false
   },
   {
