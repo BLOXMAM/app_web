@@ -22,5 +22,17 @@
     "title": "الرئيسية",
     "icon": "fa-solid fa-file",
     "hidden": true
+  },
+  {
+    "file": "logic.html",
+    "title": "المنطق",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "snake3d.html",
+    "title": "snake3d",
+    "icon": "fa-solid fa-file",
+    "hidden": true
   }
 ]
