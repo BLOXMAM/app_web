@@ -116,10 +116,7 @@
   }
   .icon-btn:active{transform:scale(0.92);}
   .btn-cluster{display:flex; gap:8px;}
-  #devAddScoreBtn{
-    width:auto; padding:0 10px; font-size:12px; font-weight:700;
-    border-style:dashed; border-color:rgba(255,178,56,0.5); color:var(--accent2);
-  }
+  
 
   /* d-pad: two steering buttons only — left/right relative to heading */
   #dpad{
@@ -285,7 +282,7 @@
       <div class="icon-btn" id="pauseBtn">⏸</div>
       <div class="icon-btn" id="soundBtn">🔊</div>
       <div class="icon-btn" id="themeBtn">☀️</div>
-      <!--<div class="icon-btn" id="devAddScoreBtn" title="DEV: +30 points">🧪+30</div>-->
+      
     </div>
     <div class="score-box">
       <div class="lbl">النتيجة <span style="opacity:.6">/ 500</span></div>
@@ -1182,18 +1179,6 @@ document.getElementById('winSaveBtn').addEventListener('click', ()=>{
       btn.disabled = false;
       if(btn.textContent==='جارِ الحفظ...') btn.textContent = 'حفظ في لوحة الصدارة';
     });
-});
-document.getElementById('devAddScoreBtn').addEventListener('click', ()=>{
-  /* DEV/testing helper — adds 30 points instantly to skip ahead and preview
-     the color tiers / win screen quickly. Safe to delete this whole block
-     (and its button in the HTML/CSS) once testing is done. */
-  ensureAudio(); sfxClick();
-  if(!running || paused) return;
-  score = Math.min(WIN_SCORE, score + 30);
-  updateScoreUI();
-  checkColorTier();
-  updateSpeedForScore();
-  if(score >= WIN_SCORE) triggerWin();
 });
 document.getElementById('soundBtn').addEventListener('click', ()=>{
   ensureAudio();
