@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <style>
   :root{
     --bg: #070b10;
@@ -114,6 +116,10 @@
   }
   .icon-btn:active{transform:scale(0.92);}
   .btn-cluster{display:flex; gap:8px;}
+  #devAddScoreBtn{
+    width:auto; padding:0 10px; font-size:12px; font-weight:700;
+    border-style:dashed; border-color:rgba(255,178,56,0.5); color:var(--accent2);
+  }
 
   /* d-pad: two steering buttons only — left/right relative to heading */
   #dpad{
@@ -147,6 +153,34 @@
 
   .swipe-hint{position:absolute; bottom:14px; left:50%; transform:translateX(-50%); font-size:11.5px; color:var(--text-dim); pointer-events:none;}
 
+  /* win screen */
+  #winscreen .card{border-color:rgba(255,178,56,0.4);}
+  .win-title{font-size:26px; font-weight:800; color:var(--accent2); margin-bottom:4px;}
+  .win-sub{font-size:13px; color:var(--text-dim); margin-bottom:16px;}
+  .win-time-box{background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:12px; margin-bottom:6px;}
+  .win-time-box .lbl{font-size:11px; color:var(--text-dim);}
+  .win-time-box .val{font-size:28px; font-weight:700; color:var(--text);}
+  .name-input{
+    width:100%; background:rgba(255,255,255,0.04); border:1.5px solid rgba(255,255,255,0.12);
+    border-radius:12px; padding:12px 14px; color:var(--text); font-family:'Cairo',sans-serif; font-size:14px;
+    text-align:center; outline:none;
+  }
+  .name-input:focus{border-color:var(--accent2);}
+  .win-saved-msg{margin-top:10px; color:var(--accent); font-size:13.5px; font-weight:700;}
+  .leaderboard{display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto; text-align:right;}
+  .lb-row{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06);
+    border-radius:10px; padding:8px 12px; font-size:13px;
+  }
+  .lb-rank{min-width:28px; font-weight:800; color:var(--accent2);}
+  .lb-name{flex:1; text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .lb-time{color:var(--accent); font-weight:700;}
+  .lb-empty, .lb-loading{font-size:12.5px; color:var(--text-dim); padding:10px 0;}
+
+  /* game over taunt */
+  .taunt-text{font-size:13.5px; color:var(--text-dim); margin-bottom:10px; line-height:1.6;}
+
 </style>
 </head>
 <body>
@@ -179,6 +213,7 @@
 
     <button class="start-btn" id="startBtn">ابدأ اللعب</button>
     <div class="hiscore-line">أفضل نتيجة في هذه الجلسة: <span id="hiscoreMenu">0</span></div>
+    <div class="hiscore-line">🎁 نقاط المكافآت (bonusGames): <span id="bonusMenu">0</span></div>
   </div>
 </div>
 
@@ -198,6 +233,7 @@
 <div class="overlay hidden" id="gameover">
   <div class="card">
     <div class="go-title">انتهت اللعبة</div>
+    <div class="taunt-text" id="tauntText"></div>
     <div class="go-score num" id="finalScore">0</div>
     <div class="go-best">أفضل نتيجة: <span class="num" id="bestScore">0</span></div>
     <div class="go-row">
@@ -207,6 +243,41 @@
   </div>
 </div>
 
+<!-- WIN -->
+<div class="overlay hidden" id="winscreen">
+  <div class="card">
+    <div class="win-title">🏆 لقد فزت!</div>
+    <div class="win-sub">أنهيت اللعبة بالوصول إلى 500 نقطة</div>
+    <div class="win-time-box">
+      <div class="lbl">الوقت المستغرق</div>
+      <div class="val num" id="winTime">00:00</div>
+    </div>
+    <div class="win-time-box" id="bonusEarnedBox">
+      <div class="lbl">🎁 مكافأة الفوز</div>
+      <div class="val num">+<span id="bonusEarned">5</span> نقطة</div>
+      <div class="lbl" style="margin-top:4px;">إجمالي نقاط bonusGames: <span id="bonusTotal" class="num">0</span></div>
+    </div>
+
+    <div id="winSaveRow">
+      <div class="section-label">سجّل اسمك ضمن الأفضل</div>
+      <input type="text" id="winNameInput" maxlength="16" placeholder="اكتب اسمك هنا" class="name-input">
+      <button class="start-btn" id="winSaveBtn" style="margin-top:10px;">حفظ في لوحة الصدارة</button>
+    </div>
+    <div class="win-saved-msg hidden" id="winSavedMsg">✅ تم حفظ نتيجتك بنجاح!</div>
+
+    <div class="section-label" style="margin-top:20px;">🏅 أفضل 10 (الأسرع تختيمًا)</div>
+    <div id="winLeaderboard" class="leaderboard"></div>
+
+    <div class="go-row" style="margin-top:16px;">
+      <button class="ghost-btn" id="winMenuBtn">القائمة</button>
+      <button class="start-btn" id="winRestartBtn" style="margin-top:0;">العب مجددًا</button>
+    </div>
+  </div>
+</div>
+
+<!-- toast -->
+<div id="toast" class="hidden"></div>
+
 <!-- HUD -->
 <div id="hud">
   <div class="hud-top">
@@ -214,23 +285,106 @@
       <div class="icon-btn" id="pauseBtn">⏸</div>
       <div class="icon-btn" id="soundBtn">🔊</div>
       <div class="icon-btn" id="themeBtn">☀️</div>
+      <div class="icon-btn" id="devAddScoreBtn" title="DEV: +30 points">🧪+30</div>
     </div>
     <div class="score-box">
-      <div class="lbl">النتيجة</div>
+      <div class="lbl">النتيجة <span style="opacity:.6">/ 500</span></div>
       <div class="val num" id="scoreVal">0</div>
     </div>
   </div>
   <div id="dpad">
-    
+    <div class="dbtn" data-dir="left">◀</div>
     <div class="dbtn" data-dir="right">▶</div>
-<div class="dbtn" data-dir="left">◀</div>
   </div>
   <div class="swipe-hint" id="swipeHint">اسحب يمينًا أو يسارًا للانعطاف</div>
 </div>
 
+
 <script>
 (function(){
 "use strict";
+
+/* ============================= FIREBASE (RTDB) =============================
+   The database below is public/open (databaseURL only — no apiKey/authDomain
+   needed since the RTDB rules allow public read/write access).
+*/
+const firebaseConfig = {
+  databaseURL: "https://umlog-box-default-rtdb.firebaseio.com"
+};
+let fbDb = null;
+try{
+  firebase.initializeApp(firebaseConfig);
+  fbDb = firebase.database();
+}catch(e){ console.warn('Firebase init failed', e); }
+
+function escapeHtml(str){
+  return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function renderLeaderboard(entries){
+  const box = document.getElementById('winLeaderboard');
+  if(!entries || !entries.length){
+    box.innerHTML = '<div class="lb-empty">كن أول من يسجّل اسمه هنا! 🏆</div>';
+    return;
+  }
+  box.innerHTML = entries.map((e,i)=>{
+    const rank = i+1;
+    const medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
+    return `<div class="lb-row"><span class="lb-rank">${medal}</span><span class="lb-name">${escapeHtml(e.name)}</span><span class="lb-time num">${formatTime(e.time)}</span></div>`;
+  }).join('');
+}
+
+function refreshLeaderboard(){
+  const box = document.getElementById('winLeaderboard');
+  if(!fbDb){
+    box.innerHTML = '<div class="lb-empty">لوحة الصدارة غير مفعّلة (لم يتم إعداد Firebase بعد).</div>';
+    return;
+  }
+  fbDb.ref('snake3d_leaderboard').orderByChild('time').limitToFirst(10).once('value')
+    .then(snap=>{
+      const rows = [];
+      snap.forEach(child=>{ rows.push(child.val()); });
+      rows.sort((a,b)=>a.time-b.time);
+      renderLeaderboard(rows);
+    })
+    .catch(err=>{
+      console.warn('leaderboard read failed', err);
+      box.innerHTML = '<div class="lb-empty">تعذّر تحميل لوحة الصدارة.</div>';
+    });
+}
+
+function saveScoreToLeaderboard(name, time){
+  if(!fbDb) return Promise.reject(new Error('firebase not configured'));
+  return fbDb.ref('snake3d_leaderboard').push({
+    name: name.slice(0,16),
+    time: time,
+    score: WIN_SCORE,
+    ts: Date.now()
+  });
+}
+
+/* ============================= BONUS POINTS (shared across games, localStorage) =============================
+   Stored under the localStorage key "bonusGames" as a plain integer so other
+   games on the same origin can read/increment the same total. */
+const BONUS_KEY = 'bonusGames';
+const WIN_BONUS_POINTS = 5;
+function getBonusPoints(){
+  const v = parseInt(localStorage.getItem(BONUS_KEY), 10);
+  return Number.isFinite(v) ? v : 0;
+}
+function addBonusPoints(n){
+  const total = getBonusPoints() + n;
+  localStorage.setItem(BONUS_KEY, String(total));
+  updateBonusUI();
+  return total;
+}
+function updateBonusUI(){
+  const total = getBonusPoints();
+  const menuEl = document.getElementById('bonusMenu');
+  const totalEl = document.getElementById('bonusTotal');
+  if(menuEl) menuEl.textContent = total;
+  if(totalEl) totalEl.textContent = total;
+}
 
 /* ============================= AUDIO ============================= */
 let audioCtx = null, masterGain = null, muted = false;
@@ -261,7 +415,9 @@ function sfxEat(){ ensureAudio(); tone(660,0.09,'triangle',0,0.5); tone(920,0.11
 function sfxTurn(){ ensureAudio(); tone(300,0.03,'square',0,0.06); }
 function sfxClick(){ ensureAudio(); tone(500,0.05,'sine',0,0.25); }
 function sfxLevelUp(){ ensureAudio(); tone(500,0.08,'sawtooth',0,0.3); tone(700,0.08,'sawtooth',0.07,0.3); tone(950,0.12,'sawtooth',0.14,0.3); }
+function sfxTierChange(){ ensureAudio(); tone(700,0.1,'sine',0,0.35); tone(1050,0.14,'sine',0.08,0.35); }
 function sfxGameOver(){ ensureAudio(); tone(320,0.5,'sawtooth',0,0.4,60); }
+function sfxWin(){ ensureAudio(); [660,880,1100,1320].forEach((f,i)=>tone(f,0.22,'triangle',i*0.12,0.4)); }
 function setMuted(v){
   muted = v;
   if(masterGain) masterGain.gain.value = muted ? 0 : 0.35;
@@ -270,16 +426,61 @@ function setMuted(v){
 
 /* ============================= STATE ============================= */
 const DIFF = {
-  easy:   { interval: 260, minInterval: 150, speedStep: 8,  everyPoints: 4, boardSize: 14 },
-  medium: { interval: 190, minInterval: 95,  speedStep: 10, everyPoints: 3, boardSize: 16 },
-  hard:   { interval: 140, minInterval: 65,  speedStep: 12, everyPoints: 2, boardSize: 18 }
+  easy:   { interval: 260, minInterval: 90, boardSize: 14 },
+  medium: { interval: 190, minInterval: 65, boardSize: 16 },
+  hard:   { interval: 140, minInterval: 50, boardSize: 18 }
 };
+const WIN_SCORE = 500;
+const POINTS_PER_FOOD = 10;
+/* body color changes with score — thresholds are score values, not food count */
+const SCORE_TIERS = [
+  { min:0,   label:'أخضر',   head:0x8dffce, a:0x46ffb0, b:0x1f8f5f },
+  { min:100, label:'بنفسجي', head:0xd8b8ff, a:0xa855f7, b:0x5b21b6 },
+  { min:130, label:'ذهبي',   head:0xffe98a, a:0xffd700, b:0xb8860b },
+  { min:200, label:'فضي',    head:0xf5f5f5, a:0xd9d9d9, b:0x8f8f8f },
+  { min:250, label:'أحمر',   head:0xff9a9a, a:0xff4d4d, b:0x9c1c1c },
+  { min:300, label:'أزرق',   head:0x9ecbff, a:0x4aa3ff, b:0x1560c9 },
+  { min:350, label:'وردي',   head:0xffc2e8, a:0xff8fd0, b:0xc94f95 },
+  { min:400, label:'بني',    head:0xc79a6b, a:0x8a5a34, b:0x5c3a1e }
+];
+function tierForScore(s){
+  let t = SCORE_TIERS[0];
+  for(const tier of SCORE_TIERS){ if(s>=tier.min) t=tier; }
+  return t;
+}
+const LOSS_TAUNTS_LOW = [
+  'هذا كل ما عندك؟ حتى الجدار كان أذكى منك 😂',
+  'خسرت بهذه السرعة؟ الثعبان نفسه ما صدّق 🐍',
+  'محاولة... تحتاج محاولات كثيرة كمان 🤡',
+  'صراحة توقعت أكثر من كذا... بس ولا يهمك 😅',
+  'حتى النقاط بدأت تشفق عليك 🙈'
+];
+const LOSS_TAUNTS_MID = [
+  'مو سيئ... بس مو كويس كمان 😏',
+  'كنت قريب من الاحتراف، بس رجعت تلقائي 😂',
+  'الثعبان تعب منك وقرر يرتاح بنفسه 🐍💤',
+  'أداء متوسط لشخص واثق من نفسه زيك 😅',
+  'شكله يحتاج تمرين... كثير تمرين 🏋️'
+];
+const LOSS_TAUNTS_CLOSE = [
+  'كنت قاب قوسين من الفوز وضيّعتها! 😱',
+  'قريب جدًا... قريب جدًا جدًا، بس لا 😂',
+  'الفوز شافك من بعيد وسلّم عليك ولف 👋',
+  'شكله القدر ما بغاك تفوز اليوم 🙃'
+];
+function pickTaunt(finalScore){
+  const pool = finalScore>=250 ? LOSS_TAUNTS_CLOSE : (finalScore>=100 ? LOSS_TAUNTS_MID : LOSS_TAUNTS_LOW);
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
 let difficulty = 'medium';
 let theme = 'day';
 let bestScore = 0;
 let score = 0;
 let paused = false;
 let running = false;
+let gameStartTime = 0;
+let currentTierMin = 0;
 
 /* ============================= THREE SETUP ============================= */
 const wrap = document.getElementById('canvas-wrap');
@@ -545,13 +746,11 @@ scene.add(snakeMeshGroup);
 let segMeshes = []; // {box, joint}
 let headMesh, eyeL, eyeR;
 
-const colorHead = 0x8dffce;
-const colorTailA = 0x46ffb0;
-const colorTailB = 0x1f8f5f;
-
 function lerpColor(a,b,t){ return new THREE.Color(a).lerp(new THREE.Color(b), t); }
 
 function rebuildSnakeMeshes(len){
+  const tier = tierForScore(score);
+  const colorHead = tier.head, colorTailA = tier.a, colorTailB = tier.b;
   snakeMeshGroup.clear();
   segMeshes = [];
   for(let i=0;i<len;i++){
@@ -654,9 +853,13 @@ function resetGame(){
   prevSnake = snake.map(s=>({...s}));
   dir = {x:1,z:0}; nextDir = {x:1,z:0};
   headAngle = dirAngle(dir); prevHeadAngle = headAngle;
-  score = 0; growPending = 0; foodsEatenAtLevel = 0;
-  tickInterval = DIFF[difficulty].interval;
+  score = 0; growPending = 0;
+  currentTierMin = 0;
+  lastSpeedTier = 0;
+  baseTickInterval = DIFF[difficulty].interval;
+  tickInterval = baseTickInterval;
   lastTickTime = performance.now();
+  gameStartTime = performance.now();
   updateScoreUI();
   rebuildSnakeMeshes(snake.length);
   placeFood();
@@ -673,6 +876,32 @@ function setDirection(nx, nz){
    as soon as the snake isn't facing its original starting direction. */
 function turnRight(){ nextDir = { x: -dir.z, z: dir.x }; }
 function turnLeft(){ nextDir = { x: dir.z, z: -dir.x }; }
+
+let baseTickInterval = 190;
+let lastSpeedTier = 0;
+
+/* every 50 points reached, speed increases by 10% (multiplier +0.1) */
+function updateSpeedForScore(){
+  const st = DIFF[difficulty];
+  const speedTier = Math.floor(score/50);
+  const multiplier = 1 + speedTier*0.1;
+  tickInterval = Math.max(st.minInterval, baseTickInterval/multiplier);
+  if(speedTier > lastSpeedTier){
+    lastSpeedTier = speedTier;
+    sfxLevelUp();
+  }
+}
+
+function checkColorTier(){
+  const tier = tierForScore(score);
+  if(tier.min !== currentTierMin){
+    currentTierMin = tier.min;
+    if(tier.min>0){
+      sfxTierChange();
+      showToast(`🎨 تغيّر لون الثعبان إلى ${tier.label}!`, tier.a);
+    }
+  }
+}
 
 function gameTick(){
   dir = nextDir;
@@ -701,18 +930,19 @@ function gameTick(){
 
   snake.unshift(nh);
   let grew = false;
+  let justWon = false;
   if(cellEq(nh, food)){
     growPending += 1;
-    score += 10;
-    foodsEatenAtLevel += 1;
+    score = Math.min(WIN_SCORE, score + POINTS_PER_FOOD);
     updateScoreUI();
     sfxEat();
     spawnBurst(foodMesh.position.clone());
-    placeFood();
-    const st = DIFF[difficulty];
-    if(foodsEatenAtLevel % st.everyPoints === 0){
-      tickInterval = Math.max(st.minInterval, tickInterval - st.speedStep);
-      sfxLevelUp();
+    checkColorTier();
+    updateSpeedForScore();
+    if(score >= WIN_SCORE){
+      justWon = true;
+    } else {
+      placeFood();
     }
   }
   if(growPending>0){
@@ -727,6 +957,7 @@ function gameTick(){
   } else if(segMeshes.length !== snake.length){
     rebuildSnakeMeshes(snake.length);
   }
+  if(justWon) triggerWin();
 }
 
 function endGame(){
@@ -736,7 +967,31 @@ function endGame(){
   document.getElementById('finalScore').textContent = score;
   document.getElementById('bestScore').textContent = bestScore;
   document.getElementById('hiscoreMenu').textContent = bestScore;
+  document.getElementById('tauntText').textContent = pickTaunt(score);
   show('gameover');
+}
+
+function formatTime(sec){
+  const m = Math.floor(sec/60), s = Math.floor(sec%60);
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function triggerWin(){
+  running = false;
+  sfxWin();
+  if(score > bestScore){ bestScore = score; }
+  const elapsed = (performance.now() - gameStartTime)/1000;
+  document.getElementById('winTime').textContent = formatTime(elapsed);
+  document.getElementById('hiscoreMenu').textContent = bestScore;
+  document.getElementById('bonusEarned').textContent = WIN_BONUS_POINTS;
+  addBonusPoints(WIN_BONUS_POINTS);
+  document.getElementById('winNameInput').value = '';
+  document.getElementById('winSaveRow').classList.remove('hidden');
+  document.getElementById('winSavedMsg').classList.add('hidden');
+  document.getElementById('winLeaderboard').innerHTML = '<div class="lb-loading">جارِ تحميل لوحة الصدارة...</div>';
+  window.__pendingWinTime = elapsed;
+  show('winscreen');
+  refreshLeaderboard();
 }
 
 function updateScoreUI(){
@@ -848,11 +1103,11 @@ onResize();
 
 /* ============================= UI WIRING ============================= */
 function show(id){
-  ['menu','pausescreen','gameover'].forEach(k=>document.getElementById(k).classList.add('hidden'));
+  ['menu','pausescreen','gameover','winscreen'].forEach(k=>document.getElementById(k).classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
 function hideAllOverlays(){
-  ['menu','pausescreen','gameover'].forEach(k=>document.getElementById(k).classList.add('hidden'));
+  ['menu','pausescreen','gameover','winscreen'].forEach(k=>document.getElementById(k).classList.add('hidden'));
 }
 
 document.querySelectorAll('.diff-btn').forEach(btn=>{
@@ -898,6 +1153,46 @@ document.getElementById('goMenuBtn').addEventListener('click', ()=>{
 });
 document.getElementById('goRestartBtn').addEventListener('click', ()=>{
   sfxClick(); hideAllOverlays(); resetGame();
+});
+document.getElementById('winMenuBtn').addEventListener('click', ()=>{
+  sfxClick(); show('menu');
+});
+document.getElementById('winRestartBtn').addEventListener('click', ()=>{
+  sfxClick(); hideAllOverlays(); resetGame();
+});
+document.getElementById('winSaveBtn').addEventListener('click', ()=>{
+  sfxClick();
+  const nameInput = document.getElementById('winNameInput');
+  const name = nameInput.value.trim();
+  if(!name){ nameInput.focus(); return; }
+  const time = window.__pendingWinTime || 0;
+  const btn = document.getElementById('winSaveBtn');
+  btn.disabled = true; btn.textContent = 'جارِ الحفظ...';
+  saveScoreToLeaderboard(name, time)
+    .then(()=>{
+      document.getElementById('winSaveRow').classList.add('hidden');
+      document.getElementById('winSavedMsg').classList.remove('hidden');
+      refreshLeaderboard();
+    })
+    .catch(()=>{
+      btn.textContent = 'تعذّر الحفظ، حاول مجددًا';
+    })
+    .finally(()=>{
+      btn.disabled = false;
+      if(btn.textContent==='جارِ الحفظ...') btn.textContent = 'حفظ في لوحة الصدارة';
+    });
+});
+document.getElementById('devAddScoreBtn').addEventListener('click', ()=>{
+  /* DEV/testing helper — adds 30 points instantly to skip ahead and preview
+     the color tiers / win screen quickly. Safe to delete this whole block
+     (and its button in the HTML/CSS) once testing is done. */
+  ensureAudio(); sfxClick();
+  if(!running || paused) return;
+  score = Math.min(WIN_SCORE, score + 30);
+  updateScoreUI();
+  checkColorTier();
+  updateSpeedForScore();
+  if(score >= WIN_SCORE) triggerWin();
 });
 document.getElementById('soundBtn').addEventListener('click', ()=>{
   ensureAudio();
@@ -957,6 +1252,7 @@ document.getElementById('dpad').classList.add('show');
 if(!(('ontouchstart' in window) || navigator.maxTouchPoints>0)){
   document.getElementById('swipeHint').style.display='none';
 }
+updateBonusUI();
 
 })();
 </script>
