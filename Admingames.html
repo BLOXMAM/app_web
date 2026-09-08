@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم صفحة الألعاب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+  :root{
+    --bg:#070b10; --panel:rgba(12,20,22,0.9); --panel-border:rgba(93,255,178,0.16);
+    --accent:#46ffb0; --accent-dim:#1f8f5f; --accent2:#ffb238; --danger:#ff4d6d; --text:#eaf6ef; --text-dim:#86a396;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); font-family:'Cairo',sans-serif; color:var(--text); min-height:100vh;}
+  header{padding:16px 22px; border-bottom:1px solid var(--panel-border); display:flex; align-items:center; justify-content:space-between;}
+  .brand{font-weight:800; font-size:19px; color:var(--accent2);}
+  .warn{font-size:11.5px; color:var(--danger); max-width:420px; text-align:left;}
+  main{max-width:1000px; margin:0 auto; padding:22px;}
+  h2{font-size:16px; margin:26px 0 12px; display:flex; align-items:center; gap:8px;}
+  table{width:100%; border-collapse:collapse; background:var(--panel); border:1px solid var(--panel-border); border-radius:14px; overflow:hidden; font-size:12.5px;}
+  th,td{padding:9px 8px; text-align:right; border-bottom:1px solid rgba(255,255,255,0.06);}
+  th{color:var(--text-dim); font-weight:700; font-size:11.5px;}
+  tr:last-child td{border-bottom:none;}
+  input[type=text], input[type=number], input[type=url], select{
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:8px;
+    padding:7px 8px; color:var(--text); font-family:'Cairo',sans-serif; font-size:12.5px;
+  }
+  input[type=checkbox]{width:18px; height:18px;}
+  .row-actions{display:flex; gap:6px;}
+  button{cursor:pointer; font-family:'Cairo',sans-serif; border:none; border-radius:8px; padding:7px 10px; font-size:12px; font-weight:700;}
+  .btn-save{background:var(--accent); color:#05130c;}
+  .btn-del{background:rgba(255,77,109,0.15); color:var(--danger); border:1px solid rgba(255,77,109,0.3);}
+  .btn-add{background:linear-gradient(90deg,var(--accent-dim),var(--accent)); color:#05130c; padding:10px 18px; margin-top:10px;}
+  .card-form{background:var(--panel); border:1px dashed rgba(255,178,56,0.35); border-radius:14px; padding:14px; margin-top:14px;}
+  .card-form .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-bottom:10px;}
+  .field label{display:block; font-size:11px; color:var(--text-dim); margin-bottom:4px;}
+  .status{font-size:12px; color:var(--accent); min-height:16px; margin-top:8px;}
+</style>
+</head>
+<body>
+<!-- START PASSWORD PROTECTION -->
+<style id="page-lock-style">
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Tajawal', sans-serif;
+    }
+    html, body { overflow: hidden !important; width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
+    #page-lock-screen-protection {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #f4f6f9; color: #2c3e50; z-index: 9999999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        font-family: system-ui, -apple-system, sans-serif; padding: 20px; box-sizing: border-box;
+        text-align: center;
+    }
+    #page-lock-screen-protection .lock-card {
+        background: #ffffff; padding: 35px 25px; border-radius: 18px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06); max-width: 360px; width: 100%;
+        border: 1px solid #e1e8ed;
+    }
+    #page-lock-screen-protection .lock-icon {
+        font-size: 42px; margin-bottom: 15px; color: #34495e;
+    }
+    #page-lock-screen-protection h2 {
+        margin: 0 0 10px 0; font-size: 1.3rem; color: #2c3e50; font-weight: 700;
+    }
+    #page-lock-screen-protection p {
+        margin: 0 0 20px 0; font-size: 0.95rem; color: #7f8c8d; line-height: 1.5;
+    }
+    #page-lock-screen-protection input {
+        width: 100%; padding: 12px 15px; border: 1.5px solid #dcdde1;
+        border-radius: 10px; font-size: 1rem; outline: none; margin-bottom: 15px;
+        box-sizing: border-box; text-align: center; transition: border-color 0.2s;
+    }
+    #page-lock-screen-protection input:focus {
+        border-color: #18bc9c;
+    }
+    #page-lock-screen-protection button {
+        width: 100%; background: #18bc9c; color: white; border: none;
+        padding: 12px; border-radius: 10px; font-size: 1rem; font-weight: bold;
+        cursor: pointer; transition: background 0.2s;
+    }
+    #page-lock-screen-protection button:active {
+        transform: scale(0.98);
+    }
+    #page-lock-error-msg {
+        color: #e74c3c; font-size: 0.85rem; margin-top: 10px; display: none;
+    }
+</style>
+<div id="page-lock-screen-protection">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <div class="lock-card">
+        <div class="lock-icon"><i class="fa-solid fa-lock"></i></div>
+        <h2>هذه صفحة خاصة!</h2>
+        <p>يرجى إدخال كلمة المرور لتستطيع رؤيتها!</p>
+        <input type="password" id="page-lock-pass-input" placeholder="كلمة المرور">
+        <button onclick="verifyPagePassword()">دخول</button>
+        <div id="page-lock-error-msg">كلمة المرور غير صحيحة!</div>
+    </div>
+</div>
+<script>
+(function () {
+    var SPS_JSON_PATH = "sps-pages.json";
+    var SPS_PAGE_KEY = "Admingames.html";
+    var SPS_USER = "BLOXMAM";
+    var SPS_REPO = "app_web";
+    var spsPasswordValue = null;
+    var spsReady = false;
+
+    function spsApplyConfig(cfg) {
+        spsPasswordValue = (cfg && typeof cfg[SPS_PAGE_KEY] === "string") ? cfg[SPS_PAGE_KEY] : "";
+        spsReady = true;
+    }
+
+    async function spsFetchPasswordsConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                var localData = Android.readLocalFile("sps-pages.json");
+                if (localData && localData.trim() !== "") {
+                    spsApplyConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            var res = await fetch("sps-pages.json?t=" + Date.now());
+            if (res.ok) { spsApplyConfig(await res.json()); return; }
+            throw new Error();
+        } catch (e) {
+            try {
+                var resAlt = await fetch("https://raw.githubusercontent.com/" + SPS_USER + "/" + SPS_REPO + "/main/" + SPS_JSON_PATH + "?t=" + Date.now());
+                if (resAlt.ok) { spsApplyConfig(await resAlt.json()); return; }
+                spsApplyConfig(null);
+            } catch (err) {
+                spsApplyConfig(null);
+            }
+        }
+    }
+
+    spsFetchPasswordsConfig();
+
+    window.verifyPagePassword = function () {
+        var inputVal = document.getElementById("page-lock-pass-input").value;
+        var errorEl = document.getElementById("page-lock-error-msg");
+        if (!spsReady) {
+            errorEl.textContent = "يرجى الانتظار لحظة ثم إعادة المحاولة...";
+            errorEl.style.display = "block";
+            return;
+        }
+        if (spsPasswordValue && inputVal === spsPasswordValue) {
+            document.getElementById("page-lock-screen-protection").remove();
+            var lockStyle = document.getElementById("page-lock-style");
+            if (lockStyle) lockStyle.remove();
+        } else {
+            errorEl.textContent = "كلمة المرور غير صحيحة!";
+            errorEl.style.display = "block";
+        }
+    };
+})();
+</script>
+<!-- END PASSWORD PROTECTION -->
+
+
+<header>
+  <div class="brand">⚙️ لوحة تحكم صفحة الألعاب</div>
+  <div class="warn">تنبيه: قاعدة البيانات عامة (بدون تسجيل دخول) — أي شخص يملك الرابط يقدر يعدّل هذه البيانات. لا تحط فيها بيانات حساسة.</div>
+</header>
+
+<main>
+  <h2>🗂️ الأقسام (Sections)</h2>
+  <table id="sectionsTable">
+    <thead><tr><th>المعرّف</th><th>الاسم</th><th>السعر (Bonus)</th><th>الترتيب</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="card-form">
+    <div class="grid">
+      <div class="field"><label>المعرّف (id، إنجليزي بدون مسافات)</label><input type="text" id="secId" placeholder="e.g. arcade"></div>
+      <div class="field"><label>الاسم الظاهر</label><input type="text" id="secName" placeholder="قسم الأركيد"></div>
+      <div class="field"><label>السعر (0 = مجاني دائمًا)</label><input type="number" id="secPrice" value="0" min="0"></div>
+      <div class="field"><label>الترتيب</label><input type="number" id="secOrder" value="0"></div>
+    </div>
+    <button class="btn-add" id="addSectionBtn">+ إضافة / تحديث قسم</button>
+    <div class="status" id="secStatus"></div>
+  </div>
+
+  <h2>🎮 الألعاب (Games)</h2>
+  <table id="gamesTable">
+    <thead><tr><th>المعرّف</th><th>الاسم</th><th>الصورة</th><th>القسم</th><th>Bonus</th><th>Leaderboard</th><th>رابط اللعب</th><th></th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="card-form">
+    <div class="grid">
+      <div class="field"><label>المعرّف (id)</label><input type="text" id="gmId" placeholder="e.g. snake3d"></div>
+      <div class="field"><label>الاسم الظاهر</label><input type="text" id="gmName" placeholder="ثعبان 3D"></div>
+      <div class="field"><label>القسم</label><select id="gmSection"></select></div>
+      <div class="field"><label>الأيقونة (إيموجي، احتياطي إن لم توجد صورة)</label><input type="text" id="gmIcon" placeholder="🐍"></div>
+      <div class="field"><label>رابط صورة اللعبة (اختياري)</label><input type="url" id="gmImage" placeholder="https://.../snake-cover.jpg"></div>
+      <div class="field"><label>الترتيب</label><input type="number" id="gmOrder" value="0"></div>
+      <div class="field"><label>رابط اللعب</label><input type="url" id="gmUrl" placeholder="https://.../snake3d.html"></div>
+      <div class="field"><label>مسار لوحة الصدارة في RTDB (اختياري)</label><input type="text" id="gmLbKey" placeholder="snake3d_leaderboard"></div>
+      <div class="field"><label>تمنح Bonus؟</label><input type="checkbox" id="gmGivesBonus"></div>
+      <div class="field"><label>لديها Leaderboard؟</label><input type="checkbox" id="gmHasLb"></div>
+    </div>
+    <div class="field" style="margin-bottom:10px;"><label>وصف قصير</label><input type="text" id="gmDesc" placeholder="وصف مختصر للعبة"></div>
+    <button class="btn-add" id="addGameBtn">+ إضافة / تحديث لعبة</button>
+    <div class="status" id="gmStatus"></div>
+  </div>
+</main>
+
+<script>
+(function(){
+"use strict";
+const firebaseConfig = { databaseURL: "https://umlog-box-default-rtdb.firebaseio.com" };
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+let sections = [], games = [];
+
+function loadAll(){
+  Promise.all([
+    db.ref('games_config/sections').once('value'),
+    db.ref('games_config/games').once('value')
+  ]).then(([s,g])=>{
+    sections = []; s.forEach(c=> sections.push({ id:c.key, ...c.val() }));
+    sections.sort((a,b)=>(a.order||0)-(b.order||0));
+    games = []; g.forEach(c=> games.push({ id:c.key, ...c.val() }));
+    games.sort((a,b)=>(a.order||0)-(b.order||0));
+    renderSections(); renderGamesSectionSelect(); renderGames();
+  });
+}
+
+/* ---------- sections ---------- */
+function renderSections(){
+  document.querySelector('#sectionsTable tbody').innerHTML = sections.map(s=>`
+    <tr>
+      <td>${esc(s.id)}</td>
+      <td>${esc(s.name)}</td>
+      <td>${s.price||0}</td>
+      <td>${s.order||0}</td>
+      <td class="row-actions">
+        <button class="btn-save" data-edit-sec="${esc(s.id)}">تعديل</button>
+        <button class="btn-del" data-del-sec="${esc(s.id)}">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="5" style="color:var(--text-dim)">لا توجد أقسام بعد.</td></tr>';
+
+  document.querySelectorAll('[data-edit-sec]').forEach(b=> b.addEventListener('click', ()=>{
+    const s = sections.find(x=>x.id===b.dataset.editSec);
+    document.getElementById('secId').value = s.id;
+    document.getElementById('secName').value = s.name||'';
+    document.getElementById('secPrice').value = s.price||0;
+    document.getElementById('secOrder').value = s.order||0;
+  }));
+  document.querySelectorAll('[data-del-sec]').forEach(b=> b.addEventListener('click', ()=>{
+    if(!confirm('حذف هذا القسم؟')) return;
+    db.ref('games_config/sections/'+b.dataset.delSec).remove().then(loadAll);
+  }));
+}
+document.getElementById('addSectionBtn').addEventListener('click', ()=>{
+  const id = document.getElementById('secId').value.trim();
+  if(!id){ alert('المعرّف مطلوب'); return; }
+  const data = {
+    name: document.getElementById('secName').value.trim(),
+    price: parseFloat(document.getElementById('secPrice').value)||0,
+    order: parseFloat(document.getElementById('secOrder').value)||0
+  };
+  db.ref('games_config/sections/'+id).set(data).then(()=>{
+    document.getElementById('secStatus').textContent = '✅ تم الحفظ';
+    setTimeout(()=>document.getElementById('secStatus').textContent='',2000);
+    loadAll();
+  });
+});
+
+/* ---------- games ---------- */
+function renderGamesSectionSelect(){
+  document.getElementById('gmSection').innerHTML = sections.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('') || '<option value="">أضف قسمًا أولًا</option>';
+}
+function renderGames(){
+  document.querySelector('#gamesTable tbody').innerHTML = games.map(g=>`
+    <tr>
+      <td>${esc(g.id)}</td>
+      <td>${esc(g.name)}</td>
+      <td>${g.image ? `<img src="${esc(g.image)}" style="width:44px;height:32px;object-fit:cover;border-radius:6px;" onerror="this.style.display='none'">` : '—'}</td>
+      <td>${esc(g.sectionId)}</td>
+      <td>${g.givesBonus?'✅':'—'}</td>
+      <td>${g.hasLeaderboard?'✅':'—'}</td>
+      <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(g.url)}</td>
+      <td class="row-actions">
+        <button class="btn-save" data-edit-gm="${esc(g.id)}">تعديل</button>
+        <button class="btn-del" data-del-gm="${esc(g.id)}">حذف</button>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="8" style="color:var(--text-dim)">لا توجد ألعاب بعد.</td></tr>';
+
+  document.querySelectorAll('[data-edit-gm]').forEach(b=> b.addEventListener('click', ()=>{
+    const g = games.find(x=>x.id===b.dataset.editGm);
+    document.getElementById('gmId').value = g.id;
+    document.getElementById('gmName').value = g.name||'';
+    document.getElementById('gmSection').value = g.sectionId||'';
+    document.getElementById('gmIcon').value = g.icon||'';
+    document.getElementById('gmImage').value = g.image||'';
+    document.getElementById('gmOrder').value = g.order||0;
+    document.getElementById('gmUrl').value = g.url||'';
+    document.getElementById('gmLbKey').value = g.leaderboardKey||'';
+    document.getElementById('gmGivesBonus').checked = !!g.givesBonus;
+    document.getElementById('gmHasLb').checked = !!g.hasLeaderboard;
+    document.getElementById('gmDesc').value = g.desc||'';
+  }));
+  document.querySelectorAll('[data-del-gm]').forEach(b=> b.addEventListener('click', ()=>{
+    if(!confirm('حذف هذه اللعبة؟')) return;
+    db.ref('games_config/games/'+b.dataset.delGm).remove().then(loadAll);
+  }));
+}
+document.getElementById('addGameBtn').addEventListener('click', ()=>{
+  const id = document.getElementById('gmId').value.trim();
+  if(!id){ alert('المعرّف مطلوب'); return; }
+  const data = {
+    name: document.getElementById('gmName').value.trim(),
+    sectionId: document.getElementById('gmSection').value,
+    icon: document.getElementById('gmIcon').value.trim(),
+    image: document.getElementById('gmImage').value.trim(),
+    order: parseFloat(document.getElementById('gmOrder').value)||0,
+    url: document.getElementById('gmUrl').value.trim(),
+    leaderboardKey: document.getElementById('gmLbKey').value.trim() || (id+'_leaderboard'),
+    givesBonus: document.getElementById('gmGivesBonus').checked,
+    hasLeaderboard: document.getElementById('gmHasLb').checked,
+    desc: document.getElementById('gmDesc').value.trim()
+  };
+  db.ref('games_config/games/'+id).set(data).then(()=>{
+    document.getElementById('gmStatus').textContent = '✅ تم الحفظ';
+    setTimeout(()=>document.getElementById('gmStatus').textContent='',2000);
+    loadAll();
+  });
+});
+
+loadAll();
+})();
+</script>
+</body>
+</html>
