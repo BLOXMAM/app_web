@@ -261,7 +261,7 @@
             fbDb.ref(LB_PATH).orderByChild('time').limitToFirst(10).once('value')
                 .then(snap=>{
                     const rows = [];
-                    snap.forEach(c=> rows.push(c.val()));
+                    snap.forEach(c=>{ rows.push(c.val()); });
                     rows.sort((a,b)=> (a.time||0) - (b.time||0));
                     if(!rows.length){ box.innerHTML = '<div class="lb-empty">كن أول من يسجّل اسمه هنا! 🏆</div>'; return; }
                     box.innerHTML = rows.map((r,i)=>{
