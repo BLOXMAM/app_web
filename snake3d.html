@@ -106,6 +106,8 @@
     backdrop-filter: blur(10px);
   }
   .score-box .lbl{font-size:10px; color:var(--text-dim); letter-spacing:0.5px;}
+  #foodTimerVal.food-timer-urgent{color:var(--accent2, #ff8a3d); animation:foodPulse 0.5s infinite alternate;}
+  @keyframes foodPulse{ from{opacity:1;} to{opacity:0.4;} }
   .score-box .val{font-size:22px; font-weight:700; color:var(--accent);}
   .icon-btn{
     pointer-events:auto;
@@ -126,11 +128,12 @@
   .dbtn{
     pointer-events:auto;
     width:72px; height:72px; border-radius:50%;
-    background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.16);
+    background:var(--panel); border:1.5px solid var(--panel-border);
     display:flex; align-items:center; justify-content:center; color:var(--text); font-size:28px;
     backdrop-filter: blur(6px); touch-action:none;
+    box-shadow:0 2px 10px rgba(0,0,0,0.25);
   }
-  .dbtn:active{background:rgba(70,255,176,0.25); border-color:var(--accent); transform:scale(0.94);}
+  .dbtn:active{background:rgba(70,255,176,0.3); border-color:var(--accent); transform:scale(0.94);}
 
   /* game over */
   #gameover .card{border-color:rgba(255,77,109,0.35);}
@@ -281,16 +284,18 @@
       <div class="icon-btn" id="pauseBtn">⏸</div>
       <div class="icon-btn" id="soundBtn">🔊</div>
       <div class="icon-btn" id="themeBtn">☀️</div>
-      <a class="icon-btn" id="backHomeBtn" href="Games.html" title="العودة لصفحة الألعاب">🏠</a>
+      <a class="icon-btn" id="backHomeBtn" href="games.html" title="العودة لصفحة الألعاب">🏠</a>
     </div>
     <div class="score-box">
-      <div class="lbl">النتيجة <span style="opacity:.6">/ 500</span></div>
+      <div class="lbl">النتيجة <span style="opacity:.6">/ 200</span></div>
       <div class="val num" id="scoreVal">0</div>
+      <div class="lbl" style="margin-top:6px;">⏳ يختفي الطعام خلال</div>
+      <div class="val num" id="foodTimerVal" style="font-size:16px;">30</div>
     </div>
   </div>
   <div id="dpad">
-    
-    <div class="dbtn" data-dir="right">▶</div>
+   
+    <div class="dbtn" data-dir="right">▶</div> 
 <div class="dbtn" data-dir="left">◀</div>
   </div>
   <div class="swipe-hint" id="swipeHint">اسحب يمينًا أو يسارًا للانعطاف</div>
@@ -410,7 +415,7 @@ function tone(freq, dur, type, delay, peak, sweepTo){
 }
 function sfxEat(){ ensureAudio(); tone(660,0.09,'triangle',0,0.5); tone(920,0.11,'triangle',0.06,0.45); }
 function sfxTurn(){ ensureAudio(); tone(300,0.03,'square',0,0.06); }
-function sfxClick(){ ensureAudio(); tone(500,0.05,'sine',0,0.25); }
+function sfxClick(){ ensureAudio(); tone(520,0.08,'sine',0,0.55); tone(720,0.05,'sine',0.015,0.3); }
 function sfxLevelUp(){ ensureAudio(); tone(500,0.08,'sawtooth',0,0.3); tone(700,0.08,'sawtooth',0.07,0.3); tone(950,0.12,'sawtooth',0.14,0.3); }
 function sfxTierChange(){ ensureAudio(); tone(700,0.1,'sine',0,0.35); tone(1050,0.14,'sine',0.08,0.35); }
 function sfxGameOver(){ ensureAudio(); tone(320,0.5,'sawtooth',0,0.4,60); }
@@ -427,7 +432,7 @@ const DIFF = {
   medium: { interval: 190, minInterval: 65, boardSize: 16 },
   hard:   { interval: 140, minInterval: 50, boardSize: 18 }
 };
-const WIN_SCORE = 500;
+const WIN_SCORE = 200;
 const POINTS_PER_FOOD = 10;
 /* body color changes with score — thresholds are score values, not food count */
 const SCORE_TIERS = [
@@ -444,6 +449,21 @@ function tierForScore(s){
   let t = SCORE_TIERS[0];
   for(const tier of SCORE_TIERS){ if(s>=tier.min) t=tier; }
   return t;
+}
+/* walls take on the current tier's color too — not just the snake's body */
+function updateWallColors(){
+  if(!wallGroup) return;
+  const tier = tierForScore(score);
+  let col, em, op;
+  if(tier.min === 0){
+    col = theme==='night' ? 0x46ffb0 : 0x2fae6b;
+    em  = theme==='night' ? 0x0f7a4d : 0x0a3320;
+    op  = theme==='night' ? 0.45 : 0.28;
+  } else {
+    col = tier.a; em = tier.b;
+    op  = theme==='night' ? 0.5 : 0.34;
+  }
+  wallGroup.children.forEach(w=>{ w.material.color.set(col); w.material.emissive.set(em); w.material.opacity = op; });
 }
 const LOSS_TAUNTS_LOW = [
   'هذا كل ما عندك؟ حتى الجدار كان أذكى منك 😂',
@@ -700,13 +720,13 @@ function applyTheme(t){
     skyDome.material.uniforms.topColor.value.set(0x4fa8f5);
     skyDome.material.uniforms.bottomColor.value.set(0xe8f6ff);
     sunMoon.material.map = makeGlowTexture('rgba(255,246,214,1)','rgba(255,246,214,0)');
-    ambientLight.intensity = 0.75; ambientLight.color.set(0xffffff);
-    hemiLight.intensity = 0.55; hemiLight.color.set(0xbfe8ff); hemiLight.groundColor.set(0x6fae6f);
-    sunLight.color.set(0xfff3d6); sunLight.intensity = 1.15;
+    ambientLight.intensity = 0.55; ambientLight.color.set(0xffffff);
+    hemiLight.intensity = 0.42; hemiLight.color.set(0xbfe8ff); hemiLight.groundColor.set(0x6fae6f);
+    sunLight.color.set(0xfff3d6); sunLight.intensity = 0.85;
     sunLight.position.set(10, 18, 8);
     ground.material.color.set(0xffffff);
     gridHelper.material.opacity = 0.10; gridHelper.material.transparent = true;
-    wallGroup.children.forEach(w=>{ w.material.color.set(0x2fae6b); w.material.emissive.set(0x0a3320); w.material.opacity = 0.28; });
+    updateWallColors();
     stars.visible = false;
   } else {
     scene.background = new THREE.Color(0x050912);
@@ -720,7 +740,7 @@ function applyTheme(t){
     sunLight.position.set(-8, 16, -6);
     ground.material.color.set(0xffffff);
     gridHelper.material.opacity = 0.22; gridHelper.material.transparent = true;
-    wallGroup.children.forEach(w=>{ w.material.color.set(0x46ffb0); w.material.emissive.set(0x0f7a4d); w.material.opacity = 0.45; });
+    updateWallColors();
     stars.visible = true;
   }
   sunMoon.material.needsUpdate = true;
@@ -782,6 +802,123 @@ const foodLight = new THREE.PointLight(0xffb238, 1.1, 4);
 foodMesh.add(foodLight);
 scene.add(foodMesh);
 
+/* 3D compass arrow — floats above the snake's head and rotates to always
+   point toward the current (orange) food. Built as a proper arrow shape:
+   a thin shaft plus a triangular head at the tip — not just a bare cone. */
+const arrowMat = new THREE.MeshStandardMaterial({ color:0x40e0ff, emissive:0x0090aa, emissiveIntensity:1.2, roughness:0.25, metalness:0.4 });
+const arrowShaftGeo = new THREE.CylinderGeometry(0.055, 0.055, 0.75, 8);
+arrowShaftGeo.rotateX(Math.PI/2);
+arrowShaftGeo.translate(0, 0, 0.375);
+const arrowHeadGeo = new THREE.ConeGeometry(0.19, 0.5, 4);
+arrowHeadGeo.rotateX(Math.PI/2);
+arrowHeadGeo.translate(0, 0, 0.75 + 0.25);
+const foodArrow = new THREE.Group();
+foodArrow.add(new THREE.Mesh(arrowShaftGeo, arrowMat));
+foodArrow.add(new THREE.Mesh(arrowHeadGeo, arrowMat));
+foodArrow.position.set(0, 3.2, 0);
+foodArrow.visible = false;
+scene.add(foodArrow);
+
+/* the arrow shrinks a notch every 30 points and is fully gone by 120,
+   forcing the player to start finding food on their own */
+function arrowScaleForScore(s){
+  const steps = Math.min(4, Math.floor(s/30));
+  return Math.max(0, 1 - steps*0.25);
+}
+function updateFoodArrow(headWorldPos, now){
+  const scale = arrowScaleForScore(score);
+  foodArrow.visible = scale > 0.001;
+  if(!foodArrow.visible) return;
+  foodArrow.scale.setScalar(scale);
+  const dx = foodMesh.position.x - headWorldPos.x;
+  const dz = foodMesh.position.z - headWorldPos.z;
+  const angle = Math.atan2(dx, dz);
+  foodArrow.position.set(headWorldPos.x, headWorldPos.y + 2.6 + Math.sin(now*0.004)*0.15, headWorldPos.z);
+  foodArrow.rotation.y = angle;
+}
+
+/* food auto-relocates if left uneaten too long, so it can't get "camped" forever */
+const FOOD_LIFETIME_SEC = 30;
+let foodTimeLeft = FOOD_LIFETIME_SEC;
+function updateFoodTimerUI(){
+  const el = document.getElementById('foodTimerVal');
+  const secs = Math.max(0, Math.ceil(foodTimeLeft));
+  el.textContent = secs;
+  el.classList.toggle('food-timer-urgent', secs<=5);
+}
+
+/* poisonous red food — appears once the player reaches 100 points. Same
+   relocate-after-30s behaviour as the normal food, but touching it is fatal. */
+const poisonFoodGeo = new THREE.OctahedronGeometry(0.34, 0);
+const poisonFoodMat = new THREE.MeshStandardMaterial({ color:0xff2d4d, emissive:0xaa0018, emissiveIntensity:1.0, roughness:0.25, metalness:0.3 });
+const poisonFoodMesh = new THREE.Mesh(poisonFoodGeo, poisonFoodMat);
+poisonFoodMesh.castShadow = true;
+const poisonLight = new THREE.PointLight(0xff2d4d, 1.1, 4);
+poisonFoodMesh.add(poisonLight);
+poisonFoodMesh.visible = false;
+scene.add(poisonFoodMesh);
+let poisonActive = false;
+let poisonFood = {x:0,z:0};
+let poisonTimeLeft = FOOD_LIFETIME_SEC;
+
+function placePoisonFood(){
+  let c; let tries = 0;
+  do { c = randCell(); tries++; } while((occupied(c, snake) || cellEq(c, food)) && tries<200);
+  poisonFood = c;
+  const w = cellToWorld(c.x, c.z);
+  poisonFoodMesh.position.set(w.x, 0.55, w.z);
+  poisonTimeLeft = FOOD_LIFETIME_SEC;
+}
+
+/* one-off expanding "wave" ring, played when the map grows at 100 points */
+let waveRings = [];
+function spawnWaveRing(pos){
+  const geo = new THREE.RingGeometry(0.4, 0.6, 48);
+  const mat = new THREE.MeshBasicMaterial({ color:0xa855f7, transparent:true, opacity:0.85, side:THREE.DoubleSide });
+  const ring = new THREE.Mesh(geo, mat);
+  ring.rotation.x = -Math.PI/2;
+  ring.position.set(pos.x, 0.08, pos.z);
+  ring.userData.t = 0; ring.userData.life = 1.1;
+  scene.add(ring);
+  waveRings.push(ring);
+}
+function updateWaveRings(dt){
+  for(let i=waveRings.length-1;i>=0;i--){
+    const r = waveRings[i];
+    r.userData.t += dt;
+    const p = r.userData.t / r.userData.life;
+    if(p >= 1){ scene.remove(r); waveRings.splice(i,1); continue; }
+    const scale = 1 + p*Math.max(boardSize, 16);
+    r.scale.setScalar(scale);
+    r.material.opacity = 0.85*(1-p);
+  }
+}
+
+/* board expansion at 100 points — grows boardSize while shifting every
+   logical grid coordinate so nothing visually jumps (world positions cancel out) */
+function expandBoard(delta){
+  const shift = delta/2;
+  boardSize += delta;
+  half = boardSize/2;
+  snake = snake.map(s=>({x:s.x+shift, z:s.z+shift}));
+  prevSnake = prevSnake.map(s=>({x:s.x+shift, z:s.z+shift}));
+  food = {x:food.x+shift, z:food.z+shift};
+  poisonFood = {x:poisonFood.x+shift, z:poisonFood.z+shift};
+  buildEnvironment();
+  applyTheme(theme);
+}
+
+let hundredTriggered = false;
+function triggerHundredEvent(){
+  hundredTriggered = true;
+  expandBoard(6);
+  spawnWaveRing(headMesh.position.clone());
+  poisonActive = true;
+  poisonFoodMesh.visible = true;
+  placePoisonFood();
+  showToast('🌊 وصلت 100 نقطة! اتسعت الخريطة وظهر طعام أحمر سام — تجنّبه!', 0xff2d4d);
+}
+
 /* particles for eat burst */
 let burstParticles = [];
 function spawnBurst(pos){
@@ -831,10 +968,12 @@ function occupied(cell, arr){ return arr.some(s=>cellEq(s,cell)); }
 function placeFood(){
   let c;
   let tries=0;
-  do { c = randCell(); tries++; } while(occupied(c, snake) && tries<200);
+  do { c = randCell(); tries++; } while((occupied(c, snake) || (poisonActive && cellEq(c, poisonFood))) && tries<200);
   food = c;
   const w = cellToWorld(c.x, c.z);
   foodMesh.position.set(w.x, 0.55, w.z);
+  foodTimeLeft = FOOD_LIFETIME_SEC;
+  updateFoodTimerUI();
 }
 
 function resetGame(){
@@ -852,14 +991,20 @@ function resetGame(){
   headAngle = dirAngle(dir); prevHeadAngle = headAngle;
   score = 0; growPending = 0;
   currentTierMin = 0;
+  hundredTriggered = false;
+  poisonActive = false;
+  poisonFoodMesh.visible = false;
   lastSpeedTier = 0;
   baseTickInterval = DIFF[difficulty].interval;
   tickInterval = baseTickInterval;
   lastTickTime = performance.now();
   gameStartTime = performance.now();
   updateScoreUI();
+  updateWallColors();
   rebuildSnakeMeshes(snake.length);
   placeFood();
+  foodArrow.visible = true;
+  foodArrow.scale.setScalar(1);
   paused = false; running = true;
 }
 
@@ -893,9 +1038,10 @@ function checkColorTier(){
   const tier = tierForScore(score);
   if(tier.min !== currentTierMin){
     currentTierMin = tier.min;
+    updateWallColors();
     if(tier.min>0){
       sfxTierChange();
-      showToast(`🎨 تغيّر لون الثعبان إلى ${tier.label}!`, tier.a);
+      showToast(`🎨 تغيّر لون الثعبان والجدران إلى ${tier.label}!`, tier.a);
     }
   }
 }
@@ -924,6 +1070,10 @@ function gameTick(){
   if(occupied(nh, bodyCheck)){
     return endGame();
   }
+  // poisonous food — instant death
+  if(poisonActive && cellEq(nh, poisonFood)){
+    return endGame();
+  }
 
   snake.unshift(nh);
   let grew = false;
@@ -936,6 +1086,9 @@ function gameTick(){
     spawnBurst(foodMesh.position.clone());
     checkColorTier();
     updateSpeedForScore();
+    if(!hundredTriggered && score >= 100){
+      triggerHundredEvent();
+    }
     if(score >= WIN_SCORE){
       justWon = true;
     } else {
@@ -959,6 +1112,7 @@ function gameTick(){
 
 function endGame(){
   running = false;
+  foodArrow.visible = false;
   sfxGameOver();
   if(score > bestScore){ bestScore = score; }
   document.getElementById('finalScore').textContent = score;
@@ -975,6 +1129,7 @@ function formatTime(sec){
 
 function triggerWin(){
   running = false;
+  foodArrow.visible = false;
   sfxWin();
   if(score > bestScore){ bestScore = score; }
   const elapsed = (performance.now() - gameStartTime)/1000;
@@ -1020,7 +1175,12 @@ function animate(now){
 
   foodMesh.rotation.y += dt*1.6;
   foodMesh.position.y = 0.55 + Math.sin(now*0.003)*0.08;
+  if(poisonFoodMesh.visible){
+    poisonFoodMesh.rotation.y -= dt*2.0;
+    poisonFoodMesh.position.y = 0.55 + Math.sin(now*0.0035+2)*0.1;
+  }
   updateBurst(dt);
+  updateWaveRings(dt);
   if(stars.visible) stars.rotation.y += dt*0.006;
 
   if(cloudGroup && cloudGroup.visible){
@@ -1042,6 +1202,20 @@ function animate(now){
   }
 
   if(running && !paused){
+    foodTimeLeft -= dt;
+    if(foodTimeLeft <= 0){
+      placeFood(); // relocates the food and resets its own timer
+      spawnBurst(foodMesh.position.clone());
+    } else {
+      updateFoodTimerUI();
+    }
+    if(poisonActive){
+      poisonTimeLeft -= dt;
+      if(poisonTimeLeft <= 0){
+        placePoisonFood();
+      }
+    }
+
     const elapsed = now - lastTickTime;
     if(elapsed >= tickInterval){
       lastTickTime = now;
@@ -1083,6 +1257,7 @@ function animate(now){
 
     const dirVec = new THREE.Vector3(Math.sin(headAngle),0,Math.cos(headAngle));
     updateCamera(headMesh.position, dirVec, dt);
+    updateFoodArrow(headMesh.position, now);
   }
 
   renderer.render(scene, camera);
