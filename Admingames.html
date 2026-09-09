@@ -215,6 +215,16 @@
     <button class="btn-add" id="addGameBtn">+ إضافة / تحديث لعبة</button>
     <div class="status" id="gmStatus"></div>
   </div>
+  <h2>🪙 أخذ Bonus (تخزين محلي — localStorage)</h2>
+  <div class="card-form">
+    <div class="grid">
+      <div class="field"><label>الرصيد الحالي في هذا المتصفح</label><input type="text" id="bonusCurrent" value="0" disabled></div>
+      <div class="field"><label>الرقم المراد أخذه</label><input type="number" id="bonusAmount" placeholder="مثال: 50" min="0"></div>
+    </div>
+    <button class="btn-add" id="addBonusBtn">+ إضافة</button>
+    <div class="status" id="bonusStatus"></div>
+  </div>
+
   <h2>🔍 تشخيص (Debug)</h2>
   <button class="btn-save" id="debugBtn">عرض البيانات الخام من قاعدة البيانات</button>
   <pre id="debugOutput" style="background:var(--panel); border:1px solid var(--panel-border); border-radius:12px; padding:14px; margin-top:10px; font-size:11.5px; white-space:pre-wrap; word-break:break-all; max-height:300px; overflow:auto; display:none;"></pre>
@@ -374,6 +384,22 @@ document.getElementById('addGameBtn').addEventListener('click', ()=>{
     alert('فشل الحفظ: ' + err.message);
   });
 });
+
+/* ---------- local bonus coins (localStorage, same key used in games.html) ---------- */
+const BONUS_KEY = 'bonusGames';
+function getLocalBonus(){ const v = parseInt(localStorage.getItem(BONUS_KEY),10); return Number.isFinite(v)?v:0; }
+function renderLocalBonus(){ document.getElementById('bonusCurrent').value = getLocalBonus(); }
+document.getElementById('addBonusBtn').addEventListener('click', ()=>{
+  const amount = parseInt(document.getElementById('bonusAmount').value, 10);
+  if(!Number.isFinite(amount) || amount <= 0){ alert('اكتب رقمًا صحيحًا أكبر من صفر'); return; }
+  const newVal = getLocalBonus() + amount;
+  localStorage.setItem(BONUS_KEY, String(newVal));
+  renderLocalBonus();
+  document.getElementById('bonusAmount').value = '';
+  document.getElementById('bonusStatus').textContent = '✅ تمت إضافة ' + amount + ' — الرصيد الآن: ' + newVal;
+  setTimeout(()=>document.getElementById('bonusStatus').textContent='',3000);
+});
+renderLocalBonus();
 
 document.getElementById('debugBtn').addEventListener('click', ()=>{
   const out = document.getElementById('debugOutput');
