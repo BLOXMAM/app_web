@@ -51,6 +51,7 @@
   .badge{display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:700; padding:4px 9px; border-radius:100px; width:fit-content;}
   .badge.bonus{background:rgba(255,178,56,0.15); color:var(--accent2); border:1px solid rgba(255,178,56,0.3);}
   .badge.nobonus{background:rgba(255,255,255,0.05); color:var(--text-dim); border:1px solid rgba(255,255,255,0.08);}
+  .badge.offline{background:rgba(70,255,176,0.12); color:var(--accent); border:1px solid rgba(70,255,176,0.3);}
   .card-actions{display:flex; gap:8px; margin-top:4px;}
   .btn{flex:1; border:none; border-radius:11px; padding:10px 8px; font-family:'Cairo',sans-serif; font-weight:700; font-size:12.5px; cursor:pointer; text-align:center;}
   .btn-play{background:linear-gradient(90deg,var(--accent-dim),var(--accent)); color:#05130c;}
@@ -193,6 +194,11 @@ function gameCardHtml(g){
   const badge = g.givesBonus
     ? `<span class="badge bonus">🎁 يمنح Bonus</span>`
     : `<span class="badge nobonus">بدون Bonus</span>`;
+  const offlineBadge = g.offlineMode === 'first-run'
+    ? `<span class="badge offline">📶→📴 تحتاج اتصال أول مرة فقط</span>`
+    : g.offlineMode === 'offline'
+    ? `<span class="badge offline">📴 تعمل بدون إنترنت</span>`
+    : '';
   const lbBtn = g.hasLeaderboard
     ? `<button class="btn btn-lb" data-lb="${esc(g.leaderboardKey || (g.id+'_leaderboard'))}" data-name="${esc(g.name)}">🏆 المتصدرون</button>`
     : '';
@@ -205,6 +211,7 @@ function gameCardHtml(g){
     <div class="name">${esc(g.name)}</div>
     <div class="desc">${esc(g.desc || '')}</div>
     ${badge}
+    ${offlineBadge}
     <div class="card-actions">
       ${lbBtn}
       <a class="btn btn-play" href="${esc(g.url||'#')}">▶ ابدأ اللعب</a>
