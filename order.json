@@ -19,7 +19,7 @@
   },
   {
     "file": "cowball.html",
-    "title": "cowball",
+    "title": "لعبة البقرة",
     "icon": "fa-solid fa-file",
     "hidden": true
   },
@@ -43,7 +43,7 @@
   },
   {
     "file": "snake3d.html",
-    "title": "snake3d",
+    "title": "لعبة الثعبان",
     "icon": "fa-solid fa-file",
     "hidden": true
   }
