@@ -164,8 +164,6 @@
 <!-- END PASSWORD PROTECTION -->
 
 
-
-
 <header>
   <div class="brand">⚙️ لوحة تحكم صفحة الألعاب</div>
   <div class="warn">تنبيه: قاعدة البيانات عامة (بدون تسجيل دخول) — أي شخص يملك الرابط يقدر يعدّل هذه البيانات. لا تحط فيها بيانات حساسة.</div>
@@ -190,7 +188,7 @@
 
   <h2>🎮 الألعاب (Games)</h2>
   <table id="gamesTable">
-    <thead><tr><th>المعرّف</th><th>الاسم</th><th>الصورة</th><th>القسم</th><th>Bonus</th><th>Leaderboard</th><th>رابط اللعب</th><th></th></tr></thead>
+    <thead><tr><th>المعرّف</th><th>الاسم</th><th>الصورة</th><th>القسم</th><th>الاتصال</th><th>Bonus</th><th>Leaderboard</th><th>رابط اللعب</th><th></th></tr></thead>
     <tbody></tbody>
   </table>
   <div class="card-form">
@@ -203,6 +201,13 @@
       <div class="field"><label>الترتيب</label><input type="number" id="gmOrder" value="0"></div>
       <div class="field"><label>رابط اللعب</label><input type="url" id="gmUrl" placeholder="https://.../snake3d.html"></div>
       <div class="field"><label>مسار لوحة الصدارة في RTDB (اختياري)</label><input type="text" id="gmLbKey" placeholder="snake3d_leaderboard"></div>
+      <div class="field"><label>الحاجة للإنترنت</label>
+        <select id="gmOfflineMode">
+          <option value="online">تحتاج إنترنت طول وقت اللعب</option>
+          <option value="first-run">تحتاج تشغيل أولي بالإنترنت ثم تعمل بدون إنترنت</option>
+          <option value="offline">لا تحتاج إنترنت أبدًا</option>
+        </select>
+      </div>
       <div class="field"><label>تمنح Bonus؟</label><input type="checkbox" id="gmGivesBonus"></div>
       <div class="field"><label>لديها Leaderboard؟</label><input type="checkbox" id="gmHasLb"></div>
     </div>
@@ -303,6 +308,7 @@ function renderGames(){
       <td>${esc(g.name)}</td>
       <td>${g.image ? `<img src="${esc(g.image)}" style="width:44px;height:32px;object-fit:cover;border-radius:6px;" onerror="this.style.display='none'">` : '—'}</td>
       <td>${esc(g.sectionId)}</td>
+      <td>${g.offlineMode==='first-run' ? '📶→📴 أولي' : g.offlineMode==='offline' ? '📴 بدون نت' : '🌐 دائم'}</td>
       <td>${g.givesBonus?'✅':'—'}</td>
       <td>${g.hasLeaderboard?'✅':'—'}</td>
       <td style="max-width:140px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${esc(g.url)}</td>
@@ -310,7 +316,7 @@ function renderGames(){
         <button class="btn-save" data-edit-gm="${esc(g.id)}">تعديل</button>
         <button class="btn-del" data-del-gm="${esc(g.id)}">حذف</button>
       </td>
-    </tr>`).join('') || '<tr><td colspan="8" style="color:var(--text-dim)">لا توجد ألعاب بعد.</td></tr>';
+    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--text-dim)">لا توجد ألعاب بعد.</td></tr>';
 
   document.querySelectorAll('[data-edit-gm]').forEach(b=> b.addEventListener('click', ()=>{
     const g = games.find(x=>x.id===b.dataset.editGm);
@@ -322,6 +328,7 @@ function renderGames(){
     document.getElementById('gmOrder').value = g.order||0;
     document.getElementById('gmUrl').value = g.url||'';
     document.getElementById('gmLbKey').value = g.leaderboardKey||'';
+    document.getElementById('gmOfflineMode').value = g.offlineMode||'online';
     document.getElementById('gmGivesBonus').checked = !!g.givesBonus;
     document.getElementById('gmHasLb').checked = !!g.hasLeaderboard;
     document.getElementById('gmDesc').value = g.desc||'';
@@ -343,6 +350,7 @@ document.getElementById('addGameBtn').addEventListener('click', ()=>{
     order: parseFloat(document.getElementById('gmOrder').value)||0,
     url: document.getElementById('gmUrl').value.trim(),
     leaderboardKey: document.getElementById('gmLbKey').value.trim() || (id+'_leaderboard'),
+    offlineMode: document.getElementById('gmOfflineMode').value,
     givesBonus: document.getElementById('gmGivesBonus').checked,
     hasLeaderboard: document.getElementById('gmHasLb').checked,
     desc: document.getElementById('gmDesc').value.trim()
@@ -357,6 +365,7 @@ document.getElementById('addGameBtn').addEventListener('click', ()=>{
     document.getElementById('gmOrder').value = 0;
     document.getElementById('gmUrl').value = '';
     document.getElementById('gmLbKey').value = '';
+    document.getElementById('gmOfflineMode').value = 'online';
     document.getElementById('gmGivesBonus').checked = false;
     document.getElementById('gmHasLb').checked = false;
     document.getElementById('gmDesc').value = '';
