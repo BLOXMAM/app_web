@@ -112,11 +112,10 @@
     width:42px; height:42px; border-radius:12px; border:1px solid var(--panel-border);
     background:var(--panel); color:var(--text); font-size:18px;
     display:flex; align-items:center; justify-content:center; cursor:pointer;
-    backdrop-filter: blur(10px); touch-action:none;
+    backdrop-filter: blur(10px); touch-action:none; text-decoration:none;
   }
   .icon-btn:active{transform:scale(0.92);}
   .btn-cluster{display:flex; gap:8px;}
-  
 
   /* d-pad: two steering buttons only — left/right relative to heading */
   #dpad{
@@ -282,7 +281,7 @@
       <div class="icon-btn" id="pauseBtn">⏸</div>
       <div class="icon-btn" id="soundBtn">🔊</div>
       <div class="icon-btn" id="themeBtn">☀️</div>
-      
+      <a class="icon-btn" id="backHomeBtn" href="games.html" title="العودة لصفحة الألعاب">🏠</a>
     </div>
     <div class="score-box">
       <div class="lbl">النتيجة <span style="opacity:.6">/ 500</span></div>
@@ -464,7 +463,7 @@ const LOSS_TAUNTS_CLOSE = [
   'كنت قاب قوسين من الفوز وضيّعتها! 😱',
   'قريب جدًا... قريب جدًا جدًا، بس لا 😂',
   'الفوز شافك من بعيد وسلّم عليك ولف 👋',
-  'شكل يدك ما تبغاك تفوز اليوم 🙃'
+  'شكله القدر ما بغاك تفوز اليوم 🙃'
 ];
 function pickTaunt(finalScore){
   const pool = finalScore>=250 ? LOSS_TAUNTS_CLOSE : (finalScore>=100 ? LOSS_TAUNTS_MID : LOSS_TAUNTS_LOW);
