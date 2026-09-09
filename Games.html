@@ -149,26 +149,11 @@ function withTimeout(promise, ms){
   ]);
 }
 
+let liveDataArrived = false;
 function loadAll(){
-  const fetchPromise = Promise.all([
-    db.ref('games_config/sections').once('value'),
-    db.ref('games_config/games').once('value')
-  ]);
-
-  withTimeout(fetchPromise, 6000).then(([secSnap, gameSnap])=>{
-    const sections = [];
-    secSnap.forEach(c=> sections.push({ id:c.key, ...c.val() }));
-    sections.sort((a,b)=>(a.order||0)-(b.order||0));
-
-    const games = [];
-    gameSnap.forEach(c=> games.push({ id:c.key, ...c.val() }));
-    games.sort((a,b)=>(a.order||0)-(b.order||0));
-
-    saveCache(sections, games);
-    setOfflineBanner(false);
-    renderSections(sections, games);
-  }).catch(err=>{
-    console.warn('live load failed, falling back to cache', err);
+  // احتياط: لو ما وصلت أي بيانات حيّة خلال 6 ثواني (اتصال بطيء/منقطع)، اعرض النسخة المحفوظة محليًا.
+  setTimeout(()=>{
+    if(liveDataArrived) return;
     const cached = loadCache();
     if(cached && cached.sections){
       setOfflineBanner(true);
@@ -176,7 +161,32 @@ function loadAll(){
     } else {
       document.getElementById('sectionsRoot').innerHTML = '<div class="empty-note">تعذّر تحميل بيانات الألعاب ولا توجد نسخة محفوظة محليًا بعد. تحقق من اتصالك بالإنترنت.</div>';
     }
-  });
+  }, 6000);
+
+  // مستمع حي (on) بدل قراءة لمرة واحدة — أي تعديل بلوحة التحكم يظهر هنا فورًا
+  // بدون الحاجة لإعادة تحميل الصفحة، ويلغي أي احتمال لعرض بيانات قديمة عالقة بالذاكرة.
+  db.ref('games_config/sections').on('value', ()=> reloadFromLive(), err=>console.warn(err));
+  db.ref('games_config/games').on('value', ()=> reloadFromLive(), err=>console.warn(err));
+}
+
+function reloadFromLive(){
+  Promise.all([
+    db.ref('games_config/sections').once('value'),
+    db.ref('games_config/games').once('value')
+  ]).then(([secSnap, gameSnap])=>{
+    const sections = [];
+    secSnap.forEach(c=>{ sections.push({ id:c.key, ...c.val() }); });
+    sections.sort((a,b)=>(a.order||0)-(b.order||0));
+
+    const games = [];
+    gameSnap.forEach(c=>{ games.push({ id:c.key, ...c.val() }); });
+    games.sort((a,b)=>(a.order||0)-(b.order||0));
+
+    liveDataArrived = true;
+    saveCache(sections, games);
+    setOfflineBanner(false);
+    renderSections(sections, games);
+  }).catch(err=> console.warn('live reload failed', err));
 }
 
 function gameCardHtml(g){
@@ -235,7 +245,7 @@ function renderSections(sections, games){
   root.querySelectorAll('[data-unlock]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.unlock, price = parseFloat(btn.dataset.price)||0;
-      if(unlockSection(id, price)){ loadAll(); }
+      if(unlockSection(id, price)){ reloadFromLive(); }
       else { alert('رصيدك من الـ Bonus غير كافٍ لفتح هذا القسم.'); }
     });
   });
@@ -252,7 +262,7 @@ function openLeaderboard(path, gameName){
   document.getElementById('lbModal').classList.remove('hidden');
   db.ref(path).orderByChild('time').limitToFirst(10).once('value').then(snap=>{
     const rows = [];
-    snap.forEach(c=> rows.push(c.val()));
+    snap.forEach(c=>{ rows.push(c.val()); });
     rows.sort((a,b)=>(a.time||0)-(b.time||0));
     if(!rows.length){ body.innerHTML = '<div class="lb-empty">لا توجد نتائج بعد.</div>'; return; }
     body.innerHTML = rows.map((r,i)=>{
