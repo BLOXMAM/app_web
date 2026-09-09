@@ -18,6 +18,12 @@
     "hidden": false
   },
   {
+    "file": "cowball.html",
+    "title": "cowball",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
     "file": "drajcmath.html",
     "title": "التبرير الإستقرائي والتخمين",
     "icon": "fa fa-book",
