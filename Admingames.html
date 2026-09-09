@@ -208,6 +208,9 @@
     <button class="btn-add" id="addGameBtn">+ إضافة / تحديث لعبة</button>
     <div class="status" id="gmStatus"></div>
   </div>
+  <h2>🔍 تشخيص (Debug)</h2>
+  <button class="btn-save" id="debugBtn">عرض البيانات الخام من قاعدة البيانات</button>
+  <pre id="debugOutput" style="background:var(--panel); border:1px solid var(--panel-border); border-radius:12px; padding:14px; margin-top:10px; font-size:11.5px; white-space:pre-wrap; word-break:break-all; max-height:300px; overflow:auto; display:none;"></pre>
 </main>
 
 <script>
@@ -220,17 +223,23 @@ function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, m=>({'&':'&amp;
 
 let sections = [], games = [];
 
-function loadAll(){
-  Promise.all([
-    db.ref('games_config/sections').once('value'),
-    db.ref('games_config/games').once('value')
-  ]).then(([s,g])=>{
-    sections = []; s.forEach(c=> sections.push({ id:c.key, ...c.val() }));
+/* استخدام مستمع حي (on) بدل قراءة لمرة واحدة (once) — بهذي الطريقة الجدول يتحدّث
+   تلقائيًا وفوريًا مع أي تغيير بقاعدة البيانات، من أي مصدر (لوحة التحكم نفسها،
+   Firebase Console مباشرة، أو حتى من متصفح ثاني)، بدون الحاجة لإعادة تحميل الصفحة. */
+function startLiveSync(){
+  db.ref('games_config/sections').on('value', snap=>{
+    sections = [];
+    snap.forEach(c=>{ sections.push({ id:c.key, ...c.val() }); });
     sections.sort((a,b)=>(a.order||0)-(b.order||0));
-    games = []; g.forEach(c=> games.push({ id:c.key, ...c.val() }));
+    renderSections(); renderGamesSectionSelect();
+  }, err=>{ console.error(err); alert('فشل مزامنة الأقسام: ' + err.message); });
+
+  db.ref('games_config/games').on('value', snap=>{
+    games = [];
+    snap.forEach(c=>{ games.push({ id:c.key, ...c.val() }); });
     games.sort((a,b)=>(a.order||0)-(b.order||0));
-    renderSections(); renderGamesSectionSelect(); renderGames();
-  });
+    renderGames();
+  }, err=>{ console.error(err); alert('فشل مزامنة الألعاب: ' + err.message); });
 }
 
 /* ---------- sections ---------- */
@@ -256,21 +265,28 @@ function renderSections(){
   }));
   document.querySelectorAll('[data-del-sec]').forEach(b=> b.addEventListener('click', ()=>{
     if(!confirm('حذف هذا القسم؟')) return;
-    db.ref('games_config/sections/'+b.dataset.delSec).remove().then(loadAll);
+    db.ref('games_config/sections/'+b.dataset.delSec).remove();
   }));
 }
 document.getElementById('addSectionBtn').addEventListener('click', ()=>{
-  const id = document.getElementById('secId').value.trim();
+  let id = document.getElementById('secId').value.trim();
   if(!id){ alert('المعرّف مطلوب'); return; }
+  id = id.replace(/[.#$\[\]\/\s]/g, '-'); // RTDB keys can't contain . # $ [ ] or whitespace
   const data = {
     name: document.getElementById('secName').value.trim(),
     price: parseFloat(document.getElementById('secPrice').value)||0,
     order: parseFloat(document.getElementById('secOrder').value)||0
   };
   db.ref('games_config/sections/'+id).set(data).then(()=>{
-    document.getElementById('secStatus').textContent = '✅ تم الحفظ';
-    setTimeout(()=>document.getElementById('secStatus').textContent='',2000);
-    loadAll();
+    document.getElementById('secStatus').textContent = '✅ تم الحفظ (المعرّف: '+id+')';
+    setTimeout(()=>document.getElementById('secStatus').textContent='',3000);
+    document.getElementById('secId').value = '';
+    document.getElementById('secName').value = '';
+    document.getElementById('secPrice').value = 0;
+    document.getElementById('secOrder').value = 0;
+  }).catch(err=>{
+    console.error(err);
+    alert('فشل الحفظ: ' + err.message);
   });
 });
 
@@ -310,12 +326,13 @@ function renderGames(){
   }));
   document.querySelectorAll('[data-del-gm]').forEach(b=> b.addEventListener('click', ()=>{
     if(!confirm('حذف هذه اللعبة؟')) return;
-    db.ref('games_config/games/'+b.dataset.delGm).remove().then(loadAll);
+    db.ref('games_config/games/'+b.dataset.delGm).remove();
   }));
 }
 document.getElementById('addGameBtn').addEventListener('click', ()=>{
-  const id = document.getElementById('gmId').value.trim();
+  let id = document.getElementById('gmId').value.trim();
   if(!id){ alert('المعرّف مطلوب'); return; }
+  id = id.replace(/[.#$\[\]\/\s]/g, '-');
   const data = {
     name: document.getElementById('gmName').value.trim(),
     sectionId: document.getElementById('gmSection').value,
@@ -329,13 +346,36 @@ document.getElementById('addGameBtn').addEventListener('click', ()=>{
     desc: document.getElementById('gmDesc').value.trim()
   };
   db.ref('games_config/games/'+id).set(data).then(()=>{
-    document.getElementById('gmStatus').textContent = '✅ تم الحفظ';
-    setTimeout(()=>document.getElementById('gmStatus').textContent='',2000);
-    loadAll();
+    document.getElementById('gmStatus').textContent = '✅ تم الحفظ (المعرّف: '+id+')';
+    setTimeout(()=>document.getElementById('gmStatus').textContent='',3000);
+    document.getElementById('gmId').value = '';
+    document.getElementById('gmName').value = '';
+    document.getElementById('gmIcon').value = '';
+    document.getElementById('gmImage').value = '';
+    document.getElementById('gmOrder').value = 0;
+    document.getElementById('gmUrl').value = '';
+    document.getElementById('gmLbKey').value = '';
+    document.getElementById('gmGivesBonus').checked = false;
+    document.getElementById('gmHasLb').checked = false;
+    document.getElementById('gmDesc').value = '';
+  }).catch(err=>{
+    console.error(err);
+    alert('فشل الحفظ: ' + err.message);
   });
 });
 
-loadAll();
+document.getElementById('debugBtn').addEventListener('click', ()=>{
+  const out = document.getElementById('debugOutput');
+  out.style.display = 'block';
+  out.textContent = 'جارِ الجلب مباشرة من: ' + db.ref('games_config').toString() + ' ...';
+  db.ref('games_config').once('value').then(snap=>{
+    out.textContent = 'المسار: ' + db.ref('games_config').toString() + '\n\n' + JSON.stringify(snap.val(), null, 2);
+  }).catch(err=>{
+    out.textContent = 'خطأ بالقراءة: ' + err.code + ' — ' + err.message;
+  });
+});
+
+startLiveSync();
 })();
 </script>
 </body>
