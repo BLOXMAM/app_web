@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة البقرة الراكضة 3D - النسخة المطورّة</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #87CEEB;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            transition: background-color 2s ease;
+        }
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+        #ui {
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+        }
+        #pause-btn {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid white;
+            color: white;
+            font-size: 18px;
+            padding: 8px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        #pause-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        .screen-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            display: none;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 35px 60px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.7);
+        }
+        .screen-box h1 { margin: 0 0 15px 0; }
+        .btn {
+            background: linear-gradient(135deg, #2ed573, #26af5f);
+            border: none;
+            color: white;
+            padding: 14px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+            margin-top: 10px;
+        }
+        .btn:hover {
+            transform: scale(1.08);
+            background: linear-gradient(135deg, #26af5f, #1e8e4c);
+        }
+        #instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 14px;
+            background: rgba(0,0,0,0.4);
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            z-index: 10;
+            text-align: center;
+        }
+        #home-btn {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid white;
+            color: white;
+            font-size: 18px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        #home-btn:hover { background: rgba(0,0,0,0.8); }
+        .btn-row { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+        .box-line { background: rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 16px; margin: 10px 0; }
+        .box-line .lbl { font-size: 12px; opacity: 0.8; }
+        .box-line .val { font-size: 22px; font-weight: bold; }
+        #name-input {
+            width: 85%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 15px;
+            text-align: center;
+            margin: 8px 0;
+            outline: none;
+        }
+        #name-input:focus { border-color: #2ed573; }
+        #save-status { font-size: 13px; color: #2ed573; min-height: 16px; margin-top: 4px; }
+        #leaderboard-box {
+            margin-top: 14px;
+            max-height: 220px;
+            overflow-y: auto;
+            text-align: right;
+        }
+        .lb-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 8px;
+            background: rgba(255,255,255,0.06); border-radius: 8px; padding: 7px 12px;
+            font-size: 13px; margin-bottom: 6px;
+        }
+        .lb-rank { font-weight: bold; color: #ffd700; min-width: 26px; }
+        .lb-name { flex: 1; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .lb-time { color: #2ed573; font-weight: bold; }
+        .lb-empty { font-size: 12.5px; opacity: 0.7; padding: 8px 0; }
+    </style>
+</head>
+<body>
+
+    <div id="ui-container">
+        <div style="display:flex; align-items:center;">
+            <a id="home-btn" href="games.html" title="العودة لصفحة الألعاب">🏠</a>
+            <div id="ui">النقاط: <span id="score">0</span> / 1000</div>
+        </div>
+        <button id="pause-btn" onclick="togglePause()">⏸ إيقاف</button>
+    </div>
+    
+    <!-- شاشة الإيقاف -->
+    <div id="pause-screen" class="screen-box">
+        <h1>اللعبة متوقفة مؤقتاً</h1>
+        <button class="btn" onclick="togglePause()">استئناف اللعب</button>
+    </div>
+
+    <!-- شاشة الخسارة -->
+    <div id="game-over" class="screen-box">
+        <h1 style="color: #ff4757;">اصطدمت بالكرة الشوكية!</h1>
+        <p>النتيجة النهائية: <span id="final-score">0</span></p>
+        <button class="btn" onclick="restartGame()">العب مجدداً</button>
+    </div>
+
+    <!-- شاشة الفوز -->
+    <div id="win-screen" class="screen-box">
+        <h1 style="color: #2ed573;">🎉 مبروووك! فزت باللعبة!</h1>
+        <p>لقد اجتازت البقرة الـ 100 كرة بنجاح ووصلت لخط النهاية!</p>
+
+        <div class="box-line">
+            <div class="lbl">الوقت المستغرق</div>
+            <div class="val" id="win-time">00:00</div>
+        </div>
+        <div class="box-line">
+            <div class="lbl">🎁 مكافأة الفوز</div>
+            <div class="val">+<span id="bonus-earned">5</span> نقطة</div>
+            <div class="lbl" style="margin-top:4px;">إجمالي نقاط bonusGames: <span id="bonus-total">0</span></div>
+        </div>
+
+        <div id="save-row">
+            <input type="text" id="name-input" placeholder="اكتب اسمك للوحة الصدارة" maxlength="16">
+            <div class="btn-row">
+                <button class="btn" id="save-score-btn" onclick="saveScore()">حفظ في لوحة الصدارة</button>
+            </div>
+            <div id="save-status"></div>
+        </div>
+
+        <div id="leaderboard-box">
+            <div class="lb-empty">جارِ تحميل لوحة الصدارة...</div>
+        </div>
+
+        <div class="btn-row" style="margin-top:14px;">
+            <button class="btn" onclick="claimPrize()">خذ جائزتك 🎁</button>
+            <button class="btn" onclick="restartGame()">العب مجدداً</button>
+        </div>
+    </div>
+
+    <div id="instructions">
+        يجب عليك تفادي كرات الشوك بالنقر على الشاشة للقفز
+    </div>
+
+    <!-- استدعاء مكتبة Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+    <script>
+        let scene, camera, renderer, cow, clouds = [], obstacles = [], trackPieces = [];
+        let finishLine = null;
+        let stars;
+        let score = 0;
+        let gameRunning = true;
+        let isPaused = false;
+        let isJumping = false;
+        let jumpVelocity = 0;
+        const gravity = 0.018;
+        const jumpStrength = 0.38;
+        let gameSpeed = 0.4;
+        let hasWon = false;
+        let isNight = false;
+        let obstacleTimer = null;
+        let isInvincible = false;
+        let pressTimer = null;
+        let gameStartTime = performance.now();
+
+        /* ============================= FIREBASE (RTDB, public db — databaseURL only) ============================= */
+        const firebaseConfig = { databaseURL: "https://umlog-box-default-rtdb.firebaseio.com" };
+        let fbDb = null;
+        try{
+            firebase.initializeApp(firebaseConfig);
+            fbDb = firebase.database();
+        }catch(e){ console.warn('Firebase init failed', e); }
+        const LB_PATH = 'cowball_leaderboard';
+
+        /* ============================= BONUS POINTS (shared across games, localStorage) ============================= */
+        const BONUS_KEY = 'bonusGames';
+        const WIN_BONUS_POINTS = 5;
+        function getBonusPoints(){
+            const v = parseInt(localStorage.getItem(BONUS_KEY), 10);
+            return Number.isFinite(v) ? v : 0;
+        }
+        function addBonusPoints(n){
+            const total = getBonusPoints() + n;
+            localStorage.setItem(BONUS_KEY, String(total));
+            return total;
+        }
+
+        function escapeHtml(str){
+            return String(str).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+        }
+        function formatTime(sec){
+            sec = sec || 0;
+            const m = Math.floor(sec/60), s = Math.floor(sec%60);
+            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
+        function refreshLeaderboard(){
+            const box = document.getElementById('leaderboard-box');
+            if(!fbDb){ box.innerHTML = '<div class="lb-empty">لوحة الصدارة غير مفعّلة.</div>'; return; }
+            fbDb.ref(LB_PATH).orderByChild('time').limitToFirst(10).once('value')
+                .then(snap=>{
+                    const rows = [];
+                    snap.forEach(c=> rows.push(c.val()));
+                    rows.sort((a,b)=> (a.time||0) - (b.time||0));
+                    if(!rows.length){ box.innerHTML = '<div class="lb-empty">كن أول من يسجّل اسمه هنا! 🏆</div>'; return; }
+                    box.innerHTML = rows.map((r,i)=>{
+                        const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':`#${i+1}`;
+                        return `<div class="lb-row"><span class="lb-rank">${medal}</span><span class="lb-name">${escapeHtml(r.name)}</span><span class="lb-time">${formatTime(r.time)}</span></div>`;
+                    }).join('');
+                })
+                .catch(()=>{ box.innerHTML = '<div class="lb-empty">تعذّر تحميل لوحة الصدارة.</div>'; });
+        }
+        function saveScore(){
+            const nameInput = document.getElementById('name-input');
+            const name = nameInput.value.trim();
+            if(!name){ nameInput.focus(); return; }
+            if(!fbDb){ document.getElementById('save-status').textContent = 'لوحة الصدارة غير مفعّلة.'; return; }
+            const btn = document.getElementById('save-score-btn');
+            btn.disabled = true; btn.textContent = 'جارِ الحفظ...';
+            fbDb.ref(LB_PATH).push({
+                name: name.slice(0,16),
+                time: window.__cowballWinTime || 0,
+                score: score,
+                ts: Date.now()
+            }).then(()=>{
+                document.getElementById('save-row').style.display = 'none';
+                document.getElementById('save-status').textContent = '✅ تم الحفظ بنجاح';
+                refreshLeaderboard();
+            }).catch(()=>{
+                btn.disabled = false; btn.textContent = 'حفظ في لوحة الصدارة';
+                document.getElementById('save-status').textContent = 'تعذّر الحفظ، حاول مجددًا.';
+            });
+        }
+
+        const scoreElement = document.getElementById('score');
+        const gameOverScreen = document.getElementById('game-over');
+        const winScreen = document.getElementById('win-screen');
+        const pauseScreen = document.getElementById('pause-screen');
+        const finalScoreElement = document.getElementById('final-score');
+        const pauseBtn = document.getElementById('pause-btn');
+
+        let cowBodyMat;
+
+        function createCowTexture(dark = false, gold = false) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+
+            if (gold) {
+                ctx.fillStyle = '#ffd700'; // أبيض البقرة يصبح ذهبي فاتح براق
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = '#b8860b'; // أسود البقرة يصبح ذهبي داكن للتفريق
+            } else {
+                ctx.fillStyle = dark ? '#cccccc' : '#ffffff';
+                ctx.fillRect(0, 0, 256, 256);
+                ctx.fillStyle = dark ? '#222222' : '#111111';
+            }
+
+            for(let i = 0; i < 12; i++) {
+                ctx.beginPath();
+                let x = Math.random() * 256;
+                let y = Math.random() * 256;
+                let r = Math.random() * 30 + 15;
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createGrassTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#55a630';
+            ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = '#38b000';
+            for(let i=0; i<300; i++) {
+                let x = Math.random() * 128;
+                let y = Math.random() * 128;
+                ctx.fillRect(x, y, 2, 6);
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createDirtTexture() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#d4a373';
+            ctx.fillRect(0, 0, 128, 128);
+            ctx.fillStyle = '#bc6c25';
+            for(let i=0; i<150; i++) {
+                ctx.fillRect(Math.random()*128, Math.random()*128, 4, 4);
+            }
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.FogExp2(0x87CEEB, 0.015);
+
+            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 3.5, 7);
+            camera.lookAt(0, 1, -2);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const sunLight = new THREE.DirectionalLight(0xfff5e6, 1.2);
+            sunLight.position.set(20, 30, 20);
+            sunLight.castShadow = true;
+            scene.add(sunLight);
+
+            createTrack();
+            createClouds();
+            createStars();
+            createCow();
+
+            // الاستماع لأحداث اللمس والماوس للضغط المطول والقفز
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('mousedown', handlePressStart);
+            window.addEventListener('mouseup', handlePressEnd);
+            window.addEventListener('touchstart', handlePressStart);
+            window.addEventListener('touchend', handlePressEnd);
+            window.addEventListener('resize', onWindowResize);
+
+            startSpawningObstacles();
+            animate();
+        }
+
+        function createTrack() {
+            const grassTex = createGrassTexture();
+            const dirtTex = createDirtTexture();
+
+            for (let i = -5; i <= 15; i++) {
+                const segmentGroup = new THREE.Group();
+
+                const grassGeo = new THREE.BoxGeometry(30, 0.2, 10);
+                const grassMat = new THREE.MeshStandardMaterial({ map: grassTex, roughness: 0.9 });
+                const grass = new THREE.Mesh(grassGeo, grassMat);
+                grass.position.set(0, -0.1, 0);
+                grass.receiveShadow = true;
+                segmentGroup.add(grass);
+
+                const trackGeo = new THREE.BoxGeometry(5, 0.22, 10);
+                const trackMat = new THREE.MeshStandardMaterial({ map: dirtTex, roughness: 0.8 });
+                const track = new THREE.Mesh(trackGeo, trackMat);
+                track.position.set(0, -0.09, 0);
+                track.receiveShadow = true;
+                segmentGroup.add(track);
+
+                segmentGroup.position.set(0, 0, i * 10 - 20);
+                scene.add(segmentGroup);
+                trackPieces.push(segmentGroup);
+            }
+        }
+
+        function updateTrack() {
+            trackPieces.forEach(segment => {
+                segment.position.z += gameSpeed;
+                if (segment.position.z > 25) {
+                    segment.position.z -= 200;
+                }
+            });
+        }
+
+        function createClouds() {
+            const cloudMat = new THREE.MeshLambertMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
+            for(let i=0; i<15; i++) {
+                const cloudGroup = new THREE.Group();
+                for(let j=0; j<3; j++) {
+                    const cloudGeo = new THREE.DodecahedronGeometry(Math.random() * 2 + 1.5);
+                    const cloudPart = new THREE.Mesh(cloudGeo, cloudMat);
+                    cloudPart.position.set(j * 2 - 2, Math.random() * 0.5, Math.random() * 2);
+                    cloudGroup.add(cloudPart);
+                }
+                cloudGroup.position.set(
+                    (Math.random() - 0.5) * 60,
+                    Math.random() * 10 + 8,
+                    -Math.random() * 100
+                );
+                scene.add(cloudGroup);
+                clouds.push(cloudGroup);
+            }
+        }
+
+        function updateClouds() {
+            clouds.forEach(cloud => {
+                cloud.position.z += gameSpeed * 0.2;
+                if(cloud.position.z > 20) {
+                    cloud.position.z = -100;
+                    cloud.position.x = (Math.random() - 0.5) * 60;
+                }
+            });
+        }
+
+        function createStars() {
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 400;
+            const positions = new Float32Array(starsCount * 3);
+            const colors = new Float32Array(starsCount * 3);
+
+            for(let i = 0; i < starsCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 200;
+                positions[i+1] = Math.random() * 60 + 10;
+                positions[i+2] = (Math.random() - 0.5) * 200;
+
+                if(Math.random() > 0.5) {
+                    colors[i] = 1; colors[i+1] = 1; colors[i+2] = 1;
+                } else {
+                    colors[i] = 0.7; colors[i+1] = 0.85; colors[i+2] = 1;
+                }
+            }
+
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            starsGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const starsMaterial = new THREE.PointsMaterial({
+                size: 0.8,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0
+            });
+
+            stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+        }
+
+        function createCow() {
+            cow = new THREE.Group();
+
+            const cowTex = createCowTexture(false, false);
+            cowBodyMat = new THREE.MeshStandardMaterial({ map: cowTex, roughness: 0.4 });
+            const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb5a7, roughness: 0.5 });
+            const hornMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.3 });
+
+            const bodyGeo = new THREE.BoxGeometry(0.8, 0.7, 1.3);
+            const body = new THREE.Mesh(bodyGeo, cowBodyMat);
+            body.position.y = 0.75;
+            body.castShadow = true;
+            cow.add(body);
+
+            const headGeo = new THREE.BoxGeometry(0.6, 0.6, 0.7);
+            const head = new THREE.Mesh(headGeo, cowBodyMat);
+            head.position.set(0, 1.1, 0.7);
+            head.castShadow = true;
+            cow.add(head);
+
+            const snoutGeo = new THREE.BoxGeometry(0.5, 0.25, 0.3);
+            const snout = new THREE.Mesh(snoutGeo, pinkMat);
+            snout.position.set(0, 0.95, 1.05);
+            cow.add(snout);
+
+            const hornGeo = new THREE.ConeGeometry(0.08, 0.3, 4);
+            const horn1 = new THREE.Mesh(hornGeo, hornMat);
+            horn1.position.set(-0.25, 1.4, 0.6);
+            cow.add(horn1);
+
+            const horn2 = new THREE.Mesh(hornGeo, hornMat);
+            horn2.position.set(0.25, 1.4, 0.6);
+            cow.add(horn2);
+
+            const legGeo = new THREE.BoxGeometry(0.2, 0.5, 0.2);
+            for(let x of [-0.25, 0.25]) {
+                for(let z of [-0.3, 0.3]) {
+                    const leg = new THREE.Mesh(legGeo, cowBodyMat);
+                    leg.position.set(x, 0.25, z);
+                    cow.add(leg);
+                }
+            }
+
+            cow.position.set(0, 0, 0);
+            scene.add(cow);
+        }
+
+        let spawnedCount = 0;
+        function startSpawningObstacles() {
+            function spawnNext() {
+                // مهم: نستمر بجدولة المؤقّت دائمًا طالما اللعبة لم تنتهِ، حتى أثناء الإيقاف المؤقت.
+                // المشكلة السابقة كانت أن المؤقت يتوقف نهائيًا (ولا يُعاد جدولته) إذا نفّذ أثناء
+                // الإيقاف المؤقت، فتتوقف الكرات الشوكية عن الظهور للأبد بعد أول إيقاف.
+                if (!gameRunning || hasWon) return;
+
+                if (!isPaused && spawnedCount < 100) {
+                    spawnObstacle();
+                    spawnedCount++;
+                }
+
+                if (spawnedCount < 100) {
+                    obstacleTimer = setTimeout(spawnNext, 2200);
+                }
+            }
+            spawnNext();
+        }
+
+        function spawnObstacle() {
+            const obstacle = new THREE.Group();
+            
+            const coreGeo = new THREE.SphereGeometry(0.4, 8, 8);
+            const spikeMat = new THREE.MeshStandardMaterial({ 
+                color: isNight ? 0x991111 : 0xff3333, 
+                roughness: 0.3, 
+                metalness: 0.5 
+            });
+            const core = new THREE.Mesh(coreGeo, spikeMat);
+            obstacle.add(core);
+
+            for(let i = 0; i < 6; i++) {
+                const spikeGeo = new THREE.ConeGeometry(0.12, 0.4, 4);
+                const spike = new THREE.Mesh(spikeGeo, spikeMat);
+                if(i === 0) spike.position.set(0.4, 0, 0), spike.rotation.z = -Math.PI/2;
+                if(i === 1) spike.position.set(-0.4, 0, 0), spike.rotation.z = Math.PI/2;
+                if(i === 2) spike.position.set(0, 0.4, 0);
+                if(i === 3) spike.position.set(0, -0.4, 0), spike.rotation.x = Math.PI;
+                if(i === 4) spike.position.set(0, 0, 0.4), spike.rotation.x = Math.PI/2;
+                if(i === 5) spike.position.set(0, 0, -0.4), spike.rotation.x = -Math.PI/2;
+                obstacle.add(spike);
+            }
+
+            obstacle.position.set(0, 0.5, -60);
+            scene.add(obstacle);
+            obstacles.push(obstacle);
+        }
+
+        function spawnFinishLine() {
+            if (finishLine) return;
+            const poleGeo = new THREE.BoxGeometry(0.3, 4, 0.3);
+            const flagMat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+            
+            finishLine = new THREE.Group();
+            
+            const p1 = new THREE.Mesh(poleGeo, flagMat);
+            p1.position.set(-2.5, 2, 0);
+            const p2 = new THREE.Mesh(poleGeo, flagMat);
+            p2.position.set(2.5, 2, 0);
+            
+            const bannerGeo = new THREE.BoxGeometry(5.2, 1, 0.1);
+            const bannerMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+            const banner = new THREE.Mesh(bannerGeo, bannerMat);
+            banner.position.set(0, 3.5, 0);
+
+            finishLine.add(p1);
+            finishLine.add(p2);
+            finishLine.add(banner);
+
+            finishLine.position.set(0, 0, -70);
+            scene.add(finishLine);
+        }
+
+        function handleKeyDown(e) {
+            if (e.code === 'Escape') {
+                togglePause();
+                return;
+            }
+            if (e.code === 'Space') {
+                if (!gameRunning || hasWon || isPaused) return;
+                if (!isJumping) {
+                    isJumping = true;
+                    jumpVelocity = jumpStrength;
+                }
+            }
+        }
+
+        function handlePressStart(e) {
+            if (!gameRunning || hasWon || isPaused) return;
+            if (e.target && (e.target.id === 'pause-btn' || e.target.closest('#pause-screen') || e.target.closest('#game-over') || e.target.closest('#win-screen'))) return;
+
+            // بدء مؤقت للضغط المطول لتفعيل المنعة الذهبية
+            pressTimer = setTimeout(() => {
+                isInvincible = true;
+                cowBodyMat.map = createCowTexture(isNight, true);
+                cowBodyMat.needsUpdate = true;
+            }, 400); // بعد 400 ملي ثانية من الضغط المستمر تصبح منيعة
+
+            // إذا كان نقرة سريعة وليست مطولة، تجعل البقرة تقفز
+            if (!isJumping && e.type === 'mousedown') {
+                // القفزة العادية عند النقر السريع
+            }
+        }
+
+        function handlePressEnd(e) {
+            // إلغاء مؤقت الضغط المطول
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+
+            // إذا لم تكن مطولة كفاية للمنعة، تعتبر نقرة للقفز
+            if (!isInvincible && gameRunning && !hasWon && !isPaused) {
+                if (e.target && (e.target.id === 'pause-btn' || e.target.closest('.screen-box'))) return;
+                if (!isJumping) {
+                    isJumping = true;
+                    jumpVelocity = jumpStrength;
+                }
+            }
+
+            // إيقاف المنعة عند رفع الإصبع
+            if (isInvincible) {
+                isInvincible = false;
+                cowBodyMat.map = createCowTexture(isNight, false);
+                cowBodyMat.needsUpdate = true;
+            }
+        }
+
+        function togglePause() {
+            if (!gameRunning || hasWon) return;
+            isPaused = !isPaused;
+            if (isPaused) {
+                pauseScreen.style.display = 'block';
+                pauseBtn.innerText = "▶ استئناف";
+            } else {
+                pauseScreen.style.display = 'none';
+                pauseBtn.innerText = "⏸ إيقاف";
+            }
+        }
+
+        function updateCow() {
+            if (isJumping) {
+                cow.position.y += jumpVelocity;
+                jumpVelocity -= gravity;
+                cow.rotation.x = -jumpVelocity * 0.5;
+
+                if (cow.position.y <= 0) {
+                    cow.position.y = 0;
+                    isJumping = false;
+                    jumpVelocity = 0;
+                    cow.rotation.x = 0;
+                }
+            } else {
+                cow.position.y = Math.sin(Date.now() * 0.025) * 0.04;
+            }
+        }
+
+        function checkNightMode() {
+            if (score >= 500 && !isNight) {
+                isNight = true;
+                scene.background.setHex(0x0a0a23);
+                scene.fog.color.setHex(0x0a0a23);
+                document.body.style.backgroundColor = "#0a0a23";
+                
+                stars.material.opacity = 1;
+
+                trackPieces.forEach(segment => {
+                    segment.children.forEach(mesh => {
+                        mesh.material.color.setHex(0x334433);
+                    });
+                });
+
+                cowBodyMat.map = createCowTexture(true, isInvincible);
+                cowBodyMat.needsUpdate = true;
+
+                obstacles.forEach(obs => {
+                    obs.children.forEach(child => {
+                        if(child.material && child.material.color.getHex() !== 0x111111) {
+                            child.material.color.setHex(0x991111);
+                        }
+                    });
+                });
+            }
+        }
+
+        function updateObstacles() {
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                obstacles[i].position.z += gameSpeed;
+                obstacles[i].rotation.x += 0.03;
+                obstacles[i].rotation.y += 0.03;
+
+                const cowBox = new THREE.Box3().setFromObject(cow);
+                const obsBox = new THREE.Box3().setFromObject(obstacles[i]);
+
+                if (cowBox.intersectsBox(obsBox)) {
+                    if (isInvincible) {
+                        // إذا كانت منيعة، تصبح الكرة الشوكية سوداء وتمر البقرة من فوقها بسلام
+                        obstacles[i].children.forEach(child => {
+                            if (child.material) {
+                                child.material.color.setHex(0x111111);
+                            }
+                        });
+                    } else {
+                        gameOver();
+                    }
+                }
+
+                if (obstacles[i].position.z > 5) {
+                    scene.remove(obstacles[i]);
+                    obstacles.splice(i, 1);
+                    
+                    if (!hasWon) {
+                        score += 10;
+                        if (score > 1000) score = 1000;
+                        scoreElement.innerText = score;
+
+                        checkNightMode();
+
+                        if (score >= 1000 && !finishLine) {
+                            spawnFinishLine();
+                        }
+                    }
+                }
+            }
+
+            if (finishLine) {
+                finishLine.position.z += gameSpeed;
+                if (finishLine.position.z >= 0 && !hasWon) {
+                    triggerWin();
+                }
+            }
+        }
+
+        function gameOver() {
+            gameRunning = false;
+            clearTimeout(obstacleTimer);
+            gameOverScreen.style.display = 'block';
+            finalScoreElement.innerText = score;
+        }
+
+        function triggerWin() {
+            hasWon = true;
+            gameRunning = false;
+            clearTimeout(obstacleTimer);
+            winScreen.style.display = 'block';
+
+            const elapsed = (performance.now() - gameStartTime) / 1000;
+            window.__cowballWinTime = elapsed;
+            document.getElementById('win-time').textContent = formatTime(elapsed);
+
+            document.getElementById('bonus-earned').textContent = WIN_BONUS_POINTS;
+            const total = addBonusPoints(WIN_BONUS_POINTS);
+            document.getElementById('bonus-total').textContent = total;
+
+            document.getElementById('name-input').value = '';
+            document.getElementById('save-row').style.display = 'block';
+            document.getElementById('save-score-btn').disabled = false;
+            document.getElementById('save-score-btn').textContent = 'حفظ في لوحة الصدارة';
+            document.getElementById('save-status').textContent = '';
+            refreshLeaderboard();
+        }
+
+        function claimPrize() {
+            alert('مبروك! يتم نقلك الآن إلى صفحة الجائزة...');
+            window.location.href = "https://www.google.com";
+        }
+
+        function restartGame() {
+            gameStartTime = performance.now();
+            obstacles.forEach(obs => scene.remove(obs));
+            obstacles = [];
+            if (finishLine) {
+                scene.remove(finishLine);
+                finishLine = null;
+            }
+            score = 0;
+            spawnedCount = 0;
+            hasWon = false;
+            isNight = false;
+            isPaused = false;
+            isInvincible = false;
+            gameSpeed = 0.4;
+            scoreElement.innerText = score;
+            cow.position.y = 0;
+            isJumping = false;
+            scene.background.setHex(0x87CEEB);
+            scene.fog.color.setHex(0x87CEEB);
+            document.body.style.backgroundColor = "#87CEEB";
+            if(stars) stars.material.opacity = 0;
+
+            cowBodyMat.map = createCowTexture(false, false);
+            cowBodyMat.needsUpdate = true;
+
+            trackPieces.forEach(segment => {
+                segment.children.forEach(mesh => {
+                    mesh.material.color.setHex(0xffffff);
+                });
+            });
+
+            gameOverScreen.style.display = 'none';
+            winScreen.style.display = 'none';
+            pauseScreen.style.display = 'none';
+            pauseBtn.innerText = "⏸ إيقاف";
+            gameRunning = true;
+
+            startSpawningObstacles();
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (gameRunning && !isPaused) {
+                updateTrack();
+                updateClouds();
+                updateCow();
+                updateObstacles();
+                if(stars && isNight) {
+                    stars.rotation.y += 0.0005;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        init();
+    </script>
+</body>
+</html>
