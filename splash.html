@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رياضيات (ص10)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+
+
+    </style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رياضيات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=IBM+Plex+Sans+Arabic:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board-900:#0F241C;
+    --board-700:#1C3A2C;
+    --chalk-100:#EAF3EA;
+    --mint-400:#8FCBA0;
+    --mint-300:#B9E3C4;
+    --mint-glow:rgba(143,203,160,.55);
+    --line-soft:rgba(234,243,234,.14);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html,body{
+    height:100%;
+    background: radial-gradient(ellipse 110% 85% at 50% 35%, var(--board-700) 0%, var(--board-900) 68%);
+    overflow:hidden;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    color:var(--chalk-100);
+    position:relative;
+    min-height:100vh;
+  }
+
+  /* drifting chalk dust */
+  .dust{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+    z-index:1;
+  }
+  .mote{
+    position:absolute;
+    border-radius:50%;
+    background:var(--chalk-100);
+    opacity:0;
+    animation: rise linear infinite, fadeMote ease-in-out infinite;
+  }
+  @keyframes rise{
+    0%{ transform:translateY(0); }
+    100%{ transform:translateY(-120vh); }
+  }
+  @keyframes fadeMote{
+    0%,100%{ opacity:0; }
+    15%,85%{ opacity:.3; }
+  }
+
+  .stage{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding: 6vh 8vw;
+    max-width:520px;
+  }
+
+  .plot-wrap{
+    width:min(58vw, 320px);
+    height:min(58vw, 320px);
+    margin-bottom:1.6rem;
+    position:relative;
+  }
+
+  .axis{
+    stroke:var(--line-soft);
+    stroke-width:1.2;
+    stroke-dasharray:260;
+    stroke-dashoffset:260;
+    animation: drawLine .7s ease-out forwards;
+  }
+  .axis.y{ animation-delay:.1s; }
+  .axis.x{ animation-delay:.35s; }
+
+  @keyframes drawLine{
+    to{ stroke-dashoffset:0; }
+  }
+
+  .tick{
+    stroke:var(--line-soft);
+    stroke-width:1.2;
+    opacity:0;
+    animation: tickIn .3s ease-out forwards;
+  }
+
+  @keyframes tickIn{
+    to{ opacity:1; }
+  }
+
+  .curve{
+    fill:none;
+    stroke:var(--mint-400);
+    stroke-width:2.4;
+    stroke-linecap:round;
+    stroke-dasharray:340;
+    stroke-dashoffset:340;
+    filter: drop-shadow(0 0 6px var(--mint-glow));
+    animation: drawCurve 1.7s cubic-bezier(.3,.05,.15,1) forwards;
+    animation-delay:1.05s;
+  }
+  @keyframes drawCurve{
+    to{ stroke-dashoffset:0; }
+  }
+
+  .tracer{
+    fill:var(--mint-300);
+    opacity:0;
+    filter: drop-shadow(0 0 9px var(--mint-glow));
+    offset-path: path("M42,214 C 76,214 92,90 160,90 C 228,90 244,214 278,214");
+    offset-rotate:0deg;
+    animation: trace 1.7s cubic-bezier(.3,.05,.15,1) forwards;
+    animation-delay:1.05s;
+  }
+  @keyframes trace{
+    0%{ opacity:1; offset-distance:0%; }
+    98%{ opacity:1; }
+    100%{ offset-distance:100%; opacity:0; }
+  }
+
+  .peak{
+    fill:var(--mint-300);
+    opacity:0;
+    filter: drop-shadow(0 0 10px var(--mint-glow));
+    animation: peakPop .8s ease-out forwards, pulse 2.4s ease-in-out infinite;
+    animation-delay:2.55s, 3.35s;
+  }
+  @keyframes peakPop{
+    0%{ opacity:0; r:0; }
+    100%{ opacity:1; r:3.4; }
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:.85; }
+    50%{ opacity:1; }
+  }
+
+  .wordmark{
+    font-family:'Aref Ruqaa', serif;
+    font-weight:700;
+    font-size:clamp(2.6rem, 8vw, 3.8rem);
+    line-height:1;
+    color:var(--chalk-100);
+    opacity:0;
+    letter-spacing:.01em;
+    animation: riseIn 1s ease-out forwards;
+    animation-delay:2.8s;
+  }
+
+  .underline{
+    width:0;
+    height:1px;
+    background:linear-gradient(to right, transparent, var(--mint-400), transparent);
+    margin-top:1rem;
+    animation: underlineGrow 1s ease-out forwards;
+    animation-delay:3.15s;
+  }
+
+  @keyframes underlineGrow{
+    0%{ width:0; opacity:0; }
+    30%{ opacity:1; }
+    100%{ width:120px; opacity:1; }
+  }
+
+  @keyframes riseIn{
+    0%{ opacity:0; transform:translateY(12px); }
+    100%{ opacity:1; transform:translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .axis, .tick, .curve, .tracer, .peak, .wordmark, .underline, .mote{
+      animation:none !important;
+      opacity:1 !important;
+      transform:none !important;
+      stroke-dashoffset:0 !important;
+    }
+    .tracer{ display:none; }
+    .underline{ width:120px !important; }
+    .mote{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="dust" id="dust"></div>
+
+  <main class="stage">
+    <div class="plot-wrap">
+      <svg viewBox="0 0 320 260" width="100%" height="100%" aria-hidden="true">
+        <!-- coordinate axes -->
+        <line class="axis y" x1="30" y1="230" x2="30" y2="20"/>
+        <line class="axis x" x1="20" y1="220" x2="300" y2="220"/>
+
+        <!-- ticks -->
+        <line class="tick" x1="26" y1="60"  x2="34" y2="60"  style="animation-delay:.55s"/>
+        <line class="tick" x1="26" y1="100" x2="34" y2="100" style="animation-delay:.62s"/>
+        <line class="tick" x1="26" y1="140" x2="34" y2="140" style="animation-delay:.69s"/>
+        <line class="tick" x1="26" y1="180" x2="34" y2="180" style="animation-delay:.76s"/>
+        <line class="tick" x1="70"  y1="216" x2="70"  y2="224" style="animation-delay:.83s"/>
+        <line class="tick" x1="115" y1="216" x2="115" y2="224" style="animation-delay:.90s"/>
+        <line class="tick" x1="205" y1="216" x2="205" y2="224" style="animation-delay:.97s"/>
+        <line class="tick" x1="250" y1="216" x2="250" y2="224" style="animation-delay:1.04s"/>
+
+        <!-- parabola y = x^2, opening upward -->
+        <path class="curve" d="M42,214 C 76,214 92,90 160,90 C 228,90 244,214 278,214"/>
+        <circle class="tracer" cx="0" cy="0" r="4"/>
+        <circle class="peak" cx="160" cy="90" r="0"/>
+      </svg>
+    </div>
+
+    <h1 class="wordmark">رياضيات</h1>
+    <div class="underline"></div>
+  </main>
+
+<script>
+  // sparse chalk dust drifting slowly upward
+  const dustEl = document.getElementById('dust');
+  const total = 20;
+  for (let i = 0; i < total; i++){
+    const m = document.createElement('div');
+    m.className = 'mote';
+    const size = 1 + Math.random() * 2;
+    m.style.width = size + 'px';
+    m.style.height = size + 'px';
+    m.style.left = Math.random() * 100 + '%';
+    m.style.top = (60 + Math.random() * 40) + '%';
+    const dur = 14 + Math.random() * 10;
+    m.style.animationDuration = dur + 's, ' + dur + 's';
+    m.style.animationDelay = (Math.random() * dur * -1) + 's, ' + (Math.random() * dur * -1) + 's';
+    dustEl.appendChild(m);
+  }
+</script>
+
+</body>
+</html>
+<script>
+    
+    setTimeout(function () { window.location.href = "home.html"; }, 2200);
+</script>
+</body>
+</html>
