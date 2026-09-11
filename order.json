@@ -18,6 +18,12 @@
     "hidden": false
   },
   {
+    "file": "Sly.html",
+    "title": "Sly",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  },
+  {
     "file": "cowball.html",
     "title": "لعبة البقرة",
     "icon": "fa-solid fa-file",
