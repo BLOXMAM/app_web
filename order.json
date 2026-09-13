@@ -6,22 +6,22 @@
     "hidden": false
   },
   {
-    "file": "Games.html",
-    "title": "الألعاب🎮",
-    "icon": "fa-solid fa-gamepad",
-    "hidden": false
-  },
-  {
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
-    "hidden": false
+    "hidden": true
+  },
+  {
+    "file": "Games.html",
+    "title": "الألعاب🎮",
+    "icon": "fa-solid fa-gamepad",
+    "hidden": true
   },
   {
     "file": "Sly.html",
     "title": "Sly",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": true
   },
   {
     "file": "cowball.html",
