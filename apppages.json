@@ -6,5 +6,9 @@
   "version.txt": {
     "op": "update",
     "timestamp": 1789311228650
+  },
+  "wrangler.jsonc": {
+    "op": "add",
+    "timestamp": 1789311677694
   }
 }
