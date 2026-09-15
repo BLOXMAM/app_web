@@ -12,6 +12,11 @@
           "name": "المنطق",
           "href": "logic.html",
           "type": "link"
+        },
+        {
+          "name": "العبارات الشرطية",
+          "href": "conditional.html",
+          "type": "link"
         }
       ]
     }
