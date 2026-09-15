@@ -1,30 +1,94 @@
 {
-  "order.json": {
-    "op": "update",
-    "timestamp": 1789488951395
+  "Admingames.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
   },
-  "version.txt": {
-    "op": "update",
-    "timestamp": 1789491510533
-  },
-  "wrangler.jsonc": {
-    "op": "add",
-    "timestamp": 1789489874732
-  },
-  "conditional.html": {
-    "op": "update",
-    "timestamp": 1789492440151
-  },
-  "app_linked_pages.json": {
-    "op": "update",
-    "timestamp": 1789489232626
-  },
-  "checkser.json": {
-    "op": "update",
-    "timestamp": 1789489340723
+  "Games.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
   },
   "Sly.html": {
-    "op": "add",
-    "timestamp": 1789490503570
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "apk_version.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "apkversion.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "app_linked_pages.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "apppages.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "checkser.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "conditional.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "cowball.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "drajcmath.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "home.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "lessons.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "logic.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "order.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "sm-custom-styles.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "snake3d.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "splash.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "splash_config.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "sps-pages.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "var.json": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "version.txt": {
+    "op": "sync",
+    "timestamp": 1789492444461
+  },
+  "لوحة_التحكم.html": {
+    "op": "sync",
+    "timestamp": 1789492444461
   }
 }
