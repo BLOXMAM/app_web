@@ -22,9 +22,5 @@
   "checkser.json": {
     "op": "update",
     "timestamp": 1789489340723
-  },
-  "sly.html": {
-    "op": "add",
-    "timestamp": 1789490425651
   }
 }
