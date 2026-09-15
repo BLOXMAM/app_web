@@ -90,5 +90,9 @@
   "لوحة_التحكم.html": {
     "op": "sync",
     "timestamp": 1789492444461
+  },
+  "cond.html": {
+    "op": "add",
+    "timestamp": 1789492592734
   }
 }
