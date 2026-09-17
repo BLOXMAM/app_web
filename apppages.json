@@ -1,98 +1,94 @@
 {
   "Admingames.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "Games.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "apk_version.json": {
-    "op": "update",
-    "timestamp": 1789494560253
+    "op": "sync",
+    "timestamp": 1789631606957
   },
   "apkversion.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "app_linked_pages.json": {
-    "op": "update",
-    "timestamp": 1789631442965
+    "op": "sync",
+    "timestamp": 1789631606957
   },
   "apppages.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "checkser.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
+  },
+  "cond.html": {
+    "op": "sync",
+    "timestamp": 1789631606957
   },
   "conditional.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "cowball.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "drajcmath.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "home.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "lessons.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "logic.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "order.json": {
-    "op": "update",
-    "timestamp": 1789631309534
+    "op": "sync",
+    "timestamp": 1789631606957
   },
   "sm-custom-styles.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "snake3d.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "splash.html": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "splash_config.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "sps-pages.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "var.json": {
     "op": "sync",
-    "timestamp": 1789492444461
+    "timestamp": 1789631606957
   },
   "version.txt": {
-    "op": "update",
-    "timestamp": 1789631310425
+    "op": "sync",
+    "timestamp": 1789631606957
   },
   "لوحة_التحكم.html": {
     "op": "sync",
-    "timestamp": 1789492444461
-  },
-  "cond.html": {
-    "op": "add",
-    "timestamp": 1789492592734
-  },
-  "app/uploads/maths10.apk": {
-    "op": "update",
-    "timestamp": 1789494546523
+    "timestamp": 1789631606957
   }
 }
