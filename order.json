@@ -18,6 +18,18 @@
     "hidden": true
   },
   {
+    "file": "Sly.html",
+    "title": "Sly",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
+    "file": "cond.html",
+    "title": "cond",
+    "icon": "fa-solid fa-file",
+    "hidden": true
+  },
+  {
     "file": "conditional.html",
     "title": "العبارات الشرطية",
     "icon": "fa-solid fa-file",
