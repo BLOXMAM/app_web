@@ -60,9 +60,9 @@
     "hidden": true
   },
   {
-    "file": "snake3d.html",
-    "title": "لعبة الثعبان",
+    "file": "OVO3-D.html",
+    "title": "Ovo 3D",
     "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": false
   }
 ]
