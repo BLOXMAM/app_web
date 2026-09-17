@@ -52,8 +52,8 @@
     "timestamp": 1789492444461
   },
   "order.json": {
-    "op": "sync",
-    "timestamp": 1789492444461
+    "op": "update",
+    "timestamp": 1789631309534
   },
   "sm-custom-styles.json": {
     "op": "sync",
