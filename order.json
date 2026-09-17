@@ -64,5 +64,11 @@
     "title": "Ovo 3D",
     "icon": "fa-solid fa-file",
     "hidden": false
-  }
+  },
+  {
+    "file": "ANGRYBIRD.html",
+    "title": "ANGRY BIRD",
+    "icon": "fa-solid fa-file",
+    "hidden": false
+  } 
 ]
