@@ -5,7 +5,9 @@
     "icon": "fa-solid fa-wrench",
     "hidden": false,
     "searchEnabled": true,
-    "searchNames": []
+    "searchNames": [
+      "الاساس"
+    ]
   },
   {
     "file": "OVO3-D.html",
@@ -21,7 +23,9 @@
     "icon": "fa-solid fa-file",
     "hidden": false,
     "searchEnabled": true,
-    "searchNames": []
+    "searchNames": [
+      "ANGRY BIRD"
+    ]
   },
   {
     "file": "Admingames.html",
