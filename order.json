@@ -10,24 +10,6 @@
     ]
   },
   {
-    "file": "OVO3-D.html",
-    "title": "Ovo 3D",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "ANGRYBIRD.html",
-    "title": "ANGRY BIRD",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": [
-      "ANGRY BIRD"
-    ]
-  },
-  {
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
