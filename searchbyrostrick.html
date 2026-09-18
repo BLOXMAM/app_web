@@ -48,6 +48,10 @@
 
 
 
+
+
+
+
 <script id="sm-search-placeholders">
 (function(){
   var SM_FILE = "searchbyrostrick.html";
@@ -67,9 +71,10 @@
     var title = esc(p.title || String(p.file).replace(/\.html$/i, ""));
     return '<div class="rt-search-item" data-rt-file="' + p.file + '"><i class="' + icon + '"></i><span>' + title + '</span></div>';
   }
-  function ready(pages){
+  function ready(pages, fetchFailed){
     var html = document.body.innerHTML;
     var used = false;
+    var errNote = '<div class="rt-search-empty">تعذر تحميل قائمة الصفحات (order.json). إذا كنت تختبر هذا من داخل نافذة المعاينة بلوحة التحكم فهذا متوقع ولن يعمل هناك — جرّب بعد نشر الصفحة فعلياً على الرابط الحقيقي.</div>';
     if (html.indexOf("{{RosTrick_SearchBox}}") !== -1) {
       used = true;
       html = html.split("{{RosTrick_SearchBox}}").join(
@@ -78,12 +83,16 @@
     }
     if (html.indexOf("{{RosTrick_PagesList}}") !== -1) {
       used = true;
-      var listable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE && !p.hidden; });
-      html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + listable.map(itemHtml).join("") + '</div>');
+      if (fetchFailed) {
+        html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + errNote + '</div>');
+      } else {
+        var listable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE && !p.hidden; });
+        html = html.split("{{RosTrick_PagesList}}").join('<div class="rt-pages-list">' + (listable.length ? listable.map(itemHtml).join("") : '<div class="rt-search-empty">لا توجد صفحات قابلة للظهور بالبحث بعد (فعّلها من قسم \"ترتيب الصفحات\")</div>') + '</div>');
+      }
     }
     if (html.indexOf("{{RosTrick_PagesCount}}") !== -1) {
       used = true;
-      var countable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; }).length;
+      var countable = fetchFailed ? 0 : pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; }).length;
       html = html.split("{{RosTrick_PagesCount}}").join(String(countable));
     }
     if (used) document.body.innerHTML = html;
@@ -94,6 +103,7 @@
     var input = document.getElementById("rtSearchInput");
     var resultsEl = document.getElementById("rtSearchResults");
     if (input && resultsEl) {
+      if (fetchFailed) { resultsEl.innerHTML = errNote; input.disabled = true; return; }
       var searchable = pages.filter(function(p){ return p.searchEnabled !== false && p.file !== SM_FILE; });
       function render(list){
         if (!list.length) { resultsEl.innerHTML = '<div class="rt-search-empty">لا توجد نتائج مطابقة</div>'; return; }
@@ -112,8 +122,8 @@
     }
   }
   fetch("order.json").then(function(r){ return r.ok ? r.json() : Promise.reject(); }).then(function(data){
-    ready(Array.isArray(data) ? data : []);
-  }).catch(function(){ ready([]); });
+    ready(Array.isArray(data) ? data : [], false);
+  }).catch(function(){ ready([], true); });
 })();
 </script>
 <style id="sm-search-placeholders-style">
