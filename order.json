@@ -3,72 +3,96 @@
     "file": "لوحة_التحكم.html",
     "title": "-الإدارة-",
     "icon": "fa-solid fa-wrench",
-    "hidden": false
-  },
-  {
-    "file": "Admingames.html",
-    "title": "-الإدارة2-",
-    "icon": "fa-solid fa-wrench",
-    "hidden": true
-  },
-  {
-    "file": "Games.html",
-    "title": "الألعاب🎮",
-    "icon": "fa-solid fa-gamepad",
-    "hidden": true
-  },
-  {
-    "file": "Sly.html",
-    "title": "Sly",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "cond.html",
-    "title": "cond",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "conditional.html",
-    "title": "العبارات الشرطية",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "cowball.html",
-    "title": "لعبة البقرة",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "drajcmath.html",
-    "title": "التبرير الإستقرائي والتخمين",
-    "icon": "fa fa-book",
-    "hidden": true
-  },
-  {
-    "file": "home.html",
-    "title": "الرئيسية",
-    "icon": "fa-solid fa-file",
-    "hidden": true
-  },
-  {
-    "file": "logic.html",
-    "title": "المنطق",
-    "icon": "fa-solid fa-file",
-    "hidden": true
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "OVO3-D.html",
     "title": "Ovo 3D",
     "icon": "fa-solid fa-file",
-    "hidden": false
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
   },
   {
     "file": "ANGRYBIRD.html",
     "title": "ANGRY BIRD",
     "icon": "fa-solid fa-file",
-    "hidden": false
-  } 
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "Admingames.html",
+    "title": "-الإدارة2-",
+    "icon": "fa-solid fa-wrench",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "Games.html",
+    "title": "الألعاب🎮",
+    "icon": "fa-solid fa-gamepad",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "cond.html",
+    "title": "cond",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "conditional.html",
+    "title": "العبارات الشرطية",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "cowball.html",
+    "title": "لعبة البقرة",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "drajcmath.html",
+    "title": "التبرير الإستقرائي والتخمين",
+    "icon": "fa fa-book",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "home.html",
+    "title": "الرئيسية",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "logic.html",
+    "title": "المنطق",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "snake3d.html",
+    "title": "snake3d",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  }
 ]
