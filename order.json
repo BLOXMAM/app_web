@@ -26,6 +26,14 @@
     "searchNames": []
   },
   {
+    "file": "ككك.html",
+    "title": "ككك",
+    "icon": "fa-solid fa-file",
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "cond.html",
     "title": "cond",
     "icon": "fa-solid fa-file",
