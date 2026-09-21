@@ -10,14 +10,6 @@
     ]
   },
   {
-    "file": "ككك.html",
-    "title": "ككك",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
@@ -92,6 +84,14 @@
   {
     "file": "snake3d.html",
     "title": "snake3d",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "ككك.html",
+    "title": "ككك",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
