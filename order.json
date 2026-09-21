@@ -10,9 +10,9 @@
     ]
   },
   {
-    "file": "Games.html",
-    "title": "الألعاب🎮",
-    "icon": "fa-solid fa-gamepad",
+    "file": "ككك.html",
+    "title": "ككك",
+    "icon": "fa-solid fa-file",
     "hidden": false,
     "searchEnabled": true,
     "searchNames": []
@@ -21,15 +21,15 @@
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
-    "hidden": false,
+    "hidden": true,
     "searchEnabled": true,
     "searchNames": []
   },
   {
-    "file": "ككك.html",
-    "title": "ككك",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
+    "file": "Games.html",
+    "title": "الألعاب🎮",
+    "icon": "fa-solid fa-gamepad",
+    "hidden": true,
     "searchEnabled": true,
     "searchNames": []
   },
@@ -52,6 +52,14 @@
   {
     "file": "cowball.html",
     "title": "لعبة البقرة",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "deductive_reasoning.html",
+    "title": "deductive_reasoning",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
