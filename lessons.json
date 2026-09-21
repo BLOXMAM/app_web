@@ -17,6 +17,11 @@
           "name": "العبارات الشرطية",
           "href": "cond.html",
           "type": "link"
+        },
+        {
+          "name": "التبرير الإستنتاجي",
+          "href": "deductive_reasoning.html",
+          "type": "link"
         }
       ]
     }
