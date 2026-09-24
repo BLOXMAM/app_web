@@ -5,9 +5,7 @@
     "icon": "fa-solid fa-wrench",
     "hidden": false,
     "searchEnabled": true,
-    "searchNames": [
-      "الاساس"
-    ]
+    "searchNames": []
   },
   {
     "file": "Admingames.html",
@@ -84,14 +82,6 @@
   {
     "file": "snake3d.html",
     "title": "snake3d",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "ككك.html",
-    "title": "ككك",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
