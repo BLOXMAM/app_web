@@ -202,6 +202,12 @@
 
 
 
+
+
+
+
+
+
 <!-- SM-AUTO-INJECTED:START:admin-styles -->
 <style id="admin-styles">
         :root {
@@ -347,7 +353,7 @@
 header {
     background: transparent !important;
     box-shadow: none;
-    border-radius: 1px 1px 8px 8px;
+    border-radius: 3px 3px 16px 16px;
     border: 1px solid var(--header-text);
 }
 #pageMainHeader {
@@ -430,7 +436,7 @@ header.header-scrolled .menu-bar-line {
 </head>
 <body>
 <!-- START ADMIN DRAWER -->
-<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"page","accent":"#3498db"} -->
+<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"page","accent":"#3498db","position":"after-theme"} -->
 <header>
     <div style="display: flex; align-items: center; gap: 15px;">
         <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
@@ -439,6 +445,8 @@ header.header-scrolled .menu-bar-line {
             <div class="menu-bar-line"></div>
         </button>
         <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">home</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
     </div>
 </header>
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
@@ -463,6 +471,7 @@ header.header-scrolled .menu-bar-line {
     </div>
 </div>
 <!-- END ADMIN DRAWER -->
+
 
 
 
@@ -649,6 +658,7 @@ header.header-scrolled .menu-bar-line {
     loadData();
   }
 </script>
+
 
 
 
