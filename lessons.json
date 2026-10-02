@@ -27,6 +27,11 @@
           "name": "المُسَلْمَات والبراهين الحرة",
           "href": "postulates_proofs.html",
           "type": "link"
+        },
+        {
+          "name": "البرهان الجبري",
+          "href": "algebraic_proof.html",
+          "type": "link"
         }
       ]
     }
