@@ -80,6 +80,14 @@
     "searchNames": []
   },
   {
+    "file": "postulates_proofs.html",
+    "title": "المسلمات والبراهين الحرة",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "snake3d.html",
     "title": "snake3d",
     "icon": "fa-solid fa-file",
