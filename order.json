@@ -24,6 +24,14 @@
     "searchNames": []
   },
   {
+    "file": "algebraic_proof.html",
+    "title": "البرهان الجبري",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "cond.html",
     "title": "cond",
     "icon": "fa-solid fa-file",
