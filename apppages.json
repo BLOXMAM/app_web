@@ -106,5 +106,9 @@
   "postulates_proofs.html": {
     "op": "add",
     "timestamp": 1790915272520
+  },
+  "algebraic_proof.html": {
+    "op": "add",
+    "timestamp": 1790916248052
   }
 }
