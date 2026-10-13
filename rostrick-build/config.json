@@ -1,0 +1,14 @@
+{
+  "app_name": "رياضيات (ص10)",
+  "package_name": "we.we.en",
+  "version_code": 10,
+  "version_name": "1.9",
+  "asset_base_host": "app-web.hosaaam-753.workers.dev",
+  "colors": {
+    "primary": "#000000",
+    "primary_dark": "#000000",
+    "accent": "#000090",
+    "highlight": "#000090",
+    "control_normal": "#000090"
+  }
+}
