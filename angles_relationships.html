@@ -1,0 +1,2190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي علاقات الزوايا</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF2FF;
+      --card-bg: #FFFFFF;
+      --text: #1E1B4B;
+      --subtext: #64748B;
+      --w1: #F1F5F9;
+      --w2: #E2E8F0;
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --success: #16A34A;
+      --danger: #DC2626;
+      --warn: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
+
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .mode-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
+    }
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
+    .mode-btn.active {
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .cat-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
+    }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
+
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .level-card {
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
+    }
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
+
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
+    .custom-input {
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
+    }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
+    }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
+
+    .btn-start {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
+
+    .quiz-box { display: none; }
+    .header-stats {
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
+    }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
+
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
+    }
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
+    }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
+    .option-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
+    }
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
+    .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
+
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
+    }
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
+    }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
+
+    .toast {
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
+    }
+    .toast.show { bottom: 30px; opacity: 1; }
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    .result-box { display: none; text-align: center; }
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+
+    /* ===== البرهان الجبري: كسور وجداول البراهين ===== */
+    .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; font-size: .92em; line-height: 1.2; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; }
+    .fr > span:last-child { padding: 1px 3px 0; }
+    table.pf { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0; }
+    table.pf th { background: var(--w2); padding: 6px 4px; font-weight: 800; border: 1px solid var(--w2); }
+    table.pf td { border: 1px solid var(--w2); padding: 6px 6px; vertical-align: middle; }
+    table.pf td.n { width: 26px; text-align: center; color: var(--subtext); font-weight: 800; padding: 6px 2px; }
+    table.pf td.s { text-align: center; font-weight: 700; direction: ltr; }
+    table.pf td.s.ar { direction: rtl; }
+    table.pf td.j { text-align: right; }
+    table.pf .blank { display: inline-block; min-width: 40px; text-align: center; background: var(--w2); color: var(--primary); font-weight: 900; border-radius: 8px; padding: 2px 10px; }
+    table.pf.sm td, table.pf.sm th { padding: 4px 4px; font-size: .82rem; }
+    .given-box { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; font-weight: 700; line-height: 2; text-align: right; font-size: .98rem; }
+    .stmt-list { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; text-align: right; font-weight: 700; line-height: 2.1; }
+    table.pt td { font-size: .86rem; }
+    table.pt td:first-child { font-weight: 800; white-space: nowrap; }
+    table.pt td.eq { direction: rtl; text-align: right; font-weight: 600; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<!-- SM-AUTO-INJECTED:START:admin-styles -->
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .sm-search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; box-sizing: border-box; }
+        .sm-search-overlay.open { display: flex; }
+        .sm-search-panel { width: 100%; max-width: 520px; background: var(--drawer-bg, #fff); color: var(--drawer-text, #333); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; max-height: 70vh; display: flex; flex-direction: column; }
+        .sm-search-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .sm-search-bar i.fa-magnifying-glass { color: #3498db; font-size: 1.1rem; }
+        .sm-search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 1rem; color: inherit; }
+        .sm-search-close { background: transparent; border: none; color: inherit; font-size: 1rem; cursor: pointer; opacity: 0.7; padding: 4px; }
+        .sm-search-close:hover { opacity: 1; }
+        .sm-search-results { list-style: none; margin: 0; padding: 6px 0; overflow-y: auto; }
+        .sm-search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background-color 0.15s; }
+        .sm-search-result-item:hover, .sm-search-result-item:active { background-color: rgba(0,0,0,0.06); }
+        .sm-search-result-item i { color: #3498db; width: 20px; text-align: center; }
+        .sm-search-empty { padding: 22px 16px; text-align: center; color: var(--text-muted, #888); font-size: 0.9rem; }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SM-AUTO-INJECTED:END:admin-styles -->
+
+
+
+
+
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"overlay","accent":"#3498db","position":"after-theme"} -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">angles_relationships</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+    </div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">angles_relationships</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<div class="sm-search-overlay" id="smSearchOverlay" onclick="if(event.target===this) smCloseSearchPanel();">
+    <div class="sm-search-panel">
+        <div class="sm-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="smSearchInput" placeholder="ابحث عن صفحة..." oninput="smPerformSearch(this.value)" autocomplete="off">
+            <button type="button" class="sm-search-close" onclick="smCloseSearchPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sm-search-results" id="smSearchResults"></ul>
+    </div>
+</div>
+<!-- END ADMIN DRAWER -->
+
+
+<div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي علاقات الزوايا 📐</h1>
+    <p class="subtitle">الدرس ١-٨ • إثبات علاقات بين الزوايا<br>اضغط على أيقونة (i) لمراجعة المسلّمتين ١٫١٠ و١٫١١ والنظريات ١٫٣–١٫١٣ وأمثلة الكتاب قبل البدء أو أثناء الحل</p>
+
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="post" onclick="setMode('post', this)">مسلّمتا الزوايا 📐<small>المنقلة وجمع القياسات</small></button>
+      <button class="mode-btn" data-mode="thms" onclick="setMode('thms', this)">نظريات الزوايا 📋<small>متكاملتان ومتتامتان وقائمة</small></button>
+      <button class="mode-btn" data-mode="proofs" onclick="setMode('proofs', this)">البرهان ذو العمودين 🧾<small>إكمال الجدول وترتيبه</small></button>
+      <button class="mode-btn" data-mode="apply" onclick="setMode('apply', this)">مسائل وتطبيقات 🔭<small>مساحة ومقص ومعادلات</small></button>
+      <button class="mode-btn" data-mode="error" onclick="setMode('error', this)">اكتشف الخطأ 🔍<small>مبرر أو فهم خاطئ</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وأفكار</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
+    </div>
+
+    <div id="cats-wrapper" style="display: none;">
+      <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
+      <div class="cats-grid" id="cats-container"></div>
+    </div>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>سهل جدًا</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>سهل</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>متوسط</h4>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>صعب</h4>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="60" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="mode-grid" style="margin-bottom: 16px;">
+        <button type="button" class="mode-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="mode-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
+      </div>
+    </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
+    </div>
+    <div class="progress-dots" id="progress-dots"></div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
+    </div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ١-٨ إثبات علاقات بين الزوايا</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ٦٦–٧٠) ============
+  const LESSON = {
+    badges: ['🌟 خبير علاقات الزوايا', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تتقن مسلّمتي المنقلة وجمع قياسات الزوايا ونظريات المتكاملتين والمتتامتين والمتقابلتين بالرأس وتبرر كل خطوة بثقة.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. راجع النظريات ١٫٣ و١٫٤ و١٫٦ و١٫٧ و١٫٨، وتذكّر: المتكاملتان ١٨٠° والمتتامتان ٩٠°.',
+      'لا بأس، افتح أيقونة (i) واقرأ المسلّمات والنظريات والأمثلة، ثم جرّب مستوى أسهل.']
+  };
+
+  // ============ كسور وجداول البراهين ============
+  const frH = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+  const FR_RE = /\{([^{}]+?)\/([^{}]+?)\}/g;
+  const H = s => s.replace(FR_RE, (m, n, d) => frH(n, d));
+  const par = s => (/^\d+$|^[A-Za-z]$/.test(s) ? s : '(' + s + ')');
+  const T = (s) => s.replace(FR_RE, (m, n, d, off, str) => {
+    const f = par(n) + '/' + par(d), prev = off > 0 ? str[off - 1] : ' ';
+    return (prev === ' ' || prev === '(') ? f : '(' + f + ')';
+  });
+  const E = s => '<bdi dir="ltr">' + H(s) + '</bdi>';
+  const adg = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+
+  const JN = {
+    given: 'معطيات', protr: 'مسلّمة المنقلة', angAdd: 'مسلّمة جمع قياسات الزوايا',
+    suppT: 'نظرية الزاويتين المتكاملتين', compT: 'نظرية الزاويتين المتتامتين',
+    defSupp: 'تعريف الزاويتين المتكاملتين', defComp: 'تعريف الزاويتين المتتامتين',
+    defLP: 'تعريف الزاويتين المتجاورتين على مستقيم', defVert: 'تعريف الزاويتين المتقابلتين بالرأس',
+    vertT: 'نظرية الزاويتين المتقابلتين بالرأس', congSupT: 'نظرية تطابق المكمّلات', congCompT: 'نظرية تطابق المتممات',
+    defBis: 'تعريف منصف الزاوية', defA: 'تعريف تطابق الزوايا',
+    transC: 'خاصية التعدي للتطابق', symmC: 'خاصية التماثل للتطابق', reflC: 'خاصية الانعكاس للتطابق',
+    subs: 'بالتعويض', subt: 'بالطرح', adds: 'بالجمع', divs: 'بالقسمة', simp: 'بالتبسيط', symmE: 'خاصية التماثل للمساواة'
+  };
+  // صف: s نص العبارة، w مفتاح المبرر، j نص مبرر مخصص، ar صف نصه عربي (لا يُلفّ بـ ltr)، bad مشتتات للعبارة، ref [من، في]
+  const R = (s, w, j, ar) => ({ s, w, j, ar });
+  function pfTable(rows, o) {
+    o = o || {};
+    let h = '<table class="pf' + (o.sm ? ' sm' : '') + '"><tr><th></th><th>العبارات</th><th>المبررات</th></tr>';
+    rows.forEach((r, i) => {
+      const jk = o.wrongJ && o.wrongJ[i] ? o.wrongJ[i] : r.w;
+      const jt = o.wrongJ && o.wrongJ[i] ? JN[jk] : (r.j || JN[r.w]);
+      const st = o.blankS === i ? '<span class="blank">؟</span>' : (r.ar ? r.s : E(r.s));
+      h += `<tr><td class="n">${adg(i + 1)}</td><td class="s${r.ar ? ' ar' : ''}">${st}</td>` +
+        `<td class="j">${o.blankJ === i ? '<span class="blank">؟</span>' : jt}</td></tr>`;
+    });
+    return h + '</table>';
+  }
+  const pfBox = (rows, o) => `<div class="viz-box">${pfTable(rows, o)}</div>`;
+
+  // ============ أشكال (SVG) ============
+  const svgWrap = (inner, h) => `<svg direction="ltr" viewBox="0 0 320 ${h || 130}" role="img" aria-label="شكل هندسي" style="color:var(--text);width:100%;max-width:340px;display:block;margin:0 auto">${inner}</svg>`;
+  const sTxt = (x, y, t, c, sz) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz || 15}" font-weight="700" font-style="italic" font-family="Georgia,serif" fill="${c || 'currentColor'}">${t}</text>`;
+  const sDot = (x, y, c) => `<circle cx="${x}" cy="${y}" r="3.8" fill="${c || 'currentColor'}"/>`;
+  const sLn = (x1, y1, x2, y2, c, w) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c || 'var(--primary)'}" stroke-width="${w || 2.4}" stroke-linecap="round"/>`;
+
+  // ============ أشكال (SVG) للزوايا ============
+  const PX = (cx, r, deg) => +(cx + r * Math.cos(deg * Math.PI / 180)).toFixed(1);
+  const PY = (cy, r, deg) => +(cy - r * Math.sin(deg * Math.PI / 180)).toFixed(1);
+  // رأس + أشعة + أقواس + تسميات: o = {cx, cy, h, rays:[{deg, len, lab, c, ldx, ldy, nodot}], arcs:[{r, a1, a2, lab, c, lr}], right:[{a1}]}
+  function figAngles(o) {
+    let s = '';
+    (o.lines || []).forEach(l => { s += sLn(PX(o.cx, l.len, l.deg), PY(o.cy, l.len, l.deg), PX(o.cx, l.len, l.deg + 180), PY(o.cy, l.len, l.deg + 180), l.c || 'var(--primary)', 2.4); });
+    (o.rays || []).forEach(r => {
+      const x = PX(o.cx, r.len, r.deg), y = PY(o.cy, r.len, r.deg);
+      s += sLn(o.cx, o.cy, x, y, r.c || 'var(--primary)', 2.4);
+      if (!r.nodot) s += sDot(x, y);
+      if (r.lab) s += sTxt(x + (r.ldx || 0), y + (r.ldy || 0), r.lab);
+    });
+    (o.arcs || []).forEach(a => {
+      const x1 = PX(o.cx, a.r, a.a1), y1 = PY(o.cy, a.r, a.a1), x2 = PX(o.cx, a.r, a.a2), y2 = PY(o.cy, a.r, a.a2);
+      const big = Math.abs(a.a2 - a.a1) > 180 ? 1 : 0, sw = a.a2 < a.a1 ? 1 : 0;
+      s += `<path d="M ${x1} ${y1} A ${a.r} ${a.r} 0 ${big} ${sw} ${x2} ${y2}" fill="none" stroke="${a.c || 'var(--danger)'}" stroke-width="2"/>`;
+      if (a.lab) { const m = (a.a1 + a.a2) / 2; s += sTxt(PX(o.cx, a.lr || a.r + 13, m), PY(o.cy, a.lr || a.r + 13, m) + 5, a.lab, a.c || 'var(--danger)', 13); }
+    });
+    (o.right || []).forEach(q => {
+      const p = [[10, 0], [10, 10], [0, 10]].map(([u, v]) => [PX(o.cx, 1, 0) + 0, 0]);
+      const a = q.a1, d = 11, ux = Math.cos(a * Math.PI / 180), uy = -Math.sin(a * Math.PI / 180), vx = Math.cos((a + 90) * Math.PI / 180), vy = -Math.sin((a + 90) * Math.PI / 180);
+      s += `<path d="M ${o.cx + ux * d} ${o.cy + uy * d} L ${o.cx + (ux + vx) * d} ${o.cy + (uy + vy) * d} L ${o.cx + vx * d} ${o.cy + vy * d}" fill="none" stroke="var(--danger)" stroke-width="2"/>`;
+    });
+    if (o.vlab) s += sTxt(o.cx + (o.vdx || 0), o.cy + (o.vdy || 18), o.vlab);
+    return svgWrap(s, o.h || 140);
+  }
+  // مسلّمة المنقلة: شعاع عند الصفر وشعاع آخر عند deg
+  function figProt(a, b, c, deg) {
+    const cx = 160, cy = 118, R = 100;
+    let s = `<path d="M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy} Z" fill="var(--primary)" fill-opacity=".08" stroke="var(--primary)" stroke-width="1.6"/>`;
+    for (let g = 0; g <= 180; g += 10) {
+      const l = g % 30 === 0 ? 14 : 8;
+      s += sLn(PX(cx, R, g), PY(cy, R, g), PX(cx, R - l, g), PY(cy, R - l, g), 'var(--primary)', 1.2);
+      if (g % 30 === 0) s += sTxt(PX(cx, R - 26, g), PY(cy, R - 26, g) + 4, String(g), 'currentColor', 11);
+    }
+    s += sLn(cx - R - 10, cy, cx + R + 10, cy, 'currentColor', 1.4);
+    s += sLn(cx, cy, PX(cx, R + 6, deg), PY(cy, R + 6, deg), 'var(--danger)', 2.6) + sDot(cx, cy);
+    s += sTxt(cx, cy + 16, b) + sTxt(cx - R - 12, cy + 16, a) + sTxt(PX(cx, R + 18, deg), PY(cy, R + 18, deg), c);
+    return svgWrap(s, 140);
+  }
+  // مسلّمة جمع قياسات الزوايا: D داخل ∠ABC
+  function figAngAdd(a, b, c, d, l1, l2) {
+    return figAngles({ cx: 70, cy: 112, h: 130, rays: [
+      { deg: 12, len: 215, lab: c, ldx: 12, ldy: 4 }, { deg: 62, len: 120, lab: d, ldx: 10, ldy: -6 }, { deg: 112, len: 105, lab: a, ldx: -6, ldy: -8 }],
+      arcs: [{ r: 40, a1: 12, a2: 62, lab: l2, c: 'var(--success)', lr: 54 }, { r: 40, a1: 62, a2: 112, lab: l1, c: 'var(--danger)', lr: 54 }], vlab: b, vdx: -14, vdy: 6 });
+  }
+  // مستقيمان متقاطعان وزواياهما ١–٤ (١ يسار، ٢ أعلى، ٣ يمين، ٤ أسفل)
+  function figCross(labs, names) {
+    labs = labs || ['1', '2', '3', '4']; names = names || [];
+    return figAngles({ cx: 160, cy: 75, h: 150, lines: [{ deg: 25, len: 125 }, { deg: 115, len: 66, c: 'var(--success)' }],
+      arcs: [{ r: 24, a1: 115, a2: 205, lab: labs[0], lr: 36 }, { r: 24, a1: 25, a2: 115, lab: labs[1], lr: 36, c: 'var(--primary)' }, { r: 24, a1: -65, a2: 25, lab: labs[2], lr: 36 }, { r: 24, a1: 205, a2: 295, lab: labs[3], lr: 36, c: 'var(--primary)' }] });
+  }
+  // زاويتان متجاورتان على مستقيم
+  function figLinePair(l1, l2, deg) {
+    deg = deg || 65;
+    return figAngles({ cx: 160, cy: 100, h: 125, lines: [{ deg: 0, len: 125 }], rays: [{ deg: deg, len: 82, c: 'var(--success)', nodot: true }],
+      arcs: [{ r: 28, a1: deg, a2: 180, lab: l1, c: 'var(--danger)', lr: 44 }, { r: 28, a1: 0, a2: deg, lab: l2, c: 'var(--primary)', lr: 44 }] });
+  }
+  // زاويتان متجاورتان تكوّنان زاوية قائمة
+  function figRightPair(l1, l2, deg) {
+    deg = deg || 55;
+    return figAngles({ cx: 90, cy: 110, h: 135, rays: [{ deg: 0, len: 190, nodot: true }, { deg: deg, len: 130, c: 'var(--success)', nodot: true }, { deg: 90, len: 95, nodot: true }],
+      arcs: [{ r: 34, a1: 0, a2: deg, lab: l2, c: 'var(--primary)', lr: 50 }, { r: 34, a1: deg, a2: 90, lab: l1, c: 'var(--danger)', lr: 50 }], right: [{ a1: 0 }] });
+  }
+  // منصف الزاوية (من الكتاب: DB ينصف ∠ADC) والزوايا ١ و٢ و٣
+  function figBis() {
+    return figAngles({ cx: 150, cy: 82, h: 160,
+      rays: [{ deg: 160, len: 110, lab: 'A', ldx: -10, ldy: -4 }, { deg: 110, len: 95, lab: 'B', ldx: 2, ldy: -9 }, { deg: 60, len: 110, lab: 'C', ldx: 10, ldy: -4 },
+        { deg: 340, len: 70, nodot: true }, { deg: 290, len: 62, nodot: true }],
+      arcs: [{ r: 28, a1: 110, a2: 160, lab: '1', lr: 42 }, { r: 28, a1: 60, a2: 110, lab: '2', lr: 42, c: 'var(--success)' }, { r: 28, a1: 290, a2: 340, lab: '3', lr: 42, c: 'var(--primary)' }], vlab: 'D', vdx: -12, vdy: 16 });
+  }
+
+  // أمثلة الكتاب
+  const mm = s => L(s);
+  const EX1 = [
+    R('m∠1 + m∠2 = m∠JKL', 'angAdd'),
+    R('m∠1 + 56° = 145°', 'subs', 'عوّض m∠2 = 56° و m∠JKL = 145°'),
+    R('m∠1 + 56° − 56° = 145° − 56°', 'subt', 'اطرح 56 من الطرفين'),
+    R('m∠1 = 89°', 'simp', 'بسّط')
+  ];
+  const EX2 = [
+    R('m∠1 + m∠2 = 90°', 'compT'),
+    R('73° + m∠2 = 90°', 'subs', 'عوّض m∠1 = 73°'),
+    R('73° + m∠2 − 73° = 90° − 73°', 'subt', 'اطرح 73 من الطرفين'),
+    R('m∠2 = 17°', 'simp', 'بسّط')
+  ];
+  const EX3 = [
+    R(`${mm('∠1')} و${mm('∠3')} متكاملتان ، ${mm('∠2')} و${mm('∠3')} متكاملتان`, 'given', null, true),
+    R('m∠1 + m∠3 = 180° , m∠2 + m∠3 = 180°', 'defSupp'),
+    R('m∠1 + m∠3 = m∠2 + m∠3', 'subs'),
+    R('m∠1 = m∠2', 'subt'),
+    R('∠1 ≅ ∠2', 'defA')
+  ];
+  const EX4 = [
+    R(`${mm('∠2')} و${mm('∠4')} متقابلتان بالرأس`, 'given', null, true),
+    R(`${mm('∠2')} و${mm('∠3')} متجاورتان على مستقيم ، ${mm('∠3')} و${mm('∠4')} متجاورتان على مستقيم`, 'defLP', null, true),
+    R(`${mm('∠2')} و${mm('∠3')} متكاملتان ، ${mm('∠3')} و${mm('∠4')} متكاملتان`, 'suppT', null, true),
+    R('∠2 ≅ ∠4', 'congSupT')
+  ];
+  const EX5 = [
+    R(`${mm('DB')} ينصّف ${mm('∠ADC')}`, 'given', null, true),
+    R('∠1 ≅ ∠2', 'defBis'),
+    R(`${mm('∠1')} و${mm('∠3')} متقابلتان بالرأس`, 'defVert', null, true),
+    R('∠3 ≅ ∠1', 'vertT'),
+    R('∠3 ≅ ∠2', 'transC'),
+    R('∠2 ≅ ∠3', 'symmC')
+  ];
+
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>نربط الزاوية بعدد حقيقي بين ${E('0°')} و${E('180°')} (المنقلة)، ثم نجمع قياسات الزوايا ونستعمل نظريات <b>المتكاملتين</b> و<b>المتتامتين</b> و<b>المتقابلتين بالرأس</b> وتطابق الزوايا في كتابة البراهين.</p>
+      <h4>المسلّمات والنظريات</h4>
+      <ol class="steps">
+        <li><b>المسلّمة ١٫١٠ (المنقلة):</b> تُربط زاوية بعدد حقيقي بين ${E('0°')} و${E('180°')}.</li>
+        <li><b>المسلّمة ١٫١١ (جمع قياسات الزوايا):</b> تقع ${E('D')} داخل ${E('∠ABC')} إذا وفقط إذا كان ${E('m∠ABD + m∠DBC = m∠ABC')}.</li>
+        <li><b>النظرية ١٫٣ (المتكاملتان):</b> المتجاورتان على مستقيم متكاملتان، أي ${E('m∠1 + m∠2 = 180°')}.</li>
+        <li><b>النظرية ١٫٤ (المتتامتان):</b> إذا شكّل ضلعاهما غير المشتركين زاوية قائمة فهما متتامتان: ${E('m∠1 + m∠2 = 90°')}.</li>
+        <li><b>النظرية ١٫٥:</b> تطابق الزوايا يحقق الانعكاس والتماثل والتعدي.</li>
+        <li><b>النظريتان ١٫٦ و١٫٧:</b> المكمّلتان (أو المتمّمتان) للزاوية نفسها أو لزاويتين متطابقتين متطابقتان.</li>
+        <li><b>النظرية ١٫٨:</b> المتقابلتان بالرأس متطابقتان.</li>
+        <li><b>نظريات ١٫٩–١٫١٣ (الزاوية القائمة).</b></li>
+      </ol>
+      <h4>كيف نكتب برهانًا يتضمن زوايا؟</h4>
+      <ol class="steps">
+        <li>ارسم الشكل واكتب المعطيات والمطلوب.</li>
+        <li>حدّد العلاقة: متجاورتان على مستقيم، متتامتان، متقابلتان بالرأس، منصف زاوية…</li>
+        <li>حوّل العلاقة إلى معادلة قياسات بالنظرية أو التعريف المناسب.</li>
+        <li>عوّض وبسّط (بالتعويض، بالطرح، بالقسمة…).</li>
+        <li>عُد إلى ${E('≅')} بتعريف تطابق الزوايا إذا طُلب تطابق.</li>
+      </ol>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) المنقلة تربط الزاوية بعدد.</b><br>نضع صفر المنقلة على أحد ضلعي الزاوية فيمثل العدد المقابل للضلع الآخر قياسها (المسلّمة ١٫١٠).</div>
+      <div class="idea-card"><b>٢) «داخل الزاوية» تعني جمع قياسات.</b><br>إذا كانت ${E('D')} داخل ${E('∠ABC')} فإن ${E('m∠ABD + m∠DBC = m∠ABC')} والعكس (المسلّمة ١٫١١).</div>
+      <div class="idea-card"><b>٣) المتكاملتان مجموعهما ${E('180°')}.</b><br>والزاويتان المتجاورتان على مستقيم متكاملتان (النظرية ١٫٣).</div>
+      <div class="idea-card"><b>٤) المتتامتان مجموعهما ${E('90°')}.</b><br>وضلعاهما غير المشتركين يكوّنان زاوية قائمة (النظرية ١٫٤).</div>
+      <div class="idea-card"><b>٥) المتقابلتان بالرأس متطابقتان.</b><br>غير متجاورتين، وتتكوّنان من تقاطع مستقيمين (النظرية ١٫٨).</div>
+      <div class="idea-card"><b>٦) المتكاملات/المتممات المشتركة.</b><br>إذا كانت زاويتان متكاملتين (أو متتامتين) لزاوية ثالثة فهما متطابقتان (١٫٦ و١٫٧) وبرهانهما: تعويض ثم طرح.</div>
+      <div class="idea-card"><b>٧) منصف الزاوية</b> شعاع داخل الزاوية يقسمها إلى زاويتين متطابقتين، وبدايته رأس الزاوية.</div>
+      <div class="idea-card"><b>٨) من تعريف التطابق:</b> ${E('∠1 ≅ ∠2')} تعني ${E('m∠1 = m∠2')} والعكس.</div>
+      <div class="idea-card"><b>٩) نظريات الزاوية القائمة:</b> المستقيمان المتعامدان يكوّنان أربع زوايا قائمة، وجميع الزوايا القائمة متطابقة، وإذا كانت زاويتان متكاملتين ومتطابقتين فكل منهما قائمة.</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">الزاويتان المتكاملتان</span><span class="en">Supplementary Angles</span><br>زاويتان مجموع قياسيهما ${E('180°')}.</div>
+      <div class="def-card"><span class="term">الزاويتان المتتامتان</span><span class="en">Complementary Angles</span><br>زاويتان مجموع قياسيهما ${E('90°')}.</div>
+      <div class="def-card"><span class="term">زاويتان متجاورتان على مستقيم</span><span class="en">Linear Pair</span><br>زاويتان متجاورتان ضلعاهما غير المشتركين شعاعان متعاكسان (مستقيم).</div>
+      <div class="def-card"><span class="term">الزاويتان المتقابلتان بالرأس</span><span class="en">Vertical Angles</span><br>زاويتان غير متجاورتين تتكوّنان من تقاطع مستقيمين.</div>
+      <div class="def-card"><span class="term">منصف الزاوية</span><span class="en">Angle Bisector</span><br>شعاع يقع داخل الزاوية ويقسمها إلى زاويتين متطابقتين، وبدايته رأس الزاوية.</div>
+      <div class="def-card"><span class="term">تطابق الزوايا</span><br>الزاويتان المتساويتان في القياس متطابقتان (${E('∠1 ≅ ∠2')} تكافئ ${E('m∠1 = m∠2')}).</div>
+      <div class="def-card"><span class="term">رمز التعامد ${E('⊥')}</span><br>يُقرأ «عمودي على» أو «يعامد».</div>
+      <div class="def-card"><span class="term">الخصائص الجبرية</span><br>تنطبق على تطابق الزوايا وتساوي قياساتها كما تنطبق على القطع المستقيمة.</div>` },
+
+    { id: 'post', title: '📐 المسلّمات', html: `
+      <div class="ex-card"><div class="ex-t">المسلّمة ١٫١٠: المنقلة</div>
+        تُستعمل المنقلة للربط بين قياس زاوية وعدد حقيقي يقع بين ${E('0°')} و${E('180°')}.<br>مثال: في ${E('∠ABC')} إذا انطبق صفر المنقلة على ${E('BA')} فإن العدد المقابل لـ ${E('BC')} يمثل قياس ${E('∠ABC')}.
+        <div style="margin-top:8px">${figProt('A', 'B', 'C', 48)}</div></div>
+      <div class="ex-card"><div class="ex-t">المسلّمة ١٫١١: جمع قياسات الزوايا</div>
+        تقع النقطة ${E('D')} داخل ${E('∠ABC')} إذا وفقط إذا كان ${E('m∠ABD + m∠DBC = m∠ABC')}.
+        <div style="margin-top:8px">${figAngAdd('A', 'B', 'C', 'D', 'x°', 'y°')}</div>
+        <p class="note">في الشكل: ${E('m∠ABC = (x + y)°')}.</p></div>` },
+
+    { id: 'thm', title: '📋 النظريات', html: `
+      <div class="ex-card"><div class="ex-t">١٫٣ نظرية الزاويتين المتكاملتين</div>
+        إذا كانت زاويتان متجاورتين على مستقيم فإنهما متكاملتان. مثال: ${E('∠1, ∠2')} متجاورتان على مستقيم، إذن ${E('m∠1 + m∠2 = 180°')}.
+        <div style="margin-top:6px">${figLinePair('1', '2')}</div></div>
+      <div class="ex-card"><div class="ex-t">١٫٤ نظرية الزاويتين المتتامتين</div>
+        إذا شكّل الضلعان غير المشتركين لزاويتين متجاورتين زاوية قائمة فإنهما متتامتان. مثال: ${E('m∠1 + m∠2 = 90°')}.
+        <div style="margin-top:6px">${figRightPair('1', '2')}</div></div>
+      <div class="ex-card"><div class="ex-t">١٫٥ خصائص تطابق الزوايا</div>
+        <table class="pf pt">
+          <tr><td>الانعكاس</td><td class="eq">${E('∠1 ≅ ∠1')}</td></tr>
+          <tr><td>التماثل</td><td class="eq">إذا كانت ${E('∠2 ≅ ∠1')} فإن ${E('∠1 ≅ ∠2')}</td></tr>
+          <tr><td>التعدي</td><td class="eq">إذا كانت ${E('∠2 ≅ ∠1')} و${E('∠3 ≅ ∠2')} فإن ${E('∠3 ≅ ∠1')}</td></tr>
+        </table>
+        <p class="note">برهان حر للتماثل: المعطى ${E('∠A ≅ ∠B')}، ومن تعريف التطابق ${E('m∠A = m∠B')}، وبخاصية التماثل للمساواة ${E('m∠B = m∠A')}، وعليه ${E('∠B ≅ ∠A')} من تعريف التطابق.</p></div>
+      <div class="ex-card"><div class="ex-t">١٫٦ نظرية تطابق المكمّلات</div>
+        الزاويتان المكمّلتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان.<br>مثال: إذا كان ${E('m∠1 + m∠2 = 180°')} و${E('m∠2 + m∠3 = 180°')} فإن ${E('∠1 ≅ ∠3')}.</div>
+      <div class="ex-card"><div class="ex-t">١٫٧ نظرية تطابق المتممات</div>
+        الزاويتان المتمّمتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان.<br>مثال: إذا كان ${E('m∠4 + m∠5 = 90°')} و${E('m∠5 + m∠6 = 90°')} فإن ${E('∠4 ≅ ∠6')}.</div>
+      <div class="ex-card"><div class="ex-t">١٫٨ نظرية الزاويتين المتقابلتين بالرأس</div>
+        الزاويتان المتقابلتان بالرأس متطابقتان. مثال: ${E('∠1 ≅ ∠3')} و${E('∠2 ≅ ∠4')}.
+        <div style="margin-top:6px">${figCross()}</div></div>
+      <div class="ex-card"><div class="ex-t">نظريات الزاوية القائمة</div>
+        <table class="pf pt">
+          <tr><td>١٫٩</td><td class="eq">يتقاطع المستقيمان المتعامدان ويكوّنان أربع زوايا قائمة.</td></tr>
+          <tr><td>١٫١٠</td><td class="eq">جميع الزوايا القائمة متطابقة.</td></tr>
+          <tr><td>١٫١١</td><td class="eq">المستقيمان المتعامدان يكوّنان زوايا متجاورة متطابقة.</td></tr>
+          <tr><td>١٫١٢</td><td class="eq">إذا كانت الزاويتان متكاملتين ومتطابقتين فإنهما قائمتان.</td></tr>
+          <tr><td>١٫١٣</td><td class="eq">إذا تجاورت زاويتان على مستقيم وكانتا متطابقتين فإنهما قائمتان.</td></tr>
+        </table></div>` },
+
+    { id: 'ex', title: '📖 أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: استعمال مسلّمة جمع قياسات الزوايا</div>
+        إذا كان ${E('m∠JKL = 145°')} و${E('m∠2 = 56°')} فأوجد ${E('m∠1')}.
+        ${pfBox(EX1, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢ من واقع الحياة: مسح الأراضي</div>
+        قاس مساح الزاوية بين خط نظره إلى قمة تلة والمستقيم الرأسي فكانت ${E('73°')}. ما قياس الزاوية بين خط نظره والخط الأفقي؟ (الخطان الأفقي والرأسي يكوّنان زاوية قائمة)
+        ${pfBox(EX2, { sm: true })}
+        <p class="note">التحقق: ${E('17° + 73° = 90°')} ✓</p></div>
+      <div class="ex-card"><div class="ex-t">برهان: إحدى حالات نظرية تطابق المكمّلات</div>
+        المعطيات: ${E('∠1')} و${E('∠3')} متكاملتان، ${E('∠2')} و${E('∠3')} متكاملتان. المطلوب: ${E('∠1 ≅ ∠2')}.
+        ${pfBox(EX3, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: نظريتا تطابق المكمّلات أو المتمّمات</div>
+        أثبت أن الزاويتين المتقابلتين بالرأس ${E('2')} و${E('4')} متطابقتان.
+        <div style="margin-top:6px">${figCross()}</div>
+        ${pfBox(EX4, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">مثال ٤: استعمال الزوايا المتقابلة بالرأس</div>
+        أثبت أنه إذا كان ${E('DB')} ينصّف ${E('∠ADC')} فإن ${E('∠3 ≅ ∠2')}.
+        <div style="margin-top:6px">${figBis()}</div>
+        ${pfBox(EX5, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">تحقق من فهمك ٢ و٤ (محلولان)</div>
+        <b>٢)</b> ${E('∠6')} و${E('∠7')} متجاورتان على مستقيم، ${E('m∠6 = (3x + 32)°')} و${E('m∠7 = (5x + 12)°')}:
+        ${E('8x + 44 = 180')} فـ ${E('x = 17')}، ${E('m∠6 = 83°')}، ${E('m∠7 = 97°')}.<br>
+        <b>٤)</b> ${E('∠3')} و${E('∠4')} متقابلتان بالرأس، ${E('m∠3 = (6x + 2)°')} و${E('m∠4 = (8x − 14)°')}:
+        ${E('6x + 2 = 8x − 14')} فـ ${E('x = 8')}، ${E('m∠3 = m∠4 = 50°')}.</div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    post: { name: 'مسلّمتا الزوايا', icon: '📐' },
+    thms: { name: 'نظريات الزوايا', icon: '📋' },
+    proofs: { name: 'البرهان ذو العمودين', icon: '🧾' },
+    apply: { name: 'مسائل وتطبيقات', icon: '🔭' },
+    error: { name: 'اكتشف الخطأ', icon: '🔍' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
+  };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const PT = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'X', 'Y', 'Z'];
+  const pts = n => sample(PT, n);
+  const rnd = (lo, hi) => randInt(lo, hi);
+
+  // ============ أدوات التنسيق ============
+  const fm = n => (n < 0 ? '−' : '') + Math.abs(n);
+  const tm = n => (n < 0 ? ` − ${-n}` : ` + ${n}`);
+  const coef = (a, v) => (a === 1 ? '' : a === -1 ? '−' : fm(a)) + v;
+  const LT = s => L(T(s));
+  const mA = n => `m∠${n}`;
+
+  function evalStmt(s, vals) {
+    try {
+      let e = s;
+      Object.keys(vals).sort((a, b) => b.length - a.length).forEach(k => { e = e.split(k).join('(' + vals[k] + ')'); });
+      e = e.replace(FR_RE, '(($1)/($2))').replace(/°/g, '').replace(/−/g, '-').replace(/·/g, '*');
+      if (/[^0-9+\-*/().=\s]/.test(e)) return null;
+      e = e.replace(/(\d|\))\s*\(/g, '$1*(');
+      const parts = e.split('=');
+      if (parts.length !== 2) return null;
+      const lv = Function('return ' + parts[0])(), rv = Function('return ' + parts[1])();
+      return Math.abs(lv - rv) < 1e-9;
+    } catch (err) { return null; }
+  }
+  function mutate(s, vals) {
+    const out = new Set();
+    [...s.matchAll(/\d+/g)].forEach(m => {
+      const pre = s[m.index - 1];
+      if (pre === '∠') return;
+      [1, -1, 2, -2, 10, -10].forEach(dv => { const nv = +m[0] + dv; if (nv >= 0) out.add(s.slice(0, m.index) + nv + s.slice(m.index + m[0].length)); });
+    });
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === '+') out.add(s.slice(0, i) + '−' + s.slice(i + 1));
+      if (s[i] === '−') out.add(s.slice(0, i) + '+' + s.slice(i + 1));
+    }
+    return [...out].filter(c => c !== s && evalStmt(c, vals) === false);
+  }
+  const ang = n => `∠${n}`;
+
+  // ============ سلاسل البراهين ============
+  // (١) مسلّمة جمع قياسات الزوايا (مثال ١)
+  function chainA1() {
+    const [j, k, l] = pts(3), full = j + k + l;
+    let a, u; do { a = rnd(20, 80); u = rnd(20, 80); } while (a === u);
+    const T0 = a + u, p = pick([1, 2]), q = 3 - p, kn = `m∠${full}`;
+    const rows = [
+      R(`m∠${p} = ${a}° , ${kn} = ${T0}°`, 'given'),
+      R(`m∠1 + m∠2 = ${kn}`, 'angAdd'),
+      R(`m∠${q} + ${a}° = ${T0}°`, 'subs'),
+      R(`m∠${q} + ${a}° − ${a}° = ${T0}° − ${a}°`, 'subt'),
+      R(`m∠${q} = ${u}°`, 'simp')
+    ];
+    rows[1].bad = [`m∠1 + ${kn} = m∠2`, `m∠1 − m∠2 = ${kn}`, `m∠1 = m∠2`, `${kn} + m∠2 = m∠1`];
+    rows[2].bad = [`m∠${q} + ${T0}° = ${a}°`, `m∠${q} − ${a}° = ${T0}°`, `m∠${q} + ${a}° = ${u}°`, `m∠${q} + ${T0 + a}° = ${T0}°`];
+    rows[3].bad = [`m∠${q} + ${a}° − ${a}° = ${T0}° + ${a}°`, `m∠${q} + ${a}° − ${a}° = ${T0}°`, `m∠${q} + ${a}° − ${a}° = ${T0}° − ${u}°`, `m∠${q} + ${a}° − ${a}° = ${T0}° − ${T0}°`];
+    rows[4].bad = [`m∠${q} = ${T0}°`, `m∠${q} = ${T0 + a}°`, `m∠${q} = ${a}°`, `m∠${q} = ${Math.abs(T0 - 2 * a) || 7}°`, `m∠${q} = ${u + 10}°`];
+    const vals = { 'm∠1': p === 1 ? a : u, 'm∠2': p === 2 ? a : u, [kn]: T0 };
+    return { kind: 'A1', rows, vals, givenHtml: `${L(`m∠${p} = ${a}°`)}، ${L(`${kn} = ${T0}°`)}`, goal: `m∠${q} = ${u}°`,
+      fig: () => figAngAdd(j, k, l, '', '1', '2') };
+  }
+  // (٢) متكاملتان / متتامتان (مثال ٢)
+  function chainA2() {
+    const kind = pick(['comp', 'supp']), S = kind === 'comp' ? 90 : 180;
+    let a; do { a = kind === 'comp' ? rnd(15, 75) : rnd(30, 150); } while (a * 2 === S);
+    const p = pick([1, 2]), q = 3 - p, key = kind === 'comp' ? 'compT' : 'suppT';
+    const rel = kind === 'comp' ? 'تكوّنان زاوية قائمة' : 'متجاورتان على مستقيم';
+    const rows = [
+      R(`${L(ang(1))} و${L(ang(2))} ${rel} ، ${L(`m∠${p} = ${a}°`)}`, 'given', null, true),
+      R(`m∠1 + m∠2 = ${S}°`, key),
+      R(`${a}° + m∠${q} = ${S}°`, 'subs'),
+      R(`${a}° + m∠${q} − ${a}° = ${S}° − ${a}°`, 'subt'),
+      R(`m∠${q} = ${S - a}°`, 'simp')
+    ];
+    const O = S === 90 ? 180 : 90;
+    rows[1].bad = [`m∠1 + m∠2 = ${O}°`, `m∠1 = m∠2`, `m∠1 − m∠2 = ${S}°`, `m∠1 + m∠2 = ${S + 10}°`];
+    rows[2].bad = [`${a}° + ${S}° = m∠${q}`, `${a}° − m∠${q} = ${S}°`, `${a}° + m∠${q} = ${O}°`, `${a}° + m∠${q} = ${a}°`];
+    rows[3].bad = [`${a}° + m∠${q} − ${a}° = ${S}° + ${a}°`, `${a}° + m∠${q} + ${a}° = ${S}° − ${a}°`, `${a}° + m∠${q} − ${a}° = ${S}°`];
+    rows[4].bad = [`m∠${q} = ${S}°`, `m∠${q} = ${S + a}°`, `m∠${q} = ${a}°`, `m∠${q} = ${O - a > 0 ? O - a : a + 10}°`];
+    const vals = { 'm∠1': p === 1 ? a : S - a, 'm∠2': p === 2 ? a : S - a };
+    return { kind: 'A2', sub: kind, rows, vals, givenHtml: `${L(ang(1))} و${L(ang(2))} ${rel}، ${L(`m∠${p} = ${a}°`)}`, goal: `m∠${q} = ${S - a}°`,
+      fig: () => (kind === 'comp' ? figRightPair('1', '2') : figLinePair('1', '2')) };
+  }
+  // (٣) مع x: متكاملتان / متتامتان / متقابلتان بالرأس / منصف
+  function chainX(kind) {
+    kind = kind || pick(['lp', 'comp', 'vert', 'bis']);
+    const [a1, a2] = sample([1, 2, 3, 4, 5, 6, 7, 8], 2).sort((x, y) => x - y);
+    if (kind === 'lp' || kind === 'comp') {
+      const S = kind === 'lp' ? 180 : 90, key = kind === 'lp' ? 'suppT' : 'compT';
+      let p, r, s, q, t, ang1, ang2, kk;
+      for (let g = 0; g < 400; g++) {
+        p = rnd(1, 6); r = rnd(1, 6); s = rnd(2, 12); ang1 = rnd(10, S - 10); ang2 = S - ang1;
+        q = ang1 - p * s; t = ang2 - r * s; kk = q + t;
+        if (q && t && kk && ang1 * 2 !== S && Math.abs(q) <= 40 && Math.abs(t) <= 40 && Math.abs(q) !== Math.abs(t) && (p + r) * s === S - kk) break;
+      }
+      const e1 = `${coef(p, 'x')}${tm(q)}`, e2 = `${coef(r, 'x')}${tm(t)}`, pr = p + r, rel = kind === 'lp' ? 'متجاورتان على مستقيم' : 'تكوّنان زاوية قائمة';
+      const rhs = S - kk, op = kk > 0 ? 'subt' : 'adds';
+      const rows = [
+        R(`${L(ang(a1))} و${L(ang(a2))} ${rel} ، ${L(`m∠${a1} = (${e1})°`)} ، ${L(`m∠${a2} = (${e2})°`)}`, 'given', null, true),
+        R(`m∠${a1} + m∠${a2} = ${S}°`, key),
+        R(`(${e1})° + (${e2})° = ${S}°`, 'subs'),
+        R(`${coef(pr, 'x')}${tm(kk)} = ${S}`, 'simp'),
+        R(`${coef(pr, 'x')} = ${rhs}`, op),
+        R(`x = ${s}`, 'divs')
+      ];
+      const O = S === 90 ? 180 : 90;
+      rows[1].bad = [`m∠${a1} + m∠${a2} = ${O}°`, `m∠${a1} = m∠${a2}`, `m∠${a1} − m∠${a2} = ${S}°`];
+      rows[4].bad = [`${coef(pr, 'x')} = ${S + kk}`, `${coef(pr, 'x')} = ${S}`, `${coef(pr, 'x')} = ${rhs + 2}`];
+      rows[5].bad = [`x = ${rhs}`, `x = ${s + 1}`, `x = ${s - 1}`, `x = ${pr}`];
+      const vals = { x: s, [`m∠${a1}`]: ang1, [`m∠${a2}`]: ang2 };
+      return { kind: 'X', sub: kind, rows, vals, v: 'x', s, ang1, ang2, a1, a2, e1, e2, S, givenHtml: `${L(ang(a1))} و${L(ang(a2))} ${rel}، ${L(`m∠${a1} = (${e1})°`)}، ${L(`m∠${a2} = (${e2})°`)}`, goal: `x = ${s}`,
+        fig: () => (kind === 'lp' ? figLinePair(String(a1), String(a2)) : figRightPair(String(a1), String(a2))) };
+    }
+    // vert / bis
+    let p, r, s, q, t;
+    for (let g = 0; g < 400; g++) {
+      p = rnd(1, 7); r = p + rnd(2, 5); s = rnd(3, 14); q = rnd(1, 24); t = q - (r - p) * s;
+      if (t < 0 && Math.abs(t) <= 40 && p * s + q >= 8 && p * s + q <= 170 && p * s + q !== 45 && p * s + q !== 90) break;
+    }
+    const dr = r - p, val = p * s + q, e1 = `${coef(p, 'x')}${tm(q)}`, e2 = `${coef(r, 'x')}${tm(t)}`, [A, B, C, D] = pts(4);
+    const head = kind === 'vert'
+      ? [`${L(ang(a1))} و${L(ang(a2))} متقابلتان بالرأس ، ${L(`m∠${a1} = (${e1})°`)} ، ${L(`m∠${a2} = (${e2})°`)}`, ang(a1), ang(a2), `m∠${a1}`, `m∠${a2}`, 'vertT']
+      : [`${L(B + D)} ينصّف ${L('∠' + A + B + C)} ، ${L(`m∠${A + B + D} = (${e1})°`)} ، ${L(`m∠${D + B + C} = (${e2})°`)}`, `∠${A + B + D}`, `∠${D + B + C}`, `m∠${A + B + D}`, `m∠${D + B + C}`, 'defBis'];
+    const rows = [
+      R(head[0], 'given', null, true),
+      R(`${head[1]} ≅ ${head[2]}`, head[5]),
+      R(`${head[3]} = ${head[4]}`, 'defA'),
+      R(`(${e1})° = (${e2})°`, 'subs'),
+      R(`${q} = ${coef(dr, 'x')}${tm(t)}`, 'subt'),
+      R(`${q - t} = ${coef(dr, 'x')}`, 'adds'),
+      R(`${s} = x`, 'divs'),
+      R(`x = ${s}`, 'symmE')
+    ];
+    rows[1].bad = [`${head[1]} ≅ ∠${A}${B}${C}`, `${head[2]} ≅ ∠${A}${B}${C}`, `${head[1]} + ${head[2]} ≅ ∠${A}${B}${C}`];
+    rows[2].bad = [`${head[3]} + ${head[4]} = 90°`, `${head[3]} + ${head[4]} = 180°`, `${head[3]} = ${head[4]} + 90°`];
+    rows[4].bad = [`${q} = ${coef(dr, 'x')}${tm(-t)}`, `${q + p * s} = ${coef(dr, 'x')}${tm(t)}`, `${q} = ${coef(dr + 1, 'x')}${tm(t)}`];
+    rows[5].bad = [`${q + t} = ${coef(dr, 'x')}`, `${q - t + 2} = ${coef(dr, 'x')}`, `${q} = ${coef(dr, 'x')}`];
+    rows[6].bad = [`${q - t} = x`, `${s + 1} = x`, `${s - 1} = x`, `${dr} = x`];
+    const vals = { x: s, [head[3]]: val, [head[4]]: val };
+    const rowsB = rows;
+    return { kind: 'X', sub: kind, rows: rowsB, vals, v: 'x', s, val, e1, e2, a1, a2, A, B, C, D, givenHtml: head[0].replace(' ، ', '، ').replace(/ ، /g, '، '), goal: `x = ${s}`,
+      fig: () => (kind === 'vert' ? figCross(['1', '2', '3', '4']) : figAngAdd(A, B, C, D, `(${e1})°`, `(${e2})°`)) };
+  }
+  // (٤) تطابق المكمّلات/المتممات
+  function chainC3() {
+    const kind = pick(['supp', 'comp']), S = kind === 'supp' ? 180 : 90, [a, b, c] = sample([1, 2, 3, 4, 5, 6], 3);
+    let val; do { val = kind === 'supp' ? rnd(30, 150) : rnd(15, 75); } while (val * 2 === S);
+    const word = kind === 'supp' ? 'متكاملتان' : 'متتامتان', dk = kind === 'supp' ? 'defSupp' : 'defComp', O = S === 90 ? 180 : 90;
+    const rows = [
+      R(`${L(ang(a))} و${L(ang(c))} ${word} ، ${L(ang(b))} و${L(ang(c))} ${word}`, 'given', null, true),
+      R(`m∠${a} + m∠${c} = ${S}° , m∠${b} + m∠${c} = ${S}°`, dk),
+      R(`m∠${a} + m∠${c} = m∠${b} + m∠${c}`, 'subs'),
+      R(`m∠${a} = m∠${b}`, 'subt'),
+      R(`∠${a} ≅ ∠${b}`, 'defA')
+    ];
+    rows[1].bad = [`m∠${a} + m∠${b} = ${S}° , m∠${b} + m∠${c} = ${S}°`, `m∠${a} + m∠${c} = ${S}° , m∠${a} + m∠${b} = ${S}°`, `m∠${a} + m∠${c} = ${O}° , m∠${b} + m∠${c} = ${O}°`, `m∠${a} = ${S}° , m∠${b} = ${S}°`];
+    rows[2].bad = [`m∠${a} + m∠${c} = m∠${b}`, `m∠${a} + m∠${b} = m∠${b} + m∠${c}`, `m∠${a} − m∠${c} = m∠${b} + m∠${c}`, `m∠${a} + m∠${c} = m∠${b} − m∠${c}`];
+    rows[3].bad = [`m∠${a} = m∠${c}`, `m∠${a} + m∠${b} = ${S}°`, `m∠${a} = m∠${b} + m∠${c}`, `m∠${c} = m∠${b}`];
+    rows[4].bad = [`∠${a} ≅ ∠${c}`, `∠${b} ≅ ∠${c}`, `∠${c} ≅ ∠${a}`, `∠${a} + ∠${b} ≅ ∠${c}`];
+    const vals = { [`m∠${a}`]: val, [`m∠${b}`]: val, [`m∠${c}`]: S - val };
+    return { kind: 'C3', sub: kind, rows, vals, givenHtml: `${L(ang(a))} و${L(ang(c))} ${word}، ${L(ang(b))} و${L(ang(c))} ${word}`, goal: `∠${a} ≅ ∠${b}`, fig: null };
+  }
+  // (٥) الزوايا المتقابلة بالرأس عبر المتكاملتين (مثال ٣)
+  function chainC4() {
+    const combos = [[[2, 4], 1], [[2, 4], 3], [[1, 3], 2], [[1, 3], 4]], [pair, m] = pick(combos), [p, q] = pair, o = [1, 2, 3, 4].find(x => x !== p && x !== q && x !== m);
+    const rows = [
+      R(`${L(ang(p))} و${L(ang(q))} متقابلتان بالرأس`, 'given', null, true),
+      R(`${L(ang(p))} و${L(ang(m))} متجاورتان على مستقيم ، ${L(ang(m))} و${L(ang(q))} متجاورتان على مستقيم`, 'defLP', null, true),
+      R(`${L(ang(p))} و${L(ang(m))} متكاملتان ، ${L(ang(m))} و${L(ang(q))} متكاملتان`, 'suppT', null, true),
+      R(`∠${p} ≅ ∠${q}`, 'congSupT')
+    ];
+    rows[3].bad = [`∠${p} ≅ ∠${m}`, `∠${m} ≅ ∠${q}`, `∠${p} ≅ ∠${o}`, `∠${q} ≅ ∠${o}`];
+    return { kind: 'C4', rows, givenHtml: `${L(ang(p))} و${L(ang(q))} متقابلتان بالرأس`, goal: `∠${p} ≅ ∠${q}`, fig: () => figCross() };
+  }
+  // (٦) منصف الزاوية (مثال ٤)
+  function chainC5() {
+    const rows = [
+      R(`${L('DB')} ينصّف ${L('∠ADC')}`, 'given', null, true),
+      R('∠1 ≅ ∠2', 'defBis'),
+      R(`${L('∠1')} و${L('∠3')} متقابلتان بالرأس`, 'defVert', null, true),
+      R('∠3 ≅ ∠1', 'vertT'),
+      R('∠3 ≅ ∠2', 'transC'),
+      R('∠2 ≅ ∠3', 'symmC')
+    ];
+    const bd = ['∠3 ≅ ∠ADC', '∠1 ≅ ∠ADC', '∠2 ≅ ∠ADC', '∠ADC ≅ ∠3'];
+    rows[1].bad = ['∠1 ≅ ∠ADC', '∠2 ≅ ∠ADC', '∠1 ≅ ∠3 + ∠2'.replace('∠3 + ∠2', '∠ADC'), '∠ADC ≅ ∠2'];
+    rows[3].bad = bd; rows[4].bad = bd.slice(1).concat(['∠ADC ≅ ∠1']); rows[5].bad = bd.slice(1).concat(['∠ADC ≅ ∠2']);
+    return { kind: 'C5', rows, givenHtml: `${L('DB')} ينصّف ${L('∠ADC')}`, goal: '∠2 ≅ ∠3', fig: () => figBis() };
+  }
+  const CHAINS = { A1: chainA1, A2: chainA2, X: chainX, C3: chainC3, C4: chainC4, C5: chainC5 };
+  const pickChain = keys => CHAINS[pick(keys)]();
+
+  function givenBox(ch) {
+    const g = ch.givenHtml || '';
+    return `<div class="given-box">المعطيات: ${g}<br>المطلوب: ${L(T(ch.goal))}</div>`;
+  }
+  const figBoxOf = ch => (ch.fig ? `<div class="viz-box">${ch.fig()}</div>` : '');
+
+  // ============ مبررات ============
+  const J_HINT = {
+    given: 'هذه العبارة هي ما أُعطي في المسألة.',
+    angAdd: 'الشعاع داخل الزاوية: قياس الكل = مجموع قياسي الجزأين.',
+    suppT: 'زاويتان متجاورتان على مستقيم مجموعهما ١٨٠°.',
+    compT: 'ضلعاهما غير المشتركين يكوّنان زاوية قائمة: مجموعهما ٩٠°.',
+    defSupp: 'المتكاملتان مجموع قياسيهما ١٨٠°.',
+    defComp: 'المتتامتان مجموع قياسيهما ٩٠°.',
+    defLP: 'متجاورتان وضلعاهما غير المشتركين على استقامة واحدة.',
+    defVert: 'زاويتان غير متجاورتين تتكوّنان من تقاطع مستقيمين.',
+    vertT: 'المتقابلتان بالرأس متطابقتان.',
+    congSupT: 'مكمّلتان للزاوية نفسها فهما متطابقتان.',
+    congCompT: 'متمّمتان للزاوية نفسها فهما متطابقتان.',
+    defBis: 'المنصف يقسم الزاوية إلى زاويتين متطابقتين.',
+    defA: 'الانتقال بين «≅» و«=» للزوايا.',
+    transC: 'تطابقان يشتركان في زاوية فتتطابق الطرفان.',
+    symmC: 'تبدّل موضع طرفي التطابق.',
+    reflC: 'الزاوية تطابق نفسها.',
+    subs: 'وُضع مقدار مساوٍ مكان مقدار آخر.',
+    subt: 'طُرح المقدار نفسه من الطرفين.',
+    adds: 'أُضيف العدد نفسه إلى الطرفين.',
+    divs: 'قُسم الطرفان على العدد نفسه.',
+    simp: 'لم تُطبَّق خاصية جديدة؛ أُجري حساب بسيط فقط.',
+    symmE: 'تبديل طرفي المساواة.'
+  };
+  const J_EXPL = {
+    given: 'العبارة الأولى هي المعطيات.',
+    angAdd: 'إذا وقع شعاع داخل زاوية فإن قياس الزاوية الكبرى يساوي مجموع قياسي الزاويتين الصغريين (المسلّمة ١٫١١).',
+    suppT: 'الزاويتان المتجاورتان على مستقيم متكاملتان، أي مجموع قياسيهما ١٨٠° (النظرية ١٫٣).',
+    compT: 'إذا شكّل الضلعان غير المشتركين لزاويتين متجاورتين زاوية قائمة فالزاويتان متتامتان، أي مجموعهما ٩٠° (النظرية ١٫٤).',
+    defSupp: 'الزاويتان المتكاملتان مجموع قياسيهما ١٨٠°.',
+    defComp: 'الزاويتان المتتامتان مجموع قياسيهما ٩٠°.',
+    defLP: 'الزاويتان المتجاورتان على مستقيم متجاورتان وضلعاهما غير المشتركين شعاعان متعاكسان.',
+    defVert: 'الزاويتان المتقابلتان بالرأس غير متجاورتين وتتكوّنان من تقاطع مستقيمين.',
+    vertT: 'الزاويتان المتقابلتان بالرأس متطابقتان (النظرية ١٫٨).',
+    congSupT: 'الزاويتان المكمّلتان للزاوية نفسها متطابقتان (النظرية ١٫٦).',
+    congCompT: 'الزاويتان المتمّمتان للزاوية نفسها متطابقتان (النظرية ١٫٧).',
+    defBis: 'منصف الزاوية يقسمها إلى زاويتين متطابقتين.',
+    defA: 'الزاويتان المتطابقتان لهما القياس نفسه، والمتساويتان قياسًا متطابقتان (تعريف تطابق الزوايا).',
+    transC: 'إذا طابقت زاوية زاوية ثانية، وطابقت الثانية ثالثة، فالأولى تطابق الثالثة.',
+    symmC: 'إذا كانت زاوية تطابق أخرى فالثانية تطابق الأولى.',
+    reflC: 'كل زاوية تطابق نفسها.',
+    subs: 'عوّضنا بمقدار مساوٍ مكان مقدار آخر في العبارة.',
+    subt: 'طرحنا المقدار نفسه من طرفي المساواة.',
+    adds: 'جمعنا العدد نفسه إلى طرفي المساواة.',
+    divs: 'قسمنا طرفي المساواة على العدد نفسه.',
+    simp: 'لا خاصية جديدة؛ هو تبسيط حسابي للعبارة السابقة.',
+    symmE: 'إذا كان a = b فإن b = a.'
+  };
+  const CONF = { suppT: ['defSupp', 'angAdd'], compT: ['defComp', 'angAdd'], defSupp: ['suppT'], defComp: ['compT'], angAdd: ['compT', 'suppT'], defVert: ['vertT'], vertT: ['defVert'], defBis: [], congSupT: ['congCompT', 'vertT'], congCompT: ['congSupT', 'vertT'] };
+  const POOL_BY = {
+    A1: ['given', 'angAdd', 'subs', 'subt', 'adds', 'divs', 'simp'],
+    A2: ['given', 'suppT', 'compT', 'subs', 'subt', 'adds', 'divs', 'simp'],
+    X: ['given', 'suppT', 'compT', 'vertT', 'defBis', 'defA', 'subs', 'subt', 'adds', 'divs', 'simp', 'symmE'],
+    C3: ['given', 'defSupp', 'defComp', 'subs', 'subt', 'adds', 'defA', 'suppT', 'compT'],
+    C4: ['given', 'defLP', 'suppT', 'compT', 'congSupT', 'congCompT', 'defVert', 'defA'],
+    C5: ['given', 'defBis', 'defVert', 'vertT', 'transC', 'symmC', 'reflC', 'defA']
+  };
+  const jText = r => r.j || JN[r.w];
+  const jExplain = (i, r) => `مبرر الخطوة ${adg(i + 1)} هو «${jText(r)}»: ${J_EXPL[r.w]}`;
+  function poolFor(ch, key) {
+    const bad = new Set((CONF[key] || []).concat([key]));
+    return POOL_BY[ch.kind].filter(k => !bad.has(k));
+  }
+  function qBlankJ(cat, d, ch, idxs) {
+    const rows = ch.rows, i = pick(idxs), r = rows[i], key = r.w;
+    const pool = poolFor(ch, key).filter(k => k !== 'given' || key === 'given' ? true : false);
+    return build({ cat, d, nOpts: 4,
+      prompt: `أمامك برهان ذو عمودين. ما المبرر الذي يوضع في الخانة (؟) أمام الخطوة رقم ${adg(i + 1)}؟`,
+      extra: givenBox(ch) + figBoxOf(ch) + pfBox(rows, { blankJ: i }),
+      correct: jText(r), wrongs: shuffle(pool.filter(k => k !== 'given').map(k => JN[k])), hint: J_HINT[key], explain: jExplain(i, r) });
+  }
+  function qBlankS(cat, d, ch, idxs) {
+    const rows = ch.rows, vals = ch.vals || {};
+    const ok = idxs.filter(k => !rows[k].ar && (rows[k].bad || evalStmt(rows[k].s, vals) === true)), i = pick(ok), r = rows[i];
+    let bad = r.bad ? r.bad.slice() : mutate(r.s, vals);
+    if (r.bad && Object.keys(vals).length) bad = bad.filter(b => evalStmt(b, vals) !== true);
+    bad = bad.filter(b => b !== r.s);
+    if (bad.length < 3) bad = bad.concat(mutate(r.s, vals));
+    bad = shuffle([...new Set(bad)].filter(b => b !== r.s));
+    if (bad.length < 3) return qBlankS(cat, d, ch, idxs);
+    return build({ cat, d, nOpts: 4,
+      prompt: `أمامك برهان ذو عمودين. أي العبارات الآتية تكمل الخانة (؟) في الخطوة رقم ${adg(i + 1)}، علمًا أن مبررها «${jText(r)}»؟`,
+      extra: givenBox(ch) + figBoxOf(ch) + pfBox(rows, { blankS: i }),
+      correct: LT(r.s), wrongs: bad.map(LT), hint: 'طبّق المبرر المذكور على العبارات التي قبلها.',
+      explain: `الخطوة ${adg(i + 1)} هي ${LT(r.s)}، وتنتج بـ«${jText(r)}». ${J_EXPL[r.w]}` });
+  }
+
+  // ============ 1) مسلّمتا الزوايا ============
+  const PN = ['مسلّمة المنقلة (١٫١٠)', 'مسلّمة جمع قياسات الزوايا (١٫١١)', 'نظرية الزاويتين المتكاملتين (١٫٣)', 'نظرية الزاويتين المتقابلتين بالرأس (١٫٨)'];
+  const GEN_POST = [
+    { d: 1, w: 3, fn() {
+      const [a, b, c, d] = pts(4);
+      const it = pick([
+        { k: 0, t: 'يوضع صفر المنقلة على أحد ضلعي الزاوية، فيمثل العدد المقابل للضلع الآخر قياسها، وهو عدد بين ٠° و١٨٠°.' },
+        { k: 0, t: 'تُستعمل أداة للربط بين قياس زاوية وعدد حقيقي يقع بين ٠° و١٨٠°.' },
+        { k: 1, t: `تقع ${L(d)} داخل ${L('∠' + a + b + c)} إذا وفقط إذا كان ${L(`m∠${a}${b}${d} + m∠${d}${b}${c} = m∠${a}${b}${c}`)}.` },
+        { k: 1, t: 'قياس الزاوية الكبرى يساوي مجموع قياسي زاويتين تقعان داخلها وتتجاوران.' }
+      ]);
+      return build({ cat: 'post', d: 1, nOpts: 4, fixedOrder: true, order: PN,
+        prompt: `أي مسلّمة أو نظرية توضحها العبارة الآتية؟<br>«${it.t}»`, correct: PN[it.k], wrongs: PN.filter((x, i) => i !== it.k),
+        hint: it.k === 0 ? 'أداة القياس.' : 'قياس الكل = مجموع قياسات الأجزاء.',
+        explain: it.k === 0 ? 'المسلّمة ١٫١٠: تربط المنقلة بين قياس الزاوية وعدد حقيقي بين ٠° و١٨٠°.' : `المسلّمة ١٫١١: ${L('m∠ABD + m∠DBC = m∠ABC')} إذا وفقط إذا كانت D داخل ${L('∠ABC')}.` });
+    } },
+    { d: 1, w: 2, fn() {      // قراءة المنقلة
+      const [a, b, c] = pts(3), deg = rnd(2, 17) * 10, f = n => L(n + '°');
+      return build({ cat: 'post', d: 1, nOpts: 4,
+        prompt: `وُضع صفر المنقلة على الشعاع ${L(b + a)} فانطبق الشعاع ${L(b + c)} على التدريج المبيّن في الشكل. ما قياس ${L('∠' + a + b + c)}؟`,
+        extra: `<div class="viz-box">${figProt(a, b, c, deg)}</div>`, correct: f(deg), wrongs: numWrongs(deg, [180 - deg, deg + 10, deg - 10, deg + 20, deg - 20, 90], f),
+        hint: 'اقرأ التدريج الذي يمر به الشعاع.', explain: `يمر الشعاع ${L(b + c)} بالتدريج ${L(deg + '°')}، فـ ${L('m∠' + a + b + c + ' = ' + deg + '°')} (المسلّمة ١٫١٠).` });
+    } },
+    { d: 1, w: 2, fn() {      // إكمال نص ١٫١١
+      const [a, b, c, d] = pts(4), ok = `m∠${a}${b}${d} + m∠${d}${b}${c} = m∠${a}${b}${c}`;
+      return build({ cat: 'post', d: 1, nOpts: 4,
+        prompt: `أكمل المسلّمة ١٫١١: «تقع النقطة ${L(d)} داخل ${L('∠' + a + b + c)} إذا وفقط إذا كان …………»`,
+        extra: `<div class="viz-box">${figAngAdd(a, b, c, d, '', '')}</div>`, correct: L(ok),
+        wrongs: [`m∠${a}${b}${d} = m∠${d}${b}${c}`, `m∠${a}${b}${d} + m∠${a}${b}${c} = m∠${d}${b}${c}`, `m∠${a}${b}${d} + m∠${d}${b}${c} = 180°`, `m∠${a}${b}${c} + m∠${d}${b}${c} = m∠${a}${b}${d}`].map(L),
+        hint: 'الكبرى = مجموع الصغريين.', explain: `${L(ok)}: قياس الزاوية الكبرى يساوي مجموع قياسي الجزأين.` });
+    } },
+    { d: 2, w: 3, fn() {      // إيجاد قياس
+      const [a, b, c, d] = pts(4), x = rnd(20, 70), y = rnd(20, 70), tot = x + y, kind = rnd(0, 2), f = n => L(n + '°');
+      const A1 = `m∠${a}${b}${d}`, A2 = `m∠${d}${b}${c}`, AT = `m∠${a}${b}${c}`;
+      const fig = lab => `<div class="viz-box">${figAngAdd(a, b, c, d, lab[0], lab[1])}</div>`;
+      const mk = (q, ans, cands, expl, lab) => build({ cat: 'post', d: 2, nOpts: 4, prompt: q, extra: fig(lab), correct: f(ans), wrongs: numWrongs(ans, cands, f), hint: 'طبّق مسلّمة جمع قياسات الزوايا.', explain: expl });
+      if (kind === 0) return mk(`${L(d)} داخل ${L('∠' + a + b + c)}، ${L(A1 + ' = ' + x + '°')} و${L(A2 + ' = ' + y + '°')}. ما قياس ${L('∠' + a + b + c)}؟`, tot, [Math.abs(x - y), x, y, tot + 10, tot - 10, 180 - tot], `${L(AT + ' = ' + A1 + ' + ' + A2 + ' = ' + x + '° + ' + y + '° = ' + tot + '°')}.`, [x + '°', y + '°']);
+      if (kind === 1) return mk(`${L(d)} داخل ${L('∠' + a + b + c)}، ${L(AT + ' = ' + tot + '°')} و${L(A1 + ' = ' + x + '°')}. ما قياس ${L('∠' + d + b + c)}؟`, y, [tot + x, x, tot, y + 10, Math.abs(y - 10), 180 - y], `${L(A2 + ' = ' + AT + ' − ' + A1 + ' = ' + tot + '° − ' + x + '° = ' + y + '°')}.`, [x + '°', '؟']);
+      return mk(`${L(d)} داخل ${L('∠' + a + b + c)}، ${L(AT + ' = ' + tot + '°')} و${L(A2 + ' = ' + y + '°')}. ما قياس ${L('∠' + a + b + d)}؟`, x, [tot + y, y, tot, x + 10, Math.abs(x - 10), 180 - x], `${L(A1 + ' = ' + AT + ' − ' + A2 + ' = ' + tot + '° − ' + y + '° = ' + x + '°')}.`, ['؟', y + '°']);
+    } },
+    { d: 2, w: 2, fn() {      // هل D داخل الزاوية؟
+      const [a, b, c, d] = pts(4), x = rnd(20, 70), y = rnd(20, 70), inside = Math.random() < 0.5, tot = inside ? x + y : x + y + pick([-10, -5, 5, 10, 15]);
+      const YES = `نعم، ${d} داخل الزاوية`, NO = `لا، ${d} ليست داخل الزاوية`, UN = 'لا يمكن التحديد';
+      return build({ cat: 'post', d: 2, nOpts: 3, fixedOrder: true, order: [YES, NO, UN].map(s => s),
+        prompt: `إذا كان ${L(`m∠${a}${b}${d} = ${x}°`)} و${L(`m∠${d}${b}${c} = ${y}°`)} و${L(`m∠${a}${b}${c} = ${tot}°`)}، فهل تقع ${L(d)} داخل ${L('∠' + a + b + c)}؟`,
+        correct: inside ? YES : NO, wrongs: [inside ? NO : YES, UN], hint: 'قارن مجموع الجزأين بقياس الزاوية الكبرى.',
+        explain: `${L(x + '° + ' + y + '° = ' + (x + y) + '°')} ${inside ? 'يساوي' : 'لا يساوي'} ${L(tot + '°')}، ${inside ? 'فبحسب المسلّمة ١٫١١ تقع النقطة داخل الزاوية.' : 'فبحسب المسلّمة ١٫١١ لا تقع النقطة داخل الزاوية.'}` });
+    } },
+    { d: 3, w: 3, fn() {      // معادلة من جمع القياسات
+      const [a, b, c, d] = pts(4);
+      let p, r, s, q, t;
+      do { p = rnd(1, 5); r = rnd(1, 5); s = rnd(3, 14); q = rnd(-15, 20); t = rnd(-15, 25); } while (!q || !t || p * s + q < 8 || r * s + t < 8 || (p + r) * s + q + t > 175);
+      const e1 = `${coef(p, 'x')}${tm(q)}`, e2 = `${coef(r, 'x')}${tm(t)}`, tot = (p + r) * s + q + t, vf = n => L('x = ' + fm(n));
+      return build({ cat: 'post', d: 3, nOpts: 4,
+        prompt: `${L(d)} داخل ${L('∠' + a + b + c)}، و${L(`m∠${a}${b}${d} = (${e1})°`)} و${L(`m∠${d}${b}${c} = (${e2})°`)} و${L(`m∠${a}${b}${c} = ${tot}°`)}. ما قيمة ${L('x')}؟`,
+        extra: `<div class="viz-box">${figAngAdd(a, b, c, d, `(${e1})°`, `(${e2})°`)}</div>`, correct: vf(s), wrongs: numWrongs(s, [-s, s + 1, s - 1, s + 2, s - 2, tot - s], vf),
+        hint: 'اجمع القياسين وساوِ الناتج بقياس الزاوية الكبرى.', explain: `${L('(' + e1 + ') + (' + e2 + ') = ' + tot)}، وبالحل ${vf(s)}.` });
+    } },
+    { d: 3, w: 2, fn() {      // ثلاث زوايا متجاورة
+      const [a, b, c, d, e] = pts(5), x = rnd(15, 45), y = rnd(15, 45), z = rnd(15, 45), tot = x + y + z, f = n => L(n + '°');
+      return build({ cat: 'post', d: 3, nOpts: 4,
+        prompt: `الشعاعان ${L(b + d)} و${L(b + e)} داخل ${L('∠' + a + b + c)} بالترتيب ${L(b + a)}، ${L(b + d)}، ${L(b + e)}، ${L(b + c)}. إذا كان ${L(`m∠${a}${b}${d} = ${x}°`)} و${L(`m∠${d}${b}${e} = ${y}°`)} و${L(`m∠${e}${b}${c} = ${z}°`)}، فما قياس ${L('∠' + a + b + c)}؟`,
+        correct: f(tot), wrongs: numWrongs(tot, [tot + 10, tot - 10, x + y, y + z, tot + 20, Math.abs(x - y) + z], f), hint: 'طبّق المسلّمة مرتين.',
+        explain: `${L('m∠' + a + b + c + ' = ' + x + '° + ' + y + '° + ' + z + '° = ' + tot + '°')}.` });
+    } }
+  ];
+
+  // ============ 2) نظريات الزوايا ============
+  const TN = { suppT: 'نظرية الزاويتين المتكاملتين (١٫٣)', compT: 'نظرية الزاويتين المتتامتين (١٫٤)', vertT: 'نظرية الزاويتين المتقابلتين بالرأس (١٫٨)', congSupT: 'نظرية تطابق المكمّلات (١٫٦)', congCompT: 'نظرية تطابق المتممات (١٫٧)' };
+  const TSTM = [
+    { k: 'suppT', t: 'إذا كانت الزوايا المتجاورة على مستقيم فإنها متكاملة.' },
+    { k: 'suppT', t: `إذا كانت ${L('∠1')} و${L('∠2')} متجاورتين على مستقيم فإن ${L('m∠1 + m∠2 = 180°')}.` },
+    { k: 'compT', t: 'إذا شكّل الضلعان غير المشتركين لزاويتين متجاورتين زاوية قائمة فإن الزاويتين متتامتان.' },
+    { k: 'compT', t: `إذا كانت ${L('∠1')} و${L('∠2')} متجاورتين وتكوّنان زاوية قائمة فإن ${L('m∠1 + m∠2 = 90°')}.` },
+    { k: 'vertT', t: 'الزاويتان المتقابلتان بالرأس متطابقتان.' },
+    { k: 'vertT', t: `إذا تقاطع مستقيمان وكانت ${L('∠1')} و${L('∠3')} متقابلتين بالرأس فإن ${L('∠1 ≅ ∠3')}.` },
+    { k: 'congSupT', t: 'الزاويتان المكمّلتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان.' },
+    { k: 'congSupT', t: `إذا كان ${L('m∠1 + m∠2 = 180°')} و${L('m∠2 + m∠3 = 180°')} فإن ${L('∠1 ≅ ∠3')}.` },
+    { k: 'congCompT', t: 'الزاويتان المتمّمتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان.' },
+    { k: 'congCompT', t: `إذا كان ${L('m∠4 + m∠5 = 90°')} و${L('m∠5 + m∠6 = 90°')} فإن ${L('∠4 ≅ ∠6')}.` }
+  ];
+  const keysT = Object.keys(TN);
+  const RT = [   // نظريات الزاوية القائمة 1.9–1.13: شرط ونتيجة
+    { q: `إذا كانت ${L('∠5')} و${L('∠6')} متكاملتين ومتطابقتين، فماذا نستنتج؟`, c: 'كل منهما زاوية قائمة', w: ['كل منهما زاوية حادة', 'كل منهما زاوية منفرجة', 'مجموع قياسيهما ٩٠°'], e: 'إذا كانت الزاويتان متكاملتين ومتطابقتين فإن قياس كل منهما ٩٠° (النظرية ١٫١٢): ٢m = ١٨٠° إذن m = ٩٠°.' },
+    { q: `تجاورت ${L('∠7')} و${L('∠8')} على مستقيم وكانتا متطابقتين. ماذا نستنتج؟`, c: 'كل منهما زاوية قائمة', w: ['كل منهما زاوية حادة', 'مجموع قياسيهما ٩٠°', 'متقابلتان بالرأس'], e: 'إذا تجاورت زاويتان على مستقيم وكانتا متطابقتين فإنهما قائمتان (النظرية ١٫١٣).' },
+    { q: `إذا كان ${L('AC ⊥ DB')} فماذا نستنتج عن الزوايا الأربع الناتجة عن تقاطعهما؟`, c: 'جميعها قائمة', w: ['جميعها حادة', 'اثنتان قائمتان فقط', 'مجموعها ١٨٠°'], e: 'يتقاطع المستقيمان المتعامدان ويكوّنان أربع زوايا قائمة (النظرية ١٫٩).' },
+    { q: `إذا كانت ${L('∠1')} و${L('∠2')} و${L('∠3')} جميعها قائمة، فماذا نستنتج؟`, c: `${L('∠1 ≅ ∠2 ≅ ∠3')}`, w: ['مجموعها ١٨٠°', 'اثنتان منها متكاملتان فقط', 'لا علاقة بينها'], e: 'جميع الزوايا القائمة متطابقة (النظرية ١٫١٠).' },
+    { q: `إذا كان ${L('AC ⊥ DB')} فماذا نستنتج عن كل زاويتين متجاورتين ناتجتين عن تقاطعهما؟`, c: 'متطابقتان', w: ['متتامتان فقط', 'مجموعهما ٣٦٠°', 'إحداهما قائمة والأخرى حادة'], e: 'المستقيمان المتعامدان يكوّنان زوايا متجاورة متطابقة (النظرية ١٫١١)، وكلها قائمة.' }
+  ];
+  const REL = [
+    { t: 'زاويتان متجاورتان على مستقيم', c: 'متكاملتان' },
+    { t: 'زاويتان متجاورتان يكوّن ضلعاهما غير المشتركين زاوية قائمة', c: 'متتامتان' },
+    { t: 'زاويتان غير متجاورتين تتكوّنان من تقاطع مستقيمين', c: 'متقابلتان بالرأس' }
+  ];
+  const RELO = ['متكاملتان', 'متتامتان', 'متقابلتان بالرأس', 'ليستا مرتبطتين بعلاقة محددة'];
+  const TRUEFALSE = [
+    { t: 'الزاويتان المتقابلتان بالرأس متطابقتان.', ok: true },
+    { t: 'الزاويتان المتجاورتان على مستقيم متكاملتان.', ok: true },
+    { t: 'جميع الزوايا القائمة متطابقة.', ok: true },
+    { t: 'الزاويتان المتتامتان مجموع قياسيهما ٩٠°.', ok: true },
+    { t: 'الزاويتان المتجاورتان على مستقيم متطابقتان دائمًا.', ok: false },
+    { t: 'الزاويتان المتتامتان مجموع قياسيهما ١٨٠°.', ok: false },
+    { t: 'الزاويتان المتقابلتان بالرأس متجاورتان.', ok: false },
+    { t: 'جميع الزوايا الحادة متطابقة.', ok: false },
+    { t: 'الزاويتان المتكاملتان مجموع قياسيهما ٩٠°.', ok: false }
+  ];
+  const GEN_THMS = [
+    { d: 1, w: 3, fn() {
+      const it = pick(TSTM);
+      return build({ cat: 'thms', d: 1, nOpts: 4, fixedOrder: true, order: keysT.map(k => TN[k]),
+        prompt: `أي نظرية توضحها العبارة الآتية؟<br>«${it.t}»`, correct: TN[it.k], wrongs: keysT.filter(k => k !== it.k).map(k => TN[k]),
+        hint: 'انتبه: ١٨٠° للمتكاملتين و٩٠° للمتتامتين، والمتقابلتان بالرأس متطابقتان.', explain: `${TN[it.k]}: ${J_EXPL[it.k]}` });
+    } },
+    { d: 1, w: 3, fn() {      // قياس الزاوية المتممة/المكملة/المقابلة
+      const k = pick(['comp', 'supp', 'vert']), a = k === 'supp' ? rnd(30, 150) : k === 'comp' ? rnd(15, 75) : rnd(20, 160), f = n => L(n + '°');
+      const ans = k === 'comp' ? 90 - a : k === 'supp' ? 180 - a : a;
+      const txt = k === 'comp' ? `زاويتان متتامتان قياس إحداهما ${f(a)}. ما قياس الأخرى؟` : k === 'supp' ? `زاويتان متكاملتان قياس إحداهما ${f(a)}. ما قياس الأخرى؟` : `زاويتان متقابلتان بالرأس قياس إحداهما ${f(a)}. ما قياس الأخرى؟`;
+      return build({ cat: 'thms', d: 1, nOpts: 4, prompt: txt, correct: f(ans), wrongs: numWrongs(ans, [90 - a, 180 - a, a, 360 - a, 90 + a, a + 10, a - 10, 180 - a + 10], f),
+        hint: k === 'comp' ? 'المجموع ٩٠°.' : k === 'supp' ? 'المجموع ١٨٠°.' : 'المتقابلتان بالرأس متطابقتان.',
+        explain: k === 'comp' ? `${L('90° − ' + a + '° = ' + ans + '°')} (النظرية ١٫٤).` : k === 'supp' ? `${L('180° − ' + a + '° = ' + ans + '°')} (النظرية ١٫٣).` : `المتقابلتان بالرأس متطابقتان فقياس الأخرى ${f(a)} (النظرية ١٫٨).` });
+    } },
+    { d: 1, w: 2, fn() {      // العلاقة بين زاويتين
+      const it = pick(REL);
+      return build({ cat: 'thms', d: 1, nOpts: 4, fixedOrder: true, order: RELO, prompt: `ما العلاقة بين الزاويتين في الوصف الآتي؟<br>«${it.t}»`,
+        correct: it.c, wrongs: RELO.filter(x => x !== it.c), hint: 'تذكّر التعاريف.', explain: `${it.t} ⇐ ${it.c}.` });
+    } },
+    { d: 2, w: 3, fn() {      // نظريات الزاوية القائمة
+      const it = pick(RT);
+      return build({ cat: 'thms', d: 2, nOpts: 4, prompt: it.q, correct: it.c, wrongs: it.w, hint: 'تذكّر نظريات الزاوية القائمة ١٫٩–١٫١٣.', explain: it.e });
+    } },
+    { d: 2, w: 2, fn() {      // أي عبارة صحيحة؟
+      const goods = shuffle(TRUEFALSE.filter(x => x.ok)), bads = shuffle(TRUEFALSE.filter(x => !x.ok)), g = goods[0];
+      return build({ cat: 'thms', d: 2, nOpts: 4, prompt: 'أي العبارات الآتية صحيحة؟', correct: g.t, wrongs: bads.slice(0, 3).map(x => x.t), hint: 'جرّب تمثيل الحالة بقياسات.', explain: g.t.replace(/^/, 'العبارة الصحيحة: ') });
+    } },
+    { d: 2, w: 3, fn() {      // قياسات من الشكل: متقابلتان + متجاورتان
+      const a = rnd(25, 155), f = n => L(n + '°'), qk = rnd(0, 1);
+      const txt = qk === 0 ? `تقاطع مستقيمان وكان ${L('m∠1 = ' + a + '°')}. ما قياس ${L('∠3')} المقابلة بالرأس لها؟` : `تقاطع مستقيمان وكان ${L('m∠1 = ' + a + '°')}. ما قياس ${L('∠2')} المجاورة لها على مستقيم؟`;
+      const ans = qk === 0 ? a : 180 - a;
+      return build({ cat: 'thms', d: 2, nOpts: 4, prompt: txt, extra: `<div class="viz-box">${figCross()}</div>`, correct: f(ans), wrongs: numWrongs(ans, [a, 180 - a, 90 - a > 0 ? 90 - a : a + 20, 360 - a, a + 10, 180 - a + 10], f),
+        hint: qk === 0 ? 'متقابلتان بالرأس.' : 'متجاورتان على مستقيم.', explain: qk === 0 ? `${L('∠1')} و${L('∠3')} متقابلتان بالرأس فهما متطابقتان: ${f(a)} (النظرية ١٫٨).` : `${L('∠1')} و${L('∠2')} متجاورتان على مستقيم فهما متكاملتان: ${L('180° − ' + a + '° = ' + ans + '°')} (النظرية ١٫٣).` });
+    } },
+    { d: 3, w: 3, fn() {      // مبرر الاستنتاج
+      const POOLJ = ['vertT', 'congSupT', 'congCompT', 'transC', 'defA', 'suppT', 'compT'];
+      const it = pick([
+        { k: 'congSupT', t: `${L('m∠1 + m∠2 = 180°')} و${L('m∠2 + m∠3 = 180°')} ⇒ ${L('∠1 ≅ ∠3')}` },
+        { k: 'congCompT', t: `${L('m∠1 + m∠2 = 90°')} و${L('m∠2 + m∠3 = 90°')} ⇒ ${L('∠1 ≅ ∠3')}` },
+        { k: 'vertT', t: `${L('∠1')} و${L('∠3')} متقابلتان بالرأس ⇒ ${L('∠1 ≅ ∠3')}` },
+        { k: 'transC', t: `${L('∠1 ≅ ∠2')} و${L('∠2 ≅ ∠3')} ⇒ ${L('∠1 ≅ ∠3')}` },
+        { k: 'defA', t: `${L('∠1 ≅ ∠2')} ⇒ ${L('m∠1 = m∠2')}` },
+        { k: 'suppT', t: `${L('∠1')} و${L('∠2')} متجاورتان على مستقيم ⇒ ${L('m∠1 + m∠2 = 180°')}` },
+        { k: 'compT', t: `${L('∠1')} و${L('∠2')} متجاورتان تكوّنان زاوية قائمة ⇒ ${L('m∠1 + m∠2 = 90°')}` }
+      ]);
+      const wr = shuffle(POOLJ.filter(k => k !== it.k && !(CONF[it.k] || []).includes(k))).slice(0, 3);
+      return build({ cat: 'thms', d: 3, nOpts: 4, prompt: `ما مبرر الاستنتاج الآتي؟<br>${it.t}`, correct: JN[it.k], wrongs: wr.map(k => JN[k]), hint: J_HINT[it.k], explain: `${JN[it.k]}: ${J_EXPL[it.k]}` });
+    } },
+    { d: 3, w: 2, fn() {      // ما الشرط الناقص؟
+      const it = pick([
+        { q: `لإثبات أن ${L('∠1 ≅ ∠3')} بنظرية المتقابلتين بالرأس يلزم أن تكونا …`, c: 'متقابلتين بالرأس (ناتجتين عن تقاطع مستقيمين)', w: ['متجاورتين على مستقيم', 'متتامتين', 'قائمتين فقط'] },
+        { q: `لإثبات أن زاويتين متطابقتان بنظرية تطابق المكمّلات يلزم أن تكونا …`, c: 'مكمّلتين للزاوية نفسها (أو لزاويتين متطابقتين)', w: ['متقابلتين بالرأس', 'متتامتين فقط', 'متجاورتين فقط'] },
+        { q: `لإثبات أن زاويتين متطابقتان بنظرية تطابق المتمّمات يلزم أن تكونا …`, c: 'متمّمتين للزاوية نفسها (أو لزاويتين متطابقتين)', w: ['مكمّلتين للزاوية نفسها', 'متقابلتين بالرأس فقط', 'متجاورتين على مستقيم'] }
+      ]);
+      return build({ cat: 'thms', d: 3, nOpts: 4, prompt: it.q, correct: it.c, wrongs: it.w, hint: 'اقرأ نص النظرية.', explain: `يجب تحقق شرط النظرية: ${it.c}.` });
+    } }
+  ];
+
+  // ============ 3) البرهان ذو العمودين ============
+  const GEN_PROOFS = [
+    { d: 1, w: 3, fn() { const ch = pickChain(['C3', 'C4', 'C5', 'A2']); return qBlankJ('proofs', 1, ch, ch.rows.map((r, i) => i)); } },
+    { d: 1, w: 2, fn() {      // ما المطلوب؟
+      const ch = pickChain(['C3', 'C4', 'C5']), rows = ch.rows, good = ch.goal, w2 = rows[rows.length - 1].bad.filter(x => x !== good);
+      return build({ cat: 'proofs', d: 1, nOpts: 4, prompt: 'المعطيات في البرهان الآتي مكتوبة في الخطوة ١. ما المطلوب إثباته؟',
+        extra: givenBox(Object.assign({}, ch, { goal: '؟' })) + figBoxOf(ch) + pfBox(rows),
+        correct: LT(good), wrongs: [...new Set(w2)].filter(x => x !== good).map(LT), hint: 'المطلوب هو العبارة الأخيرة في الجدول.', explain: `المطلوب هو الخطوة الأخيرة: ${LT(good)}.` });
+    } },
+    { d: 2, w: 3, fn() { const ch = pickChain(['A1', 'A2', 'X', 'C3', 'C4', 'C5']); return qBlankJ('proofs', 2, ch, ch.rows.map((r, i) => i)); } },
+    { d: 2, w: 2, fn() {      // أي مبرر لم يُستعمل؟
+      const ch = pickChain(['A1', 'A2', 'X', 'C3', 'C5']), used = [...new Set(ch.rows.map(r => r.w))], pool = poolFor(ch, 'x').filter(k => k !== 'given');
+      const unusedAll = pool.filter(k => !used.includes(k) && !used.some(u => (CONF[u] || []).includes(k) || (CONF[k] || []).includes(u)));
+      if (!unusedAll.length || used.filter(k => k !== 'given').length < 3) return this.fn();
+      const un = pick(unusedAll), us = shuffle(used.filter(k => k !== 'given')).slice(0, 3);
+      return build({ cat: 'proofs', d: 2, nOpts: 4, prompt: 'أي المبررات الآتية <b>لم</b> يُستعمل في البرهان الآتي؟', extra: givenBox(ch) + figBoxOf(ch) + pfBox(ch.rows),
+        correct: JN[un], wrongs: us.map(k => JN[k]), hint: 'اقرأ عمود المبررات كاملًا.', explain: `«${JN[un]}» لا يظهر في عمود المبررات، أما الباقية فتظهر فيه.` });
+    } },
+    { d: 3, w: 3, fn() { const ch = pickChain(['A1', 'A2', 'X', 'C3', 'C5']); return qBlankS('proofs', 3, ch, ch.rows.map((r, i) => i).filter(i => i >= 1)); } },
+    { d: 3, w: 2, fn() {      // ترتيب أربع خطوات متتالية
+      const ch = pickChain(['X', 'A1', 'A2', 'C5']), n = ch.rows.length;
+      if (n < 5) return this.fn();
+      const st = randInt(1, n - 4), win = ch.rows.slice(st, st + 4);
+      const labs = ['أ', 'ب', 'ج', 'د']; let idxs; do { idxs = shuffle([0, 1, 2, 3]); } while (idxs.every((x, k) => x === k));
+      const seqStr = a => a.join(' ثم ');
+      const correctSeq = [0, 1, 2, 3].map(r => labs[idxs.indexOf(r)]);
+      const perms = [];
+      shuffle([[0, 1, 3, 2], [1, 0, 2, 3], [0, 2, 1, 3], [3, 0, 1, 2], [1, 2, 3, 0], [2, 1, 0, 3], [3, 2, 1, 0], [0, 3, 2, 1]]).forEach(p => {
+        const s = seqStr(p.map(r => labs[idxs.indexOf(r)])); if (s !== seqStr(correctSeq)) perms.push(s);
+      });
+      const list = idxs.map((r, k) => `${labs[k]}) ${win[r].ar ? win[r].s : E(win[r].s)}`).join('<br>');
+      const prev = ch.rows[st - 1];
+      return build({ cat: 'proofs', d: 3, nOpts: 4,
+        prompt: `الخطوات الآتية أربع خطوات متتالية من برهان. سبقتها الخطوة: ${prev.ar ? prev.s : LT(prev.s)}. أي ترتيب لها يمثل برهانًا صحيحًا؟`,
+        extra: `<div class="stmt-list">${list}</div>`, correct: seqStr(correctSeq), wrongs: perms, hint: 'كل خطوة تنتج من التي قبلها.', explain: `الترتيب الصحيح هو ${seqStr(correctSeq)}.` });
+    } }
+  ];
+  // ============ 4) مسائل وتطبيقات ============
+  function vertNums() {
+    let p, r, s, q, t;
+    for (let g = 0; g < 400; g++) {
+      p = rnd(1, 7); r = p + rnd(2, 5); s = rnd(3, 14); q = rnd(1, 24); t = q - (r - p) * s;
+      if (t < 0 && Math.abs(t) <= 40 && p * s + q >= 8 && p * s + q <= 170 && p * s + q !== 45 && p * s + q !== 90) break;
+    }
+    return { p, r, s, q, t, val: p * s + q, e1: `${coef(p, 'x')}${tm(q)}`, e2: `${coef(r, 'x')}${tm(t)}` };
+  }
+  const GEN_APPLY = [
+    { d: 1, w: 3, fn() {      // مسح الأراضي
+      const a = rnd(20, 80), f = n => L(n + '°');
+      return build({ cat: 'apply', d: 1, nOpts: 4,
+        prompt: `قام مساح بقياس الزاوية بين خط نظره إلى قمة تلة والمستقيم الرأسي فكانت ${f(a)}. ما قياس الزاوية بين خط نظره والخط الأفقي؟ (الخطان الأفقي والرأسي يكوّنان زاوية قائمة)`,
+        extra: `<div class="viz-box">${figRightPair('2', '1', 90 - a)}</div>`, correct: f(90 - a), wrongs: numWrongs(90 - a, [180 - a, a, 90 + a, 180 - a - 10, 90 - a + 10, 90 - a - 10], f),
+        hint: 'الخطان الأفقي والرأسي يكوّنان زاوية قائمة: الزاويتان متتامتان.', explain: `الزاويتان متتامتان (النظرية ١٫٤): ${L('90° − ' + a + '° = ' + (90 - a) + '°')}.` });
+    } },
+    { d: 1, w: 2, fn() {      // المقص: متجاورتان على مستقيم
+      const a = rnd(25, 155), f = n => L(n + '°');
+      return build({ cat: 'apply', d: 1, nOpts: 4,
+        prompt: `في مقص مفتوح، الزاويتان ${L('∠2')} (بين الشفرة والمقبض) و${L('∠3')} (بين المقبضين) متجاورتان على مستقيم. إذا كان ${L('m∠2 = ' + a + '°')} فما قياس ${L('∠3')}؟`,
+        extra: `<div class="viz-box">${figLinePair('2', '3')}</div>`, correct: f(180 - a), wrongs: numWrongs(180 - a, [90 - a > 0 ? 90 - a : a + 20, a, 180 + a - 10, 360 - a, 180 - a + 10, 180 - a - 10], f),
+        hint: 'المتجاورتان على مستقيم مجموعهما ١٨٠°.', explain: `${L('180° − ' + a + '° = ' + (180 - a) + '°')} (النظرية ١٫٣).` });
+    } },
+    { d: 1, w: 2, fn() {      // المقص: متقابلتان بالرأس
+      const a = rnd(20, 160), f = n => L(n + '°');
+      return build({ cat: 'apply', d: 1, nOpts: 4,
+        prompt: `تقاطع شفرتا مقص كما في الشكل وكان ${L('m∠1 = ' + a + '°')}. ما قياس ${L('∠3')}؟`,
+        extra: `<div class="viz-box">${figCross()}</div>`, correct: f(a), wrongs: numWrongs(a, [180 - a, 90 - a > 0 ? 90 - a : a + 20, 360 - a, a + 10, a - 10], f),
+        hint: '∠1 و∠3 متقابلتان بالرأس.', explain: `${L('∠1')} و${L('∠3')} متقابلتان بالرأس فهما متطابقتان (النظرية ١٫٨)، أي ${f(a)}.` });
+    } },
+    { d: 2, w: 3, fn() {      // x من المتكاملتين/المتتامتين
+      const ch = chainX(pick(['lp', 'comp'])), s = ch.s, vf = n => L('x = ' + fm(n)), askAng = Math.random() < 0.4;
+      const text = `${ch.givenHtml.replace(/، /g, '، ')}`;
+      if (askAng) {
+        const which = pick([1, 2]), ans = which === 1 ? ch.ang1 : ch.ang2, f = n => L(n + '°');
+        return build({ cat: 'apply', d: 2, nOpts: 4, prompt: `${text}. ما قياس ${L(ang(which === 1 ? ch.a1 : ch.a2))}؟`, extra: `<div class="viz-box">${ch.fig()}</div>`, correct: f(ans),
+          wrongs: numWrongs(ans, [ch.S - ans, s, ans + 10, ans - 10, ch.ang1 + 5, 2 * ans > 175 ? ans + 20 : 2 * ans], f), hint: 'أوجد x أولًا ثم عوّض.',
+          explain: `${L(ch.rows[3].s)} ثم ${L('x = ' + s)}، وبالتعويض ${L('m' + ang(which === 1 ? ch.a1 : ch.a2) + ' = ' + ans + '°')}.` });
+      }
+      return build({ cat: 'apply', d: 2, nOpts: 4, prompt: `${text}. ما قيمة ${L('x')}؟`, extra: `<div class="viz-box">${ch.fig()}</div>`, correct: vf(s),
+        wrongs: numWrongs(s, [-s, s + 1, s - 1, s + 2, s - 2, ch.S - s], vf), hint: ch.sub === 'lp' ? 'مجموع المتكاملتين ١٨٠°.' : 'مجموع المتتامتين ٩٠°.',
+        explain: `${L(ch.rows[2].s)}، ثم ${L(ch.rows[3].s)} فـ ${vf(s)}.` });
+    } },
+    { d: 2, w: 3, fn() {      // x من المتقابلتين بالرأس
+      const v = vertNums(), s = v.s, vf = n => L('x = ' + fm(n)), f = n => L(n + '°'), pair = pick([[1, 3], [2, 4]]);
+      if (Math.random() < 0.5) return build({ cat: 'apply', d: 2, nOpts: 4,
+        prompt: `${L(ang(pair[0]))} و${L(ang(pair[1]))} متقابلتان بالرأس، ${L(`m∠${pair[0]} = (${v.e1})°`)} و${L(`m∠${pair[1]} = (${v.e2})°`)}. ما قيمة ${L('x')}؟`,
+        extra: `<div class="viz-box">${figCross()}</div>`, correct: vf(s), wrongs: numWrongs(s, [-s, s + 1, s - 1, s + 2, s - 2, v.q], vf), hint: 'المتقابلتان بالرأس متطابقتان فقياساهما متساويان.',
+        explain: `${L('(' + v.e1 + ') = (' + v.e2 + ')')} فـ ${vf(s)}.` });
+      return build({ cat: 'apply', d: 2, nOpts: 4,
+        prompt: `${L(ang(pair[0]))} و${L(ang(pair[1]))} متقابلتان بالرأس، ${L(`m∠${pair[0]} = (${v.e1})°`)} و${L(`m∠${pair[1]} = (${v.e2})°`)}. ما قياس ${L(ang(pair[0]))}؟`,
+        extra: `<div class="viz-box">${figCross()}</div>`, correct: f(v.val), wrongs: numWrongs(v.val, [180 - v.val, s, v.val + 10, v.val - 10, v.q, 2 * v.val > 175 ? v.val + 20 : 2 * v.val], f),
+        hint: 'أوجد x ثم عوّض.', explain: `${vf(s)}، وبالتعويض ${L(`m∠${pair[0]} = ${v.val}°`)}.` });
+    } },
+    { d: 2, w: 2, fn() {      // نسبة بين المتكاملتين/المتتامتين
+      const kind = pick(['supp', 'comp']), S = kind === 'supp' ? 180 : 90, ks = [2, 3, 4, 5, 8].filter(k => S % (k + 1) === 0), k = pick(ks), small = S / (k + 1), big = small * k, askBig = Math.random() < 0.5, f = n => L(n + '°');
+      const ans = askBig ? big : small;
+      return build({ cat: 'apply', d: 2, nOpts: 4,
+        prompt: `زاويتان ${kind === 'supp' ? 'متكاملتان' : 'متتامتان'}، وقياس إحداهما ${N(k)} أمثال قياس الأخرى. ما قياس الزاوية ${askBig ? 'الكبرى' : 'الصغرى'}؟`,
+        correct: f(ans), wrongs: numWrongs(ans, [S - ans, small, big, S / 2, ans + 10, ans - 10, S - ans + 10], f), hint: 'افرض الصغرى m فتكون الكبرى k·m، ومجموعهما ثابت.',
+        explain: `نفرض الصغرى ${L('m')}، فالكبرى ${L(k + 'm')}: ${L((k + 1) + 'm = ' + S + '°')} فـ ${L('m = ' + small + '°')} والكبرى ${L(big + '°')}.` });
+    } },
+    { d: 3, w: 3, fn() {      // منصف الزاوية: قياس الزاوية الكلية
+      const ch = chainX('bis'), s = ch.s, tot = 2 * ch.val, f = n => L(n + '°');
+      return build({ cat: 'apply', d: 3, nOpts: 4,
+        prompt: `${ch.givenHtml}. ما قياس ${L('∠' + ch.A + ch.B + ch.C)}؟`, extra: `<div class="viz-box">${ch.fig()}</div>`, correct: f(tot),
+        wrongs: numWrongs(tot, [ch.val, s, tot + 10, tot - 10, ch.val + 10, 180 - tot > 0 ? 180 - tot : tot + 20], f), hint: 'المنصف يقسم الزاوية إلى زاويتين متطابقتين؛ ساوِ القياسين ثم ضاعف.',
+        explain: `${L('(' + ch.e1 + ') = (' + ch.e2 + ')')} فـ ${L('x = ' + s)}، قياس كل جزء ${L(ch.val + '°')} والزاوية الكلية ${L(tot + '°')}.` });
+    } },
+    { d: 3, w: 3, fn() {      // متقابلتان + متجاورتان
+      const v = vertNums(), pair = pick([[1, 3], [2, 4]]), mid = pair[0] === 1 ? 2 : 1, ans = 180 - v.val, f = n => L(n + '°');
+      return build({ cat: 'apply', d: 3, nOpts: 4,
+        prompt: `تقاطع مستقيمان، وكان ${L(`m∠${pair[0]} = (${v.e1})°`)} و${L(`m∠${pair[1]} = (${v.e2})°`)}. ما قياس ${L(ang(mid))}؟`,
+        extra: `<div class="viz-box">${figCross()}</div>`, correct: f(ans), wrongs: numWrongs(ans, [v.val, v.s, 90, 360 - v.val, ans + 10, ans - 10], f),
+        hint: 'ابدأ بالمتقابلتين بالرأس لإيجاد x، ثم استعمل المتكاملتين.',
+        explain: `المتقابلتان متطابقتان: ${L('(' + v.e1 + ') = (' + v.e2 + ')')} فـ ${L('x = ' + v.s)}، قياس ${L(ang(pair[0]))} هو ${L(v.val + '°')}، و${L(ang(mid))} تكمّلها: ${L('180° − ' + v.val + '° = ' + ans + '°')}.` });
+    } },
+    { d: 3, w: 2, fn() {      // ثلاث زوايا على مستقيم
+      const a = rnd(25, 60), b = rnd(25, 60), ans = 180 - a - b, f = n => L(n + '°');
+      return build({ cat: 'apply', d: 3, nOpts: 4,
+        prompt: `ثلاث زوايا متجاورة ${L('∠1')} و${L('∠2')} و${L('∠3')} تشكل معًا زاوية مستقيمة قياسها ${L('180°')}. إذا كان ${L('m∠1 = ' + a + '°')} و${L('m∠2 = ' + b + '°')} فما قياس ${L('∠3')}؟`,
+        correct: f(ans), wrongs: numWrongs(ans, [a + b, 180 - a, 180 - b, ans + 10, ans - 10, 90 - a - b > 0 ? 90 - a - b : ans + 20], f), hint: 'مجموع الزوايا الثلاث ١٨٠°.',
+        explain: `${L('180° − ' + a + '° − ' + b + '° = ' + ans + '°')}.` });
+    } }
+  ];
+
+  // ============ 5) اكتشف الخطأ ============
+  const WRONG_FOR = {
+    angAdd: ['suppT', 'compT', 'subs', 'simp'],
+    suppT: ['compT', 'vertT', 'subs', 'defA'], compT: ['suppT', 'vertT', 'subs', 'defA'],
+    defSupp: ['defComp', 'vertT', 'defA', 'subs'], defComp: ['defSupp', 'vertT', 'defA', 'subs'],
+    defLP: ['defVert', 'defSupp', 'defA', 'defBis'], defVert: ['defLP', 'defBis', 'defA', 'defSupp'],
+    vertT: ['suppT', 'compT', 'defA', 'transC'], congSupT: ['congCompT', 'defA', 'transC', 'symmC'], congCompT: ['congSupT', 'defA', 'transC', 'symmC'],
+    defBis: ['defVert', 'defA', 'vertT', 'transC'], defA: ['defBis', 'transC', 'symmC', 'vertT'],
+    transC: ['symmC', 'reflC', 'defA', 'vertT'], symmC: ['transC', 'reflC', 'defA'],
+    subs: ['subt', 'adds', 'divs', 'angAdd'], subt: ['adds', 'divs', 'subs'], adds: ['subt', 'divs', 'subs'], divs: ['subt', 'adds', 'subs'],
+    simp: ['subt', 'adds', 'divs', 'angAdd'], symmE: ['symmC', 'transC', 'defA', 'divs']
+  };
+  const stepName = n => `الخطوة ${adg(n)}`;
+  function brokenChain(keys) {
+    const ch = pickChain(keys), cand = ch.rows.map((r, i) => i).filter(i => i >= 1);
+    const i = pick(cand), key = ch.rows[i].w, wrongKey = pick(WRONG_FOR[key]);
+    return { ch, i, key, wrongKey };
+  }
+  const GEN_ERR = [
+    { d: 1, w: 3, fn() {      // صح أم خطأ
+      const ch = pickChain(['A1', 'A2', 'X', 'C3', 'C4', 'C5']), i = pick(ch.rows.map((r, k) => k).filter(k => k >= 1)), key = ch.rows[i].w;
+      const ok = Math.random() < 0.5, shown = ok ? JN[key] : JN[pick(WRONG_FOR[key])], row = ch.rows[i], prev = ch.rows[i - 1];
+      const show = r => (r.ar ? r.s : LT(r.s));
+      return build({ cat: 'error', d: 1, nOpts: 2, fixedOrder: true, order: ['صحيح', 'خاطئ'],
+        prompt: `كتب طالب الانتقال الآتي في برهان:<br>من: ${show(prev)}<br>إلى: ${show(row)}<br>المبرر: «${shown}»<br>هل المبرر صحيح؟`,
+        correct: ok ? 'صحيح' : 'خاطئ', wrongs: [ok ? 'خاطئ' : 'صحيح'], hint: J_HINT[key],
+        explain: ok ? `المبرر صحيح: ${J_EXPL[key]}` : `المبرر خاطئ؛ المبرر الصحيح هو «${JN[key]}»: ${J_EXPL[key]}` });
+    } },
+    ...[[2, ['A1', 'A2', 'C3', 'C4', 'C5']], [3, ['A1', 'A2', 'X', 'C3', 'C4', 'C5']]].map(([dd, keys]) => ({ d: dd, w: 3, fn() {
+      const { ch, i, key, wrongKey } = brokenChain(keys), rows = ch.rows;
+      const others = shuffle(rows.map((r, k) => k).filter(k => k !== i && k >= 1)).slice(0, 3);
+      if (others.length < 3) return this.fn();
+      const nums = [i + 1].concat(others.map(k => k + 1)).sort((x, y) => x - y);
+      return build({ cat: 'error', d: dd, nOpts: 4, fixedOrder: true, order: nums.map(stepName),
+        prompt: 'في البرهان الآتي مبرر واحد خاطئ فقط. أي خطوة مبررها خاطئ؟', extra: givenBox(ch) + figBoxOf(ch) + pfBox(rows, { wrongJ: { [i]: wrongKey } }),
+        correct: stepName(i + 1), wrongs: others.map(k => stepName(k + 1)), hint: 'قارن كل عبارة بالتي قبلها: ما الذي تغيّر؟ وهل يطابق المبرر المكتوب؟',
+        explain: `مبرر ${stepName(i + 1)} الصحيح هو «${jText(rows[i])}» وليس «${JN[wrongKey]}».` });
+    } })),
+    { d: 3, w: 3, fn() {      // المبرر الصحيح للخطوة الخاطئة
+      const { ch, i, key, wrongKey } = brokenChain(['A1', 'A2', 'X', 'C3', 'C4', 'C5']);
+      const pool = poolFor(ch, key).filter(k => k !== wrongKey && k !== 'given' && !(CONF[key] || []).includes(k));
+      const wr = [JN[wrongKey]].concat(shuffle(pool.map(k => JN[k])).slice(0, 2));
+      return build({ cat: 'error', d: 3, nOpts: 4,
+        prompt: 'في البرهان الآتي مبرر واحد خاطئ. ما المبرر الصحيح لتلك الخطوة؟', extra: givenBox(ch) + figBoxOf(ch) + pfBox(ch.rows, { wrongJ: { [i]: wrongKey } }),
+        correct: jText(ch.rows[i]), wrongs: wr, hint: J_HINT[key], explain: `الخطوة الخاطئة هي ${stepName(i + 1)}؛ مبررها الصحيح «${jText(ch.rows[i])}» وليس «${JN[wrongKey]}».` });
+    } },
+    { d: 2, w: 3, fn() {      // خطأ في المجموع
+      const supp = Math.random() < 0.5, a = rnd(15, 75), S = supp ? 180 : 90, wrongAns = (supp ? 90 : 180) - a, f = n => L(n + '°');
+      return build({ cat: 'error', d: 2, nOpts: 4,
+        prompt: `زاويتان ${supp ? 'متكاملتان' : 'متتامتان'} وقياس إحداهما ${f(a)}. كتب طالب أن قياس الأخرى ${f(wrongAns)}. ما الخطأ في حله؟`,
+        correct: supp ? 'اعتبرهما متتامتين وطرح من ٩٠° بدل ١٨٠°' : 'اعتبرهما متكاملتين وطرح من ١٨٠° بدل ٩٠°',
+        wrongs: ['جمع القياسين بدل أن يطرحهما من المجموع', 'اعتبر الزاويتين متطابقتين', 'لا خطأ في حله'], hint: supp ? 'المتكاملتان مجموعهما ١٨٠°.' : 'المتتامتان مجموعهما ٩٠°.',
+        explain: `الصواب: ${f(S)} − ${f(a)} = ${f(S - a)}.` });
+    } },
+    { d: 1, w: 2, fn() {      // مفهوم خاطئ
+      const it = pick([
+        { s: `قال طالب: «${L('∠1')} و${L('∠3')} متقابلتان بالرأس، إذن ${L('m∠1 + m∠3 = 180°')}».`, c: 'المتقابلتان بالرأس متطابقتان وليستا متكاملتين', w: ['المتقابلتان بالرأس متتامتان', 'المتقابلتان بالرأس مجموعهما ٣٦٠°', 'لا خطأ في كلامه'] },
+        { s: `قال طالب: «${L('∠1')} و${L('∠2')} متجاورتان على مستقيم، إذن ${L('∠1 ≅ ∠2')} دائمًا».`, c: 'المتجاورتان على مستقيم متكاملتان ولا يلزم أن تتطابقا', w: ['المتجاورتان على مستقيم متقابلتان بالرأس', 'المتجاورتان على مستقيم متتامتان دائمًا', 'لا خطأ في كلامه'] },
+        { s: `قال طالب: «${L('∠1')} و${L('∠2')} متتامتان، إذن ${L('m∠1 + m∠2 = 180°')}».`, c: 'مجموع قياسي المتتامتين ٩٠° لا ١٨٠°', w: ['المتتامتان متطابقتان دائمًا', 'مجموع قياسي المتتامتين ٣٦٠°', 'لا خطأ في كلامه'] },
+        { s: `قال طالب: «${L('m∠1 + m∠2 = 90°')} و${L('m∠2 + m∠3 = 90°')}، إذن ${L('∠1 ≅ ∠3')} بنظرية تطابق المكمّلات».`, c: 'يجب استعمال نظرية تطابق المتممات لأن المجموع ٩٠°', w: ['النظرية مطبّقة بشكل صحيح', 'يجب استعمال نظرية المتقابلتين بالرأس', 'الزاويتان ∠1 و∠3 غير متطابقتين'] }
+      ]);
+      return build({ cat: 'error', d: 1, nOpts: 4, prompt: `${it.s}<br>ما الخطأ في كلامه؟`, correct: it.c, wrongs: it.w, hint: 'تذكّر التعاريف والنظريات.', explain: it.c + '.' });
+    } },
+    { d: 3, w: 2, fn() {      // خطأ في الحل الجبري
+      const v = vertNums(), pair = pick([[1, 3], [2, 4]]), wrongX = v.s + pick([-2, -1, 1, 2]), f = n => L('x = ' + n);
+      return build({ cat: 'error', d: 3, nOpts: 4,
+        prompt: `${L(ang(pair[0]))} و${L(ang(pair[1]))} متقابلتان بالرأس، ${L(`m∠${pair[0]} = (${v.e1})°`)} و${L(`m∠${pair[1]} = (${v.e2})°`)}. كتب طالب ${f(wrongX)}. ما قيمة ${L('x')} الصحيحة؟`,
+        extra: `<div class="viz-box">${figCross()}</div>`, correct: f(v.s), wrongs: numWrongs(v.s, [wrongX, -v.s, v.s + 1, v.s - 1, v.s + 3], n => f(n)).filter(x => x !== f(v.s)), hint: 'المتقابلتان بالرأس متساويتا القياس.',
+        explain: `${L('(' + v.e1 + ') = (' + v.e2 + ')')} فـ ${f(v.s)}.` });
+    } }
+  ];
+
+  // ============ 6) مفاهيم ومفردات ============
+  const F = s => L(s);
+  const CONCEPTS = [
+    { d: 1, q: 'ما <b>الزاويتان المتكاملتان</b>؟', c: 'زاويتان مجموع قياسيهما ١٨٠°', w: ['زاويتان مجموع قياسيهما ٩٠°', 'زاويتان متساويتان في القياس', 'زاويتان غير متجاورتين'], h: 'متكاملتان = ١٨٠°.', e: 'الزاويتان المتكاملتان مجموع قياسيهما ١٨٠°.' },
+    { d: 1, q: 'ما <b>الزاويتان المتتامتان</b>؟', c: 'زاويتان مجموع قياسيهما ٩٠°', w: ['زاويتان مجموع قياسيهما ١٨٠°', 'زاويتان متقابلتان بالرأس', 'زاويتان قياس كل منهما ٤٥° فقط'], h: 'متتامتان = ٩٠°.', e: 'الزاويتان المتتامتان مجموع قياسيهما ٩٠°.' },
+    { d: 1, q: 'ما <b>الزاويتان المتقابلتان بالرأس</b>؟', c: 'زاويتان غير متجاورتين تتكوّنان من تقاطع مستقيمين', w: ['زاويتان متجاورتان مجموعهما ١٨٠°', 'زاويتان مجموعهما ٩٠°', 'زاويتان لهما ضلع مشترك'], h: 'تقاطع مستقيمين.', e: 'المتقابلتان بالرأس غير متجاورتين وتنتجان عن تقاطع مستقيمين، وهما متطابقتان.' },
+    { d: 1, q: 'ما <b>الزاويتان المتجاورتان على مستقيم</b>؟', c: 'زاويتان متجاورتان ضلعاهما غير المشتركين شعاعان متعاكسان', w: ['زاويتان غير متجاورتين متطابقتان', 'زاويتان مجموعهما ٩٠° فقط', 'زاويتان في الرأس نفسه ومتساويتان'], h: 'تشكّلان مستقيمًا.', e: 'المتجاورتان على مستقيم متكاملتان (مجموعهما ١٨٠°).' },
+    { d: 1, q: 'ما <b>منصف الزاوية</b>؟', c: 'شعاع داخل الزاوية يقسمها إلى زاويتين متطابقتين وبدايته رأس الزاوية', w: ['قطعة مستقيمة تقسم الزاوية إلى ثلاث زوايا', 'أي شعاع يمر برأس الزاوية', 'شعاع خارج الزاوية'], h: 'يقسم الزاوية إلى نصفين.', e: 'منصف الزاوية شعاع داخلها يقسمها إلى زاويتين متطابقتين، وتكون بدايته عند رأسها.' },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('Supplementary Angles')}؟`, c: 'الزاويتان المتكاملتان', w: ['الزاويتان المتتامتان', 'الزاويتان المتقابلتان بالرأس', 'منصف الزاوية'], h: 'Supplementary = ١٨٠°.', e: `${F('Supplementary Angles')} هما المتكاملتان.` },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('Complementary Angles')}؟`, c: 'الزاويتان المتتامتان', w: ['الزاويتان المتكاملتان', 'الزاويتان المتقابلتان بالرأس', 'زاويتان متجاورتان على مستقيم'], h: 'Complementary = ٩٠°.', e: `${F('Complementary Angles')} هما المتتامتان.` },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('Vertical Angles')}؟`, c: 'الزاويتان المتقابلتان بالرأس', w: ['الزاويتان المتتامتان', 'الزاويتان المتكاملتان', 'منصف الزاوية'], h: 'Vertical = رأسي.', e: `${F('Vertical Angles')} هما المتقابلتان بالرأس.` },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('Linear Pair')}؟`, c: 'زاويتان متجاورتان على مستقيم', w: ['زاويتان متقابلتان بالرأس', 'زاويتان متتامتان', 'منصف الزاوية'], h: 'Linear = خطي.', e: `${F('Linear Pair')} هما الزاويتان المتجاورتان على مستقيم.` },
+    { d: 1, q: 'ما الأداة التي تربط قياس الزاوية بعدد حقيقي بين ٠° و١٨٠° في المسلّمة ١٫١٠؟', c: 'المنقلة', w: ['المسطرة', 'الفرجار', 'المثلث القائم'], h: 'الأداة ذات النصف دائرة.', e: 'مسلّمة المنقلة: تربط الزاوية بعدد حقيقي بين ٠° و١٨٠°.' },
+    { d: 1, q: `ما معنى الرمز ${F('⊥')}؟`, c: 'عمودي على (يعامد)', w: ['موازٍ لـ', 'يطابق', 'ينصّف'], h: 'يُقرأ «يعامد».', e: `الرمز ${F('⊥')} يقرأ «عمودي على».` },
+    { d: 2, q: 'ما نص <b>مسلّمة جمع قياسات الزوايا</b> (١٫١١)؟', c: `تقع D داخل ${F('∠ABC')} إذا وفقط إذا كان ${F('m∠ABD + m∠DBC = m∠ABC')}`, w: [`تقع D داخل ${F('∠ABC')} إذا كان ${F('m∠ABD = m∠DBC')}`, `إذا كان ${F('m∠ABD + m∠DBC = 180°')} فإن D داخل الزاوية`, `${F('m∠ABC + m∠DBC = m∠ABD')} دائمًا`], h: 'الكل = مجموع الجزأين.', e: 'المسلّمة ١٫١١: D داخل الزاوية إذا وفقط إذا كان مجموع قياسي الزاويتين الجزئيتين يساوي قياس الزاوية الكلية.' },
+    { d: 2, q: 'ما نص <b>نظرية الزاويتين المتكاملتين</b> (١٫٣)؟', c: 'إذا كانت الزاويتان متجاورتين على مستقيم فإنهما متكاملتان', w: ['إذا كانتا متجاورتين فهما متتامتان', 'إذا كانتا متقابلتين بالرأس فهما متكاملتان', 'إذا كانتا متساويتين فهما متكاملتان'], h: 'مستقيم = ١٨٠°.', e: 'النظرية ١٫٣: المتجاورتان على مستقيم متكاملتان.' },
+    { d: 2, q: 'ما نص <b>نظرية الزاويتين المتتامتين</b> (١٫٤)؟', c: 'إذا شكّل ضلعاهما غير المشتركين لزاويتين متجاورتين زاوية قائمة فهما متتامتان', w: ['إذا شكّل ضلعاهما غير المشتركين مستقيمًا فهما متتامتان', 'إذا كانتا متقابلتين بالرأس فهما متتامتان', 'كل زاويتين متجاورتين متتامتان'], h: 'زاوية قائمة = ٩٠°.', e: 'النظرية ١٫٤: متجاورتان تكوّنان معًا زاوية قائمة فمجموعهما ٩٠°.' },
+    { d: 2, q: 'ما نص <b>نظرية الزاويتين المتقابلتين بالرأس</b> (١٫٨)؟', c: 'الزاويتان المتقابلتان بالرأس متطابقتان', w: ['الزاويتان المتقابلتان بالرأس متكاملتان', 'الزاويتان المتقابلتان بالرأس متتامتان', 'الزاويتان المتقابلتان بالرأس مجموعهما ٣٦٠°'], h: 'قياساهما متساويان.', e: 'النظرية ١٫٨: المتقابلتان بالرأس متطابقتان.' },
+    { d: 2, q: 'ما <b>خاصية التماثل لتطابق الزوايا</b>؟', c: `إذا كانت ${F('∠2 ≅ ∠1')} فإن ${F('∠1 ≅ ∠2')}`, w: [F('∠1 ≅ ∠1'), `إذا كانت ${F('∠2 ≅ ∠1')} و${F('∠3 ≅ ∠2')} فإن ${F('∠3 ≅ ∠1')}`, `إذا كانت ${F('∠1 ≅ ∠2')} فإن ${F('m∠1 = 90°')}`], h: 'تبديل الطرفين.', e: 'التماثل: إذا طابقت زاوية أخرى فالأخرى تطابقها.' },
+    { d: 2, q: 'ما <b>خاصية التعدي لتطابق الزوايا</b>؟', c: `إذا كانت ${F('∠2 ≅ ∠1')} و${F('∠3 ≅ ∠2')} فإن ${F('∠3 ≅ ∠1')}`, w: [F('∠1 ≅ ∠1'), `إذا كانت ${F('∠2 ≅ ∠1')} فإن ${F('∠1 ≅ ∠2')}`, `إذا كانت ${F('∠1 ≅ ∠2')} فإن ${F('∠3 ≅ ∠1')}`], h: 'سلسلة تطابقات.', e: 'التعدي: تطابقان يشتركان في زاوية يعطيان تطابقًا ثالثًا.' },
+    { d: 2, q: 'متى نحوّل «≅» إلى «=» في براهين الزوايا؟', c: 'عند الانتقال بتعريف تطابق الزوايا', w: ['عند استعمال نظرية المتقابلتين بالرأس فقط', 'لا يجوز ذلك أبدًا', 'عند استعمال خاصية التعدي فقط'], h: 'تعريف التطابق.', e: 'نتحول بين التطابق والمساواة بـ«تعريف تطابق الزوايا».' },
+    { d: 2, q: 'لماذا يمكن تطبيق الخصائص الجبرية على تطابق الزوايا؟', c: 'لأن قياسات الزوايا أعداد حقيقية', w: ['لأن جميع الزوايا متطابقة', 'لأن الزوايا قطع مستقيمة', 'لأن الهندسة لا تحتاج إلى مبررات'], h: 'القياس عدد.', e: 'قياسات الزوايا أعداد حقيقية فتنطبق عليها خصائص المساواة.' },
+    { d: 3, q: 'ما <b>نظرية تطابق المكمّلات</b> (١٫٦)؟', c: 'الزاويتان المكمّلتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان', w: ['الزاويتان المتمّمتان للزاوية نفسها متطابقتان', 'الزاويتان المتكاملتان دائمًا متطابقتان', 'الزاويتان المتجاورتان متطابقتان'], h: 'مجموعهما ١٨٠° مع الزاوية الثالثة.', e: 'النظرية ١٫٦: مكمّلتا زاوية واحدة متطابقتان؛ برهانها بالتعويض ثم الطرح.' },
+    { d: 3, q: 'ما <b>نظرية تطابق المتممات</b> (١٫٧)؟', c: 'الزاويتان المتمّمتان للزاوية نفسها أو لزاويتين متطابقتين متطابقتان', w: ['الزاويتان المكمّلتان للزاوية نفسها متطابقتان', 'الزاويتان المتتامتان دائمًا متطابقتان', 'الزاويتان القائمتان غير متطابقتين'], h: 'مجموعهما ٩٠° مع الزاوية الثالثة.', e: 'النظرية ١٫٧: متمّمتا زاوية واحدة متطابقتان.' },
+    { d: 3, q: 'ما الخطوات الأساسية لبرهان تطابق المكمّلات؟', c: 'تعريف المتكاملتين، ثم التعويض، ثم الطرح، ثم تعريف تطابق الزوايا', w: ['التعدي ثم الانعكاس ثم التماثل', 'الجمع ثم القسمة ثم التبسيط فقط', 'تعريف المنصف ثم نظرية المتقابلتين'], h: 'تذكّر برهان الكتاب.', e: 'من ∠1 و∠3 متكاملتين و∠2 و∠3 متكاملتين: مجموعان يساويان ١٨٠°، فبالتعويض ثم الطرح m∠1 = m∠2، فتطابقهما.' },
+    { d: 3, q: 'ما نتيجة: «إذا كانت زاويتان متكاملتين ومتطابقتين»؟', c: 'كل منهما قائمة', w: ['كل منهما حادة', 'مجموعهما ٩٠°', 'متقابلتان بالرأس'], h: '٢m = ١٨٠°.', e: 'النظرية ١٫١٢: ٢m = ١٨٠° فـ m = ٩٠°.' },
+    { d: 3, q: 'ما الذي يضمنه تعامد مستقيمين؟', c: 'تكوّن أربع زوايا قائمة متطابقة', w: ['تكوّن زاويتين قائمتين فقط', 'تكوّن زوايا حادة فقط', 'تكوّن زوايا مجموعها ٩٠°'], h: 'نظريات الزاوية القائمة.', e: 'النظريات ١٫٩ و١٫١٠ و١٫١١: أربع زوايا قائمة متطابقة.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: c.q, correct: c.c, wrongs: c.w, hint: c.h, explain: c.e }) }));
+
+  const GENS = { post: GEN_POST, thms: GEN_THMS, proofs: GEN_PROOFS, apply: GEN_APPLY, error: GEN_ERR, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'patterns', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
+  }
+
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
+  }
+
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
+  }
+
+  function startQuiz() {
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
+    showQuestion();
+  }
+
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
+  function showQuestion() {
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
+    });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
+
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
+
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
+    }
+  }
+
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}${q.extra || ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
+  function resetQuiz() {
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
+</script>
+
+<!-- SM-AUTO-INJECTED:START:admin-scripts -->
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "app_web";
+    const currentFileName = "angles_relationships.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+    let smSearchPagesData = [];
+
+    function smGoToPage(file) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(file);
+        } else {
+            window.location.href = file;
+        }
+    }
+
+    function smNormalizeSearchText(s) {
+        if (!s) return "";
+        return String(s)
+            .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+            .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+            .replace(/[\u064B-\u0652\u0670]/g, "")
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .toLowerCase()
+            .replace(/[\s\-_.,\/]+/g, "")
+            .trim();
+    }
+
+    function smToggleSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (!overlay) return;
+        if (overlay.classList.contains("open")) { smCloseSearchPanel(); return; }
+        overlay.classList.add("open");
+        smPerformSearch("");
+        setTimeout(function () { const inp = document.getElementById("smSearchInput"); if (inp) inp.focus(); }, 50);
+    }
+
+    function smCloseSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (overlay) overlay.classList.remove("open");
+    }
+
+    function smPerformSearch(query) {
+        const resultsEl = document.getElementById("smSearchResults");
+        if (!resultsEl) return;
+        const nq = smNormalizeSearchText(query);
+        const searchable = (smSearchPagesData || []).filter(function (p) { return p.searchEnabled !== false && p.file !== "searchbyrostrick.html"; });
+        let matches;
+        if (!nq) {
+            matches = searchable.filter(function (p) { return !p.hidden; });
+        } else {
+            matches = searchable.filter(function (p) {
+                const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+                return candidates.some(function (c) { return smNormalizeSearchText(c).indexOf(nq) !== -1; });
+            });
+        }
+        if (matches.length === 0) {
+            resultsEl.innerHTML = "<li class=\"sm-search-empty\">لا توجد نتائج مطابقة</li>";
+            return;
+        }
+        resultsEl.innerHTML = matches.map(function (p) {
+            const icon = p.icon || "fa-solid fa-file";
+            const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "<li class=\"sm-search-result-item\" onclick=\"smCloseSearchPanel(); smGoToPage('" + p.file + "');\"><i class=\"" + icon + "\"></i><span>" + title + "</span></li>";
+        }).join("");
+    }
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        smSearchPagesData = Array.isArray(orderedPages) ? orderedPages : [];
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+        smUpdateBottomNavFit();
+    }
+
+    function smUpdateBottomNavFit() {
+        const bottomNavbar = document.getElementById("bottomNavbar");
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (!bottomNavbar || !bottomNavList) return;
+        bottomNavList.classList.remove("sm-nav-fit");
+        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
+        bottomNavList.classList.toggle("sm-nav-fit", fits);
+    }
+    window.addEventListener("resize", smUpdateBottomNavFit);
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+<!-- SM-AUTO-INJECTED:END:admin-scripts -->
+</body>
+</html>
