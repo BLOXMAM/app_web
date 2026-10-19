@@ -32,8 +32,22 @@
           "name": "البرهان الجبري",
           "href": "algebraic_proof.html",
           "type": "link"
+        },
+        {
+          "name": "إثبات علاقات بين القطع المستقيمة",
+          "href": "segments_relationships.html",
+          "type": "link"
+        },
+        {
+          "name": "إثبات علاقات بين الزوايا",
+          "href": "angles_relationships.html",
+          "type": "link"
         }
       ]
+    },
+    {
+      "title": "فصل جديد",
+      "lessons": []
     }
   ]
 }
