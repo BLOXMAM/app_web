@@ -32,6 +32,14 @@
     "searchNames": []
   },
   {
+    "file": "angles_relationships.html",
+    "title": "إثبات علاقات بين الزوايا",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "cond.html",
     "title": "cond",
     "icon": "fa-solid fa-file",
@@ -90,6 +98,14 @@
   {
     "file": "postulates_proofs.html",
     "title": "المسلمات والبراهين الحرة",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "segments_relationships.html",
+    "title": "إثبات علاقات بين القطع المستقيمة",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
