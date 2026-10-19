@@ -17,14 +17,10 @@
       --primary-dark: #4338CA;
       --success: #16A34A;
       --danger: #DC2626;
+      --warn: #D97706;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Tajawal', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
     body {
       background-color: var(--bg);
@@ -39,7 +35,7 @@
     .container {
       background-color: var(--card-bg);
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       border-radius: 24px;
       padding: 32px;
       box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
@@ -48,301 +44,244 @@
       overflow: hidden;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 1.7rem;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
 
-    p.subtitle {
-      text-align: center;
-      color: var(--subtext);
-      font-size: 0.92rem;
-      margin-bottom: 24px;
-      line-height: 1.6;
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
     }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
 
-    .section-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
     .mode-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 12px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.9rem;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
     }
-
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
     .mode-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
       box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
     }
 
-    .cats-container-wrapper {
-      transition: all 0.3s ease;
-    }
-
-    .cats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
     .cat-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 10px 6px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.78rem;
-      line-height: 1.4;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
     }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
 
-    .cat-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
-    }
-
-    .levels-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .level-card {
-      background: var(--w1);
-      border: 2px solid transparent;
-      padding: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      color: var(--text);
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
     }
-
     .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
     .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
 
-    .level-card.active {
-      background: var(--w2);
-      border-color: var(--primary);
-    }
-
-    .custom-options-box {
-      background: var(--w1);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 28px;
-    }
-
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
     .custom-input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid var(--w2);
-      background: var(--card-bg);
-      color: var(--text);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 16px;
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
     }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
 
-    .custom-input:focus {
-      outline: none;
-      border-color: var(--primary);
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
     }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
 
     .btn-start {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #ffffff;
-      border: none;
-      padding: 16px;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
       transition: transform 0.1s, box-shadow 0.2s;
     }
-
     .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
 
     .quiz-box { display: none; }
-
     .header-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      background: var(--w1);
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-size: 0.9rem;
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
     }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
 
-    .cat-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      background: var(--w2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 14px;
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
     }
-
-    .timer-bar-container {
-      width: 100%;
-      height: 6px;
-      background: var(--w1);
-      border-radius: 10px;
-      margin-bottom: 24px;
-      overflow: hidden;
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
     }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
 
-    .timer-bar {
-      height: 100%;
-      background: var(--primary);
-      width: 100%;
-      transition: width 0.1s linear;
-    }
-
-    .question-card {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .question-text {
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: var(--text);
-      word-break: break-word;
-      white-space: pre-line;
-    }
-
-    .question-text.long-text {
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.8;
-      text-align: right;
-      white-space: pre-line;
-    }
-
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .options-grid.text-options {
-      grid-template-columns: 1fr;
-    }
-
-    .options-grid.bool-options {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
     .option-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 18px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      word-break: break-word;
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
     }
-
-    .option-btn.option-text {
-      font-size: 0.95rem;
-      font-weight: 500;
-      text-align: right;
-      padding: 14px 16px;
-    }
-
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
     .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
 
-    .option-btn.correct {
-      background-color: var(--w2) !important;
-      border-color: var(--success) !important;
-      color: var(--success) !important;
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
     }
-
-    .option-btn.wrong {
-      background-color: var(--w2) !important;
-      border-color: var(--danger) !important;
-      color: var(--danger) !important;
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
     }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
 
     .toast {
-      position: fixed;
-      bottom: -80px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 1000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      pointer-events: none;
-      max-width: 90%;
-      text-align: center;
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
     }
-
-    .toast.show {
-      bottom: 30px;
-      opacity: 1;
-    }
-
+    .toast.show { bottom: 30px; opacity: 1; }
     .toast.toast-success { background: var(--success); }
     .toast.toast-error { background: var(--danger); }
 
     .result-box { display: none; text-align: center; }
-    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
-    .badge {
-      display: inline-block;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-bottom: 16px;
-      background: var(--w1);
-      color: var(--success);
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
     }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
   </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -577,25 +516,29 @@ header.header-scrolled .menu-bar-line {
 
 
 
+
 <div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
     <h1>تحدي المنطق 🧠</h1>
-    <p class="subtitle">اختبر مهاراتك في العبارات، نفي العبارة، عبارتي الوصل والفصل، وجداول الصواب</p>
+    <p class="subtitle">الدرس ١-٢ • المنطق<br>اضغط على أيقونة (i) لمراجعة ملخص الدرس وجداول الصواب قبل البدء أو أثناء الحل</p>
 
     <div class="section-title">1. اختر نمط التحدي:</div>
-    <div class="mode-grid">
-      <button class="mode-btn active" onclick="setMode('negation', this)">نفي العبارة 🚫</button>
-      <button class="mode-btn" onclick="setMode('conjunction', this)">عبارة الوصل (∧) 🔗</button>
-      <button class="mode-btn" onclick="setMode('disjunction', this)">عبارة الفصل (∨) 🔀</button>
-      <button class="mode-btn" onclick="setMode('mixed', this)">منوع شامل 🎯</button>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="statements" onclick="setMode('statements', this)">العبارات والنفي ❝<small>صواب، خطأ، ~p</small></button>
+      <button class="mode-btn" data-mode="conj" onclick="setMode('conj', this)">عبارات الوصل ∧<small>p و q</small></button>
+      <button class="mode-btn" data-mode="disj" onclick="setMode('disj', this)">عبارات الفصل ∨<small>p أو q</small></button>
+      <button class="mode-btn" data-mode="tables" onclick="setMode('tables', this)">جداول الصواب 🧮<small>T و F</small></button>
+      <button class="mode-btn" data-mode="venn" onclick="setMode('venn', this)">أشكال فن ⭕<small>اتحاد وتقاطع</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وأفكار</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🎯<small>اختر الأقسام</small></button>
     </div>
 
-    <div id="cats-wrapper" class="cats-container-wrapper" style="display: none;">
+    <div id="cats-wrapper" style="display: none;">
       <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
-      <div class="cats-grid" id="cats-container">
-        <!-- يتم إنشاؤها عبر JavaScript -->
-      </div>
+      <div class="cats-grid" id="cats-container"></div>
     </div>
 
     <div class="section-title">2. حدد مستواك الحالي:</div>
@@ -606,15 +549,15 @@ header.header-scrolled .menu-bar-line {
       </div>
       <div class="level-card" onclick="selectLevel('good', this)">
         <h4>سهل</h4>
-        <span>10 أسئلة • 20 ثانية/سؤال</span>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('very_good', this)">
         <h4>متوسط</h4>
-        <span>15 سؤال • 15 ثانية/سؤال</span>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('excellent', this)">
         <h4>صعب</h4>
-        <span>20 سؤال • 10 ثواني/سؤال</span>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
       </div>
       <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
         <h4>مخصص ⚙️</h4>
@@ -634,9 +577,14 @@ header.header-scrolled .menu-bar-line {
 
       <div id="custom-time-input-wrapper" style="display: none;">
         <div class="section-title">الوقت بالثواني لكل سؤال:</div>
-        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="15" style="margin-bottom: 0;">
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
       </div>
     </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
 
     <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
   </div>
@@ -645,476 +593,1053 @@ header.header-scrolled .menu-bar-line {
   <div id="quiz-box" class="quiz-box">
     <div class="header-stats">
       <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
-      <span>النقاط: <strong id="score-text">0</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
     </div>
+    <div class="progress-dots" id="progress-dots"></div>
 
     <div class="timer-bar-container" id="timer-container">
       <div class="timer-bar" id="timer-bar"></div>
     </div>
 
     <div class="question-card">
-      <div id="cat-tag" class="cat-tag">نفي العبارة</div>
-      <div class="question-text" id="question-text">p: "..."</div>
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
     </div>
 
-    <div class="options-grid" id="options-container">
-      <!-- خيارات الإجابة -->
-    </div>
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
   </div>
 
   <!-- شاشة النتيجة -->
   <div id="result-box" class="result-box">
     <h2>النتيجة النهائية 🏆</h2>
     <div class="result-score" id="final-percentage">0%</div>
-    <div class="badge" id="level-badge">جاري التقييم...</div>
-    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
-    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ١-٢ المنطق</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
-  // ============ أدوات عشوائية عامة ============
-  function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function shuffleArray(arr) {
-    return [...arr].sort(() => Math.random() - 0.5);
-  }
-
-  function pickDistinctDistractors(correctValue, generatorFn, count) {
-    const seen = new Set([String(correctValue)]);
-    const result = [];
-    let guard = 0;
-    while (result.length < count && guard < 500) {
-      guard++;
-      const v = generatorFn();
-      const key = String(v);
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(v);
-      }
-    }
-    return result;
-  }
-
-  function isPrime(n) {
-    if (n < 2) return false;
-    for (let i = 2; i * i <= n; i++) {
-      if (n % i === 0) return false;
-    }
-    return true;
-  }
-
-  // ============ مولّدات "الحقائق" الأساسية (كل حقيقة نص + قيمة صواب محسوبة) ============
-
-  function factParity() {
-    const x = randInt(10, 99);
-    const claimEven = Math.random() < 0.5;
-    const text = `العدد ${x} عدد ${claimEven ? 'زوجي' : 'فردي'}`;
-    const actualEven = x % 2 === 0;
-    const value = claimEven ? actualEven : !actualEven;
-    return { text, value };
-  }
-
-  function factDivisible() {
-    const d = [2, 3, 4, 5, 6, 9][randInt(0, 5)];
-    const x = randInt(10, 99);
-    const text = `العدد ${x} يقبل القسمة على ${d}`;
-    const value = x % d === 0;
-    return { text, value };
-  }
-
-  function factPrime() {
-    const x = randInt(2, 60);
-    const text = `العدد ${x} عدد أولي`;
-    const value = isPrime(x);
-    return { text, value };
-  }
-
-  function factCompare() {
-    const a = randInt(1, 100), b = randInt(1, 100);
-    const op = Math.random() < 0.5 ? '>' : '<';
-    const text = `${a} ${op} ${b}`;
-    const value = op === '>' ? a > b : a < b;
-    return { text, value };
-  }
-
-  function factMultiple() {
-    const d = randInt(2, 9);
-    const k = randInt(2, 15);
-    const claimMultiple = Math.random() < 0.5;
-    const x = claimMultiple ? d * k : d * k + randInt(1, d - 1);
-    const text = `العدد ${x} من مضاعفات العدد ${d}`;
-    const value = x % d === 0;
-    return { text, value };
-  }
-
-  const factGenerators = [factParity, factDivisible, factPrime, factCompare, factMultiple];
-  function genFact() {
-    return factGenerators[randInt(0, factGenerators.length - 1)]();
-  }
-
-  const boolOptions = ['صائبة', 'خاطئة'];
-  function boolLabel(v) { return v ? 'صائبة' : 'خاطئة'; }
-
-  // ============ 1) نفي العبارة ============
-  function generateNegationQuestion() {
-    const p = genFact();
-    const correct = boolLabel(!p.value);
-    const prompt = `العبارة p: "${p.text}"\nما قيمة صواب نفي العبارة (~p)؟`;
-    return { type: 'text', catKey: 'negation', prompt, options: [...boolOptions], correct };
-  }
-
-  // ============ 2) عبارة الوصل p ∧ q ============
-  function generateConjunctionQuestion() {
-    const p = genFact();
-    const q = genFact();
-    const correct = boolLabel(p.value && q.value);
-    const prompt = `p: "${p.text}"\nq: "${q.text}"\nما قيمة صواب عبارة الوصل (p ∧ q)؟`;
-    return { type: 'text', catKey: 'conjunction', prompt, options: [...boolOptions], correct };
-  }
-
-  // ============ 3) عبارة الفصل p ∨ q ============
-  function generateDisjunctionQuestion() {
-    const p = genFact();
-    const q = genFact();
-    const correct = boolLabel(p.value || q.value);
-    const prompt = `p: "${p.text}"\nq: "${q.text}"\nما قيمة صواب عبارة الفصل (p ∨ q)؟`;
-    return { type: 'text', catKey: 'disjunction', prompt, options: [...boolOptions], correct };
-  }
-
-  // ============ 4) عبارات مركبة (نفي + وصل/فصل معًا) ============
-  function generateCompoundQuestion() {
-    const p = genFact();
-    const q = genFact();
-    const exprs = [
-      { sym: '~p ∧ q', val: !p.value && q.value },
-      { sym: 'p ∧ ~q', val: p.value && !q.value },
-      { sym: '~p ∨ q', val: !p.value || q.value },
-      { sym: 'p ∨ ~q', val: p.value || !q.value },
-      { sym: '~p ∧ ~q', val: !p.value && !q.value },
-      { sym: '~p ∨ ~q', val: !p.value || !q.value }
-    ];
-    const e = exprs[randInt(0, exprs.length - 1)];
-    const correct = boolLabel(e.val);
-    const prompt = `p: "${p.text}"\nq: "${q.text}"\nما قيمة صواب العبارة (${e.sym})؟`;
-    return { type: 'text', catKey: 'compound', prompt, options: [...boolOptions], correct };
-  }
-
-  // ============ 5) مفاهيم أساسية (رموز، قواعد، عدد صفوف جدول الصواب) ============
-
-  function tSymbolMeaning() {
-    const items = [
-      { sym: '~p', correct: 'نفي العبارة p' },
-      { sym: 'p ∧ q', correct: 'عبارة الوصل بين p و q' },
-      { sym: 'p ∨ q', correct: 'عبارة الفصل بين p و q' }
-    ];
-    const it = items[randInt(0, items.length - 1)];
-    const wrongPool = shuffleArray([
-      ...items.filter(x => x !== it).map(x => x.correct),
-      'معادلة جبرية عامة',
-      'مثال مضاد للعبارة'
-    ]);
-    const options = shuffleArray([it.correct, ...wrongPool.slice(0, 3)]);
-    return { prompt: `ماذا يمثل الرمز "${it.sym}"؟`, options, correct: it.correct };
-  }
-
-  function tConjunctionRule() {
-    const prompt = 'متى تكون عبارة الوصل (p ∧ q) صائبة؟';
-    const options = shuffleArray([
-      'إذا كانت كلتا العبارتين p و q صائبتين',
-      'إذا كانت إحدى العبارتين صائبة فقط',
-      'إذا كانت كلتا العبارتين خاطئتين',
-      'دائمًا صائبة بغض النظر عن قيم p و q'
-    ]);
-    return { prompt, options, correct: 'إذا كانت كلتا العبارتين p و q صائبتين' };
-  }
-
-  function tDisjunctionRule() {
-    const prompt = 'متى تكون عبارة الفصل (p ∨ q) خاطئة؟';
-    const options = shuffleArray([
-      'عندما تكون كلتا العبارتين p و q خاطئتين',
-      'عندما تكون إحدى العبارتين خاطئة فقط',
-      'عندما تكون كلتا العبارتين صائبتين',
-      'لا يمكن أن تكون خاطئة أبدًا'
-    ]);
-    return { prompt, options, correct: 'عندما تكون كلتا العبارتين p و q خاطئتين' };
-  }
-
-  function tTruthTableRows() {
-    const n = randInt(2, 4);
-    const vars = n === 2 ? 'p, q' : (n === 3 ? 'p, q, r' : 'p, q, r, s');
-    const answer = Math.pow(2, n);
-    const prompt = `عبارة مركبة تحتوي على ${n} عبارات أساسية (${vars}). كم عدد صفوف جدول الصواب اللازمة لتغطية جميع الحالات الممكنة؟`;
-    const distractors = pickDistinctDistractors(answer, () => {
-      let v = answer + randInt(1, 6) * (Math.random() < 0.5 ? -1 : 1);
-      if (v <= 0) v = answer + randInt(6, 12);
-      return v;
-    }, 3);
-    const options = shuffleArray([answer, ...distractors]).map(String);
-    return { prompt, options, correct: String(answer) };
-  }
-
-  function tNegationConcept() {
-    const isTrue = Math.random() < 0.5;
-    const prompt = `إذا كانت قيمة صواب العبارة p هي (${isTrue ? 'صائبة' : 'خاطئة'})، فما قيمة صواب نفيها (~p)؟`;
-    const correct = boolLabel(!isTrue);
-    return { prompt, options: [...boolOptions], correct };
-  }
-
-  function tCompoundStatementDef() {
-    const prompt = 'العبارة الناتجة عن ربط عبارتين أو أكثر باستعمال (و) أو (أو) تسمى:';
-    const options = shuffleArray(['عبارة مركبة', 'عبارة بسيطة', 'مثال مضاد', 'معادلة خطية']);
-    return { prompt, options, correct: 'عبارة مركبة' };
-  }
-
-  const conceptTemplates = [tSymbolMeaning, tConjunctionRule, tDisjunctionRule, tTruthTableRows, tNegationConcept, tCompoundStatementDef];
-
-  function generateConceptQuestion() {
-    const fn = conceptTemplates[randInt(0, conceptTemplates.length - 1)];
-    const { prompt, options, correct } = fn();
-    return { type: 'text', catKey: 'concepts', prompt, options, correct };
-  }
-
-  // ============ حالة التطبيق ============
-  let currentMode = 'negation';
-  let selectedCats = ['negation', 'conjunction', 'disjunction', 'compound', 'concepts'];
-  let selectedLevel = 'weak';
-  let customHasTime = false;
-  let questions = [];
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timer = null;
-  let timePerQuestion = 0;
-  let isAnswering = false;
-
-  const levelSettings = {
-    weak: { count: 5, time: 0 },
-    good: { count: 10, time: 20 },
-    very_good: { count: 15, time: 15 },
-    excellent: { count: 20, time: 10 }
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ١٩–٢٢) ============
+  const LESSON = {
+    badges: ['🌟 خبير في المنطق', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تتقن قيم الصواب وجداولها وأشكال فن.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. اقرأ ملخص الدرس ثم أعد المحاولة.',
+      'لا بأس، افتح أيقونة (i) واقرأ الأفكار الأساسية وجداول الصواب، ثم جرّب مستوى أسهل.']
   };
+  const TT_AND = '<table class="tt tt-mini"><tr><th colspan="3">p ∧ q</th></tr><tr><th>p</th><th>q</th><th>p∧q</th></tr><tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr><tr><td class="t">T</td><td class="f">F</td><td class="f">F</td></tr><tr><td class="f">F</td><td class="t">T</td><td class="f">F</td></tr><tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr></table>';
+  const TT_OR = '<table class="tt tt-mini"><tr><th colspan="3">p ∨ q</th></tr><tr><th>p</th><th>q</th><th>p∨q</th></tr><tr><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr><tr><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr><tr><td class="f">F</td><td class="t">T</td><td class="t">T</td></tr><tr><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr></table>';
+  const TT_NOT = '<table class="tt tt-mini"><tr><th colspan="2">~p</th></tr><tr><th>p</th><th>~p</th></tr><tr><td class="t">T</td><td class="f">F</td></tr><tr><td class="f">F</td><td class="t">T</td></tr></table>';
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>المنطق يدرس العبارات وكيف نحدد صوابها أو خطأها. نتعلم هنا كيف نربط عبارات بالرابطين «و» و«أو»، وكيف نجد قيمة صواب العبارة المركبة، وكيف ننظم ذلك في جداول صواب وأشكال فن.</p>
+      <h4>العبارة وقيمة الصواب</h4>
+      <p>العبارة جملة خبرية لها حالتان فقط: <b>صائبة (T)</b> أو <b>خاطئة (F)</b>، ولا تحتمل حالة ثالثة. ونرمز لها بحرف مثل <b>p</b> أو <b>q</b>. الأسئلة والأوامر والتعجب ليست عبارات.</p>
+      <h4>النفي ~p</h4>
+      <p>نفي العبارة يفيد معنى مضادًا لها، وقيمة صوابه <b>عكس</b> قيمة صواب العبارة الأصلية. تُقرأ ~p «ليس p». ونفي العبارة ليس خاطئًا دائمًا، فإن كانت p خاطئة فإن ~p صائبة.</p>
+      <h4>العبارة المركبة</h4>
+      <ol class="steps">
+        <li><b>الوصل (و) ∧:</b> تكون p ∧ q صائبة <b>فقط</b> عندما تكون جميع مكوناتها صائبة. تكفي عبارة خاطئة واحدة لتصبح خاطئة.</li>
+        <li><b>الفصل (أو) ∨:</b> تكون p ∨ q صائبة إذا كانت <b>إحدى</b> مكوناتها صائبة، وتكون خاطئة <b>فقط</b> عندما تكون جميع مكوناتها خاطئة.</li>
+        <li>عند وجود نفي مثل q ∧ ~r: أوجد قيمة ~r أولًا (عكس قيمة r)، ثم طبّق قاعدة الوصل أو الفصل.</li>
+      </ol>
+      <h4>كيف أنشئ جدول صواب؟ (مثال ٣)</h4>
+      <ol class="steps">
+        <li>أنشئ عمودًا لكل من العبارات الأساسية، ونفيها، والعبارة المركبة.</li>
+        <li>ضع جميع حالات قيم الصواب للعبارات الأساسية: TT ، TF ، FT ، FF.</li>
+        <li>استعمل قيم p لتحديد ~p، ثم استعمل الأعمدة السابقة لتحديد العبارة المركبة.</li>
+      </ol>
+      <h4>أشكال فن</h4>
+      <p>المستطيل الذي يحيط بالدوائر يمثل المجموعة الكلية. <b>التقاطع</b> هو المنطقة المشتركة بين الدائرتين وتمثل «و». <b>الاتحاد</b> هو كل ما في الدائرتين معًا ويمثل «أو». ويقسم شكل فن بدائرتين المجموعة الكلية إلى أربع مناطق على الأكثر، وبثلاث دوائر إلى ٨ مناطق على الأكثر.</p>` },
 
-  const catLabels = {
-    negation: 'نفي العبارة',
-    conjunction: 'عبارة الوصل',
-    disjunction: 'عبارة الفصل',
-    compound: 'عبارات مركبة',
-    concepts: 'مفاهيم أساسية'
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) لكل عبارة قيمة صواب واحدة فقط.</b><br>إما T أو F، فلا توجد حالة وسط. أما «كم عمرك؟» فسؤال وليس عبارة.</div>
+      <div class="idea-card"><b>٢) نفي العبارة يعكس قيمة صوابها.</b><br>إن كانت p صائبة فـ ~p خاطئة، وإن كانت p خاطئة فـ ~p صائبة. ونفي النفي يعيد العبارة الأصلية.</div>
+      <div class="idea-card"><b>٣) الوصل «صارم»: يحتاج الجميع صائبًا.</b><br>p ∧ q لا تكون صائبة إلا إذا كانت p و q صائبتين معًا.</div>
+      <div class="idea-card"><b>٤) الفصل «متساهل»: تكفي واحدة صائبة.</b><br>p ∨ q لا تكون خاطئة إلا إذا كانت p و q خاطئتين معًا. وتبقى صائبة حتى لو كانت الاثنتان صائبتين.</div>
+      <div class="idea-card"><b>٥) إذا كانت إحدى مكونات الوصل خاطئة، فلا يؤثر ما تبقى.</b><br>وإذا كانت إحدى مكونات الفصل صائبة فلا يؤثر ما تبقى أيضًا (كما في المثال ٢أ: «وكون العبارة q خاطئة لا يؤثر»).</div>
+      <div class="idea-card"><b>٦) جداول الصواب تنظم كل الحالات الممكنة.</b><br>لعبارتين p و q توجد أربع حالات: TT ، TF ، FT ، FF.</div>
+      <div class="idea-card"><b>٧) أشكال فن تمثل الوصل بالتقاطع والفصل بالاتحاد.</b><br>عدد من في الاتحاد = (A فقط) + (التقاطع) + (B فقط).</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">العبارة</span><span class="en">Statement</span><br>جملة خبرية لها حالتان فقط: إما أن تكون صائبة أو خاطئة، ولا تحتمل أي حالة أخرى.</div>
+      <div class="def-card"><span class="term">قيمة الصواب</span><span class="en">Truth value</span><br>صواب العبارة (T) أو خطؤها (F).</div>
+      <div class="def-card"><span class="term">نفي العبارة</span><span class="en">Negation</span><br>عبارة تفيد معنى مضادًا لمعنى العبارة الأصلية، وقيمة صوابها عكس قيمة صواب الأصلية. رمزها ~p وتقرأ «ليس p».</div>
+      <div class="def-card"><span class="term">العبارة المركبة</span><span class="en">Compound statement</span><br>عبارة تتكون من ربط عبارتين أو أكثر بالرابط «و» أو «أو».</div>
+      <div class="def-card"><span class="term">عبارة الوصل</span><span class="en">Conjunction</span><br>عبارة مركبة تحتوي الرابط «و». رمزها p ∧ q وتقرأ «p و q». تكون صائبة فقط عندما تكون جميع مكوناتها صائبة.</div>
+      <div class="def-card"><span class="term">عبارة الفصل</span><span class="en">Disjunction</span><br>عبارة مركبة تحتوي الرابط «أو». رمزها p ∨ q وتقرأ «p أو q». تكون خاطئة فقط عندما تكون جميع مكوناتها خاطئة.</div>
+      <div class="def-card"><span class="term">جدول الصواب</span><span class="en">Truth table</span><br>جدول ينظم قيم الصواب للعبارات الأصلية وللعبارة المركبة في جميع الحالات الممكنة.</div>
+      <div class="def-card"><span class="term">التقاطع</span><br>مجموعة العناصر المشتركة بين مجموعتين.</div>
+      <div class="def-card"><span class="term">الاتحاد</span><br>مجموعة عناصر المجموعتين كلها.</div>
+      <div class="def-card"><span class="term">المضلع المحدّب</span><br>مضلع لا يحوي امتداد أي من أضلاعه نقاطًا داخله. وعكس ذلك يكون مقعّرًا.</div>` },
+
+    { id: 'tables', title: '🧮 جداول الصواب', html: `
+      <p>احفظ الجداول الثلاثة، فهي أساس الدرس:</p>
+      <div style="text-align:center;direction:ltr">${TT_NOT}${TT_AND}${TT_OR}</div>
+      <div class="idea-card"><b>للوصل:</b> ابحث عن F واحدة، فإن وُجدت فالنتيجة F.</div>
+      <div class="idea-card"><b>للفصل:</b> ابحث عن T واحدة، فإن وُجدت فالنتيجة T.</div>
+      <h4>جدول ~p ∨ q (المثال ٣)</h4>
+      <table class="tt"><tr><th>p</th><th>q</th><th>~p</th><th>~p∨q</th></tr>
+        <tr><td class="t">T</td><td class="t">T</td><td class="f">F</td><td class="t">T</td></tr>
+        <tr><td class="t">T</td><td class="f">F</td><td class="f">F</td><td class="f">F</td></tr>
+        <tr><td class="f">F</td><td class="t">T</td><td class="t">T</td><td class="t">T</td></tr>
+        <tr><td class="f">F</td><td class="f">F</td><td class="t">T</td><td class="t">T</td></tr></table>` },
+
+    { id: 'ex', title: '📖 أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: الوصل (مثلث قائم فيه ضلعان متطابقان)</div>
+        p: الشكل مثلث (T). q: في الشكل ضلعان متطابقان (T). r: جميع زوايا الشكل حادة (F).<br>
+        • p ∧ r: خاطئة، لأن r خاطئة.<br>• q ∧ ~r: صائبة، لأن q صائبة و ~r صائبة.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢: الفصل (شهر يناير)</div>
+        p: يناير من أشهر فصل الربيع (F). q: عدد أيام يناير ٣٠ يومًا فقط (F). r: يناير أول أشهر السنة الميلادية (T).<br>
+        • q ∨ r: صائبة، لأن r صائبة ولا يؤثر كون q خاطئة.<br>• p ∨ q: خاطئة، لأن كلتيهما خاطئة.<br>• ~p ∨ r: صائبة، لأن ~p صائبة و r صائبة.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: جدول صواب ~p ∨ q</div>
+        نكوّن أعمدة p و q و ~p و ~p ∨ q ثم نملؤها كما في تبويب «جداول الصواب».</div>
+      <div class="ex-card"><div class="ex-t">مثال ٤: حملة الاقتصاد في استعمال الورق (شكل فن)</div>
+        شعبان فقط ١٤، التقاطع ٦، رجب فقط ٥.<br>
+        • رجب أو شعبان (الاتحاد): ١٤ + ٦ + ٥ = ٢٥ شخصًا.<br>
+        • رجب وشعبان (التقاطع): ٦ أشخاص.<br>
+        • العدد ١٤ يمثل من شاركوا في شعبان ولم يشاركوا في رجب.</div>
+      <div class="ex-card"><div class="ex-t">تحقق من فهمك ٤: الاختباران</div>
+        الرياضيات فقط ٤، التقاطع ٤٦، الكيمياء فقط ٣، خارج الدائرتين ٢. عدد طلاب الصف: ٣ + ٤٦ + ٤ + ٢ = ٥٥ طالبًا.</div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+  const CAT = {
+    statements: { name: 'العبارات والنفي', icon: '❝' },
+    conj: { name: 'عبارات الوصل', icon: '∧' },
+    disj: { name: 'عبارات الفصل', icon: '∨' },
+    tables: { name: 'جداول الصواب', icon: '🧮' },
+    venn: { name: 'أشكال فن', icon: '⭕' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
   };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const TFS = ['صائبة (T)', 'خاطئة (F)'];
+  const tfw = b => b ? 'صائبة' : 'خاطئة';
+  const tfOpt = b => b ? TFS[0] : TFS[1];
+  const TF_ORDER = TFS.slice();
 
-  const catsContainer = document.getElementById('cats-container');
-  Object.keys(catLabels).forEach(key => {
-    const btn = document.createElement('button');
-    btn.className = `cat-btn ${selectedCats.includes(key) ? 'active' : ''}`;
-    btn.innerText = catLabels[key];
-    btn.onclick = () => toggleCat(key, btn);
-    catsContainer.appendChild(btn);
-  });
+  // ============ مخزن العبارات ============
+  // [نص العبارة، نفيها، قيمة الصواب، تعليل اختياري]
+  const STATIC_FACTS = [
+    ['المستطيل شكل رباعي', 'المستطيل ليس شكلًا رباعيًا', true, 'للمستطيل أربعة أضلاع'],
+    ['المستطيل مضلع محدّب', 'المستطيل ليس مضلعًا محدّبًا', true],
+    ['المربع معين', 'المربع ليس معينًا', true, 'أضلاع المربع الأربعة متساوية'],
+    ['المعين مستطيل', 'المعين ليس مستطيلًا', false, 'زوايا المعين ليست قوائم دائمًا'],
+    ['للمثلث ثلاثة أضلاع', 'ليس للمثلث ثلاثة أضلاع', true],
+    ['للمثلث أربع زوايا', 'ليس للمثلث أربع زوايا', false, 'للمثلث ثلاث زوايا فقط'],
+    ['الشكل السداسي له خمسة أضلاع', 'الشكل السداسي ليس له خمسة أضلاع', false, 'للسداسي ستة أضلاع'],
+    ['قطرا المستطيل متطابقان', 'قطرا المستطيل ليسا متطابقين', true],
+    ['قطرا المعين متطابقان دائمًا', 'ليس قطرا المعين متطابقين دائمًا', false],
+    ['الزاوية القائمة قياسها ٩٠°', 'الزاوية القائمة ليس قياسها ٩٠°', true],
+    ['مجموع قياسات زوايا المثلث الداخلية ٣٦٠°', 'مجموع قياسات زوايا المثلث الداخلية ليس ٣٦٠°', false, 'المجموع هو ١٨٠°'],
+    ['للمربع أربعة أضلاع متساوية', 'ليس للمربع أربعة أضلاع متساوية', true],
+    ['المثلث القائم الزاوية فيه زاوية منفرجة', 'المثلث القائم الزاوية ليس فيه زاوية منفرجة', false, 'مجموع زواياه ١٨٠° وفيه زاوية قائمة'],
+    ['أبها مدينة سعودية', 'أبها ليست مدينة سعودية', true],
+    ['الرياض عاصمة المملكة العربية السعودية', 'الرياض ليست عاصمة المملكة العربية السعودية', true],
+    ['جدة مدينة ساحلية', 'جدة ليست مدينة ساحلية', true],
+    ['الرياض مدينة ساحلية', 'الرياض ليست مدينة ساحلية', false],
+    ['عدد أيام الأسبوع سبعة أيام', 'عدد أيام الأسبوع ليس سبعة أيام', true],
+    ['يناير هو أول أشهر السنة الميلادية', 'يناير ليس أول أشهر السنة الميلادية', true],
+    ['يناير من أشهر فصل الربيع', 'يناير ليس من أشهر فصل الربيع', false, 'يناير من أشهر الشتاء'],
+    ['محرم هو أول شهور السنة الهجرية', 'محرم ليس أول شهور السنة الهجرية', true],
+    ['الشمس تشرق من الغرب', 'الشمس لا تشرق من الغرب', false, 'الشمس تشرق من الشرق'],
+    ['القمر يدور حول الأرض', 'القمر لا يدور حول الأرض', true],
+    ['الحوت من الأسماك', 'الحوت ليس من الأسماك', false, 'الحوت من الثدييات'],
+    ['الصيف يأتي بعد الربيع', 'الصيف لا يأتي بعد الربيع', true]
+  ].map(a => ({ pos: a[0], neg: a[1], tv: a[2], why: a[3] || '' }));
 
-  function setMode(mode, element) {
-    currentMode = mode;
-    document.querySelectorAll('.mode-grid .mode-btn').forEach(btn => btn.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('cats-wrapper').style.display = (mode === 'mixed') ? 'block' : 'none';
+  function paramFact(want) {
+    const kind = pick(['even', 'prime', 'div', 'sum', 'gt']);
+    const w = want === undefined ? Math.random() < 0.5 : want;
+    if (kind === 'even') {
+      let n; do { n = randInt(2, 40); } while ((n % 2 === 0) !== w);
+      return { pos: `العدد ${N(n)} عدد زوجي`, neg: `العدد ${N(n)} ليس عددًا زوجيًا`, tv: w, why: w ? `${N(n)} يقبل القسمة على ${N(2)}` : `${N(n)} عدد فردي` };
+    }
+    if (kind === 'prime') {
+      let n; do { n = randInt(4, 40); } while (isPrime(n) !== w);
+      let s = 2; while (n % s) s++;
+      return { pos: `العدد ${N(n)} عدد أولي`, neg: `العدد ${N(n)} ليس عددًا أوليًا`, tv: w, why: w ? `${N(n)} لا يقبل القسمة إلا على ${N(1)} ونفسه` : `${N(n)} = ${N(s)} × ${N(n / s)}` };
+    }
+    if (kind === 'div') {
+      const k = pick([3, 4, 5, 6, 9]); const m = randInt(2, 9);
+      const n = w ? k * m : k * m + randInt(1, k - 1);
+      return { pos: `العدد ${N(n)} يقبل القسمة على ${N(k)}`, neg: `العدد ${N(n)} لا يقبل القسمة على ${N(k)}`, tv: w, why: w ? `${N(n)} = ${N(k)} × ${N(n / k)}` : `${N(n)} ÷ ${N(k)} يعطي باقي القسمة ${N(n % k)}` };
+    }
+    if (kind === 'sum') {
+      const a = randInt(5, 40), b = randInt(5, 40); const c = w ? a + b : a + b + pick([-3, -2, -1, 1, 2, 3]);
+      return { pos: L(`${N(a)} + ${N(b)} = ${N(c)}`), neg: L(`${N(a)} + ${N(b)} ≠ ${N(c)}`), tv: w, why: L(`${N(a)} + ${N(b)} = ${N(a + b)}`) };
+    }
+    let a, b; do { a = randInt(1, 50); b = randInt(1, 50); } while (a === b || (a > b) !== w);
+    return { pos: `العدد ${N(a)} أكبر من العدد ${N(b)}`, neg: `العدد ${N(a)} ليس أكبر من العدد ${N(b)}`, tv: w, why: L(`${N(a)} ${a > b ? '>' : '<'} ${N(b)}`) };
+  }
+  function randFact(want, exclude) {
+    exclude = exclude || new Set();
+    for (let i = 0; i < 100; i++) {
+      let f;
+      if (Math.random() < 0.55) {
+        const pool = STATIC_FACTS.filter(x => want === undefined || x.tv === want);
+        f = Object.assign({}, pick(pool));
+      } else f = paramFact(want);
+      if (!exclude.has(f.pos)) return f;
+    }
+    throw new Error('randFact');
   }
 
-  function toggleCat(key, btn) {
-    if (selectedCats.includes(key)) {
-      if (selectedCats.length > 1) {
-        selectedCats = selectedCats.filter(c => c !== key);
-        btn.classList.remove('active');
+  // مشاهد مأخوذة من الكتاب وغيرها (ثلاث عبارات p و q و r)
+  const mkScene = (header, rows) => () => ({ header, facts: rows.map(r => ({ pos: r[0], neg: r[1], tv: r[2], why: r[3] || '' })) });
+  const SCENES = [
+    mkScene('الشكل: مثلث قائم الزاوية فيه ضلعان متطابقان', [
+      ['الشكل مثلث', 'الشكل ليس مثلثًا', true],
+      ['في الشكل ضلعان متطابقان', 'ليس في الشكل ضلعان متطابقان', true],
+      ['جميع زوايا الشكل حادة', 'ليست جميع زوايا الشكل حادة', false, 'في المثلث زاوية قائمة وهي ليست حادة']]),
+    mkScene('التقويم: شهر يناير', [
+      ['يناير من أشهر فصل الربيع', 'يناير ليس من أشهر فصل الربيع', false, 'يناير من أشهر الشتاء'],
+      ['عدد أيام شهر يناير ٣٠ يومًا فقط', 'عدد أيام شهر يناير ليس ٣٠ يومًا فقط', false, 'لشهر يناير ٣١ يومًا'],
+      ['يناير هو أول أشهر السنة الميلادية', 'يناير ليس أول أشهر السنة الميلادية', true]]),
+    mkScene('الشكل: مستطيل بعداه ٣ سم و٥ سم', [
+      ['الشكل رباعي', 'الشكل ليس رباعيًا', true],
+      ['أضلاع الشكل الأربعة متساوية', 'أضلاع الشكل الأربعة ليست متساوية', false, 'بعدا المستطيل مختلفان'],
+      ['زوايا الشكل الأربع قوائم', 'زوايا الشكل الأربع ليست كلها قوائم', true]]),
+    mkScene('المدينة: الرياض', [
+      ['الرياض عاصمة المملكة العربية السعودية', 'الرياض ليست عاصمة المملكة العربية السعودية', true],
+      ['الرياض مدينة ساحلية', 'الرياض ليست مدينة ساحلية', false],
+      ['الرياض تقع في وسط المملكة', 'الرياض لا تقع في وسط المملكة', true]]),
+    mkScene('الشكل: مربع', [
+      ['للشكل أربعة أضلاع متساوية', 'ليس للشكل أربعة أضلاع متساوية', true],
+      ['قطرا الشكل متطابقان', 'قطرا الشكل ليسا متطابقين', true],
+      ['الشكل مثلث', 'الشكل ليس مثلثًا', false, 'للمربع أربعة أضلاع']]),
+    mkScene('الشكل: معين ليست زواياه قوائم', [
+      ['الشكل رباعي', 'الشكل ليس رباعيًا', true],
+      ['زوايا الشكل الأربع قوائم', 'زوايا الشكل الأربع ليست كلها قوائم', false, 'المعين المفروض ليست زواياه قوائم'],
+      ['أضلاع الشكل الأربعة متساوية', 'أضلاع الشكل الأربعة ليست متساوية', true]]),
+    () => {
+      const n = randInt(4, 48), k = pick([3, 4, 5, 6]);
+      const ev = n % 2 === 0, pr = isPrime(n), dv = n % k === 0; let s = 2; while (n % s) s++;
+      return { header: `العدد: ${N(n)}`, facts: [
+        { pos: `العدد ${N(n)} عدد زوجي`, neg: `العدد ${N(n)} ليس عددًا زوجيًا`, tv: ev, why: ev ? `${N(n)} يقبل القسمة على ${N(2)}` : `${N(n)} عدد فردي` },
+        { pos: `العدد ${N(n)} عدد أولي`, neg: `العدد ${N(n)} ليس عددًا أوليًا`, tv: pr, why: pr ? `${N(n)} لا يقبل القسمة إلا على ${N(1)} ونفسه` : `${N(n)} = ${N(s)} × ${N(n / s)}` },
+        { pos: `العدد ${N(n)} يقبل القسمة على ${N(k)}`, neg: `العدد ${N(n)} لا يقبل القسمة على ${N(k)}`, tv: dv, why: dv ? `${N(n)} = ${N(k)} × ${N(n / k)}` : `${N(n)} ÷ ${N(k)} يعطي باقي ${N(n % k)}` }] };
+    }
+  ];
+  function makeWorld() {
+    if (Math.random() < 0.7) return pick(SCENES)();
+    const ex = new Set(), facts = [];
+    for (let i = 0; i < 3; i++) { const f = randFact(undefined, ex); ex.add(f.pos); facts.push(f); }
+    return { header: '', facts };
+  }
+  const VN = ['p', 'q', 'r'];
+  function worldHTML(w, vars) {
+    let h = '<div class="examples-box pq-list">';
+    if (w.header) h += `<div style="color:var(--subtext);font-size:.9rem">${w.header}</div>`;
+    vars.forEach(v => { h += `<div><b>${v}</b>: ${w.facts[VN.indexOf(v)].pos}</div>`; });
+    return h + '</div>';
+  }
+
+  // ============ تعبير منطقي ============
+  const litSym = l => (l.neg ? '~' : '') + l.v;
+  const exprSym = e => e.lits.map(litSym).join(e.op === 'and' ? ' ∧ ' : ' ∨ ');
+  const litFact = (l, w) => w.facts[VN.indexOf(l.v)];
+  const litVal = (l, w) => l.neg ? !litFact(l, w).tv : litFact(l, w).tv;
+  const litText = (l, w) => l.neg ? litFact(l, w).neg : litFact(l, w).pos;
+  const evalExpr = (e, w) => e.op === 'and' ? e.lits.every(l => litVal(l, w)) : e.lits.some(l => litVal(l, w));
+  const verbal = (e, w, op) => e.lits.map(l => litText(l, w)).join(op === 'and' ? ' و' : ' أو ');
+  // صيغة لفظية: «أ» و«ب»
+  const verb2 = (e, w, op) => e.lits.map(l => litText(l, w)).join(' ' + (op === 'and' ? 'و' : 'أو') + ' ');
+  const sym2 = (op, lits) => ({ op, lits });
+  const opName = op => op === 'and' ? 'الوصل' : 'الفصل';
+
+  function explainLits(e, w) {
+    return e.lits.map(l => {
+      const f = litFact(l, w), why = f.why ? ` (${f.why})` : '';
+      return l.neg ? `<b>${l.v}</b> ${tfw(f.tv)}${why}، إذن <b>${L('~' + l.v)}</b> ${tfw(!f.tv)}` : `<b>${l.v}</b> ${tfw(f.tv)}${why}`;
+    }).join('. ') + '. ';
+  }
+  function explainResult(e, w) {
+    const vals = e.lits.map(l => litVal(l, w)), res = evalExpr(e, w);
+    if (e.op === 'and') {
+      if (res) return `جميع المكونات صائبة، فعبارة الوصل ${L(exprSym(e))} صائبة.`;
+      const bad = e.lits[vals.indexOf(false)];
+      return `المكوّن ${L(litSym(bad))} خاطئ، وتكفي عبارة خاطئة واحدة لتكون عبارة الوصل خاطئة.`;
+    }
+    if (!res) return `جميع المكونات خاطئة، فعبارة الفصل ${L(exprSym(e))} خاطئة.`;
+    const good = e.lits[vals.indexOf(true)];
+    return `المكوّن ${L(litSym(good))} صائب، وتكفي عبارة صائبة واحدة لتكون عبارة الفصل صائبة (ولا يؤثر كون غيره خاطئًا).`;
+  }
+
+  function randExpr(op, d) {
+    const n = d === 3 ? 3 : 2;
+    const vars = n === 3 ? ['p', 'q', 'r'] : sample(VN, 2).sort();
+    let neg;
+    do { neg = vars.map(() => d === 1 ? false : Math.random() < 0.5); } while (d === 2 && !neg.some(Boolean));
+    return sym2(op, vars.map((v, i) => ({ v, neg: neg[i] })));
+  }
+  const toggle = (e, i) => sym2(e.op, e.lits.map((l, k) => k === i ? { v: l.v, neg: !l.neg } : l));
+
+  // ----- تقييم عبارة وصل/فصل -----
+  function genEval(op, d) {
+    const cat = op === 'and' ? 'conj' : 'disj';
+    return { d, fn() {
+      const wantT = Math.random() < 0.5;
+      let w, e;
+      for (let t = 0; t < 80; t++) {
+        w = makeWorld(); e = randExpr(op, d);
+        if (evalExpr(e, w) === wantT || t > 60) break;
       }
-    } else {
-      selectedCats.push(key);
-      btn.classList.add('active');
-    }
+      const res = evalExpr(e, w);
+      return build({ cat, d, fixedOrder: true, nOpts: 2, order: TF_ORDER,
+        prompt: `أوجد قيمة الصواب لعبارة ${opName(op)} الآتية: <b>${L(exprSym(e))}</b>`,
+        extra: worldHTML(w, e.lits.map(l => l.v).filter((v, i, a) => a.indexOf(v) === i)),
+        correct: tfOpt(res), wrongs: [tfOpt(!res)],
+        hint: op === 'and' ? 'أوجد قيمة كل مكوّن (انتبه للنفي ~). الوصل صائب فقط إذا كانت كل المكونات صائبة.' : 'أوجد قيمة كل مكوّن (انتبه للنفي ~). الفصل خاطئ فقط إذا كانت كل المكونات خاطئة.',
+        explain: explainLits(e, w) + explainResult(e, w) });
+    } };
   }
 
-  function selectLevel(level, element) {
-    selectedLevel = level;
-    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('custom-options').style.display = level === 'custom' ? 'block' : 'none';
+  // ----- كتابة عبارة الوصل/الفصل لفظيًا -----
+  function genWrite(op, d) {
+    const cat = op === 'and' ? 'conj' : 'disj';
+    return { d, fn() {
+      const w = makeWorld(), e = randExpr(op, d === 1 ? 1 : 2);
+      const other = op === 'and' ? 'or' : 'and';
+      const correct = verb2(e, w, op);
+      const wr = [verb2(e, w, other)];
+      e.lits.forEach((l, i) => wr.push(verb2(toggle(e, i), w, op)));
+      e.lits.forEach((l, i) => wr.push(verb2(toggle(e, i), w, other)));
+      return build({ cat, d, prompt: `اكتب عبارة ${opName(op)} <b>${L(exprSym(e))}</b> بالكلمات:`,
+        extra: worldHTML(w, e.lits.map(l => l.v)), correct, wrongs: wr,
+        hint: `الرمز ${op === 'and' ? '∧' : '∨'} يعني «${op === 'and' ? 'و' : 'أو'}»، والرمز ~ يعني «ليس» فنستعمل نفي العبارة.`,
+        explain: `نكتب كل مكوّن بالصيغة المناسبة (النفي ~ يعطي نفي العبارة) ونربط بينها بـ«${op === 'and' ? 'و' : 'أو'}»، فتكون: ${correct}.` });
+    } };
+  }
+  // ----- كتابة الرمز من عبارة لفظية -----
+  function genSymbolize(op, d) {
+    const cat = op === 'and' ? 'conj' : 'disj';
+    return { d, fn() {
+      const w = makeWorld(), e = randExpr(op, 2);
+      const correct = L(exprSym(e)), other = op === 'and' ? 'or' : 'and';
+      const wr = [L(exprSym(sym2(other, e.lits)))];
+      e.lits.forEach((l, i) => wr.push(L(exprSym(toggle(e, i)))));
+      return build({ cat, d, prompt: `ما الصورة الرمزية لعبارة ${opName(op)} الآتية؟<br><b>${verb2(e, w, op)}</b>`,
+        extra: worldHTML(w, e.lits.map(l => l.v)), correct, wrongs: wr,
+        hint: 'حدّد أي المكونات منفي (فيه «ليس» أو «لا»)، ثم اختر الرابط ∧ أو ∨ حسب الكلمة «و» أو «أو».',
+        explain: `الرابط «${op === 'and' ? 'و' : 'أو'}» يكتب ${op === 'and' ? '∧' : '∨'}، والمكوّنات المنفية تكتب مسبوقة بـ ~، فتكون الصورة الرمزية ${correct}.` });
+    } };
   }
 
-  function setCustomTimeMode(hasTime) {
-    customHasTime = hasTime;
-    document.getElementById('custom-time-no').classList.toggle('active', !hasTime);
-    document.getElementById('custom-time-yes').classList.toggle('active', hasTime);
-    document.getElementById('custom-time-input-wrapper').style.display = hasTime ? 'block' : 'none';
+  // ----- استدلال من معطيات -----
+  function genReason(d, gop) {
+    return { d, fn() {
+      const rows = [[true, true], [true, false], [false, true], [false, false]];
+      const ex = [{ s: 'p ∧ q', f: (p, q) => p && q }, { s: 'p ∨ q', f: (p, q) => p || q }, { s: 'p', f: p => p }, { s: 'q', f: (p, q) => q }, { s: '~p', f: p => !p }, { s: '~q', f: (p, q) => !q }];
+      for (let t = 0; t < 200; t++) {
+        const g1 = gop === 'and' ? ex[0] : ex[1], g2 = Math.random() < 0.8 ? pick([ex[2], ex[3], ex[4], ex[5]]) : null;
+        const givens = [[g1, Math.random() < 0.5]]; if (g2) givens.push([g2, Math.random() < 0.5]);
+        const cands = ex.filter(x => !givens.some(g => g[0].s === x.s));
+        const ask = pick(cands);
+        const cons = rows.filter(r => givens.every(g => g[0].f(r[0], r[1]) === g[1]));
+        if (!cons.length) continue;
+        const vals = cons.map(r => ask.f(r[0], r[1])), same = vals.every(v => v === vals[0]);
+        const dd = same ? 2 : 3; if (dd !== d) continue;
+        const ans = same ? tfw(vals[0]) : 'لا يمكن تحديدها';
+        const opts = ['صائبة', 'خاطئة', 'لا يمكن تحديدها'];
+        const cat = g1.s === 'p ∧ q' ? 'conj' : 'disj';
+        const tv = b => b ? 'T' : 'F';
+        return build({ cat, d: dd, fixedOrder: true, nOpts: 3, order: opts,
+          prompt: `إذا علمت المعلومات الآتية، فما قيمة صواب العبارة <b>${L(ask.s)}</b>؟`,
+          extra: '<div class="examples-box pq-list">' + givens.map(g => `<div>${L(g[0].s)} ${g[1] ? 'صائبة' : 'خاطئة'}</div>`).join('') + '</div>',
+          correct: ans, wrongs: opts.filter(o => o !== ans),
+          hint: 'اكتب الحالات الأربع الممكنة لـ p و q، واستبعد التي تخالف المعطيات.',
+          explain: `الحالات التي تحقق المعطيات: ${cons.map(r => L(`p=${tv(r[0])} ، q=${tv(r[1])}`)).join(' أو ')}. قيمة ${L(ask.s)} فيها: ${vals.map(v => tv(v)).join(' ، ')}. ` +
+            (same ? 'وهي ثابتة في كل الحالات، فالجواب محدد.' : 'وهي تتغير بين الحالات، فلا يمكن تحديدها من المعطيات.') });
+      }
+      return genEval(gop, 1).fn();
+    } };
   }
 
-  function showToast(message, type) {
-    const toast = document.getElementById('toast');
-    toast.innerText = message;
-    toast.className = `toast toast-${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 1000);
+  // ============ العبارات والنفي ============
+  const NON_STATEMENTS = ['كم عمرك؟', 'ما عاصمة المملكة العربية السعودية؟', 'هل المثلث مضلع؟', 'أغلق الباب بهدوء', 'اكتب اسمك على الورقة', 'ارسم مستطيلًا على السبورة', 'ما أجمل الربيع!', 'يا لها من مدينة جميلة!', 'من فتح النافذة؟', 'احسب مجموع العددين', 'ما أعظم هذا المنظر!'];
+  const GEN_STATEMENTS = [
+    { d: 1, fn() {
+      const f = randFact(), ns = sample(NON_STATEMENTS, 3);
+      return build({ cat: 'statements', d: 1, prompt: 'أي مما يأتي يُعدّ عبارة (له قيمة صواب واحدة: صائبة أو خاطئة)؟',
+        correct: f.pos, wrongs: ns,
+        hint: 'العبارة جملة خبرية. السؤال والأمر والتعجب ليست عبارات.',
+        explain: `«${f.pos}» جملة خبرية قيمة صوابها ${tfw(f.tv)}، لذلك هي عبارة. أما بقية الخيارات فهي أسئلة أو أوامر أو تعجب ولا توصف بالصواب أو الخطأ.` });
+    } },
+    { d: 2, fn() {
+      const ex = new Set(), fs = []; for (let i = 0; i < 3; i++) { const f = randFact(undefined, ex); ex.add(f.pos); fs.push(f); }
+      const n = pick(NON_STATEMENTS);
+      return build({ cat: 'statements', d: 2, prompt: 'أي مما يأتي <b>ليس</b> عبارة؟',
+        correct: n, wrongs: fs.map(f => f.pos),
+        hint: 'ابحث عن الجملة التي لا يمكن أن نحكم عليها بأنها صائبة أو خاطئة.',
+        explain: `«${n}» ليست جملة خبرية (سؤال أو أمر أو تعجب)، فلا تحتمل الصواب أو الخطأ. أما الخيارات الأخرى فجمل خبرية، بعضها صائب وبعضها خاطئ، وكلها عبارات.` });
+    } },
+    { d: 1, fn() {
+      const f = randFact(), useNeg = Math.random() < 0.3, v = useNeg ? !f.tv : f.tv, txt = useNeg ? f.neg : f.pos;
+      return build({ cat: 'statements', d: 1, fixedOrder: true, nOpts: 2, order: TF_ORDER, prompt: `ما قيمة الصواب للعبارة الآتية؟<br><b>${txt}</b>`,
+        correct: tfOpt(v), wrongs: [tfOpt(!v)], hint: 'قيمة الصواب إما T أو F فقط.',
+        explain: `العبارة «${txt}» ${tfw(v)}${f.why ? ' (' + f.why + ')' : ''}.` + (useNeg ? ` وهي نفي للعبارة «${f.pos}» التي قيمتها ${tfw(f.tv)}، فقيمتها عكس ذلك.` : '') });
+    } },
+    { d: 1, fn() {
+      const f = randFact();
+      return build({ cat: 'statements', d: 1, fixedOrder: true, nOpts: 2, order: TF_ORDER,
+        prompt: `<b>p</b>: ${f.pos}<br>العبارة p ${tfw(f.tv)}. فما قيمة الصواب للعبارة <b>~p</b>؟`,
+        correct: tfOpt(!f.tv), wrongs: [tfOpt(f.tv)], hint: 'قيمة صواب النفي هي عكس قيمة صواب العبارة الأصلية.',
+        explain: `p ${tfw(f.tv)}، وقيمة الصواب للنفي ~p عكسها، فهي ${tfw(!f.tv)}. و~p هي: «${f.neg}».` });
+    } },
+    { d: 2, fn() {
+      const f = randFact(); const same = Math.random() < 0.5;
+      const other = [randFact(f.tv, new Set([f.pos]))];
+      const opp = randFact(!f.tv);
+      const wrongs = [f.pos, other[0].pos, opp.neg].filter(x => x !== f.neg);
+      return build({ cat: 'statements', d: 2, prompt: `<b>p</b>: ${f.pos}<br>أي مما يأتي يمثل <b>~p</b> (نفي العبارة p)؟`,
+        correct: f.neg, wrongs,
+        hint: 'نفي العبارة قيمة صوابها عكس قيمة صواب p. إذا كانت p ' + tfw(f.tv) + ' فالنفي ' + tfw(!f.tv) + '.',
+        explain: `p ${tfw(f.tv)}، لذلك يجب أن يكون نفيها ${tfw(!f.tv)}، وهو «${f.neg}». أما الخيارات الأخرى فقيمة صوابها ${tfw(f.tv)} مثل p، فلا يمكن أن تكون نفيًا لها.` });
+    } },
+    { d: 3, fn() {
+      const f = randFact();
+      return build({ cat: 'statements', d: 3, fixedOrder: true, nOpts: 2, order: TF_ORDER,
+        prompt: `<b>p</b>: ${f.pos}<br>ما قيمة الصواب للعبارة <b>~(~p)</b> أي نفي نفي العبارة p؟`,
+        correct: tfOpt(f.tv), wrongs: [tfOpt(!f.tv)], hint: 'اعكس القيمة مرتين.',
+        explain: `p ${tfw(f.tv)} ← ~p ${tfw(!f.tv)} ← ~(~p) ${tfw(f.tv)}. أي أن نفي النفي يعيد قيمة العبارة الأصلية.` });
+    } },
+    { d: 3, fn() {
+      const f = randFact(), g = randFact(undefined, new Set([f.pos]));
+      const wantFalse = Math.random() < 0.5;
+      const val = !f.tv;
+      return build({ cat: 'statements', d: 3, fixedOrder: true, nOpts: 2, order: TF_ORDER,
+        prompt: `<b>p</b>: ${f.pos}<br>إذا كانت <b>~p</b> ${tfw(!f.tv)}، فما قيمة الصواب للعبارة p؟`,
+        correct: tfOpt(f.tv), wrongs: [tfOpt(!f.tv)], hint: 'قيمة p عكس قيمة ~p.',
+        explain: `~p ${tfw(!f.tv)} وقيمتها عكس قيمة p، إذن p ${tfw(f.tv)}.` });
+    } }
+  ];
+
+  const GEN_CONJ = [genEval('and', 1), genEval('and', 1), genEval('and', 2), genEval('and', 2), genEval('and', 3), genWrite('and', 1), genWrite('and', 2), genSymbolize('and', 1), genSymbolize('and', 2)];
+  const GEN_DISJ = [genEval('or', 1), genEval('or', 1), genEval('or', 2), genEval('or', 2), genEval('or', 3), genWrite('or', 1), genWrite('or', 2), genSymbolize('or', 1), genSymbolize('or', 2)];
+  GEN_CONJ.push({ d: 2, w: 0.5, fn: genReason(2, 'and').fn }, { d: 3, w: 0.5, fn: genReason(3, 'and').fn });
+  GEN_DISJ.push({ d: 2, w: 0.5, fn: genReason(2, 'or').fn }, { d: 3, w: 0.5, fn: genReason(3, 'or').fn });
+  // ============ جداول الصواب ============
+  const ROWS2 = [[true, true], [true, false], [false, true], [false, false]];
+  const EXPRS2 = [
+    { s: 'p ∧ q', f: (p, q) => p && q, op: 'and' }, { s: 'p ∨ q', f: (p, q) => p || q, op: 'or' },
+    { s: '~p ∧ q', f: (p, q) => !p && q, op: 'and' }, { s: 'p ∧ ~q', f: (p, q) => p && !q, op: 'and' },
+    { s: '~p ∨ q', f: (p, q) => !p || q, op: 'or' }, { s: 'p ∨ ~q', f: (p, q) => p || !q, op: 'or' },
+    { s: '~p ∨ ~q', f: (p, q) => !p || !q, op: 'or' }, { s: '~p ∧ ~q', f: (p, q) => !p && !q, op: 'and' }
+  ];
+  const TFc = b => `<td class="${b ? 't' : 'f'}">${b ? 'T' : 'F'}</td>`;
+  // mask: {col:'final'|'~p'|'~q', row:i}  hideFinal: كل خلايا العمود الأخير مخفية
+  function tableHTML(e, o) {
+    o = o || {};
+    const hasNp = e.s.includes('~p'), hasNq = e.s.includes('~q');
+    let h = '<div class="viz-box"><table class="tt"><tr><th>p</th><th>q</th>' + (hasNp ? '<th>~p</th>' : '') + (hasNq ? '<th>~q</th>' : '') + `<th>${e.s}</th></tr>`;
+    ROWS2.forEach(([p, q], i) => {
+      h += '<tr>' + TFc(p) + TFc(q);
+      const q0 = '<td class="qm">؟</td>';
+      if (hasNp) h += (o.mask && o.mask.col === '~p' && o.mask.row === i) ? q0 : TFc(!p);
+      if (hasNq) h += (o.mask && o.mask.col === '~q' && o.mask.row === i) ? q0 : TFc(!q);
+      h += (o.hideFinal || (o.mask && o.mask.col === 'final' && o.mask.row === i)) ? q0 : TFc(e.f(p, q));
+      h += '</tr>';
+    });
+    return h + '</table></div>';
+  }
+  const colStr = e => L(ROWS2.map(([p, q]) => e.f(p, q) ? 'T' : 'F').join(' ، '));
+  const colEq = (a, b) => ROWS2.every(([p, q]) => a.f(p, q) === b.f(p, q));
+  const tvc = b => b ? 'T' : 'F';
+  const rowDesc = (p, q) => `${L('p = ' + tvc(p))} و ${L('q = ' + tvc(q))}`;
+
+  const GEN_TABLES = [
+    // أكمل العمود الأخير
+    { d: 1, fn() {
+      const e = pick(EXPRS2.slice(0, 2));
+      const wr = EXPRS2.filter(x => !colEq(x, e)).map(colStr);
+      return build({ cat: 'tables', d: 1, prompt: `أكمل العمود الأخير في جدول الصواب للعبارة <b>${L(e.s)}</b> (الصفوف بالترتيب من الأعلى إلى الأسفل):`,
+        extra: tableHTML(e, { hideFinal: true }), correct: colStr(e), wrongs: wr,
+        hint: e.op === 'and' ? 'الوصل صائب (T) فقط عندما يكون p و q صائبين معًا.' : 'الفصل خاطئ (F) فقط عندما يكون p و q خاطئين معًا.',
+        explain: `نطبّق القاعدة على كل صف: ${ROWS2.map(([p, q]) => `${rowDesc(p, q)} ← ${tvc(e.f(p, q))}`).join('، ')}. فالعمود الأخير: ${colStr(e)}.` });
+    } },
+    { d: 2, fn() {
+      const e = pick(EXPRS2.slice(2));
+      const wr = EXPRS2.filter(x => !colEq(x, e)).map(colStr);
+      return build({ cat: 'tables', d: 2, prompt: `أكمل العمود الأخير في جدول الصواب للعبارة <b>${L(e.s)}</b> (الصفوف بالترتيب من الأعلى إلى الأسفل):`,
+        extra: tableHTML(e, { hideFinal: true }), correct: colStr(e), wrongs: wr,
+        hint: 'استعمل أعمدة النفي لتحديد قيمة كل مكوّن في الصف، ثم طبّق قاعدة الوصل أو الفصل.',
+        explain: `نطبّق القاعدة على كل صف باستعمال أعمدة النفي: ${ROWS2.map(([p, q]) => `${rowDesc(p, q)} ← ${tvc(e.f(p, q))}`).join('، ')}. فالعمود الأخير: ${colStr(e)}.` });
+    } },
+    // خلية ناقصة
+    { d: 1, fn() {
+      const e = pick(EXPRS2), hasNeg = e.s.includes('~');
+      const row = randInt(0, 3), [p, q] = ROWS2[row];
+      const helper = hasNeg && Math.random() < 0.4;
+      let mask, val, why;
+      if (helper) {
+        const col = (e.s.includes('~p') && (!e.s.includes('~q') || Math.random() < 0.5)) ? '~p' : '~q';
+        mask = { col, row }; val = col === '~p' ? !p : !q;
+        why = `${L(col)} عكس قيمة ${col === '~p' ? 'p' : 'q'} في هذا الصف (${rowDesc(p, q)})، فهي ${tvc(val)}.`;
+      } else {
+        mask = { col: 'final', row }; val = e.f(p, q);
+        why = `في الصف الذي فيه ${rowDesc(p, q)} تكون العبارة ${L(e.s)} ${tvc(val)}` + (e.op === 'and' ? (val ? ' لأن كل المكونات T.' : ' لأن أحد المكونات F.') : (val ? ' لأن أحد المكونات T.' : ' لأن كل المكونات F.'));
+      }
+      return build({ cat: 'tables', d: 1, fixedOrder: true, nOpts: 2, order: ['T', 'F'],
+        prompt: 'ما القيمة الناقصة (؟) في جدول الصواب الآتي؟', extra: tableHTML(e, { mask }),
+        correct: tvc(val), wrongs: [tvc(!val)], hint: 'انظر إلى قيم p و q في الصف نفسه.', explain: why });
+    } },
+    // عدد قيم T
+    { d: 2, fn() {
+      const e = pick(EXPRS2), cnt = ROWS2.filter(([p, q]) => e.f(p, q)).length;
+      return build({ cat: 'tables', d: 2, prompt: `في جدول الصواب للعبارة <b>${L(e.s)}</b>، كم صفًا تكون قيمة العبارة فيه T؟`,
+        correct: N(cnt), wrongs: [0, 1, 2, 3, 4].filter(x => x !== cnt).map(N),
+        hint: 'أنشئ الجدول بالصفوف الأربعة TT ، TF ، FT ، FF وأوجد قيمة العبارة في كل صف.',
+        explain: `العمود الأخير للعبارة ${L(e.s)} هو ${colStr(e)}، وفيه ${N(cnt)} من قيم T.` });
+    } },
+    // أي عبارة يمثلها الجدول
+    { d: 2, fn() {
+      const e = pick(EXPRS2), wr = sample(EXPRS2.filter(x => !colEq(x, e)), 3).map(x => L(x.s));
+      return build({ cat: 'tables', d: 2, prompt: 'أي عبارة يمثل جدول الصواب الآتي؟',
+        extra: tableHTML(e), correct: L(e.s), wrongs: wr,
+        hint: 'جرّب الصف الذي فيه p = T و q = F، فهو يفرّق بين كثير من العبارات.',
+        explain: `نختبر الخيارات صفًا صفًا. العبارة ${L(e.s)} تعطي العمود ${colStr(e)} وهو المطابق للجدول، بينما تعطي كل عبارة أخرى عمودًا مختلفًا.` });
+    } },
+    { d: 3, fn() {
+      const e = pick(EXPRS2.slice(2)), wr = sample(EXPRS2.filter(x => !colEq(x, e)), 3).map(x => L(x.s));
+      return build({ cat: 'tables', d: 3, prompt: 'العمود الأخير في جدول صواب عبارة هو الآتي (للصفوف TT ، TF ، FT ، FF بالترتيب). أي العبارات تمثله؟',
+        extra: `<div class="examples-box" style="text-align:center;direction:ltr;font-size:1.3rem">${colStr(e)}</div>`, correct: L(e.s), wrongs: wr,
+        hint: 'ابحث عن الصفوف التي فيها T، ثم اختبر كل عبارة في هذه الصفوف.',
+        explain: `العبارة ${L(e.s)} تعطي ${colStr(e)} تمامًا، أما العبارات الأخرى فيختلف عمودها في صف واحد على الأقل.` });
+    } },
+    // متى تكون صائبة / خاطئة
+    { d: 2, fn() {
+      const e = pick(EXPRS2);
+      const tvWant = e.op === 'and';
+      const only = ROWS2.filter(([p, q]) => e.f(p, q) === tvWant);
+      if (only.length !== 1) return GEN_TABLES[3].fn();
+      const [p0, q0] = only[0];
+      const opts = ROWS2.map(([p, q]) => rowDesc(p, q));
+      return build({ cat: 'tables', d: 2, prompt: `في أي حالة تكون العبارة <b>${L(e.s)}</b> ${tfw(tvWant)}؟`,
+        correct: rowDesc(p0, q0), wrongs: opts.filter(o => o !== rowDesc(p0, q0)),
+        hint: e.op === 'and' ? 'الوصل لا يكون صائبًا إلا في حالة واحدة فقط.' : 'الفصل لا يكون خاطئًا إلا في حالة واحدة فقط.',
+        explain: e.op === 'and' ? `الوصل صائب فقط إذا كانت كل مكوناته صائبة. هنا يلزم أن يكون كل مكوّن في ${L(e.s)} صائبًا، وذلك عندما ${rowDesc(p0, q0)}.`
+          : `الفصل خاطئ فقط إذا كانت كل مكوناته خاطئة. هنا يلزم أن يكون كل مكوّن في ${L(e.s)} خاطئًا، وذلك عندما ${rowDesc(p0, q0)}.` });
+    } },
+    // جدول جاهز: قيمة في صف
+    { d: 2, fn() {
+      const e = pick(EXPRS2), [p, q] = pick(ROWS2);
+      const v = e.f(p, q);
+      return build({ cat: 'tables', d: 2, fixedOrder: true, nOpts: 2, order: ['T', 'F'],
+        prompt: `ما قيمة العبارة <b>${L(e.s)}</b> عندما ${rowDesc(p, q)}؟`, correct: tvc(v), wrongs: [tvc(!v)],
+        hint: 'أوجد قيمة كل مكوّن (مع النفي) ثم طبّق قاعدة الوصل أو الفصل.',
+        explain: `عندما ${rowDesc(p, q)} تكون قيمة ${L(e.s)} هي ${tvc(v)}.` });
+    } }
+  ];
+
+  // ============ أشكال فن ============
+  const VCTX = [
+    { A: 'الرياضيات', B: 'الكيمياء', who: 'الطلاب', aP: 'نجحوا في اختبار الرياضيات', bP: 'نجحوا في اختبار الكيمياء', both: 'نجحوا في الاختبارين معًا', aNot: 'لم ينجحوا في اختبار الرياضيات', bNot: 'لم ينجحوا في اختبار الكيمياء', none: 'لم ينجحوا في أي من الاختبارين', total: 'طلاب الصف', out: true },
+    { A: 'رجب', B: 'شعبان', who: 'الأشخاص', aP: 'شاركوا في الحملة خلال شهر رجب', bP: 'شاركوا في الحملة خلال شهر شعبان', both: 'شاركوا في الحملة خلال الشهرين معًا', aNot: 'لم يشاركوا في الحملة خلال شهر رجب', bNot: 'لم يشاركوا في الحملة خلال شهر شعبان', none: '', total: '', out: false },
+    { A: 'القراءة', B: 'الرياضة', who: 'الطلاب', aP: 'يحبون القراءة', bP: 'يحبون الرياضة', both: 'يحبون القراءة والرياضة معًا', aNot: 'لا يحبون القراءة', bNot: 'لا يحبون الرياضة', none: 'لا يحبون أيًّا منهما', total: 'طلاب الفصل', out: true },
+    { A: 'نادي العلوم', B: 'نادي الروبوت', who: 'الطلاب', aP: 'اشتركوا في نادي العلوم', bP: 'اشتركوا في نادي الروبوت', both: 'اشتركوا في النادييْن معًا', aNot: 'لم يشتركوا في نادي العلوم', bNot: 'لم يشتركوا في نادي الروبوت', none: 'لم يشتركوا في أي من النادييْن', total: 'طلاب المدرسة', out: true },
+    { A: 'الربيع', B: 'الصيف', who: 'الزوار', aP: 'زاروا المدينة في الربيع', bP: 'زاروا المدينة في الصيف', both: 'زاروا المدينة في الفصلين معًا', aNot: 'لم يزوروا المدينة في الربيع', bNot: 'لم يزوروا المدينة في الصيف', none: '', total: '', out: false, dec: true, suffix: ' مليون' }
+  ];
+  function vennSVG(o) {
+    const W = 360, H = 215;
+    let s = `<svg direction="ltr" viewBox="0 0 ${W} ${H}" role="img" aria-label="شكل فن" style="color:var(--text)">`;
+    s += `<rect x="8" y="8" width="${W - 16}" height="${H - 16}" rx="8" fill="none" stroke="currentColor" opacity=".5"/>`;
+    s += `<circle cx="215" cy="112" r="70" fill="var(--primary)" fill-opacity=".18" stroke="var(--primary)" stroke-width="2"/>`;
+    s += `<circle cx="145" cy="112" r="70" fill="var(--danger)" fill-opacity=".15" stroke="var(--danger)" stroke-width="2"/>`;
+    s += `<text x="250" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">${o.A}</text>`;
+    s += `<text x="110" y="34" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">${o.B}</text>`;
+    const t = (x, y, v) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="22" font-weight="800" fill="currentColor">${v}</text>`;
+    s += t(255, 119, o.a) + t(180, 119, o.ab) + t(105, 119, o.b);
+    if (o.out !== null && o.out !== undefined) s += t(322, 188, o.out);
+    if (o.univ) s += `<text x="${W - 16}" y="26" text-anchor="end" font-size="11" fill="currentColor" opacity=".7">${o.univ}</text>`;
+    return s + '</svg>';
+  }
+  const vennBox = o => `<div class="viz-box">${vennSVG(o)}</div>`;
+
+  function vennValues(ctx) {
+    const lim = ctx.dec ? [12, 70] : [3, 40];
+    const set = new Set(); const vals = [];
+    while (vals.length < 4) { const v = randInt(...lim); if (!set.has(v)) { set.add(v); vals.push(v); } }
+    return { a: vals[0], ab: vals[1], b: vals[2], out: vals[3] };
+  }
+  const fmtV = (ctx, v) => (ctx.dec ? N((v / 10).toFixed(1)) : N(v)) + (ctx.suffix || '');
+  const fmtShow = (ctx, v) => ctx.dec ? digitsAr((v / 10).toFixed(1)).replace('.', '٫') : digitsAr(v);
+
+  function vennNumQ(kind, d) {
+    return { d, fn() {
+      let ctx; do { ctx = pick(VCTX); } while ((kind === 'none' || kind === 'total') && !ctx.out);
+      const v = vennValues(ctx), { a, ab, b, out } = v;
+      const showOut = ctx.out;
+      const fig = vennBox({ A: ctx.A, B: ctx.B, a: fmtShow(ctx, a), ab: fmtShow(ctx, ab), b: fmtShow(ctx, b), out: showOut ? fmtShow(ctx, out) : null, univ: showOut ? ctx.total : '' });
+      const F = x => fmtV(ctx, x);
+      let q, ans, pool, ex, hint;
+      switch (kind) {
+        case 'union': q = `كم عدد ${ctx.who} الذين ${ctx.aP} أو ${ctx.bP}؟`; ans = a + ab + b; pool = [a + b, a + ab, b + ab, ab, a + ab + b + (showOut ? out : 0) + 1];
+          ex = `«أو» تعني الاتحاد: ${F(a)} + ${F(ab)} + ${F(b)} = ${F(ans)}.`; hint = 'الاتحاد يضم الدائرتين كلتيهما: اجمع الأعداد الثلاثة داخل الدائرتين.'; break;
+        case 'inter': q = `كم عدد ${ctx.who} الذين ${ctx.both}؟`; ans = ab; pool = [a, b, a + b, a + ab + b, a + ab];
+          ex = `«و» تعني التقاطع، أي المنطقة المشتركة بين الدائرتين، وهي ${F(ab)}.`; hint = 'التقاطع هو المنطقة المشتركة بين الدائرتين.'; break;
+        case 'aOnly': q = `كم عدد ${ctx.who} الذين ${ctx.aP} و${ctx.bNot}؟`; ans = a; pool = [ab, b, a + ab, a + b, a + ab + b];
+          ex = `هؤلاء في دائرة ${ctx.A} فقط خارج التقاطع، وعددهم ${F(a)}.`; hint = 'ابحث عن المنطقة داخل دائرة ' + ctx.A + ' وخارج دائرة ' + ctx.B + '.'; break;
+        case 'bOnly': q = `كم عدد ${ctx.who} الذين ${ctx.bP} و${ctx.aNot}؟`; ans = b; pool = [ab, a, b + ab, a + b, a + ab + b];
+          ex = `هؤلاء في دائرة ${ctx.B} فقط خارج التقاطع، وعددهم ${F(b)}.`; hint = 'ابحث عن المنطقة داخل دائرة ' + ctx.B + ' وخارج دائرة ' + ctx.A + '.'; break;
+        case 'inA': q = `كم عدد ${ctx.who} الذين ${ctx.aP} (بما في ذلك من ${ctx.bP} أيضًا)؟`; ans = a + ab; pool = [a, ab, a + b, b + ab, a + ab + b];
+          ex = `كل من في دائرة ${ctx.A}: ${F(a)} + ${F(ab)} = ${F(ans)}.`; hint = 'اجمع الجزء الخاص بالدائرة مع التقاطع.'; break;
+        case 'none': q = `كم عدد ${ctx.who} الذين ${ctx.none}؟`; ans = out; pool = [a, ab, b, a + ab + b];
+          ex = `هؤلاء خارج الدائرتين وداخل المستطيل، وعددهم ${F(out)}.`; hint = 'ابحث عن العدد الموجود خارج الدائرتين.'; break;
+        case 'total': q = `كم عدد ${ctx.total}؟`; ans = a + ab + b + out; pool = [a + ab + b, a + b + out, a + ab + out, ab + out + b];
+          ex = `المستطيل يمثل المجموعة الكلية: ${F(a)} + ${F(ab)} + ${F(b)} + ${F(out)} = ${F(ans)}.`; hint = 'اجمع كل الأعداد في الشكل بما فيها العدد خارج الدائرتين.'; break;
+      }
+      const wr = []; const seen = new Set([ans]); pool.forEach(x => { if (!seen.has(x) && x > 0) { seen.add(x); wr.push(F(x)); } });
+      return build({ cat: 'venn', d, prompt: q, extra: fig, correct: F(ans), wrongs: wr, hint, explain: ex });
+    } };
+  }
+  const GEN_VENN = [
+    vennNumQ('union', 1), vennNumQ('inter', 1), vennNumQ('aOnly', 1), vennNumQ('bOnly', 1),
+    vennNumQ('inA', 2), vennNumQ('none', 2), vennNumQ('total', 2),
+    // ماذا يمثل العدد
+    { d: 2, fn() {
+      const ctx = pick(VCTX), v = vennValues(ctx), showOut = ctx.out;
+      const fig = vennBox({ A: ctx.A, B: ctx.B, a: fmtShow(ctx, v.a), ab: fmtShow(ctx, v.ab), b: fmtShow(ctx, v.b), out: showOut ? fmtShow(ctx, v.out) : null, univ: showOut ? ctx.total : '' });
+      const regs = [
+        { val: v.a, txt: `${ctx.aP} و${ctx.bNot}` }, { val: v.b, txt: `${ctx.bP} و${ctx.aNot}` }, { val: v.ab, txt: ctx.both }
+      ];
+      if (showOut) regs.push({ val: v.out, txt: ctx.none }); else regs.push({ val: null, txt: `${ctx.aP} أو ${ctx.bP}` });
+      const t = pick(regs.filter(r => r.val !== null));
+      return build({ cat: 'venn', d: 2, prompt: `ماذا يمثل العدد ${fmtV(ctx, t.val)} في الشكل؟ (عدد ${ctx.who} الذين:)`, extra: fig,
+        correct: t.txt, wrongs: regs.filter(r => r !== t).map(r => r.txt),
+        hint: 'حدّد في أي منطقة يقع العدد: داخل دائرة واحدة فقط، أم في التقاطع، أم خارج الدائرتين.',
+        explain: `العدد ${fmtV(ctx, t.val)} موجود في المنطقة التي تمثل: ${t.txt}.` });
+    } },
+    // عدد مناطق شكل فن
+    { d: 2, fn() {
+      const n = pick([2, 3]), ans = Math.pow(2, n);
+      return build({ cat: 'venn', d: 2, prompt: `إلى كم منطقة على الأكثر يقسّم شكل فن الذي يحوي ${n === 2 ? 'دائرتين' : 'ثلاث دوائر'} المجموعة الكلية؟`,
+        correct: N(ans), wrongs: [2, 3, 4, 5, 6, 7, 8, 9].filter(x => x !== ans).map(N),
+        hint: 'العدد على الأكثر ٢ مرفوعًا إلى قوة عدد الدوائر.',
+        explain: `شكل فن الذي يحوي ن من الدوائر يقسّم المجموعة الكلية إلى ${N(2)}ⁿ منطقة على الأكثر. فعند ${n === 2 ? 'دائرتين' : 'ثلاث دوائر'}: ${N(2)}${n === 2 ? '²' : '³'} = ${N(ans)}.` });
+    } }
+  ];
+  // ربط العبارات المنطقية بمناطق شكل فن
+  const VPAIRS = [
+    { p: 'الشكل سداسي', pn: 'الشكل ليس سداسيًا', q: 'الشكل مضلع محدّب', qn: 'الشكل ليس مضلعًا محدّبًا', univ: 'جميع المضلعات' },
+    { p: 'الشكل رباعي', pn: 'الشكل ليس رباعيًا', q: 'الشكل مضلع محدّب', qn: 'الشكل ليس مضلعًا محدّبًا', univ: 'جميع المضلعات' },
+    { p: 'العدد زوجي', pn: 'العدد ليس زوجيًا', q: 'العدد يقبل القسمة على ٣', qn: 'العدد لا يقبل القسمة على ٣', univ: 'الأعداد الصحيحة' },
+    { p: 'الطالب يحب القراءة', pn: 'الطالب لا يحب القراءة', q: 'الطالب يحب الرياضة', qn: 'الطالب لا يحب الرياضة', univ: 'جميع الطلاب' }
+  ];
+  function regionFig(pair) {
+    const W = 360, H = 215, badge = (x, y, n) => `<circle cx="${x}" cy="${y}" r="15" fill="var(--card-bg)" stroke="currentColor" stroke-opacity=".4"/><text x="${x}" y="${y + 6}" text-anchor="middle" font-size="17" font-weight="800" fill="currentColor">${digitsAr(n)}</text>`;
+    let s = `<svg direction="ltr" viewBox="0 0 ${W} ${H}" role="img" aria-label="شكل فن" style="color:var(--text)">`;
+    s += `<rect x="8" y="8" width="${W - 16}" height="${H - 16}" rx="8" fill="none" stroke="currentColor" opacity=".5"/>`;
+    s += `<circle cx="215" cy="112" r="70" fill="var(--primary)" fill-opacity=".18" stroke="var(--primary)" stroke-width="2"/>`;
+    s += `<circle cx="145" cy="112" r="70" fill="var(--danger)" fill-opacity=".15" stroke="var(--danger)" stroke-width="2"/>`;
+    s += `<text x="250" y="34" text-anchor="middle" font-size="16" font-weight="800" font-style="italic" font-family="Georgia,serif" fill="currentColor">p</text>`;
+    s += `<text x="110" y="34" text-anchor="middle" font-size="16" font-weight="800" font-style="italic" font-family="Georgia,serif" fill="currentColor">q</text>`;
+    // المناطق: ١ = p فقط، ٢ = التقاطع، ٣ = q فقط، ٤ = خارج الدائرتين
+    s += badge(255, 112, 1) + badge(180, 112, 2) + badge(105, 112, 3) + badge(322, 185, 4);
+    return `<div class="viz-box">${s}</svg></div>`;
+  }
+  const REG_ROWS = [{ n: 1, p: true, q: false }, { n: 2, p: true, q: true }, { n: 3, p: false, q: true }, { n: 4, p: false, q: false }];
+  const regOpt = n => 'المنطقة ' + digitsAr(n);
+  GEN_VENN.push(
+    { d: 2, fn() {
+      const pr = pick(VPAIRS), r = pick(REG_ROWS);
+      const sym = `${r.p ? '' : '~'}p ∧ ${r.q ? '' : '~'}q`;
+      return build({ cat: 'venn', d: 2, fixedOrder: true, nOpts: 4, order: [1, 2, 3, 4].map(regOpt),
+        prompt: `في شكل فن الآتي: <b>p</b>: ${pr.p}، <b>q</b>: ${pr.q}.<br>أي منطقة تمثل العبارة <b>${L(sym)}</b>؟`, extra: regionFig(pr),
+        correct: regOpt(r.n), wrongs: [1, 2, 3, 4].filter(x => x !== r.n).map(regOpt),
+        hint: 'المنطقة التي تمثل p هي داخل دائرة p، والتي تمثل ~p خارجها. وكذلك q.',
+        explain: `${L(sym)} تعني: ${r.p ? pr.p : pr.pn} و${r.q ? pr.q : pr.qn}. ${r.p ? 'داخل دائرة p' : 'خارج دائرة p'} و${r.q ? 'داخل دائرة q' : 'خارج دائرة q'}، وهذه هي ${regOpt(r.n)}.` });
+    } },
+    { d: 3, fn() {
+      const pr = pick(VPAIRS), r = pick(REG_ROWS.slice(0, 3));
+      return build({ cat: 'venn', d: 3, fixedOrder: true, nOpts: 4, order: [1, 2, 3, 4].map(regOpt),
+        prompt: `في شكل فن الآتي: <b>p</b>: ${pr.p}، <b>q</b>: ${pr.q}.<br>أي منطقة تمثل العبارة: «${r.p ? pr.p : pr.pn} و${r.q ? pr.q : pr.qn}»؟`, extra: regionFig(pr),
+        correct: regOpt(r.n), wrongs: [1, 2, 3, 4].filter(x => x !== r.n).map(regOpt),
+        hint: 'حدّد هل المطلوب داخل كل دائرة أم خارجها.',
+        explain: `المطلوب ${r.p ? 'داخل' : 'خارج'} دائرة p و${r.q ? 'داخل' : 'خارج'} دائرة q، وهذه هي ${regOpt(r.n)}.` });
+    } },
+    { d: 3, fn() {
+      const pr = pick(VPAIRS), op = pick(['or', 'and']);
+      const sets = op === 'or' ? [1, 2, 3] : [2];
+      const nm = s => 'المناطق ' + s.map(digitsAr).join(' و');
+      const wrongSets = op === 'or' ? [[2], [1, 2], [2, 3], [1, 2, 3, 4], [4]] : [[1, 2], [2, 3], [1, 2, 3], [1, 3], [4]];
+      return build({ cat: 'venn', d: 3, prompt: `في شكل فن الآتي: <b>p</b>: ${pr.p}، <b>q</b>: ${pr.q}.<br>أي المناطق تمثل العبارة <b>${L(op === 'or' ? 'p ∨ q' : 'p ∧ q')}</b>؟`, extra: regionFig(pr),
+        correct: sets.length === 1 ? regOpt(sets[0]) : nm(sets), wrongs: wrongSets.map(s => s.length === 1 ? regOpt(s[0]) : nm(s)),
+        hint: op === 'or' ? 'الفصل يمثل الاتحاد: كل ما في الدائرتين.' : 'الوصل يمثل التقاطع: المنطقة المشتركة.',
+        explain: op === 'or' ? `الفصل ${L('p ∨ q')} يمثل اتحاد الدائرتين: ${nm([1, 2, 3])} (p فقط، التقاطع، q فقط).` : `الوصل ${L('p ∧ q')} يمثل تقاطع الدائرتين فقط، وهو ${regOpt(2)}.` });
+    } }
+  );
+
+  // ============ مفاهيم ومفردات ============
+  const CONCEPTS = [
+    { d: 1, q: 'ما العبارة في المنطق؟', c: 'جملة خبرية لها قيمة صواب واحدة فقط: صائبة أو خاطئة', w: ['أي جملة مكتوبة', 'جملة تحتمل الصواب والخطأ معًا', 'سؤال يحتاج إلى إجابة'], e: 'العبارة جملة خبرية لها حالتان فقط: إما أن تكون صائبة أو خاطئة، ولا تحتمل أي حالة أخرى.', h: 'تذكّر تعريف العبارة.' },
+    { d: 1, q: 'ماذا نسمي صواب العبارة (T) أو خطأها (F)؟', c: 'قيمة الصواب', w: ['النفي', 'الوصل', 'الفصل'], e: 'صواب العبارة أو خطؤها يسمى قيمة الصواب.', h: 'T و F هما قيمتا ...' },
+    { d: 1, q: 'ماذا يقرأ الرمز ~p؟', c: 'ليس p', w: ['p و q', 'p أو q', 'p دائمًا'], e: 'الرمز ~p هو نفي العبارة p ويقرأ «ليس p».', h: 'الموجة ~ ترمز للنفي.' },
+    { d: 1, q: 'ما الرمز الذي يدل على عبارة الوصل؟', c: '∧', w: ['∨', '~', '='], e: 'الوصل يرمز له بـ ∧ ويقرأ «و»، والفصل بـ ∨ ويقرأ «أو».', h: 'الوصل يعني «و».' },
+    { d: 1, q: 'ما الرمز الذي يدل على عبارة الفصل؟', c: '∨', w: ['∧', '~', '÷'], e: 'الفصل يرمز له بـ ∨ ويقرأ «أو».', h: 'الفصل يعني «أو».' },
+    { d: 1, q: 'ما العبارة المركبة؟', c: 'عبارة تتكون من ربط عبارتين أو أكثر بالرابط «و» أو «أو»', w: ['عبارة قيمتها دائمًا صائبة', 'عبارة منفية فقط', 'عبارة تحتوي رقمًا'], e: 'العبارة المركبة تنتج عن ربط عبارتين أو أكثر بالرابط «و» (وصل) أو «أو» (فصل).', h: 'ترتبط فيها عبارات بالرابطين.' },
+    { d: 1, q: 'متى تكون عبارة الوصل صائبة؟', c: 'عندما تكون جميع العبارات المكونة لها صائبة', w: ['عندما تكون إحدى مكوناتها صائبة', 'عندما تكون جميع مكوناتها خاطئة', 'عندما تكون إحدى مكوناتها خاطئة'], e: 'الوصل «صارم»: لا يكون صائبًا إلا إذا كانت جميع مكوناته صائبة.', h: 'الوصل يحتاج الجميع صائبًا.' },
+    { d: 1, q: 'متى تكون عبارة الفصل خاطئة؟', c: 'عندما تكون جميع العبارات المكونة لها خاطئة', w: ['عندما تكون إحدى مكوناتها خاطئة', 'عندما تكون إحدى مكوناتها صائبة', 'عندما تكون جميع مكوناتها صائبة'], e: 'الفصل لا يكون خاطئًا إلا إذا كانت جميع مكوناته خاطئة. وتكفي مكوّنة صائبة واحدة لتكون صائبة.', h: 'الفصل «متساهل».' },
+    { d: 1, q: 'إذا كانت العبارة p صائبة، فما قيمة صواب ~p؟', c: 'خاطئة', w: ['صائبة', 'لا يمكن تحديدها', 'صائبة وخاطئة معًا'], e: 'قيمة صواب النفي عكس قيمة صواب العبارة الأصلية.', h: 'النفي يعكس القيمة.' },
+    { d: 1, q: 'كم حالة ممكنة لقيم الصواب للعبارتين p و q معًا (في جدول الصواب)؟', c: '٤ حالات', w: ['حالتان', '٣ حالات', '٦ حالات'], e: 'لكل عبارة حالتان، فللعبارتين ٢ × ٢ = ٤ حالات: TT ، TF ، FT ، FF.', h: 'TT ، TF ، ...' },
+    { d: 2, q: 'ما جدول الصواب؟', c: 'جدول ينظم قيم الصواب للعبارات الأصلية والمركبة في جميع الحالات الممكنة', w: ['جدول يحتوي على أعداد فقط', 'جدول يقتصر على العبارات الصائبة', 'جدول لتحويل الرموز إلى كلمات'], e: 'جداول الصواب تنظم قيم الصواب لنفي العبارة وللوصل والفصل في كل الحالات.', h: 'تنظم كل الحالات.' },
+    { d: 2, q: 'هل نفي العبارة خاطئ دائمًا؟', c: 'لا، قيمة صوابه عكس قيمة صواب العبارة الأصلية', w: ['نعم، نفي العبارة خاطئ دائمًا', 'نعم، لأنه يعاكسها في المعنى', 'لا، لأنه صائب دائمًا'], e: 'نفي العبارة ليس بالضرورة خاطئًا، فهو يعكس قيمة الصواب: نفي العبارة الخاطئة صائب.', h: 'تنبيه الكتاب: كما أن معكوس العدد الصحيح لا يكون سالبًا دائمًا.' },
+    { d: 2, q: 'إذا كانت العبارة q خاطئة، فما قيمة صواب p ∧ q؟', c: 'خاطئة مهما كانت قيمة p', w: ['صائبة مهما كانت قيمة p', 'تعتمد على قيمة p دائمًا', 'صائبة إذا كانت p صائبة'], e: 'تكفي مكوّنة خاطئة واحدة لتكون عبارة الوصل خاطئة.', h: 'الوصل يحتاج الجميع صائبًا.' },
+    { d: 2, q: 'إذا كانت العبارة q صائبة، فما قيمة صواب p ∨ q؟', c: 'صائبة مهما كانت قيمة p', w: ['خاطئة مهما كانت قيمة p', 'تعتمد على قيمة p دائمًا', 'خاطئة إذا كانت p خاطئة'], e: 'تكفي مكوّنة صائبة واحدة لتكون عبارة الفصل صائبة.', h: 'الفصل تكفيه مكوّنة صائبة.' },
+    { d: 2, q: 'في شكل فن، ماذا يمثل «و» (الوصل)؟', c: 'التقاطع', w: ['الاتحاد', 'المجموعة الكلية', 'الخارج عن الدائرتين'], e: 'عبارة الوصل تمثل تقاطع المجموعتين، أي المنطقة المشتركة بين الدائرتين.', h: 'المشترك بين المجموعتين.' },
+    { d: 2, q: 'في شكل فن، ماذا يمثل «أو» (الفصل)؟', c: 'الاتحاد', w: ['التقاطع', 'ما خارج الدائرتين فقط', 'منطقة واحدة داخل دائرة واحدة'], e: 'عبارة الفصل تمثل اتحاد المجموعتين، أي كل ما داخل الدائرتين معًا.', h: 'كل عناصر المجموعتين.' },
+    { d: 2, q: 'ماذا يمثل المستطيل المحيط بالدوائر في شكل فن؟', c: 'المجموعة الكلية', w: ['التقاطع', 'الاتحاد', 'نفي العبارة'], e: 'المستطيل الذي يحيط بأشكال فن يمثل المجموعة الكلية.', h: 'يحوي كل شيء.' },
+    { d: 2, q: 'ما تقاطع مجموعتين؟', c: 'مجموعة العناصر المشتركة بينهما', w: ['مجموعة عناصرهما كلها', 'مجموعة العناصر التي في إحداهما فقط', 'المجموعة الخالية دائمًا'], e: 'التقاطع هو العناصر المشتركة، أما الاتحاد فهو عناصرهما كلها.', h: 'التقاطع = المشترك.' },
+    { d: 2, q: 'ما اتحاد مجموعتين؟', c: 'مجموعة عناصرهما كلها', w: ['مجموعة العناصر المشتركة بينهما', 'مجموعة عناصر الأولى فقط', 'العناصر التي لا تنتمي إلى أي منهما'], e: 'الاتحاد يضم عناصر المجموعتين كلها.', h: 'الاتحاد = الجمع.' },
+    { d: 2, q: 'يكون المضلع محدّبًا إذا:', c: 'لم يحوِ امتداد أي من أضلاعه نقاطًا داخله', w: ['كانت جميع أضلاعه متساوية', 'كانت زواياه كلها قوائم', 'حوى امتداد أحد أضلاعه نقاطًا داخله'], e: 'المضلع المحدّب لا يحوي امتداد أي من أضلاعه نقاطًا داخله، وعكس ذلك يكون مقعّرًا.', h: 'فكّر في امتداد الأضلاع.' },
+    { d: 3, q: 'إذا كانت p ∨ q خاطئة، فأي العبارات الآتية صائبة؟', c: '~p ∧ ~q', w: ['p ∧ q', 'p ∧ ~q', '~p ∧ q'], e: 'الفصل الخاطئ يعني أن p و q خاطئتان، فتكون ~p و ~q صائبتين، وعبارة الوصل ~p ∧ ~q صائبة.', h: 'الفصل الخاطئ مكوناته كلها خاطئة.' },
+    { d: 3, q: 'إذا كانت p ∧ q صائبة، فأي العبارات الآتية صائبة دائمًا؟', c: 'p ∨ q', w: ['~p ∨ ~q', '~p ∧ q', 'p ∧ ~q'], e: 'الوصل الصائب يعني أن p و q صائبتان، فالفصل p ∨ q صائب أيضًا. أما الخيارات الأخرى فتحتوي مكوّنة منفية خاطئة.', h: 'الوصل الصائب مكوناته كلها صائبة.' },
+    { d: 3, q: 'كم منطقة على الأكثر يقسّم بها شكل فن الذي يحوي ن من الدوائر المجموعة الكلية؟', c: '٢ⁿ منطقة', w: ['٢ن منطقة', 'ن + ٢ منطقة', 'ن² منطقة'], e: 'يقسّم شكل فن الذي يحوي ن من الدوائر المجموعة الكلية إلى ٢ⁿ منطقة على الأكثر (دائرتان: ٤ ، ثلاث دوائر: ٨).', h: 'دائرتان ← ٤ ، ثلاث دوائر ← ٨.' }
+  ];
+  const fixSyms = s => s.replace(/(?<![A-Za-z])(?:~\(~[pq]\)|~?[pq](?:\s*[∧∨]\s*~?[pq])*)(?![A-Za-z])/g, m => L(m));
+  const fixOpt = s => /^[∧∨~=÷]$/.test(s) ? L(s) : fixSyms(s);
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: fixSyms(c.q), correct: fixOpt(c.c), wrongs: c.w.map(fixOpt), hint: fixSyms(c.h), explain: fixSyms(c.e) }) }));
+
+  const GENS = { statements: GEN_STATEMENTS, conj: GEN_CONJ, disj: GEN_DISJ, tables: GEN_TABLES, venn: GEN_VENN, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'patterns', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
   }
 
-  function getQuestionCount() {
-    if (selectedLevel === 'custom') {
-      let count = parseInt(document.getElementById('custom-count').value);
-      if (!count || count < 1) count = 10;
-      return count;
-    }
-    return levelSettings[selectedLevel].count;
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
   }
 
-  function getTimePerQuestion() {
-    if (selectedLevel === 'custom') {
-      if (!customHasTime) return 0;
-      let secs = parseInt(document.getElementById('custom-time-seconds').value);
-      if (!secs || secs < 1) secs = 15;
-      return secs;
-    }
-    return levelSettings[selectedLevel].time;
-  }
-
-  // كل سؤال يُبنى لحظة توليده بمولّد عشوائي — لا توجد أسئلة مكتوبة سلفًا يتم سحبها
-  function generateQuestions() {
-    const count = getQuestionCount();
-    const cats = currentMode === 'mixed' ? selectedCats : [currentMode];
-    questions = [];
-    for (let i = 0; i < count; i++) {
-      const cat = cats[randInt(0, cats.length - 1)];
-      if (cat === 'negation') questions.push(generateNegationQuestion());
-      else if (cat === 'conjunction') questions.push(generateConjunctionQuestion());
-      else if (cat === 'disjunction') questions.push(generateDisjunctionQuestion());
-      else if (cat === 'compound') questions.push(generateCompoundQuestion());
-      else questions.push(generateConceptQuestion());
-    }
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
   }
 
   function startQuiz() {
-    generateQuestions();
-    currentQuestionIndex = 0;
-    score = 0;
-    timePerQuestion = getTimePerQuestion();
-
-    document.getElementById('setup-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('quiz-box').style.display = 'block';
-    document.getElementById('timer-container').style.display = (timePerQuestion === 0) ? 'none' : 'block';
-
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
     showQuestion();
   }
 
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
   function showQuestion() {
-    clearInterval(timer);
-    isAnswering = false;
-    const q = questions[currentQuestionIndex];
-
-    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
-    document.getElementById('total-q').innerText = questions.length;
-    document.getElementById('score-text').innerText = score;
-    document.getElementById('cat-tag').innerText = catLabels[q.catKey];
-
-    const questionTextEl = document.getElementById('question-text');
-    questionTextEl.classList.add('long-text');
-    questionTextEl.innerText = q.prompt;
-
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
-    const isBoolQuestion = q.options.length === 2 && q.options.includes('صائبة') && q.options.includes('خاطئة');
-    optionsContainer.classList.toggle('text-options', !isBoolQuestion);
-    optionsContainer.classList.toggle('bool-options', isBoolQuestion);
-
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn' + (!isBoolQuestion ? ' option-text' : '');
-      btn.innerText = opt;
-      btn.dataset.value = opt;
-      btn.onclick = () => checkAnswer(opt, btn, q);
-      optionsContainer.appendChild(btn);
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
     });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
 
-    if (timePerQuestion > 0) startTimer(q);
-  }
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
 
-  function startTimer(q) {
-    const timerBar = document.getElementById('timer-bar');
-    timerBar.style.width = '100%';
-
-    const intervalTime = 100;
-    const totalSteps = (timePerQuestion * 1000) / intervalTime;
-    let currentStep = 0;
-
-    timer = setInterval(() => {
-      currentStep++;
-      const percentage = 100 - (currentStep / totalSteps) * 100;
-      timerBar.style.width = `${Math.max(0, percentage)}%`;
-      if (currentStep >= totalSteps) {
-        clearInterval(timer);
-        checkAnswer(null, null, q);
-      }
-    }, intervalTime);
-  }
-
-  function checkAnswer(selected, targetBtn, q) {
-    if (isAnswering) return;
-    isAnswering = true;
-    clearInterval(timer);
-
-    const correct = q.correct;
-    const allOptionBtns = document.querySelectorAll('.option-btn');
-
-    if (selected === correct) {
-      score++;
-      if (targetBtn) targetBtn.classList.add('correct');
-      showToast('أحسنت! 👏', 'success');
-    } else {
-      if (targetBtn) targetBtn.classList.add('wrong');
-      allOptionBtns.forEach(btn => {
-        if (btn.dataset.value === correct) btn.classList.add('correct');
-      });
-      showToast('إجابة غير صحيحة! ❌', 'error');
-    }
-
-    setTimeout(() => {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) showQuestion();
-      else endQuiz();
-    }, 1400);
-  }
-
-  function endQuiz() {
-    document.getElementById('quiz-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'block';
-
-    const percentage = Math.round((score / questions.length) * 100);
-    document.getElementById('final-percentage').innerText = `${percentage}%`;
-
-    const badge = document.getElementById('level-badge');
-    const feedback = document.getElementById('feedback-text');
-
-    if (percentage >= 90) {
-      badge.innerText = 'المستوى الفعلي: خبير منطق 🌟';
-      badge.style.color = 'var(--success)';
-      feedback.innerText = 'أداء رائع! تُتقن تحديد قيم صواب النفي وعبارتي الوصل والفصل بثقة عالية.';
-    } else if (percentage >= 75) {
-      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
-      badge.style.color = 'var(--primary-dark)';
-      feedback.innerText = 'ممتاز! فهمك لعبارات الوصل والفصل جيد جدًا، وتحتاج فقط لمزيد من التدقيق في العبارات المركبة.';
-    } else if (percentage >= 50) {
-      badge.innerText = 'المستوى الفعلي: جيد 📈';
-      badge.style.color = 'var(--subtext)';
-      feedback.innerText = 'بداية جيدة! راجع الفرق بين متى تكون عبارة الوصل صائبة ومتى تكون عبارة الفصل خاطئة، وتدرّب أكثر.';
-    } else {
-      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
-      badge.style.color = 'var(--danger)';
-      feedback.innerText = 'لا بأس، ابدأ بمستوى "سهل جدًا" بدون وقت، وركّز على نمط واحد (النفي أو الوصل أو الفصل) في كل مرة حتى تتقنه.';
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
     }
   }
 
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
   function resetQuiz() {
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('setup-box').style.display = 'block';
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
   }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = /(?<![A-Za-z])(?:~\(~[pq]\)|~?[pq](?:\s*[∧∨]\s*~?[pq])*)(?![A-Za-z])/g;
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
 </script>
+
 
 
 
@@ -1327,4 +1852,3 @@ header.header-scrolled .menu-bar-line {
 </script>
 <!-- SM-AUTO-INJECTED:END:admin-scripts -->
 </body>
-</html>
