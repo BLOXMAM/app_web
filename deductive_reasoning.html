@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تحدي المنطق - التبرير الاستنتاجي</title>
+  <title>تحدي التبرير الاستنتاجي</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -17,14 +17,10 @@
       --primary-dark: #4338CA;
       --success: #16A34A;
       --danger: #DC2626;
+      --warn: #D97706;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Tajawal', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
     body {
       background-color: var(--bg);
@@ -39,7 +35,7 @@
     .container {
       background-color: var(--card-bg);
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       border-radius: 24px;
       padding: 32px;
       box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
@@ -48,303 +44,246 @@
       overflow: hidden;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 1.7rem;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
 
-    p.subtitle {
-      text-align: center;
-      color: var(--subtext);
-      font-size: 0.92rem;
-      margin-bottom: 24px;
-      line-height: 1.6;
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
     }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
 
-    .section-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
     .mode-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 12px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.9rem;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
     }
-
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
     .mode-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
       box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
     }
 
-    .cats-container-wrapper {
-      transition: all 0.3s ease;
-    }
-
-    .cats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
     .cat-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 10px 6px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.78rem;
-      line-height: 1.4;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
     }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
 
-    .cat-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
-    }
-
-    .levels-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .level-card {
-      background: var(--w1);
-      border: 2px solid transparent;
-      padding: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      color: var(--text);
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
     }
-
     .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
     .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
 
-    .level-card.active {
-      background: var(--w2);
-      border-color: var(--primary);
-    }
-
-    .custom-options-box {
-      background: var(--w1);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 28px;
-    }
-
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
     .custom-input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid var(--w2);
-      background: var(--card-bg);
-      color: var(--text);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 16px;
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
     }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
 
-    .custom-input:focus {
-      outline: none;
-      border-color: var(--primary);
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
     }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
 
     .btn-start {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #ffffff;
-      border: none;
-      padding: 16px;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
       transition: transform 0.1s, box-shadow 0.2s;
     }
-
     .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
 
     .quiz-box { display: none; }
-
     .header-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      background: var(--w1);
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-size: 0.9rem;
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
     }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
 
-    .cat-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      background: var(--w2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 14px;
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
     }
-
-    .timer-bar-container {
-      width: 100%;
-      height: 6px;
-      background: var(--w1);
-      border-radius: 10px;
-      margin-bottom: 24px;
-      overflow: hidden;
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
     }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
 
-    .timer-bar {
-      height: 100%;
-      background: var(--primary);
-      width: 100%;
-      transition: width 0.1s linear;
-    }
-
-    .question-card {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .question-text {
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: var(--text);
-      word-break: break-word;
-      white-space: pre-line;
-    }
-
-    .question-text.long-text {
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.8;
-      text-align: right;
-      white-space: pre-line;
-    }
-
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .options-grid.text-options {
-      grid-template-columns: 1fr;
-    }
-
-    .options-grid.bool-options {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
     .option-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 18px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      word-break: break-word;
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
     }
-
-    .option-btn.option-text {
-      font-size: 0.95rem;
-      font-weight: 500;
-      text-align: right;
-      padding: 14px 16px;
-    }
-
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
     .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
 
-    .option-btn.correct {
-      background-color: var(--w2) !important;
-      border-color: var(--success) !important;
-      color: var(--success) !important;
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
     }
-
-    .option-btn.wrong {
-      background-color: var(--w2) !important;
-      border-color: var(--danger) !important;
-      color: var(--danger) !important;
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
     }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
 
     .toast {
-      position: fixed;
-      bottom: -80px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 1000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      pointer-events: none;
-      max-width: 90%;
-      text-align: center;
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
     }
-
-    .toast.show {
-      bottom: 30px;
-      opacity: 1;
-    }
-
+    .toast.show { bottom: 30px; opacity: 1; }
     .toast.toast-success { background: var(--success); }
     .toast.toast-error { background: var(--danger); }
 
     .result-box { display: none; text-align: center; }
-    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
-    .badge {
-      display: inline-block;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-bottom: 16px;
-      background: var(--w1);
-      color: var(--success);
-    }
-  </style>
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
 
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+  </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
 <!-- SM-AUTO-INJECTED:START:admin-styles -->
@@ -541,26 +480,29 @@
 </div>
 <!-- END ADMIN DRAWER -->
 
+
 <div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
     <h1>تحدي التبرير الاستنتاجي 🧠</h1>
-    <p class="subtitle">اختبر مهاراتك في التمييز بين التبرير الاستنتاجي والاستقرائي، وتطبيق قانون الفصل المنطقي وقانون القياس المنطقي، وتحديد صحة الاستنتاج</p>
+    <p class="subtitle">الدرس ١-٤ • التبرير الاستنتاجي<br>اضغط على أيقونة (i) لمراجعة ملخص الدرس وقانوني الفصل والقياس المنطقيين قبل البدء أو أثناء الحل</p>
 
     <div class="section-title">1. اختر نمط التحدي:</div>
-    <div class="mode-grid">
-      <button class="mode-btn active" onclick="setMode('ded_ind', this)">استنتاجي أم استقرائي؟ 🔍</button>
-      <button class="mode-btn" onclick="setMode('detachment', this)">قانون الفصل المنطقي 🔗</button>
-      <button class="mode-btn" onclick="setMode('syllogism', this)">قانون القياس المنطقي ⛓️</button>
-      <button class="mode-btn" onclick="setMode('identify_law', this)">أي قانون نستعمل؟ ⚖️</button>
-      <button class="mode-btn" onclick="setMode('mixed', this)" style="grid-column: span 2;">منوع شامل 🧩</button>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="ded_ind" onclick="setMode('ded_ind', this)">استنتاجي أم استقرائي؟ 🔍<small>ميّز نوع التبرير</small></button>
+      <button class="mode-btn" data-mode="detachment" onclick="setMode('detachment', this)">قانون الفصل المنطقي 🔗<small>تحقق الفرض فتتحقق النتيجة</small></button>
+      <button class="mode-btn" data-mode="syllogism" onclick="setMode('syllogism', this)">قانون القياس المنطقي ⛓️<small>سلسلة من عبارتين شرطيتين</small></button>
+      <button class="mode-btn" data-mode="validity" onclick="setMode('validity', this)">هل الاستنتاج صائب؟ ✅<small>مع أشكال فن</small></button>
+      <button class="mode-btn" data-mode="identify_law" onclick="setMode('identify_law', this)">أي قانون نستعمل؟ ⚖️<small>أو لا توجد نتيجة</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وأفكار</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
     </div>
 
-    <div id="cats-wrapper" class="cats-container-wrapper" style="display: none;">
+    <div id="cats-wrapper" style="display: none;">
       <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
-      <div class="cats-grid" id="cats-container">
-        <!-- يتم إنشاؤها عبر JavaScript -->
-      </div>
+      <div class="cats-grid" id="cats-container"></div>
     </div>
 
     <div class="section-title">2. حدد مستواك الحالي:</div>
@@ -571,15 +513,15 @@
       </div>
       <div class="level-card" onclick="selectLevel('good', this)">
         <h4>سهل</h4>
-        <span>10 أسئلة • 20 ثانية/سؤال</span>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('very_good', this)">
         <h4>متوسط</h4>
-        <span>15 سؤال • 15 ثانية/سؤال</span>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('excellent', this)">
         <h4>صعب</h4>
-        <span>20 سؤال • 10 ثواني/سؤال</span>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
       </div>
       <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
         <h4>مخصص ⚙️</h4>
@@ -599,9 +541,14 @@
 
       <div id="custom-time-input-wrapper" style="display: none;">
         <div class="section-title">الوقت بالثواني لكل سؤال:</div>
-        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="15" style="margin-bottom: 0;">
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
       </div>
     </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
 
     <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
   </div>
@@ -610,434 +557,941 @@
   <div id="quiz-box" class="quiz-box">
     <div class="header-stats">
       <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
-      <span>النقاط: <strong id="score-text">0</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
     </div>
+    <div class="progress-dots" id="progress-dots"></div>
 
     <div class="timer-bar-container" id="timer-container">
       <div class="timer-bar" id="timer-bar"></div>
     </div>
 
     <div class="question-card">
-      <div id="cat-tag" class="cat-tag">استنتاجي أم استقرائي</div>
-      <div class="question-text" id="question-text">...</div>
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
     </div>
 
-    <div class="options-grid" id="options-container">
-      <!-- خيارات الإجابة -->
-    </div>
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
   </div>
 
   <!-- شاشة النتيجة -->
   <div id="result-box" class="result-box">
     <h2>النتيجة النهائية 🏆</h2>
     <div class="result-score" id="final-percentage">0%</div>
-    <div class="badge" id="level-badge">جاري التقييم...</div>
-    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
-    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ١-٤ التبرير الاستنتاجي</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
-  // ============ أدوات عشوائية عامة ============
-  function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  function shuffleArray(arr) {
-    return [...arr].sort(() => Math.random() - 0.5);
-  }
-
-  function pickDistinctDistractors(correctValue, generatorFn, count) {
-    const seen = new Set([String(correctValue)]);
-    const result = [];
-    let guard = 0;
-    while (result.length < count && guard < 500) {
-      guard++;
-      const v = generatorFn();
-      const key = String(v);
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(v);
-      }
-    }
-    return result;
-  }
-
-  const names = ['سلمان', 'خالد', 'ندى', 'منى', 'فهد', 'ريم', 'عبدالله', 'هيا', 'ماجد', 'لجين', 'مشاري', 'نورة'];
-  function randName() { return names[randInt(0, names.length - 1)]; }
-
-  const boolOptions = ['صائبة', 'خاطئة'];
-
-  // ============ سلاسل قضايا (p → q → r) لقانوني الفصل والقياس ============
-  function chainTemplates() {
-    const n = randName();
-    const num = randInt(12, 96);
-    const pool = [
-      [`حصل ${n} على تقدير ممتاز في المقرر`, `سيحصل ${n} على منحة دراسية`, `سيتمكن ${n} من إكمال دراسته الجامعية مجانًا`],
-      [`أمطرت السماء بغزارة اليوم`, `ستُغلق الطرقات الجبلية`, `سيتأخر وصول ${n} إلى عمله`],
-      [`ارتفعت درجة الحرارة عن 40 درجة`, `ستُغلق المدارس الحكومية`, `سيبقى ${n} في المنزل`],
-      [`كان العدد ${num} من مضاعفات العدد 4`, `العدد ${num} من مضاعفات العدد 2`, `العدد ${num} عدد زوجي`],
-      [`اجتهد ${n} في التدريب طوال الموسم`, `سيتأهل ${n} لتمثيل ناديه في البطولة`, `سيحصل ${n} على فرصة الاحتراف`],
-      [`أخذ ${n} قسطًا كافيًا من النوم`, `سيكون ${n} مرتاحًا في اليوم التالي`, `سيكون أداء ${n} جيدًا في الاختبار`],
-      [`دفع ${n} رسوم الاشتراك في النادي`, `يحق لـ${n} استخدام جميع الأجهزة الرياضية`, `سيتمكن ${n} من حضور الحصص الجماعية`],
-      [`كانت زاويتان متجاورتين على مستقيم`, `مجموع قياسي الزاويتين 180°`, `الزاويتان متكاملتان`],
-      [`عمر ${n} 18 عامًا`, `يمكن ${n} التقدم للحصول على رخصة قيادة السيارات`, `يمكن ${n} قيادة سيارته إلى الجامعة`],
-      [`اعتذر أحد الفريقين عن حضور المباراة`, `فسوف تؤجل المباراة`, `سيعاد جدولة المباراة في وقت لاحق`]
-    ];
-    return pool[randInt(0, pool.length - 1)];
-  }
-
-  function genChain() {
-    const [s1, s2, s3] = chainTemplates();
-    return { s1, s2, s3 };
-  }
-
-  function condText(a, b) { return `إذا كان ${a}، فإن ${b}.`; }
-
-  // ============ 1) التمييز بين التبرير الاستنتاجي والاستقرائي ============
-  function generateDeductiveInductiveQuestion() {
-    const n = randName();
-    const num = randInt(15, 90);
-    const scenarios = [
-      { text: `في كل مرة استخدم فيها ${n} الخلطة نفسها لإعداد الكيك، لاحظ أن قالبها الصغير لا يكفي لخبز الكيك، فاستنتج أن قالبها الصغير لن يكفي لخبز الكيك في المرة القادمة.`, ans: 'استقرائي' },
-      { text: `تأخر ${n} مرتين عن الحضور إلى مقر العمل في الوقت المحدد، فاستنتج أنه سيتم خصم 5٪ من أجره اليومين.`, ans: 'استقرائي' },
-      { text: `اعتمد ${n} على حقائق ينص عليها عقده الوظيفي ليصل إلى النتيجة المطلوبة بخصوص استحقاقه للعلاوة.`, ans: 'استنتاجي' },
-      { text: `دُعي ${n} إلى حفل عشاء، وقد حضر جميع المدعوين الحفل؛ إذن فقد حضر ${n} الحفل.`, ans: 'استنتاجي' },
-      { text: `أجرى ${n} عدة تجارب لخلط الألوان في المختبر، وفي كل مرة كانت النتيجة نفسها، فاستنتج أن هذه هي النتيجة الثابتة دائمًا.`, ans: 'استقرائي' },
-      { text: `إذا كانت جميع الأعداد الأولية أكبر من 2 أعدادًا فردية، والعدد ${num} عدد أولي أكبر من 2، فإن ${n} استنتج أن العدد ${num} عدد فردي.`, ans: 'استنتاجي' },
-      { text: `لاحظ ${n} أن الشمس أشرقت من جهة الشرق كل يوم طوال حياته، فاستنتج أن الشمس ستشرق من الشرق غدًا أيضًا.`, ans: 'استقرائي' },
-      { text: `بناءً على القاعدة الهندسية التي تنص على أن مجموع زوايا المثلث 180°، حسب ${n} قياس الزاوية الثالثة في مثلث معلوم الزاويتين الأخريين.`, ans: 'استنتاجي' }
-    ];
-    const it = scenarios[randInt(0, scenarios.length - 1)];
-    const prompt = `حدد ما إذا كان التبرير المستعمل في الموقف التالي استنتاجيًا أم استقرائيًا:\n"${it.text}"`;
-    return { type: 'text', catKey: 'ded_ind', prompt, options: ['استنتاجي', 'استقرائي'], correct: it.ans };
-  }
-
-  // ============ 2) قانون الفصل المنطقي ============
-  // إذا كانت (p → q) صائبة، والفرض p صائبًا، فإن النتيجة q تكون صائبة أيضًا.
-  function generateDetachmentQuestion() {
-    const { s1, s2 } = genChain();
-    const valid = Math.random() < 0.6; // هل المعطى الثاني يطابق الفرض تمامًا؟
-    const given2 = valid ? s1 : s2; // إن لم يطابق الفرض، فلا نتيجة صائبة
-    const prompt = `المعطيات:\n• ${condText(s1, s2)}\n• ${given2}.\nبتطبيق قانون الفصل المنطقي، ماذا يمكن استنتاجه؟`;
-    const correct = valid ? s2 : 'لا توجد نتيجة صائبة يمكن الحصول عليها';
-    const options = shuffleArray([s2, s1, 'لا توجد نتيجة صائبة يمكن الحصول عليها']);
-    if (!options.includes(correct)) options.push(correct);
-    while (options.length < 3) options.push('لا يمكن تحديد ذلك');
-    return { type: 'text', catKey: 'detachment', prompt, options: shuffleArray([...new Set(options)]), correct };
-  }
-
-  function generateDetachmentTruthQuestion() {
-    const { s1, s2 } = genChain();
-    const valid = Math.random() < 0.5;
-    const claimedGiven = valid ? s1 : s2;
-    const claimedResult = valid ? s2 : s1;
-    const prompt = `المعطيات:\n• ${condText(s1, s2)}\n• ${claimedGiven}.\nالاستنتاج: ${claimedResult}.\nهل هذا الاستنتاج صائب اعتمادًا على قانون الفصل المنطقي؟`;
-    const correct = valid ? 'صائبة' : 'خاطئة';
-    return { type: 'text', catKey: 'detachment', prompt, options: [...boolOptions], correct };
-  }
-
-  const detachmentTemplates = [generateDetachmentQuestion, generateDetachmentTruthQuestion];
-  function generateDetachmentCategoryQuestion() {
-    const fn = detachmentTemplates[randInt(0, detachmentTemplates.length - 1)];
-    return fn();
-  }
-
-  // ============ 3) قانون القياس المنطقي ============
-  // إذا كانت (p → q) و (q → r) صائبتين، فإن (p → r) تكون صائبة أيضًا.
-  function generateSyllogismQuestion() {
-    const { s1, s2, s3 } = genChain();
-    const valid = Math.random() < 0.6;
-    let secondPremise, correct;
-    if (valid) {
-      secondPremise = condText(s2, s3);
-      correct = condText(s1, s3);
-    } else {
-      // كسر السلسلة بحيث لا يتطابق فرض العبارة الثانية مع نتيجة الأولى
-      const other = genChain();
-      secondPremise = condText(other.s2, other.s3);
-      correct = 'لا توجد نتيجة صائبة يمكن الحصول عليها';
-    }
-    const prompt = `المعطيات:\n• ${condText(s1, s2)}\n• ${secondPremise}\nبتطبيق قانون القياس المنطقي، ماذا يمكن استنتاجه؟`;
-    let options = [condText(s1, s3), condText(s3, s1), 'لا توجد نتيجة صائبة يمكن الحصول عليها'];
-    options = [...new Set(options)];
-    if (!options.includes(correct)) options.push(correct);
-    return { type: 'text', catKey: 'syllogism', prompt, options: shuffleArray(options), correct };
-  }
-
-  function generateSyllogismTruthQuestion() {
-    const { s1, s2, s3 } = genChain();
-    const valid = Math.random() < 0.5;
-    const claimedConclusion = valid ? condText(s1, s3) : condText(s3, s1);
-    const prompt = `المعطيات:\n• ${condText(s1, s2)}\n• ${condText(s2, s3)}\nالاستنتاج: ${claimedConclusion}\nهل هذا الاستنتاج صائب اعتمادًا على قانون القياس المنطقي؟`;
-    const correct = valid ? 'صائبة' : 'خاطئة';
-    return { type: 'text', catKey: 'syllogism', prompt, options: [...boolOptions], correct };
-  }
-
-  const syllogismTemplates = [generateSyllogismQuestion, generateSyllogismTruthQuestion];
-  function generateSyllogismCategoryQuestion() {
-    const fn = syllogismTemplates[randInt(0, syllogismTemplates.length - 1)];
-    return fn();
-  }
-
-  // ============ 4) أي قانون منطقي نستعمل؟ ============
-  function generateIdentifyLawQuestion() {
-    const { s1, s2, s3 } = genChain();
-    const kind = ['detachment', 'syllogism', 'none'][randInt(0, 2)];
-    let secondGiven;
-    let correct;
-    if (kind === 'detachment') {
-      secondGiven = s1; // يطابق فرض العبارة الأولى
-      correct = 'قانون الفصل المنطقي';
-    } else if (kind === 'syllogism') {
-      secondGiven = condText(s2, s3); // عبارة شرطية ثانية فرضها يطابق نتيجة الأولى
-      correct = 'قانون القياس المنطقي';
-    } else {
-      const other = genChain();
-      secondGiven = other.s1; // معطى لا يطابق فرض ولا يشكل سلسلة
-      correct = 'لا يمكن الحصول على نتيجة صائبة';
-    }
-    const prompt = `المعطيات:\n• ${condText(s1, s2)}\n• ${secondGiven}${kind === 'syllogism' ? '' : '.'}\nأي القوانين المنطقية يمكن استعماله للحصول على نتيجة صائبة اعتمادًا على هذه المعطيات؟`;
-    const options = ['قانون الفصل المنطقي', 'قانون القياس المنطقي', 'لا يمكن الحصول على نتيجة صائبة'];
-    return { type: 'text', catKey: 'identify_law', prompt, options: shuffleArray(options), correct };
-  }
-
-  // ============ حالة التطبيق ============
-  let currentMode = 'ded_ind';
-  let selectedCats = ['ded_ind', 'detachment', 'syllogism', 'identify_law'];
-  let selectedLevel = 'weak';
-  let customHasTime = false;
-
-  let questions = [];
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timer = null;
-  let timePerQuestion = 0;
-  let isAnswering = false;
-
-  const levelSettings = {
-    weak: { count: 5, time: 0 },
-    good: { count: 10, time: 20 },
-    very_good: { count: 15, time: 15 },
-    excellent: { count: 20, time: 10 }
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ٣٧–٤٠) ============
+  const LESSON = {
+    badges: ['🌟 خبير في التبرير الاستنتاجي', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تميّز بين الاستنتاجي والاستقرائي، وتطبّق قانوني الفصل والقياس المنطقيين بثقة.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. اقرأ ملخص الدرس ثم أعد المحاولة، وانتبه: هل تطابق المعطى فرض العبارة الشرطية؟',
+      'لا بأس، افتح أيقونة (i) واقرأ قانوني الفصل والقياس، ثم جرّب مستوى أسهل.']
   };
 
-  const catLabels = {
-    ded_ind: 'استنتاجي أم استقرائي',
-    detachment: 'قانون الفصل المنطقي',
-    syllogism: 'قانون القياس المنطقي',
-    identify_law: 'أي قانون نستعمل'
+  // شكل فن لعبارة شرطية: الدائرة الداخلية تحقق الفرض وهي جزء من الخارجية (النتيجة)
+  function vennNested(o) {
+    const W = 360, H = 215;
+    let s = `<svg direction="ltr" viewBox="0 0 ${W} ${H}" role="img" aria-label="شكل فن" style="color:var(--text)">`;
+    s += `<rect x="6" y="6" width="${W - 12}" height="${H - 12}" rx="8" fill="none" stroke="currentColor" opacity=".35"/>`;
+    s += `<ellipse cx="180" cy="110" rx="160" ry="92" fill="var(--primary)" fill-opacity=".14" stroke="var(--primary)" stroke-width="2"/>`;
+    s += `<ellipse cx="180" cy="143" rx="102" ry="42" fill="var(--success)" fill-opacity=".2" stroke="var(--success)" stroke-width="2"/>`;
+    s += `<text x="180" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">${o.outer}</text>`;
+    s += `<text x="180" y="${o.dot === 'in' ? 128 : 148}" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">${o.inner}</text>`;
+    if (o.dot === 'in') {
+      s += `<circle cx="180" cy="152" r="6" fill="var(--danger)"/>`;
+      s += `<text x="180" y="174" text-anchor="middle" font-size="12" font-weight="800" fill="var(--danger)">${o.name}</text>`;
+    }
+    return s + '</svg>';
+  }
+  const vennBox = o => `<div class="viz-box">${vennNested(o)}</div>`;
+
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>المحققون يجمعون الأدلة ويستبعدون المتهمين حتى يصلوا إلى الجاني. هذه الطريقة تسمى <b>التبرير الاستنتاجي</b>. ندرس هنا كيف نصل إلى نتيجة <b>صائبة حتمًا</b> من عبارات معطاة، باستعمال قانونين: <b>قانون الفصل المنطقي</b> و<b>قانون القياس المنطقي</b>.</p>
+      <h4>التبرير الاستنتاجي مقابل الاستقرائي</h4>
+      <ol class="steps">
+        <li><b>الاستنتاجي:</b> يستعمل حقائق وقواعد وتعريفات وخصائص للوصول إلى نتائج منطقية من عبارات معطاة.</li>
+        <li><b>الاستقرائي:</b> يستعمل أنماطًا من الأمثلة أو المشاهدات لعمل تخمين.</li>
+      </ol>
+      <p>المثال المضاد يُستعمل لإثبات <b>عدم صحة</b> تخمين توصلنا إليه بالتبرير الاستقرائي، لكنه ليس طريقة صائبة لإثبات صحة التخمين. ولإثبات الصحة يجب استعمال التبرير الاستنتاجي، ومن أشكاله قانون الفصل المنطقي.</p>
+      <h4>قانون الفصل المنطقي</h4>
+      <p>إذا كانت العبارة الشرطية <b>p → q</b> صائبة، والفرض <b>p</b> صائبًا، فإن النتيجة <b>q</b> تكون صائبة أيضًا.</p>
+      <h4>قانون القياس المنطقي</h4>
+      <p>إذا كانت العبارتان الشرطيتان <b>p → q</b> و<b>q → r</b> صائبتين، فإن العبارة الشرطية <b>p → r</b> تكون صائبة أيضًا. وذلك عندما تكون نتيجة العبارة الأولى هي فرض العبارة الثانية.</p>
+      <h4>خطوات الحل</h4>
+      <ol class="steps">
+        <li>حدّد الفرض <b>p</b> والنتيجة <b>q</b> في العبارة الشرطية.</li>
+        <li>انظر: هل المعطى الآخر هو <b>الفرض نفسه</b>؟ عندها استعمل قانون الفصل.</li>
+        <li>أم هو عبارة شرطية فرضها <b>نتيجة</b> العبارة الأولى؟ عندها استعمل قانون القياس.</li>
+        <li>وإن لم يتحقق أي منهما فاكتب: <b>«لا توجد نتيجة صائبة»</b>.</li>
+      </ol>
+      <p class="note">من الآن فصاعدًا اعتبر جميع المعطيات في الكتاب صائبة.</p>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) الاستنتاجي يعتمد على حقائق وقواعد وتعريفات.</b><br>أما الاستقرائي فيعتمد على أمثلة ومشاهدات وأنماط، وقد يكون خاطئًا.</div>
+      <div class="idea-card"><b>٢) النتيجة الاستنتاجية صائبة حتمًا</b> ما دامت العبارات المعطاة صائبة.</div>
+      <div class="idea-card"><b>٣) قانون الفصل يحتاج إلى تحقق الفرض.</b><br>إذا تحقق الفرض p تحققت النتيجة q.</div>
+      <div class="idea-card"><b>٤) تحقق النتيجة لا يعني تحقق الفرض.</b><br>«إذا ذهب مالك إلى النادي فإنه يرتدي ملابس رياضية»، و«ارتدى مالك ملابس رياضية» لا تعني أنه ذهب إلى النادي، فقد يرتديها في مكان آخر.</div>
+      <div class="idea-card"><b>٥) قانون القياس يربط عبارتين بسلسلة.</b><br>نتيجة الأولى = فرض الثانية، فنحذف الحلقة الوسطى ونحصل على p → r.</div>
+      <div class="idea-card"><b>٦) إن لم تكن نتيجة الأولى هي فرض الثانية</b> فلا يمكن استعمال قانون القياس للحصول على نتيجة صائبة.</div>
+      <div class="idea-card"><b>٧) أشكال فن تساعد على الفهم.</b><br>إذا كان كل من تحقق فرضه تحققت نتيجته فدائرة الفرض داخل دائرة النتيجة. من كان داخل الدائرة الكبيرة قد يكون خارج الصغيرة.</div>
+      <div class="idea-card"><b>٨) الدليل المنطقي</b> مدعوم بقوانين المنطق، ويختلف عن الدليل الإحصائي المدعوم بالأمثلة أو البيانات.</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">التبرير الاستنتاجي</span><span class="en">Deductive reasoning</span><br>استعمال الحقائق والقواعد والتعريفات والخصائص للوصول إلى نتائج منطقية من عبارات معطاة. وهو الطريقة التي يستعملها المحققون لتحديد الجاني.</div>
+      <div class="def-card"><span class="term">التبرير الاستقرائي</span><span class="en">Inductive reasoning</span><br>استعمال أنماط من الأمثلة أو المشاهدات لعمل تخمين.</div>
+      <div class="def-card"><span class="term">قانون الفصل المنطقي</span><span class="en">Law of Detachment</span><br>إذا كانت p → q صائبة وكان p صائبًا فإن q صائب.</div>
+      <div class="def-card"><span class="term">قانون القياس المنطقي</span><span class="en">Law of Syllogism</span><br>إذا كانت p → q و q → r صائبتين فإن p → r صائبة.</div>
+      <div class="def-card"><span class="term">نصفا المستقيم المتعاكسان</span><br>نصفا مستقيم لهما نقطة البداية نفسها، ولكن باتجاهين متعاكسين.</div>
+      <div class="def-card"><span class="term">الزاويتان المتجاورتان على مستقيم</span><br>زاويتان ضلعاهما غير المشتركين يكوّنان نصفي مستقيم متعاكسين.</div>` },
+
+    { id: 'laws', title: '⚖️ القانونان', html: `
+      <h4>قانون الفصل المنطقي</h4>
+      <div class="ex-card"><div class="ex-t">مثال الكتاب</div>
+        المعطيات: إذا لم يكن في السيارة وقود، فإنها لن تعمل.<br>لا يوجد وقود في سيارة عبدالله.<br>
+        <b>النتيجة الصائبة:</b> لن تعمل سيارة عبدالله.</div>
+      <div class="idea-card"><b>حذار:</b> لو قيل «لن تعمل سيارة عبدالله» فلا نستنتج أن السيارة بلا وقود (هذا عكس العبارة)، فقد يكون هناك سبب آخر.</div>
+      <h4>قانون القياس المنطقي</h4>
+      <div class="ex-card"><div class="ex-t">مثال الكتاب</div>
+        المعطيات: إذا حصلت على عمل، فسوف تكسب نقودًا.<br>إذا كسبت نقودًا، فسوف تتمكن من شراء سيارة.<br>
+        <b>النتيجة الصائبة:</b> إذا حصلت على عمل، فسوف تتمكن من شراء سيارة.</div>
+      <div class="idea-card"><b>حذار:</b> إذا لم تكن نتيجة العبارة الأولى هي فرض الثانية فلا يمكن استعمال قانون القياس للحصول على نتيجة صائبة.</div>
+      <h4>شكل فن لقانون الفصل (المثال ٣)</h4>
+      <p>إذا صُرف للموظف مكافأة، فإن ساعات عمله تجاوزت ١٧٥ ساعة. تجاوزت ساعات محمد ١٧٥ ساعة.</p>
+      ${vennBox({ outer: 'عملوا أكثر من ١٧٥ ساعة', inner: 'صُرف لهم مكافآت' })}
+      <p>محمد داخل الدائرة الكبيرة، لكنه ليس بالضرورة داخل الدائرة الصغيرة، فالاستنتاج «صُرفت له مكافأة» <b>غير صائب</b>.</p>` },
+
+    { id: 'ex', title: '📖 أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: استنتاجي أم استقرائي؟</div>
+        • هند وقالب الكيك: لاحظت ذلك في كل مرة (مشاهدات) ← <b>استقرائي</b>.<br>
+        • مشاري تأخر مرتين فاستنتج خصم ٥٪: اعتمد على حقائق عقده الوظيفي ← <b>استنتاجي</b>.<br>
+        • تجربة دمج الألوان (ثلاث محاولات) ← <b>استقرائي</b>.<br>
+        • خالد دُعي إلى حفل وحضر جميع المدعوين فقد حضر خالد ← <b>استنتاجي</b>.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢: استعمال قانون الفصل المنطقي</div>
+        • إذا كانت الزاويتان متجاورتين على مستقيم، فإن ضلعيهما غير المشتركين نصفا مستقيم متعاكسان. ∠AED و ∠AEB متجاورتان على مستقيم ← الاستنتاج صائب: ED و EB نصفا مستقيم متعاكسان.<br>
+        • «عندما يذهب مالك إلى النادي فإنه يرتدي ملابس رياضية»، «ارتدى مالك ملابس رياضية» ← الاستنتاج «ذهب مالك إلى النادي» <b>غير صائب</b> لأن المعطى هو النتيجة لا الفرض.<br>
+        • تحقق ٢A: «إذا كانت ثلاث نقاط لا تقع على استقامة واحدة فإنها تحدد مستوى»، النقاط في المستوى G ← «لا تقع على استقامة واحدة» غير صائب.<br>
+        • تحقق ٢B: موافقة ولي الأمر تتيح الرحلة، وأحضر سلمان موافقة ← «يمكن أن يذهب سلمان» صائب.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: المكافآت والحوافز (شكل فن)</div>
+        إذا صُرف للموظف مكافأة فساعات عمله أكثر من ١٧٥. محمد تجاوزت ساعاته ١٧٥ ← «صُرف لمحمد مكافأة» <b>غير صائب</b>.<br>
+        تحقق ٣: إذا كان الشكل مربعًا فهو مضلع، والشكل A مربع ← الشكل A مضلع (صائب).</div>
+      <div class="ex-card"><div class="ex-t">مثال ٤: من الاختبار</div>
+        (١) إذا أمطرت اليوم فسوف تؤجل المباراة. (٢) إذا اعتذر أحد الفريقين فسوف تؤجل المباراة.<br>
+        بالرموز p → q و r → q. نتيجة الأولى ليست فرض الثانية، فلا يمكن استعمال القياس، والإجابة: <b>لا توجد نتيجة صائبة (D)</b>.<br>
+        تحقق ٤: (١) إذا لم تأخذ قسطًا كافيًا من النوم فسوف تكون مرهقًا. (٢) إذا كنت مرهقًا فلن يكون أداؤك في الاختبار جيدًا ← الصائب: إذا لم تأخذ قسطًا كافيًا من النوم فلن يكون أداؤك في الاختبار جيدًا (B).</div>
+      <div class="ex-card"><div class="ex-t">مثال ٥: تطبيق القوانين</div>
+        إذا كان عمرك ١٨ عامًا فيمكنك التقدم للحصول على رخصة قيادة. عمر سلمان ١٨ عامًا ← بقانون الفصل: يمكن أن يتقدم سلمان للحصول على رخصة القيادة.</div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    ded_ind: { name: 'استنتاجي أم استقرائي', icon: '🔍' },
+    detachment: { name: 'قانون الفصل المنطقي', icon: '🔗' },
+    syllogism: { name: 'قانون القياس المنطقي', icon: '⛓️' },
+    validity: { name: 'هل الاستنتاج صائب؟', icon: '✅' },
+    identify_law: { name: 'أي قانون نستعمل؟', icon: '⚖️' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
   };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const NONE = 'لا توجد نتيجة صائبة.';
+  const NONE_L = 'لا توجد نتيجة صائبة';
+  const VO = ['صائب', 'غير صائب'];
+  const LAW_D = 'قانون الفصل المنطقي', LAW_S = 'قانون القياس المنطقي';
+  const fixSyms = s => s.replace(new RegExp(SYM_RE_SRC, 'g'), m => L(m));
+  const sp = L('p'), sq = L('q'), sr = L('r');
+  const sPQ = L('p → q'), sQR = L('q → r'), sPR = L('p → r');
 
-  const catsContainer = document.getElementById('cats-container');
-  Object.keys(catLabels).forEach(key => {
-    const btn = document.createElement('button');
-    btn.className = `cat-btn ${selectedCats.includes(key) ? 'active' : ''}`;
-    btn.innerText = catLabels[key];
-    btn.onclick = () => toggleCat(key, btn);
-    catsContainer.appendChild(btn);
-  });
+  // ============ العبارات: كل عبارة لها صيغ (فرض، حقيقة، نتيجة، نفي) ============
+  // f: عبارة معطاة، h: كفرض بعد «إذا»، c: كنتيجة بعد «فـ»، k: كاستنتاج، والصيغ n/hn/cn/kn هي النفي
+  const F = (past, imp, pron) => ({ f: past, h: past, c: 'فسوف ' + pron, k: 'سوف ' + imp, n: 'لم ' + imp, hn: 'لم ' + imp, cn: 'فلن ' + pron, kn: 'لن ' + imp });
+  const M = (subj, nom, acc, fem) => {
+    const kan = fem ? 'كانت' : 'كان', ls = fem ? 'ليست' : 'ليس', lam = fem ? 'لم تكن' : 'لم يكن', pr = fem ? 'فإنها' : 'فإنه';
+    return { f: `${subj} ${nom}`, h: `${kan} ${subj} ${acc}`, c: `${pr} ${nom}`, k: `${subj} ${nom}`, n: `${subj} ${ls} ${acc}`, hn: `${lam} ${subj} ${acc}`, cn: `${pr} ${ls} ${acc}`, kn: `${subj} ${ls} ${acc}` };
+  };
+  const cond = (A, B) => `إذا ${A.h}، ${B.c}.`;
+  const condNN = (A, B) => `إذا ${A.hn}، ${B.cn}.`;
+  const condNegC = (A, B) => `إذا ${A.h}، ${B.cn}.`;
+  const fct = A => A.f + '.', nfct = A => A.n + '.', kk = A => A.k + '.', nkk = A => A.kn + '.';
+  const bl = (...xs) => xs.map(x => '• ' + x).join('<br>');
 
-  function setMode(mode, element) {
-    currentMode = mode;
-    document.querySelectorAll('.mode-grid .mode-btn').forEach(btn => btn.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('cats-wrapper').style.display = (mode === 'mixed') ? 'block' : 'none';
+  const SCS = [
+    () => ({ p: F('حصل خالد على تقدير ممتاز في المقرر', 'يحصل خالد على تقدير ممتاز في المقرر', 'يحصل على تقدير ممتاز في المقرر'), q: F('نال خالد منحة دراسية', 'ينال خالد منحة دراسية', 'ينال منحة دراسية'), r: F('أكمل خالد دراسته الجامعية مجانًا', 'يكمل خالد دراسته الجامعية مجانًا', 'يكمل دراسته الجامعية مجانًا') }),
+    () => ({ p: F('أمطرت السماء بغزارة', 'تمطر السماء بغزارة', 'تمطر السماء بغزارة'), q: F('أُغلقت الطرقات الجبلية', 'تُغلق الطرقات الجبلية', 'تُغلق الطرقات الجبلية'), r: F('تأخر وصول سعد إلى عمله', 'يتأخر وصول سعد إلى عمله', 'يتأخر وصول سعد إلى عمله') }),
+    () => ({ p: F(`ارتفعت درجة الحرارة عن ${N(40)} درجة`, `ترتفع درجة الحرارة عن ${N(40)} درجة`, `ترتفع درجة الحرارة عن ${N(40)} درجة`), q: F('أُغلقت المدارس', 'تُغلق المدارس', 'تُغلق المدارس'), r: F('لازم سلمان منزله', 'يلازم سلمان منزله', 'يلازم منزله') }),
+    () => ({ p: F('اجتهد نايف في التدريب طوال الموسم', 'يجتهد نايف في التدريب طوال الموسم', 'يجتهد في التدريب طوال الموسم'), q: F('تأهل نايف لتمثيل ناديه في البطولة', 'يتأهل نايف لتمثيل ناديه في البطولة', 'يتأهل لتمثيل ناديه في البطولة'), r: F('نال نايف فرصة الاحتراف', 'ينال نايف فرصة الاحتراف', 'ينال فرصة الاحتراف') }),
+    () => ({ p: F('أخذت ندى قسطًا كافيًا من النوم', 'تأخذ ندى قسطًا كافيًا من النوم', 'تأخذ قسطًا كافيًا من النوم'), q: F('استيقظت ندى مرتاحة', 'تستيقظ ندى مرتاحة', 'تستيقظ مرتاحة'), r: F('أدّت ندى الاختبار أداءً جيدًا', 'تؤدي ندى الاختبار أداءً جيدًا', 'تؤدي الاختبار أداءً جيدًا') }),
+    () => ({ p: F('دفع فهد رسوم الاشتراك في النادي', 'يدفع فهد رسوم الاشتراك في النادي', 'يدفع رسوم الاشتراك في النادي'), q: F('نال فهد بطاقة العضوية', 'ينال فهد بطاقة العضوية', 'ينال بطاقة العضوية'), r: F('تمكن فهد من حضور الحصص الجماعية', 'يتمكن فهد من حضور الحصص الجماعية', 'يتمكن من حضور الحصص الجماعية') }),
+    () => ({ p: F('سجّلت ريم في المكتبة', 'تسجّل ريم في المكتبة', 'تسجّل في المكتبة'), q: F('حصلت ريم على بطاقة المكتبة', 'تحصل ريم على بطاقة المكتبة', 'تحصل على بطاقة المكتبة'), r: F('استعارت ريم كتبًا من المكتبة', 'تستعير ريم كتبًا من المكتبة', 'تستعير كتبًا من المكتبة') }),
+    () => ({ p: F('حصلت على عمل', 'تحصل على عمل', 'تحصل على عمل'), q: F('كسبت نقودًا', 'تكسب نقودًا', 'تكسب نقودًا'), r: F('تمكنت من شراء سيارة', 'تتمكن من شراء سيارة', 'تتمكن من شراء سيارة') }),
+    () => ({ p: F('اعتذر أحد الفريقين عن الحضور', 'يعتذر أحد الفريقين عن الحضور', 'يعتذر أحد الفريقين عن الحضور'), q: F('تأجلت المباراة', 'تؤجل المباراة', 'تؤجل المباراة'), r: F('أعلنت الرابطة موعدًا جديدًا للمباراة', 'تعلن الرابطة موعدًا جديدًا للمباراة', 'تعلن الرابطة موعدًا جديدًا للمباراة') }),
+    () => { const n = 4 * randInt(3, 24), s = 'العدد ' + N(n); return { p: M(s, 'من مضاعفات ' + N(4), 'من مضاعفات ' + N(4)), q: M(s, 'من مضاعفات ' + N(2), 'من مضاعفات ' + N(2)), r: M(s, 'عدد زوجي', 'عددًا زوجيًا') }; },
+    () => { const s = 'الشكل ' + L('ABCD'); return { p: M(s, 'مربع', 'مربعًا'), q: M(s, 'مستطيل', 'مستطيلًا'), r: M(s, 'متوازي أضلاع', 'متوازيَ أضلاع') }; },
+    () => {
+      const t = 'المثلث ' + L('ABC'), ft = `للمثلث ${L('ABC')} زاويتان متطابقتان`;
+      return { p: M(t, 'متساوي الأضلاع', 'متساويَ الأضلاع'), q: M(t, 'متساوي الساقين', 'متساويَ الساقين'),
+        r: { f: ft, h: 'كان ' + ft, c: 'فإن له زاويتين متطابقتين', k: ft, n: 'ليس ' + ft, hn: 'لم يكن ' + ft, cn: 'فليس له زاويتان متطابقتان', kn: 'ليس ' + ft } };
+    },
+    () => {
+      const s = 'الزاوية ' + L('B'), fa = `قياس الزاوية ${L('B')} يساوي ${N(90)}°`, na = `قياس الزاوية ${L('B')} لا يساوي ${N(90)}°`;
+      const q = M(s, 'قائمة', 'قائمة', true); q.c = `فإن ${s} قائمة`; q.cn = `فإن ${s} ليست قائمة`;
+      return { p: { f: fa, h: 'كان ' + fa, c: 'فإن ' + fa, k: fa, n: na, hn: 'لم يكن ' + fa, cn: 'فإن ' + na, kn: na }, q, r: M(s, 'زاوية غير حادة', 'زاويةً غير حادة', true) };
+    },
+    () => { const s = 'الشكل ' + L('PQRS'); return { p: M(s, 'مستطيل', 'مستطيلًا'), q: M(s, 'رباعي', 'رباعيًا'), r: M(s, 'مضلع', 'مضلعًا') }; },
+    () => { const n = pick([3, 5, 7, 11, 13, 17, 19, 23, 29, 31]), s = 'العدد ' + N(n); return { p: M(s, 'عدد أولي أكبر من ' + N(2), 'عددًا أوليًا أكبر من ' + N(2)), q: M(s, 'فردي', 'فرديًا'), r: M(s, 'غير زوجي', 'غيرَ زوجي') }; }
+  ];
+  const SCEN = () => pick(SCS)();
+
+  // ============ استنتاجي أم استقرائي ============
+  const T = (t, why, d) => () => ({ t, why, d });
+  const WHY_I = 'اعتمد الاستنتاج على مشاهدات وأمثلة متكررة للوصول إلى تخمين، وهذا هو التبرير الاستقرائي.';
+  const WHY_D = 'اعتمد الاستنتاج على حقائق وقواعد أو تعريفات معطاة للوصول إلى نتيجة، وهذا هو التبرير الاستنتاجي.';
+  const IND = [
+    T('في كل مرة استخدمت فيها هند الخلطة نفسها لإعداد الكيك، لاحظت أن قالبها الصغير لا يكفي لخبز الكيك، فاستنتجت أن قالبها الصغير لن يكفي في المرة القادمة.', 'لاحظت هند ذلك في كل مرة، فالاستنتاج مبني على مشاهدات متكررة (استقرائي).', 1),
+    T('أجرى طالب في المختبر ثلاث محاولات لدمج اللونين الأبيض والأسود، فلاحظ أنه كلما زادت كمية الأسود كانت درجة الرمادي أغمق، فاستنتج أن ذلك سيحدث دائمًا.', 'بُني الاستنتاج على نمط من التجارب (ثلاث محاولات)، فهو استقرائي.', 1),
+    T('لاحظ ماجد أن الشمس أشرقت من الشرق كل يوم طوال حياته، فاستنتج أنها ستشرق من الشرق غدًا أيضًا.', 'اعتمد على مشاهدة متكررة كل يوم، فهو تبرير استقرائي.', 1),
+    T('رأى سامي ثلاث سيارات بيضاء تمر من الشارع نفسه صباحًا، فاستنتج أن جميع سيارات الحي بيضاء.', 'عمّم من ثلاثة أمثلة فقط، والتعميم من أمثلة تبرير استقرائي وقد يكون خاطئًا.', 1),
+    T('لاحظ مشاري أن الحافلة وصلت متأخرة في الأيام الأربعة الماضية، فتوقع أنها ستصل متأخرة اليوم أيضًا.', 'توقع مبني على نمط من المشاهدات السابقة، فهو استقرائي.', 1),
+    T('لاحظ طبيب أن خمسة مرضى تناولوا الدواء نفسه فتحسنت حالتهم، فاستنتج أن الدواء يحسّن حالة جميع المرضى.', 'عمّم من أمثلة (خمسة مرضى)، فهو استقرائي.', 1),
+    T('لاحظ المزارع في تجاربه الأربع أن المحصول يزداد كلما زادت كمية الري، فتوقع أن زيادة الري ستزيد المحصول دائمًا.', 'بُني التوقع على أمثلة من التجارب، فهو استقرائي.', 2),
+    T(`لاحظ فهد في المتتابعة ${N(3)} ، ${N(6)} ، ${N(9)} ، ${N(12)} أن الفرق بين كل حدين متتاليين ${N(3)}، فتوقع أن الحد التالي هو ${N(15)}.`, 'اكتشف نمطًا من الأمثلة وتوقع الحد التالي، وهذا استقرائي.', 2),
+    T(`جمعت لجين أعدادًا فردية: ${L(N(3) + ' + ' + N(5) + ' = ' + N(8))} و${L(N(7) + ' + ' + N(9) + ' = ' + N(16))} و${L(N(11) + ' + ' + N(15) + ' = ' + N(26))}، فاستنتجت أن مجموع أي عددين فرديين عدد زوجي.`, 'اعتمدت على عدة أمثلة فقط. حتى وإن كانت النتيجة صحيحة فإن الأمثلة لا تثبتها، فهو استقرائي.', 3),
+    T(`قاست ريم زوايا ثلاثة مثلثات رسمتها فوجدت أن مجموع زوايا كل منها ${N(180)}°، فخمّنت أن مجموع زوايا أي مثلث ${N(180)}°.`, 'القياس على عدة أمثلة ثم التخمين تبرير استقرائي، وإن كان التخمين صحيحًا.', 3),
+    T('لاحظ هاني أن مربع كل عدد فردي جربه من ١ إلى ٩ هو عدد فردي، فاستنتج أن مربع أي عدد فردي هو عدد فردي.', 'جرّب أمثلة ثم عمّم، فهو استقرائي مهما كانت النتيجة صحيحة.', 3),
+    T('لاحظ فيصل أن المتجر يقدم خصمًا في آخر أربعة أسابيع من الشهر، فتوقع أن يقدم خصمًا في آخر أسبوع من الشهر القادم.', 'توقع مبني على نمط من المشاهدات السابقة، فهو استقرائي.', 2)
+  ];
+  const DED = [
+    T('دُعي خالد إلى حفل عشاء، وقد حضر جميع المدعوين الحفل؛ إذن فقد حضر خالد الحفل.', 'خالد أحد المدعوين، وجميع المدعوين حضروا، فالنتيجة حتمية من المعطيات (استنتاجي).', 1),
+    T('تأخر مشاري مرتين عن الحضور إلى مقر العمل في الوقت المحدد، فاستنتج أنه سيتم خصم ٥٪ من أجر اليومين، اعتمادًا على ما ينص عليه عقده الوظيفي.', 'اعتمد على حقائق ينص عليها العقد الوظيفي، فهو استنتاجي.', 1),
+    T('بما أن جميع الثدييات من ذوات الدم الحار، والحوت من الثدييات، فإن الحوت من ذوات الدم الحار.', 'استعمل قاعدة معطاة وحقيقة، فالنتيجة حتمية (استنتاجي).', 1),
+    T('عرّف المعلم المربع بأنه مستطيل أضلاعه متساوية، وبما أن الشكل A مربع استنتج أن الشكل A مستطيل.', 'اعتمد على تعريف معطى، فهو استنتاجي.', 1),
+    T('تنص تعليمات المسابقة على أن من يحصل على ٩٠ درجة فأكثر يتأهل للنهائي، وحصل هيثم على ٩٣ درجة، فاستنتج أنه تأهل للنهائي.', 'اعتمد على قاعدة معطاة في التعليمات، فهو استنتاجي.', 1),
+    T('ينص نظام المدرسة على أن من يتغيب ثلاثة أيام دون عذر يُستدعى ولي أمره، وغاب عمر ثلاثة أيام دون عذر، فاستنتج الوكيل أنه سيستدعي ولي أمره.', 'اعتمد على نظام معطى (قاعدة)، فهو استنتاجي.', 1),
+    T('إذا كانت زاويتان متجاورتين على مستقيم فإن ضلعيهما غير المشتركين نصفا مستقيم متعاكسان. وبما أن الزاويتين ∠AED و ∠AEB متجاورتان على مستقيم، فإن ED و EB نصفا مستقيم متعاكسان.'.replace(/∠?[A-Z]{2,3}/g, m => L(m)), 'طبّق تعريفًا عامًا على حالة معينة، فهو استنتاجي.', 2),
+    T('استعمل المحقق بصمات الأصابع والأدلة المتاحة لاستبعاد المتهمين ثم تحديد الجاني.', 'يستعمل المحققون التبرير الاستنتاجي لتحديد الجاني، فهو استنتاجي.', 2),
+    T('بما أن ناتج ضرب أي عدد في الصفر يساوي صفرًا، فإن حاصل ضرب ٧٥٣ في ٠ يساوي صفرًا.', 'طبّق خاصية معروفة على حالة معينة، فهو استنتاجي.', 2),
+    T('اعتمادًا على قانون الفصل المنطقي، استنتجت هيا أن سيارة عبدالله لن تعمل لأنه لا يوجد فيها وقود، وفق العبارة: إذا لم يكن في السيارة وقود فإنها لن تعمل.', 'استعملت قانونًا منطقيًا وعبارة معطاة، فهو استنتاجي.', 3),
+    T('بما أن مجموع زاويتين متكاملتين ١٨٠°، وقياس إحداهما ٦٥°، حسبت منى قياس الأخرى فوجدته ١١٥°.', 'طبّقت تعريف الزاويتين المتكاملتين، فهو استنتاجي.', 3)
+  ];
+  function dedParamInd() {
+    const a = randInt(2, 9), d = randInt(2, 7), seq = [0, 1, 2, 3].map(i => N(a + i * d)).join(' ، ');
+    return { t: `لاحظت منى أن الأعداد ${seq} تزداد بمقدار ${N(d)} في كل مرة، فتوقعت أن العدد التالي هو ${N(a + 4 * d)}.`, why: 'اكتشفت نمطًا من الأمثلة وتوقعت الحد التالي، فهو استقرائي.', d: 2 };
   }
+  function dedParamDed() {
+    const k = randInt(0, 2);
+    if (k === 0) {
+      let x, y, z; do { x = randInt(30, 85); y = randInt(30, 85); z = 180 - x - y; } while (z < 15);
+      return { t: `بما أن مجموع قياسات زوايا أي مثلث ${N(180)}°، وقياس زاويتين في مثلث ${N(x)}° و${N(y)}°، فقد حسبت سارة قياس الزاوية الثالثة فوجدته ${N(z)}°.`, why: 'طبّقت خاصية معروفة لمجموع زوايا المثلث، فهو استنتاجي.', d: 2 };
+    }
+    if (k === 1) {
+      const n = 6 * randInt(3, 16);
+      return { t: `تنص القاعدة على أن كل عدد يقبل القسمة على ${N(6)} يقبل القسمة على ${N(3)}، والعدد ${N(n)} يقبل القسمة على ${N(6)}، فاستنتج فهد أنه يقبل القسمة على ${N(3)}.`, why: 'طبّق قاعدة معطاة على عدد معين، فهو استنتاجي.', d: 1 };
+    }
+    const n = 4 * randInt(3, 24);
+    return { t: `بما أن كل مضاعف للعدد ${N(4)} عدد زوجي، والعدد ${N(n)} من مضاعفات ${N(4)}، فإن العدد ${N(n)} عدد زوجي.`, why: 'طبّق قاعدة معطاة على عدد معين، فهو استنتاجي.', d: 1 };
+  }
+  const anyInd = () => Math.random() < 0.2 ? dedParamInd() : pick(IND)();
+  const anyDed = () => Math.random() < 0.3 ? dedParamDed() : pick(DED)();
+  const DI = ['استنتاجي', 'استقرائي'];
+  const diPrompt = t => `حدّد ما إذا كان التبرير المستعمل في الموقف الآتي استنتاجيًا أم استقرائيًا:<br>«${t}»`;
+  const REASONS = ['اعتمد على حقائق وقواعد وتعريفات معطاة', 'اعتمد على أمثلة ومشاهدات متكررة', 'اعتمد على التخمين دون أي أساس', 'اعتمد على مثال مضاد واحد'];
 
-  function toggleCat(key, btn) {
-    if (selectedCats.includes(key)) {
-      if (selectedCats.length > 1) {
-        selectedCats = selectedCats.filter(c => c !== key);
-        btn.classList.remove('active');
+  const GEN_DI = [
+    { d: 1, fn() {
+      const ind = Math.random() < 0.5, it = ind ? anyInd() : anyDed();
+      return build({ cat: 'ded_ind', d: it.d === 3 ? 3 : (it.d === 2 ? 2 : 1), fixedOrder: true, nOpts: 2, order: DI, prompt: diPrompt(it.t),
+        correct: ind ? DI[1] : DI[0], wrongs: [ind ? DI[0] : DI[1]],
+        hint: 'اسأل: هل بُني الاستنتاج على حقائق وقواعد معطاة، أم على أمثلة ومشاهدات؟',
+        explain: it.why });
+    }, w: 3 },
+    { d: 2, fn() {
+      const ind = Math.random() < 0.5, it = ind ? anyInd() : anyDed();
+      return build({ cat: 'ded_ind', d: 2, prompt: `في الموقف الآتي:<br>«${it.t}»<br>على ماذا اعتمد الاستنتاج؟`,
+        correct: ind ? REASONS[1] : REASONS[0], wrongs: REASONS.filter(r => r !== (ind ? REASONS[1] : REASONS[0])),
+        hint: 'التبرير الاستنتاجي يعتمد على الحقائق والقواعد، والاستقرائي يعتمد على الأمثلة.',
+        explain: it.why });
+    } },
+    { d: 2, fn() {
+      const wantDed = Math.random() < 0.5, key = wantDed ? 'استنتاجيًا' : 'استقرائيًا';
+      const good = wantDed ? anyDed() : anyInd(), bad = []; const seen = new Set([good.t]);
+      for (let i = 0; i < 40 && bad.length < 3; i++) { const b = wantDed ? anyInd() : anyDed(); if (!seen.has(b.t)) { seen.add(b.t); bad.push(b.t); } }
+      return build({ cat: 'ded_ind', d: 2, prompt: `أي المواقف الآتية يستعمل تبريرًا ${key}؟`, correct: good.t, wrongs: bad,
+        hint: wantDed ? 'ابحث عن الموقف الذي يعتمد على حقيقة أو قاعدة أو تعريف.' : 'ابحث عن الموقف الذي يعمّم أو يتوقع من أمثلة ومشاهدات.',
+        explain: good.why + ' أما بقية المواقف فهي ' + (wantDed ? 'تعميمات من أمثلة ومشاهدات (استقرائية).' : 'تطبيق لقواعد وحقائق معطاة (استنتاجية).') });
+    } },
+    { d: 3, fn() {
+      const ind = Math.random() < 0.5, it = (ind ? IND : DED).map(f => f()).filter(x => x.d === 3).concat(ind ? [dedParamInd()] : [dedParamDed()]);
+      const x = pick(it);
+      return build({ cat: 'ded_ind', d: 3, fixedOrder: true, nOpts: 2, order: DI, prompt: diPrompt(x.t),
+        correct: ind ? DI[1] : DI[0], wrongs: [ind ? DI[0] : DI[1]],
+        hint: ind ? 'قد تكون النتيجة صحيحة، لكن هل أُثبتت بقاعدة أم اكتُشفت من أمثلة؟' : 'هل استُعملت قاعدة أو تعريف أو قانون معطى؟',
+        explain: x.why });
+    } }
+  ];
+
+  // ============ قانون الفصل المنطقي ============
+  function dtQ(variant, d) {
+    const { p, q, r } = SCEN();
+    const given = variant === 'p' ? fct(p) : variant === 'q' ? fct(q) : nfct(p);
+    const prompt = `المعطيات:<br>${bl(cond(p, q), given)}<br>بتطبيق قانون الفصل المنطقي، ماذا يمكن استنتاجه؟`;
+    if (variant === 'p') {
+      return build({ cat: 'detachment', d, prompt, correct: kk(q), wrongs: [nkk(q), NONE, kk(r), cond(q, p)],
+        hint: 'هل المعطى الثاني هو الفرض نفسه؟ إن كان كذلك فالنتيجة صائبة.',
+        explain: `العبارة الشرطية صائبة، والمعطى الثاني «${p.f}» يحقق الفرض ${sp}. وبتطبيق قانون الفصل المنطقي تكون النتيجة ${sq} صائبة: ${kk(q)}` });
+    }
+    if (variant === 'q') {
+      return build({ cat: 'detachment', d, prompt, correct: NONE, wrongs: [fct(p), nfct(p), kk(r), cond(q, p)],
+        hint: 'قانون الفصل يحتاج إلى تحقق الفرض، فهل المعطى الثاني هو الفرض؟',
+        explain: `المعطى الثاني «${q.f}» هو النتيجة ${sq} وليس الفرض ${sp}. وتحقق النتيجة لا يعني تحقق الفرض، فلا يمكن تطبيق قانون الفصل، ولا توجد نتيجة صائبة.` });
+    }
+    return build({ cat: 'detachment', d, prompt, correct: NONE, wrongs: [kk(q), nkk(q), kk(r), fct(q)],
+      hint: 'قانون الفصل يحتاج إلى أن يتحقق الفرض، لا أن يُنفى.',
+      explain: `المعطى الثاني ينفي الفرض ${sp} ولا يحققه، فلا يمكن تطبيق قانون الفصل. قد تتحقق النتيجة لسبب آخر، فلا توجد نتيجة صائبة.` });
+  }
+  const GEN_DT = [
+    { d: 1, fn: () => dtQ('p', 1), w: 2 },
+    { d: 1, fn() {
+      const { p, q, r } = SCEN(), askH = Math.random() < 0.5;
+      return build({ cat: 'detachment', d: 1, prompt: `في العبارة الشرطية الآتية:<br>«${cond(p, q)}»<br>ما ${askH ? 'الفرض ' + sp : 'النتيجة ' + sq}؟`,
+        correct: askH ? p.f : q.k, wrongs: askH ? [q.f, r.f, p.n, q.k] : [p.f, r.k, q.kn, p.k],
+        hint: 'الفرض يلي «إذا» والنتيجة تلي «فإن» أو «فـ».',
+        explain: `الفرض ${sp} هو الجملة التي تلي «إذا»: ${p.f}. والنتيجة ${sq} هي ما يلي «فـ» أو «فإن»: ${q.k}.` });
+    } },
+    { d: 1, fn() {
+      const v = randInt(0, 2);
+      if (v === 0) return build({ cat: 'detachment', d: 1, prompt: `إذا كانت العبارة الشرطية ${sPQ} صائبة، وكان ${sp} صائبًا، فماذا نستنتج بقانون الفصل المنطقي؟`,
+        correct: L('q'), wrongs: [L('~q'), L('q → p'), L('~p'), 'لا توجد نتيجة صائبة'], hint: 'الفرض تحقق، فماذا يتحقق؟',
+        explain: `قانون الفصل: إذا كانت ${sPQ} صائبة و${sp} صائبًا فإن ${sq} صائبة.` });
+      if (v === 1) return build({ cat: 'detachment', d: 1, prompt: `إذا كانت العبارة الشرطية ${sPQ} صائبة، وكان ${sq} صائبًا، فماذا نستنتج بقانون الفصل المنطقي؟`,
+        correct: 'لا توجد نتيجة صائبة', wrongs: [L('p'), L('~p'), L('p → q'), L('q → p')], hint: 'هل تحقق الفرض؟',
+        explain: `المعطى ${sq} هو النتيجة لا الفرض، وتحقق النتيجة لا يعني تحقق الفرض ${sp}، فلا يمكن تطبيق القانون.` });
+      return build({ cat: 'detachment', d: 1, prompt: `إذا كانت العبارة الشرطية ${sPQ} صائبة، وكان ${L('~p')} صائبًا، فماذا نستنتج بقانون الفصل المنطقي؟`,
+        correct: 'لا توجد نتيجة صائبة', wrongs: [L('q'), L('~q'), L('p'), L('q → p')], hint: 'هل تحقق الفرض؟',
+        explain: `المعطى ينفي الفرض ${sp}، ولا يمكن تطبيق قانون الفصل إلا عند تحقق الفرض، فلا توجد نتيجة صائبة.` });
+    } },
+    { d: 2, fn: () => dtQ('q', 2) },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN();
+      return build({ cat: 'detachment', d: 2, prompt: `المعطيات:<br>${bl(cond(p, q))}<br>أي المعطيات الآتية يتيح تطبيق قانون الفصل المنطقي مباشرةً للحصول على نتيجة صائبة؟`,
+        correct: fct(p), wrongs: [fct(q), nfct(p), nfct(q)],
+        hint: 'يجب أن يتحقق الفرض نفسه.',
+        explain: `قانون الفصل يتطلب أن يكون المعطى الثاني هو الفرض ${sp} نفسه: «${p.f}». وبقية الخيارات تحقق النتيجة أو تنفي إحدى العبارتين فلا تحقق الفرض.` });
+    } },
+    { d: 2, fn() {
+      const { p, q } = SCEN();
+      return build({ cat: 'detachment', d: 2, prompt: `المعطيات:<br>${bl(cond(p, q), '………')}<br>الاستنتاج: ${kk(q)}<br>ما المعطى الناقص الذي يجعل الاستنتاج صائبًا بقانون الفصل المنطقي؟`,
+        correct: fct(p), wrongs: [fct(q), nfct(p), nfct(q)],
+        hint: 'ما الذي يجب أن يتحقق لنحصل على النتيجة؟',
+        explain: `نريد الوصول إلى النتيجة ${sq}، ولذلك يجب أن يتحقق الفرض ${sp}: ${fct(p)}` });
+    } },
+    { d: 2, fn() {
+      const valid = Math.random() < 0.5;
+      const c = 'إذا لم يكن في السيارة وقود، فإنها لن تعمل.';
+      const given = valid ? 'لا يوجد وقود في سيارة عبدالله.' : 'لن تعمل سيارة عبدالله.';
+      return build({ cat: 'detachment', d: 2, prompt: `المعطيات:<br>${bl(c, given)}<br>بتطبيق قانون الفصل المنطقي، ماذا يمكن استنتاجه؟`,
+        correct: valid ? 'لن تعمل سيارة عبدالله.' : NONE, wrongs: valid ? [NONE, 'سيارة عبدالله فيها وقود.', 'ستعمل سيارة عبدالله.'] : ['لا يوجد وقود في سيارة عبدالله.', 'سيارة عبدالله فيها وقود.', 'ستعمل سيارة عبدالله.'],
+        hint: 'ما الفرض هنا؟ انتبه أنه نفي («لم يكن في السيارة وقود»).',
+        explain: valid ? `الفرض ${sp}: لا يوجد وقود في السيارة. والمعطى الثاني يحققه، فتكون النتيجة: لن تعمل سيارة عبدالله.` : `المعطى «لن تعمل سيارة عبدالله» هو النتيجة ${sq} لا الفرض، فلا نستنتج أنه لا يوجد وقود (قد يكون هناك سبب آخر).` });
+    } },
+    { d: 3, fn: () => dtQ('np', 3) },
+    { d: 3, fn() {
+      const { p, q, r } = SCEN();
+      return build({ cat: 'detachment', d: 3, prompt: `المعطيات:<br>${bl(cond(p, q), cond(q, r), fct(p))}<br>أي الاستنتاجات الآتية صائب؟`,
+        correct: kk(r), wrongs: [nkk(r), nkk(q), cond(r, p), NONE],
+        hint: 'طبّق قانون الفصل مرتين: الأولى على p → q ثم الثانية على q → r.',
+        explain: `من ${sPQ} و${sp} نستنتج ${sq} بقانون الفصل. ثم من ${sQR} و${sq} نستنتج ${sr}: ${kk(r)}` });
+    } }
+  ];
+  // ============ قانون القياس المنطقي ============
+  const GEN_SY = [
+    { d: 1, fn() {
+      const { p, q, r } = SCEN();
+      return build({ cat: 'syllogism', d: 1, prompt: `المعطيات:<br>${bl(cond(p, q), cond(q, r))}<br>بتطبيق قانون القياس المنطقي، ماذا يمكن استنتاجه؟`,
+        correct: cond(p, r), wrongs: [cond(r, p), cond(q, p), cond(r, q)],
+        hint: 'نتيجة العبارة الأولى هي فرض العبارة الثانية، فاحذف الحلقة الوسطى.',
+        explain: `نتيجة العبارة الأولى ${sq} هي فرض العبارة الثانية. فبقانون القياس: ${sPQ} و${sQR} تعطيان ${sPR}: ${cond(p, r)}` });
+    }, w: 2 },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN();
+      return build({ cat: 'syllogism', d: 2, prompt: `المعطيات:<br>${bl(cond(q, r), cond(p, q))}<br>بتطبيق قانون القياس المنطقي، ماذا يمكن استنتاجه؟`,
+        correct: cond(p, r), wrongs: [cond(r, p), cond(q, p), cond(r, q), NONE],
+        hint: 'ترتيب العبارتين لا يهم. ابحث عن العبارة التي نتيجتها هي فرض الأخرى.',
+        explain: `نتيجة العبارة الثانية ${sq} هي فرض العبارة الأولى ${sq}، فالسلسلة هي ${sPQ} ثم ${sQR}. وبقانون القياس نحصل على ${sPR}: ${cond(p, r)}. ترتيب كتابة المعطيات لا يغيّر ذلك.` });
+    } },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN(), first = Math.random() < 0.5;
+      const given = first ? [cond(p, q), '………'] : ['………', cond(q, r)];
+      const correct = first ? cond(q, r) : cond(p, q);
+      return build({ cat: 'syllogism', d: 2, prompt: `المعطيات:<br>${bl(...given)}<br>الاستنتاج (بقانون القياس): ${cond(p, r)}<br>ما العبارة الشرطية الناقصة؟`,
+        correct, wrongs: first ? [cond(r, q), cond(q, p), cond(r, p)] : [cond(q, p), cond(r, q), cond(r, p)],
+        hint: first ? 'نريد عبارة فرضها هو نتيجة العبارة الأولى، ونتيجتها هي النتيجة المطلوبة.' : 'نريد عبارة فرضها هو الفرض المطلوب، ونتيجتها هي فرض العبارة المعطاة.',
+        explain: first ? `لنصل إلى ${sPR} نحتاج عبارة فرضها ${sq} (نتيجة الأولى) ونتيجتها ${sr}، أي ${sQR}: ${correct}` : `لنصل إلى ${sPR} نحتاج عبارة فرضها ${sp} ونتيجتها ${sq} (فرض الثانية)، أي ${sPQ}: ${correct}` });
+    } },
+    { d: 1, fn() {
+      return build({ cat: 'syllogism', d: 1, prompt: `إذا كانت العبارتان الشرطيتان ${sPQ} و${sQR} صائبتين، فأي العبارات الآتية تكون صائبة بقانون القياس المنطقي؟`,
+        correct: L('p → r'), wrongs: [L('r → p'), L('q → p'), L('r → q')], hint: 'احذف الحلقة الوسطى q.',
+        explain: `نتيجة الأولى ${sq} هي فرض الثانية، فنحذفها ونحصل على ${sPR}.` });
+    } },
+    { d: 3, fn() {
+      const { p, q, r } = SCEN(), shared = Math.random() < 0.5;
+      if (shared) {
+        return build({ cat: 'syllogism', d: 3, prompt: `المعطيات:<br>${bl(cond(p, r), cond(q, r))}<br>بتطبيق قانون القياس المنطقي، ماذا يمكن استنتاجه؟`,
+          correct: NONE, wrongs: [cond(p, q), cond(q, p), condNegC(q, p), condNN(p, q)],
+          hint: 'هل نتيجة إحدى العبارتين هي فرض الأخرى؟',
+          explain: `للعبارتين النتيجة نفسها ${sr}: ${L('p → r')} و${L('q → r')}. نتيجة الأولى ليست فرض الثانية، فلا يمكن تطبيق قانون القياس ولا توجد نتيجة صائبة.` });
       }
-    } else {
-      selectedCats.push(key);
-      btn.classList.add('active');
-    }
+      return build({ cat: 'syllogism', d: 3, prompt: `المعطيات:<br>${bl(cond(p, q), cond(p, r))}<br>بتطبيق قانون القياس المنطقي، ماذا يمكن استنتاجه؟`,
+        correct: NONE, wrongs: [cond(q, r), cond(r, q), condNN(q, r), cond(q, p)],
+        hint: 'هل نتيجة إحدى العبارتين هي فرض الأخرى؟',
+        explain: `للعبارتين الفرض نفسه ${sp}: ${sPQ} و${L('p → r')}. نتيجة الأولى ليست فرض الثانية، فلا يمكن تطبيق قانون القياس ولا توجد نتيجة صائبة.` });
+    }, w: 2 },
+    { d: 3, fn() {
+      const v = randInt(0, 1);
+      if (v === 0) return build({ cat: 'syllogism', d: 3, prompt: `أي العبارات الآتية تنتج منطقيًا عن العبارتين الآتيتين؟<br>${bl('إذا أمطرت اليوم فسوف تؤجل المباراة.', 'إذا اعتذر أحد الفريقين فسوف تؤجل المباراة.')}`,
+        correct: 'لا توجد نتيجة صائبة.', wrongs: ['إذا اعتذر أحد الفريقين فسوف تمطر اليوم.', 'إذا أمطرت اليوم فسوف يعتذر أحد الفريقين.', 'إذا لم تمطر فلن يعتذر أحد الفريقين.'],
+        hint: 'ارمز: p أمطرت اليوم، q تؤجل المباراة، r اعتذر أحد الفريقين. ما صورة العبارتين؟',
+        explain: `نرمز: ${sp}: أمطرت اليوم، ${sq}: تؤجل المباراة، ${sr}: اعتذر أحد الفريقين. العبارتان هما ${sPQ} و${L('r → q')}. نتيجة الأولى ليست فرض الثانية فلا يمكن استعمال قانون القياس، فلا توجد نتيجة صائبة.` });
+      return build({ cat: 'syllogism', d: 3, prompt: `أي العبارات الآتية تنتج منطقيًا عن العبارتين الآتيتين؟<br>${bl('إذا لم تأخذ قسطًا كافيًا من النوم، فسوف تكون مرهقًا.', 'إذا كنت مرهقًا، فلن يكون أداؤك في الاختبار جيدًا.')}`,
+        correct: 'إذا لم تأخذ قسطًا كافيًا من النوم، فلن يكون أداؤك في الاختبار جيدًا.', wrongs: ['إذا كنت مرهقًا، إذن أنت لم تأخذ قسطًا كافيًا من النوم.', 'إذا لم يكن أداؤك في الاختبار جيدًا، فإنك لم تأخذ قسطًا كافيًا من النوم.', NONE],
+        hint: 'ابحث: هل نتيجة العبارة الأولى هي فرض العبارة الثانية؟',
+        explain: `نتيجة الأولى «سوف تكون مرهقًا» هي فرض الثانية «كنت مرهقًا». فبقانون القياس: إذا لم تأخذ قسطًا كافيًا من النوم فلن يكون أداؤك في الاختبار جيدًا. أما الخياران الآخران فيعكسان العبارة.` });
+    } }
+  ];
+
+  // ============ هل الاستنتاج صائب؟ ============
+  const TB = [
+    { c: 'إذا كانت الزاويتان متجاورتين على مستقيم، فإن ضلعيهما غير المشتركين نصفا مستقيم متعاكسان.', g: `الزاويتان ${L('∠AED')} و${L('∠AEB')} متجاورتان على مستقيم.`, k: `نصفا المستقيم ${L('ED')} و${L('EB')} متعاكسان.`, v: true, why: 'المعطى يحقق الفرض (زاويتان متجاورتان على مستقيم)، فتكون النتيجة صائبة بقانون الفصل.', d: 2 },
+    { c: 'عندما يذهب مالك إلى النادي الرياضي، فإنه يرتدي ملابس رياضية.', g: 'ارتدى مالك ملابس رياضية.', k: 'ذهب مالك إلى النادي الرياضي.', v: false, why: 'المعطى هو النتيجة q وليس الفرض p، وقد يرتدي مالك ملابس رياضية دون أن يذهب إلى النادي، فالاستنتاج غير صائب.', d: 2 },
+    { c: 'إذا كانت ثلاث نقاط لا تقع على استقامة واحدة، فإنها تحدد مستوى.', g: `النقاط ${L('A')} و${L('B')} و${L('C')} تقع في المستوى ${L('G')}.`, k: `النقاط ${L('A')} و${L('B')} و${L('C')} لا تقع على استقامة واحدة.`, v: false, why: 'المعطى هو النتيجة (تحدد مستوى) وليس الفرض (لا تقع على استقامة واحدة)، فلا يمكن تطبيق قانون الفصل.', d: 3 },
+    { c: 'إذا أحضر الطالب موافقة من ولي أمره، فإنه يمكنه الذهاب في الرحلة المدرسية.', g: 'أحضر سلمان موافقة من ولي أمره.', k: 'يمكن أن يذهب سلمان في الرحلة المدرسية.', v: true, why: 'المعطى يحقق الفرض، فتكون النتيجة صائبة بقانون الفصل.', d: 1 },
+    { c: `إذا كان عمرك ${N(18)} عامًا، فإنه يمكنك التقدم للحصول على رخصة قيادة السيارات.`, g: `عمر سلمان ${N(18)} عامًا.`, k: 'يمكن أن يتقدم سلمان للحصول على رخصة القيادة.', v: true, why: 'عمر سلمان يحقق الفرض p، فتكون النتيجة q صائبة بقانون الفصل.', d: 1 },
+    { c: 'إذا كان الشكل مربعًا، فإنه مضلع.', g: `الشكل ${L('A')} مربع.`, k: `الشكل ${L('A')} مضلع.`, v: true, why: 'المعطى يحقق الفرض (مربع)، فالنتيجة صائبة.', d: 1 },
+    { c: 'إذا لم يكن في السيارة وقود، فإنها لن تعمل.', g: 'لا يوجد وقود في سيارة عبدالله.', k: 'لن تعمل سيارة عبدالله.', v: true, why: 'المعطى يحقق الفرض (لا يوجد وقود)، فالنتيجة صائبة.', d: 1 },
+    { c: 'إذا لم يكن في السيارة وقود، فإنها لن تعمل.', g: 'لن تعمل سيارة عبدالله.', k: 'لا يوجد وقود في سيارة عبدالله.', v: false, why: 'المعطى هو النتيجة لا الفرض، وقد لا تعمل السيارة لسبب آخر، فالاستنتاج غير صائب.', d: 2 },
+    { c: 'إذا كان المثلث متساوي الأضلاع، فإنه متساوي الساقين.', g: `المثلث ${L('ABC')} متساوي الساقين.`, k: `المثلث ${L('ABC')} متساوي الأضلاع.`, v: false, why: 'المعطى هو النتيجة لا الفرض، فقد يكون المثلث متساوي الساقين وغير متساوي الأضلاع، فالاستنتاج غير صائب.', d: 2 },
+    { c: 'إذا صُرف للموظف مكافأة، فإن عدد ساعات عمله تجاوز ١٧٥ ساعة في الشهر.', g: 'تجاوز عدد الساعات التي عملها محمد ١٧٥ ساعة في الشهر.', k: 'صُرف لمحمد مكافأة.', v: false, why: 'المعطى هو النتيجة لا الفرض، فمحمد داخل الدائرة الكبيرة وليس بالضرورة داخل دائرة من صُرفت لهم مكافآت.', d: 3 },
+    { c: 'إذا كانت القطعتان المستقيمتان متطابقتين، فإن طوليهما متساويان.', g: `القطعتان ${L('AB')} و${L('CD')} متطابقتان.`, k: `طولا القطعتين ${L('AB')} و${L('CD')} متساويان.`, v: true, why: 'المعطى يحقق الفرض، فالنتيجة صائبة.', d: 2 },
+    { c: 'إذا كان العدد زوجيًا، فإنه يقبل القسمة على ٢.', g: 'العدد ٣٥ لا يقبل القسمة على ٢.', k: 'العدد ٣٥ ليس زوجيًا.', v: false, why: 'المعطى ينفي النتيجة لا يحقق الفرض، والمطلوب هنا تطبيق قانون الفصل المنطقي الذي يتطلب تحقق الفرض.', d: 3, skip: true }
+  ].filter(x => !x.skip);
+
+  TB.forEach(t => { t.why = fixSyms(t.why); });
+  const GEN_VAL = [
+    { d: 1, fn() {
+      const t = pick(TB.filter(x => x.d === 1));
+      return build({ cat: 'validity', d: 1, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(t.c, t.g)}<br>الاستنتاج: ${t.k}<br>هل هذا الاستنتاج صائب اعتمادًا على قانون الفصل المنطقي؟`,
+        correct: t.v ? VO[0] : VO[1], wrongs: [t.v ? VO[1] : VO[0]], hint: 'هل المعطى الثاني هو الفرض نفسه؟', explain: t.why });
+    } },
+    { d: 2, fn() {
+      const t = pick(TB.filter(x => x.d === 2));
+      return build({ cat: 'validity', d: 2, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(t.c, t.g)}<br>الاستنتاج: ${t.k}<br>هل هذا الاستنتاج صائب اعتمادًا على قانون الفصل المنطقي؟`,
+        correct: t.v ? VO[0] : VO[1], wrongs: [t.v ? VO[1] : VO[0]], hint: 'حدّد الفرض والنتيجة، ثم انظر هل المعطى هو الفرض.', explain: t.why });
+    }, w: 2 },
+    { d: 3, fn() {
+      const t = pick(TB.filter(x => x.d === 3));
+      return build({ cat: 'validity', d: 3, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(t.c, t.g)}<br>الاستنتاج: ${t.k}<br>هل هذا الاستنتاج صائب اعتمادًا على قانون الفصل المنطقي؟`,
+        correct: t.v ? VO[0] : VO[1], wrongs: [t.v ? VO[1] : VO[0]], hint: 'قارن المعطى بالفرض وبالنتيجة في العبارة الشرطية.', explain: t.why });
+    } },
+    // من المولّد: فصل صائب أو خاطئ
+    { d: 2, fn() {
+      const { p, q, r } = SCEN(), v = pick(['ok', 'ok', 'conv', 'inv']);
+      const given = v === 'conv' ? fct(q) : v === 'inv' ? nfct(p) : fct(p);
+      const claim = v === 'ok' ? kk(q) : v === 'conv' ? fct(p) : nkk(q);
+      const ok = v === 'ok';
+      return build({ cat: 'validity', d: 2, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(cond(p, q), given)}<br>الاستنتاج: ${claim}<br>هل هذا الاستنتاج صائب اعتمادًا على قانون الفصل المنطقي؟`,
+        correct: ok ? VO[0] : VO[1], wrongs: [ok ? VO[1] : VO[0]], hint: 'هل تحقق الفرض ' + sp + '؟',
+        explain: ok ? `المعطى الثاني يحقق الفرض ${sp} فتكون النتيجة ${sq} صائبة.` : v === 'conv' ? `المعطى الثاني هو النتيجة ${sq} لا الفرض ${sp}، فلا يلزم أن يتحقق الفرض.` : `المعطى ينفي الفرض ${sp} ولا يحققه، فلا يلزم أن تكون النتيجة خاطئة، والاستنتاج غير صائب.` });
+    } },
+    // من المولّد: قياس
+    { d: 2, fn() {
+      const { p, q, r } = SCEN(), v = pick(['ok', 'ok', 'conv', 'shared']);
+      const given = v === 'shared' ? [cond(p, r), cond(q, r)] : [cond(p, q), cond(q, r)];
+      const claim = v === 'ok' ? cond(p, r) : v === 'conv' ? cond(r, p) : cond(p, q);
+      const ok = v === 'ok';
+      return build({ cat: 'validity', d: 2, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(...given)}<br>الاستنتاج: ${claim}<br>هل هذا الاستنتاج صائب اعتمادًا على قانون القياس المنطقي؟`,
+        correct: ok ? VO[0] : VO[1], wrongs: [ok ? VO[1] : VO[0]], hint: 'هل نتيجة العبارة الأولى هي فرض العبارة الثانية؟',
+        explain: ok ? `نتيجة الأولى ${sq} هي فرض الثانية، فبقانون القياس ${sPR} صائبة.` : v === 'conv' ? `قانون القياس يعطي ${sPR} وليس عكسها ${L('r → p')}.` : `للعبارتين النتيجة نفسها ${sr}، ونتيجة الأولى ليست فرض الثانية، فلا يمكن تطبيق قانون القياس.` });
+    } },
+    { d: 3, fn() {
+      const { p, q, r } = SCEN();
+      return build({ cat: 'validity', d: 3, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(cond(p, q), cond(q, r), fct(p))}<br>الاستنتاج: ${kk(r)}<br>هل هذا الاستنتاج صائب؟`,
+        correct: VO[0], wrongs: [VO[1]], hint: 'يمكنك تطبيق قانون القياس أو قانون الفصل مرتين.',
+        explain: `بقانون القياس ${sPR} صائبة، ومع ${sp} نطبّق قانون الفصل فتكون ${sr} صائبة. وكذلك بتطبيق قانون الفصل مرتين.` });
+    } }
+  ];
+
+  // أشكال فن
+  const VENN = [
+    { inner: 'صُرف لهم مكافآت', outer: 'عملوا أكثر من ١٧٥ ساعة', c: 'إذا صُرف للموظف مكافأة، فإن عدد ساعات عمله تجاوز ١٧٥ ساعة في الشهر.', name: 'محمد', i: 'صُرفت لمحمد مكافأة.', o: 'تجاوز عدد الساعات التي عملها محمد ١٧٥ ساعة في الشهر.', ni: 'لم تُصرف لمحمد مكافأة.', no: 'لم تتجاوز ساعات عمل محمد ١٧٥ ساعة في الشهر.' },
+    { inner: 'المربعات', outer: 'المضلعات', c: 'إذا كان الشكل مربعًا، فإنه مضلع.', name: L('A'), i: `الشكل ${L('A')} مربع.`, o: `الشكل ${L('A')} مضلع.`, ni: `الشكل ${L('A')} ليس مربعًا.`, no: `الشكل ${L('A')} ليس مضلعًا.` },
+    { inner: 'الثدييات', outer: 'الفقاريات', c: 'إذا كان الحيوان من الثدييات، فإنه من الفقاريات.', name: L('X'), i: `الحيوان ${L('X')} من الثدييات.`, o: `الحيوان ${L('X')} من الفقاريات.`, ni: `الحيوان ${L('X')} ليس من الثدييات.`, no: `الحيوان ${L('X')} ليس من الفقاريات.` },
+    { inner: 'فرق فازت بالكأس', outer: 'فرق تأهلت للنهائي', c: 'إذا فاز الفريق بالكأس، فإنه تأهل للنهائي.', name: 'النسور', i: 'فاز فريق النسور بالكأس.', o: 'تأهل فريق النسور للنهائي.', ni: 'لم يفز فريق النسور بالكأس.', no: 'لم يتأهل فريق النسور للنهائي.' },
+    { inner: 'طلاب فازوا بالمركز الأول', outer: 'طلاب شاركوا في المسابقة', c: 'إذا فاز الطالب بالمركز الأول، فإنه شارك في المسابقة.', name: 'ماجد', i: 'فاز ماجد بالمركز الأول.', o: 'شارك ماجد في المسابقة.', ni: 'لم يفز ماجد بالمركز الأول.', no: 'لم يشارك ماجد في المسابقة.' }
+  ];
+  function vennNum() {
+    const inn = Math.random() < 0.5, n = inn ? 6 * randInt(3, 15) : pick([9, 15, 21, 27, 33, 39, 45, 51, 57, 63, 69, 75, 81]);
+    return { inner: 'مضاعفات ٦', outer: 'أعداد تقبل القسمة على ٣', c: 'إذا كان العدد من مضاعفات ٦، فإنه يقبل القسمة على ٣.', name: N(n), forceIn: inn,
+      i: `العدد ${N(n)} من مضاعفات ${N(6)}.`, o: `العدد ${N(n)} يقبل القسمة على ${N(3)}.`, ni: `العدد ${N(n)} ليس من مضاعفات ${N(6)}.`, no: `العدد ${N(n)} لا يقبل القسمة على ${N(3)}.` };
+  }
+  GEN_VAL.push(
+    { d: 2, fn() {
+      const v = Math.random() < 0.3 ? vennNum() : pick(VENN), inIn = v.forceIn !== undefined ? v.forceIn : Math.random() < 0.5;
+      const given = inIn ? v.i : v.o;
+      return build({ cat: 'validity', d: 2, prompt: `المعطيات:<br>${bl(v.c, given)}<br>الشكل الآتي يوضح العبارة الشرطية. ماذا يمكن استنتاجه؟`,
+        extra: vennBox({ inner: v.inner, outer: v.outer, dot: inIn ? 'in' : null, name: v.name }),
+        correct: inIn ? v.o : NONE, wrongs: inIn ? [NONE, v.no, v.ni] : [v.i, v.ni, v.no],
+        hint: inIn ? 'الدائرة الداخلية جزء من الخارجية، فمن كان داخل الداخلية فهو داخل الخارجية.' : 'من كان داخل الدائرة الكبيرة فقط، هل يلزم أن يكون داخل الصغيرة؟',
+        explain: inIn ? 'المعطى يحقق الفرض (داخل الدائرة الصغيرة)، وكل ما في الدائرة الصغيرة داخل الكبيرة، فالنتيجة صائبة.' : 'المعطى هو النتيجة، أي داخل الدائرة الكبيرة. قد يكون داخل الدائرة الصغيرة وقد يكون خارجها، فلا توجد نتيجة صائبة.' });
+    } },
+    { d: 3, fn() {
+      const v = pick(VENN);
+      return build({ cat: 'validity', d: 3, fixedOrder: true, nOpts: 2, order: VO,
+        prompt: `المعطيات:<br>${bl(v.c, v.o)}<br>الاستنتاج: ${v.i}<br>الشكل الآتي يوضح العبارة الشرطية. هل الاستنتاج صائب؟`,
+        extra: vennBox({ inner: v.inner, outer: v.outer }), correct: VO[1], wrongs: [VO[0]],
+        hint: 'محمد (أو الشكل أو الفريق) داخل الدائرة الكبيرة. هل يلزم أن يكون داخل الصغيرة؟',
+        explain: 'المعطى يضع العنصر داخل الدائرة الكبيرة (النتيجة) فقط، وليس بالضرورة داخل الدائرة الصغيرة (الفرض)، فالاستنتاج غير صائب.' });
+    } }
+  );
+
+  // ============ أي قانون نستعمل؟ ============
+  const IDOPT = [LAW_D, LAW_S, NONE_L];
+  const GEN_ID = [
+    { d: 1, fn() {
+      const { p, q, r } = SCEN(), kind = pick(['d', 's', 'n']);
+      const second = kind === 'd' ? fct(p) : kind === 's' ? cond(q, r) : pick([fct(q), nfct(p), cond(r, q), cond(p, r)]);
+      const correct = kind === 'd' ? LAW_D : kind === 's' ? LAW_S : NONE_L;
+      return build({ cat: 'identify_law', d: 1, fixedOrder: true, nOpts: 3, order: IDOPT,
+        prompt: `المعطيات:<br>${bl(cond(p, q), second)}<br>أي القانونين المنطقيين يمكن استعماله للحصول على نتيجة صائبة؟`,
+        correct, wrongs: IDOPT.filter(x => x !== correct),
+        hint: 'هل المعطى الثاني هو الفرض (فصل)؟ أم عبارة شرطية فرضها نتيجة الأولى (قياس)؟',
+        explain: kind === 'd' ? `المعطى الثاني هو الفرض ${sp} نفسه، فنستعمل قانون الفصل المنطقي.` : kind === 's' ? `المعطى الثاني عبارة شرطية فرضها ${sq} هو نتيجة العبارة الأولى، فنستعمل قانون القياس المنطقي.` : 'المعطى الثاني لا يحقق الفرض، وليس عبارة شرطية فرضها نتيجة الأولى، فلا يمكن استعمال أي قانون ولا توجد نتيجة صائبة.' });
+    }, w: 2 },
+    { d: 1, fn() {
+      const kind = pick(['d', 's', 'n']);
+      const pairs = { d: [`${sPQ} صائبة و${sp} صائب`, LAW_D], s: [`${sPQ} صائبة و${sQR} صائبة`, LAW_S], n: [pick([`${sPQ} صائبة و${sq} صائب`, `${sPQ} صائبة و${L('r → q')} صائبة`, `${sPQ} صائبة و${L('~p')} صائب`]), NONE_L] };
+      const [txt, correct] = pairs[kind];
+      return build({ cat: 'identify_law', d: 1, fixedOrder: true, nOpts: 3, order: IDOPT, prompt: `المعطيات: ${txt}.<br>أي القانونين المنطقيين يمكن استعماله للحصول على نتيجة صائبة؟`,
+        correct, wrongs: IDOPT.filter(x => x !== correct), hint: 'قارن المعطى الثاني بفرض العبارة الأولى ونتيجتها.',
+        explain: kind === 'd' ? 'المعطى الثاني هو الفرض p، فنستعمل قانون الفصل المنطقي.'.replace('p', sp) : kind === 's' ? `نتيجة الأولى ${sq} هي فرض الثانية، فنستعمل قانون القياس المنطقي.` : 'لا يتحقق شرط أي من القانونين، فلا توجد نتيجة صائبة.' });
+    } },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN(), kind = pick(['d', 's', 'n']);
+      let second, correct, wrongs;
+      if (kind === 'd') { second = fct(p); correct = `${kk(q)} باستعمال ${LAW_D}`; wrongs = [`${kk(q)} باستعمال ${LAW_S}`, `${nkk(q)} باستعمال ${LAW_D}`, NONE]; }
+      else if (kind === 's') { second = cond(q, r); correct = `${cond(p, r)} باستعمال ${LAW_S}`; wrongs = [`${cond(p, r)} باستعمال ${LAW_D}`, `${cond(r, p)} باستعمال ${LAW_S}`, NONE]; }
+      else { second = pick([fct(q), cond(r, q)]); correct = NONE; wrongs = [`${kk(r)} باستعمال ${LAW_D}`, `${cond(p, r)} باستعمال ${LAW_S}`, `${cond(r, p)} باستعمال ${LAW_S}`]; }
+      return build({ cat: 'identify_law', d: 2, prompt: `المعطيات:<br>${bl(cond(p, q), second)}<br>اكتب النتيجة الصائبة إن أمكن مع القانون المستعمل، وإلا فاختر «لا توجد نتيجة صائبة».`,
+        correct, wrongs, hint: 'حدّد القانون المناسب أولًا ثم النتيجة.',
+        explain: kind === 'd' ? `المعطى الثاني هو الفرض ${sp}، فبقانون الفصل: ${kk(q)}` : kind === 's' ? `نتيجة الأولى ${sq} هي فرض الثانية، فبقانون القياس: ${cond(p, r)}` : 'المعطى الثاني لا يحقق الفرض ولا يشكّل سلسلة مع الأولى، فلا توجد نتيجة صائبة.' });
+    } },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN();
+      const sets = [[cond(p, q), cond(q, r)], [cond(p, q), cond(r, q)], [cond(p, q), cond(p, r)], [cond(p, q), nfct(p)]];
+      return build({ cat: 'identify_law', d: 2, prompt: 'في أي حالة من الحالات الآتية يمكن استعمال قانون القياس المنطقي للحصول على نتيجة صائبة؟',
+        correct: 'المعطيان: ' + sets[0].join(' و'), wrongs: sets.slice(1).map(s => 'المعطيان: ' + s.join(' و')),
+        hint: 'ابحث عن عبارتين شرطيتين تكون نتيجة إحداهما هي فرض الأخرى.',
+        explain: `الحالة الأولى فقط يربط فيها ${sq} بين العبارتين (نتيجة الأولى = فرض الثانية). في الحالتين الثانية والثالثة لا توجد حلقة مشتركة بهذا الشكل، والرابعة ليست عبارتين شرطيتين.` });
+    } },
+    { d: 2, fn() {
+      const { p, q, r } = SCEN();
+      const sets = [[cond(p, q), fct(p)], [cond(p, q), fct(q)], [cond(p, q), nfct(p)], [cond(p, q), nfct(q)]];
+      return build({ cat: 'identify_law', d: 2, prompt: 'في أي حالة من الحالات الآتية يمكن استعمال قانون الفصل المنطقي للحصول على نتيجة صائبة؟',
+        correct: 'المعطيان: ' + sets[0].join(' و'), wrongs: sets.slice(1).map(s => 'المعطيان: ' + s.join(' و')),
+        hint: 'يجب أن يتحقق الفرض نفسه.',
+        explain: `في الحالة الأولى يتحقق الفرض ${sp} نفسه. وفي الحالات الأخرى المعطى الثاني هو النتيجة أو نفي لإحدى العبارتين، فلا يطبّق قانون الفصل.` });
+    } },
+    { d: 3, fn() {
+      const { p, q, r } = SCEN(), kind = pick(['d3', 'n3']);
+      if (kind === 'd3') return build({ cat: 'identify_law', d: 3, prompt: `المعطيات:<br>${bl(cond(p, q), cond(q, r), fct(p))}<br>أي القانونين نستعمل (بالترتيب المناسب) للوصول إلى ${kk(r)}`,
+        correct: 'القياس ثم الفصل، أو الفصل مرتين', wrongs: ['القياس فقط', 'الفصل مرة واحدة فقط', 'لا يمكن الوصول إليها'],
+        hint: 'من p → q و q → r يمكن تكوين p → r.',
+        explain: `بقانون القياس نحصل على ${sPR}، ثم بقانون الفصل مع ${sp} نحصل على ${sr}. أو نطبّق الفصل مرتين.` });
+      return build({ cat: 'identify_law', d: 3, prompt: `المعطيات:<br>${bl(cond(p, q), cond(r, p))}<br>أي القانونين يمكن استعماله، وما النتيجة؟`,
+        correct: `${cond(r, q)} باستعمال ${LAW_S}`, wrongs: [`${cond(p, r)} باستعمال ${LAW_S}`, `${kk(q)} باستعمال ${LAW_D}`, NONE],
+        hint: 'رتّب العبارتين: أيهما تأتي أولًا في السلسلة؟',
+        explain: `السلسلة هي ${L('r → p')} ثم ${sPQ}، فنتيجة الأولى ${sp} هي فرض الثانية. وبقانون القياس نحصل على ${L('r → q')}: ${cond(r, q)}` });
+    } }
+  ];
+
+  // ============ مفاهيم ومفردات ============
+  const CONCEPTS = [
+    { d: 1, q: 'ما التبرير الاستنتاجي؟', c: 'استعمال الحقائق والقواعد والتعريفات والخصائص للوصول إلى نتائج منطقية من عبارات معطاة', w: ['استعمال أنماط من الأمثلة أو المشاهدات لعمل تخمين', 'تخمين النتيجة دون معطيات', 'اختبار صحة التخمين بمثال مضاد'], e: 'التبرير الاستنتاجي يستعمل حقائق وقواعد وتعريفات وخصائص للوصول إلى نتائج منطقية من عبارات معطاة.', h: 'الطريقة التي يستعملها المحققون لتحديد الجاني.' },
+    { d: 1, q: 'ما التبرير الاستقرائي؟', c: 'استعمال أنماط من الأمثلة أو المشاهدات لعمل تخمين', w: ['استعمال القواعد والتعريفات للوصول إلى نتيجة حتمية', 'تطبيق قانون الفصل المنطقي', 'تطبيق قانون القياس المنطقي'], e: 'التبرير الاستقرائي يستعمل أنماطًا من الأمثلة أو المشاهدات لعمل تخمين.', h: 'يعتمد على الأمثلة.' },
+    { d: 1, q: 'أي الطرق الآتية يستعملها المحققون لتحديد الجاني؟', c: 'التبرير الاستنتاجي', w: ['التبرير الاستقرائي فقط', 'التخمين العشوائي', 'المثال المضاد'], e: 'يجمع المحققون الأدلة (مثل بصمات الأصابع) ويستعملونها لاستبعاد المتهمين وتحديد الجاني، وهذا تبرير استنتاجي.', h: 'يستعملون الحقائق والأدلة.' },
+    { d: 1, q: 'أي مما يأتي من أشكال التبرير الاستنتاجي؟', c: 'قانون الفصل المنطقي', w: ['المثال المضاد', 'التخمين', 'اكتشاف الأنماط'], e: 'من أشكال التبرير الاستنتاجي: قانون الفصل المنطقي وقانون القياس المنطقي.', h: 'له قانونان في هذا الدرس.' },
+    { d: 1, q: 'ماذا ينص قانون الفصل المنطقي؟', c: 'إذا كانت p → q صائبة وكان p صائبًا فإن q تكون صائبة', w: ['إذا كانت p → q صائبة وكان q صائبًا فإن p تكون صائبة', 'إذا كانت p → q و q → r صائبتين فإن p → r صائبة', 'إذا كان p خاطئًا فإن q تكون خاطئة'], e: 'قانون الفصل: إذا كانت p → q صائبة وكان الفرض p صائبًا فإن النتيجة q تكون صائبة أيضًا.', h: 'يحتاج إلى تحقق الفرض.' },
+    { d: 1, q: 'ماذا ينص قانون القياس المنطقي؟', c: 'إذا كانت p → q و q → r صائبتين فإن p → r صائبة', w: ['إذا كانت p → q صائبة وكان p صائبًا فإن q صائبة', 'إذا كانت p → q و r → q صائبتين فإن p → r صائبة', 'إذا كانت p → q صائبة فإن q → p صائبة'], e: 'قانون القياس: إذا كانت p → q و q → r صائبتين فإن p → r صائبة أيضًا.', h: 'سلسلة من عبارتين شرطيتين.' },
+    { d: 2, q: 'متى يمكن تطبيق قانون القياس المنطقي؟', c: 'عندما تكون نتيجة العبارة الشرطية الأولى هي فرض العبارة الشرطية الثانية', w: ['عندما يكون للعبارتين الفرض نفسه', 'عندما يكون للعبارتين النتيجة نفسها', 'عندما تكون العبارتان متكافئتين'], e: 'يتطلب قانون القياس أن تكون نتيجة العبارة الأولى هي فرض العبارة الثانية.', h: 'يجب أن تتصل العبارتان كسلسلة.' },
+    { d: 2, q: 'إذا لم تكن نتيجة العبارة الأولى هي فرض العبارة الثانية، فماذا نقول؟', c: 'لا يمكن استعمال قانون القياس للحصول على نتيجة صائبة', w: ['نستعمل قانون القياس مع تبديل العبارتين', 'نستنتج أن العبارتين خاطئتان', 'نستنتج أن الفرضين متساويان'], e: 'إذا لم تكن نتيجة العبارة الأولى هي فرض الثانية فلا يمكن استعمال قانون القياس للحصول على نتيجة صائبة.', h: 'تنبيه في الدرس.' },
+    { d: 2, q: 'ما الذي يستعمل لإثبات عدم صحة تخمين توصلنا إليه بالتبرير الاستقرائي؟', c: 'المثال المضاد', w: ['قانون الفصل المنطقي', 'قانون القياس المنطقي', 'مثال داعم واحد'], e: 'يستعمل المثال المضاد لإثبات عدم صحة التخمين، ولا يعدّ طريقة صائبة لإثبات صحته.', h: 'مثال واحد يكفي لدحضه.' },
+    { d: 2, q: 'ما الطريقة الصائبة لإثبات صحة تخمين؟', c: 'استعمال التبرير الاستنتاجي ومنه قانون الفصل المنطقي', w: ['إعطاء مثال مضاد', 'إعطاء عدة أمثلة تدعمه', 'إعطاء مثال داعم واحد'], e: 'لإثبات صحة التخمين يجب استعمال التبرير الاستنتاجي، وأحد أشكاله قانون الفصل المنطقي.', h: 'الأمثلة وحدها لا تثبت.' },
+    { d: 1, q: 'كيف نتعامل مع المعطيات في الكتاب من الآن فصاعدًا؟', c: 'نعتبر جميعها صائبة', w: ['نعتبرها جميعًا خاطئة', 'نتحقق من كل واحدة بتجربة', 'نعتبر بعضها صائبًا فقط'], e: 'من الآن فصاعدًا نعتبر جميع المعطيات في الكتاب صائبة.', h: 'إرشادات للدراسة.' },
+    { d: 2, q: 'عندما تكون العبارات المعطاة صائبة، فإن النتائج التي نصل إليها بتطبيق التبرير الاستنتاجي تكون:', c: 'صائبة حتمًا', w: ['صائبة أحيانًا فقط', 'خاطئة دائمًا', 'تخمينًا قد يكون خاطئًا'], e: 'عندما تكون العبارات المعطاة صائبة فإن النتائج التي نتوصل إليها بالتبرير الاستنتاجي تكون صائبة حتمًا.', h: 'الاستنتاج ليس تخمينًا.' },
+    { d: 2, q: 'إذا كانت p → q صائبة وكان q صائبًا، فهل يلزم أن يكون p صائبًا؟', c: 'لا، فتحقق النتيجة لا يعني تحقق الفرض', w: ['نعم، بقانون الفصل المنطقي', 'نعم، بقانون القياس المنطقي', 'نعم، لأن p → q صائبة'], e: 'قانون الفصل يحتاج إلى تحقق الفرض لا النتيجة. مثال: قد يرتدي مالك ملابس رياضية دون أن يذهب إلى النادي.', h: 'مثال مالك والنادي.' },
+    { d: 1, q: 'ما نصفا المستقيم المتعاكسان؟', c: 'نصفا مستقيم لهما نقطة البداية نفسها لكن باتجاهين متعاكسين', w: ['نصفا مستقيم متوازيان', 'نصفا مستقيم متقاطعان في نقطتين', 'نصفا مستقيم لهما الاتجاه نفسه'], e: 'نصفا المستقيم المتعاكسان لهما نقطة البداية نفسها، ولكن باتجاهين متعاكسين.', h: 'يخرجان من نقطة واحدة.' },
+    { d: 2, q: 'ما الزاويتان المتجاورتان على مستقيم؟', c: 'زاويتان ضلعاهما غير المشتركين نصفا مستقيم متعاكسان', w: ['زاويتان مجموع قياسيهما ٩٠°', 'زاويتان متطابقتان', 'زاويتان ليس لهما ضلع مشترك'], e: 'الزاويتان المتجاورتان على مستقيم هما زاويتان ضلعاهما غير المشتركين نصفا مستقيم متعاكسان.', h: 'ركّز على الضلعين غير المشتركين.' },
+    { d: 2, q: 'بِمَ يُدعم الدليل المنطقي؟', c: 'بقوانين المنطق', w: ['بالأمثلة', 'بالبيانات الإحصائية', 'بالتخمين'], e: 'الدليل المنطقي مدعوم بقوانين المنطق، ويختلف عن الدليل الإحصائي المدعوم بالأمثلة أو البيانات.', h: 'يختلف عن الدليل الإحصائي.' },
+    { d: 2, q: 'بِمَ يُدعم الدليل الإحصائي؟', c: 'بالأمثلة أو البيانات', w: ['بقوانين المنطق', 'بقانون الفصل المنطقي', 'بقانون القياس المنطقي'], e: 'الدليل الإحصائي مدعوم بالأمثلة أو البيانات، أما الدليل المنطقي فمدعوم بقوانين المنطق.', h: 'يختلف عن الدليل المنطقي.' },
+    { d: 1, q: 'ما الاستنتاج الصائب من: «إذا لم يكن في السيارة وقود فإنها لن تعمل» و«لا يوجد وقود في سيارة عبدالله»؟', c: 'لن تعمل سيارة عبدالله', w: ['يوجد وقود في سيارة عبدالله', 'ستعمل سيارة عبدالله', 'لا توجد نتيجة صائبة'], e: 'المعطى الثاني يحقق الفرض، فبقانون الفصل: لن تعمل سيارة عبدالله.', h: 'هل تحقق الفرض؟' },
+    { d: 1, q: 'ما الاستنتاج الصائب من: «إذا حصلت على عمل فسوف تكسب نقودًا» و«إذا كسبت نقودًا فسوف تتمكن من شراء سيارة»؟', c: 'إذا حصلت على عمل، فسوف تتمكن من شراء سيارة', w: ['إذا تمكنت من شراء سيارة، فسوف تحصل على عمل', 'إذا لم تحصل على عمل، فلن تكسب نقودًا', 'لا توجد نتيجة صائبة'], e: 'نتيجة الأولى هي فرض الثانية، فبقانون القياس: إذا حصلت على عمل فسوف تتمكن من شراء سيارة.', h: 'اربط العبارتين بسلسلة.' },
+    { d: 2, q: 'تُرى العبارة p → r في قانون القياس المنطقي من العبارتين:', c: 'p → q و q → r', w: ['p → q و r → q', 'p → q و p → r', 'q → p و r → q'], e: 'نحصل على p → r من p → q و q → r بحذف الحلقة الوسطى q.', h: 'q تتوسط السلسلة.' },
+    { d: 2, q: 'لماذا لا نستطيع استنتاج شيء من العبارتين p → q و r → q؟', c: 'لأن نتيجة الأولى ليست فرض الثانية', w: ['لأن العبارتين خاطئتان', 'لأن فرضيهما مختلفان فقط', 'لأن النتيجة q خاطئة'], e: 'للعبارتين النتيجة نفسها q، ونتيجة الأولى q ليست فرض الثانية r، فلا يمكن تطبيق قانون القياس.', h: 'ابحث عن الحلقة المشتركة.' },
+    { d: 3, q: 'في شكل فن لعبارة «إذا كان x في A فإنه في B»، أين تقع الدائرة A؟', c: 'داخل الدائرة B', w: ['خارج الدائرة B', 'تتقاطع مع B جزئيًا', 'تنطبق تمامًا على B دائمًا'], e: 'كل عنصر في A هو في B، فدائرة A (الفرض) تقع داخل دائرة B (النتيجة).', h: 'الفرض أخص من النتيجة.' },
+    { d: 3, q: 'إذا كان العنصر داخل الدائرة الكبيرة (النتيجة) في شكل فن، فهل يلزم أن يكون داخل الدائرة الصغيرة (الفرض)؟', c: 'لا، قد يكون داخلها وقد يكون خارجها', w: ['نعم، دائمًا', 'لا، يكون خارجها دائمًا', 'لا يمكن أن يكون داخل الدائرة الكبيرة'], e: 'الدائرة الكبيرة تضم الصغيرة وأشياء أخرى، فلا نستطيع الجزم بموقع العنصر داخل الصغيرة.', h: 'مثال محمد والمكافآت.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: fixSyms(c.q), correct: fixSyms(c.c), wrongs: c.w.map(fixSyms), hint: fixSyms(c.h), explain: fixSyms(c.e) }) }));
+
+  const GENS = { ded_ind: GEN_DI, detachment: GEN_DT, syllogism: GEN_SY, validity: GEN_VAL, identify_law: GEN_ID, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'patterns', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
   }
 
-  function selectLevel(level, element) {
-    selectedLevel = level;
-    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('custom-options').style.display = level === 'custom' ? 'block' : 'none';
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
   }
 
-  function setCustomTimeMode(hasTime) {
-    customHasTime = hasTime;
-    document.getElementById('custom-time-no').classList.toggle('active', !hasTime);
-    document.getElementById('custom-time-yes').classList.toggle('active', hasTime);
-    document.getElementById('custom-time-input-wrapper').style.display = hasTime ? 'block' : 'none';
-  }
-
-  function showToast(message, type) {
-    const toast = document.getElementById('toast');
-    toast.innerText = message;
-    toast.className = `toast toast-${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 1000);
-  }
-
-  function getQuestionCount() {
-    if (selectedLevel === 'custom') {
-      let count = parseInt(document.getElementById('custom-count').value);
-      if (!count || count < 1) count = 10;
-      return count;
-    }
-    return levelSettings[selectedLevel].count;
-  }
-
-  function getTimePerQuestion() {
-    if (selectedLevel === 'custom') {
-      if (!customHasTime) return 0;
-      let secs = parseInt(document.getElementById('custom-time-seconds').value);
-      if (!secs || secs < 1) secs = 15;
-      return secs;
-    }
-    return levelSettings[selectedLevel].time;
-  }
-
-  // كل سؤال يُبنى لحظة توليده بمولّد عشوائي — لا توجد أسئلة مكتوبة سلفًا يتم سحبها
-  function generateQuestions() {
-    const count = getQuestionCount();
-    const cats = currentMode === 'mixed' ? selectedCats : [currentMode];
-    questions = [];
-    for (let i = 0; i < count; i++) {
-      const cat = cats[randInt(0, cats.length - 1)];
-      if (cat === 'ded_ind') questions.push(generateDeductiveInductiveQuestion());
-      else if (cat === 'detachment') questions.push(generateDetachmentCategoryQuestion());
-      else if (cat === 'syllogism') questions.push(generateSyllogismCategoryQuestion());
-      else questions.push(generateIdentifyLawQuestion());
-    }
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
   }
 
   function startQuiz() {
-    generateQuestions();
-    currentQuestionIndex = 0;
-    score = 0;
-    timePerQuestion = getTimePerQuestion();
-
-    document.getElementById('setup-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('quiz-box').style.display = 'block';
-    document.getElementById('timer-container').style.display = (timePerQuestion === 0) ? 'none' : 'block';
-
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
     showQuestion();
   }
 
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
   function showQuestion() {
-    clearInterval(timer);
-    isAnswering = false;
-    const q = questions[currentQuestionIndex];
-
-    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
-    document.getElementById('total-q').innerText = questions.length;
-    document.getElementById('score-text').innerText = score;
-    document.getElementById('cat-tag').innerText = catLabels[q.catKey];
-
-    const questionTextEl = document.getElementById('question-text');
-    questionTextEl.classList.add('long-text');
-    questionTextEl.innerText = q.prompt;
-
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
-    const isBoolQuestion = q.options.length === 2 && q.options.includes('صائبة') && q.options.includes('خاطئة');
-    optionsContainer.classList.toggle('text-options', !isBoolQuestion);
-    optionsContainer.classList.toggle('bool-options', isBoolQuestion);
-
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn' + (!isBoolQuestion ? ' option-text' : '');
-      btn.innerText = opt;
-      btn.dataset.value = opt;
-      btn.onclick = () => checkAnswer(opt, btn, q);
-      optionsContainer.appendChild(btn);
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
     });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
 
-    if (timePerQuestion > 0) startTimer(q);
-  }
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
 
-  function startTimer(q) {
-    const timerBar = document.getElementById('timer-bar');
-    timerBar.style.width = '100%';
-
-    const intervalTime = 100;
-    const totalSteps = (timePerQuestion * 1000) / intervalTime;
-    let currentStep = 0;
-
-    timer = setInterval(() => {
-      currentStep++;
-      const percentage = 100 - (currentStep / totalSteps) * 100;
-      timerBar.style.width = `${Math.max(0, percentage)}%`;
-      if (currentStep >= totalSteps) {
-        clearInterval(timer);
-        checkAnswer(null, null, q);
-      }
-    }, intervalTime);
-  }
-
-  function checkAnswer(selected, targetBtn, q) {
-    if (isAnswering) return;
-    isAnswering = true;
-    clearInterval(timer);
-
-    const correct = q.correct;
-    const allOptionBtns = document.querySelectorAll('.option-btn');
-
-    if (selected === correct) {
-      score++;
-      if (targetBtn) targetBtn.classList.add('correct');
-      showToast('أحسنت! 👏', 'success');
-    } else {
-      if (targetBtn) targetBtn.classList.add('wrong');
-      allOptionBtns.forEach(btn => {
-        if (btn.dataset.value === correct) btn.classList.add('correct');
-      });
-      showToast('إجابة غير صحيحة! ❌', 'error');
-    }
-
-    setTimeout(() => {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) showQuestion();
-      else endQuiz();
-    }, 1400);
-  }
-
-  function endQuiz() {
-    document.getElementById('quiz-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'block';
-
-    const percentage = Math.round((score / questions.length) * 100);
-    document.getElementById('final-percentage').innerText = `${percentage}%`;
-
-    const badge = document.getElementById('level-badge');
-    const feedback = document.getElementById('feedback-text');
-
-    if (percentage >= 90) {
-      badge.innerText = 'المستوى الفعلي: خبير تبرير استنتاجي 🌟';
-      badge.style.color = 'var(--success)';
-      feedback.innerText = 'أداء رائع! تُتقن التمييز بين الاستنتاجي والاستقرائي، وتطبيق قانون الفصل المنطقي وقانون القياس المنطقي بثقة عالية.';
-    } else if (percentage >= 75) {
-      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
-      badge.style.color = 'var(--primary-dark)';
-      feedback.innerText = 'ممتاز! فهمك للتبرير الاستنتاجي جيد جدًا، وتحتاج فقط لمزيد من التدقيق في اختيار القانون المناسب.';
-    } else if (percentage >= 50) {
-      badge.innerText = 'المستوى الفعلي: جيد 📈';
-      badge.style.color = 'var(--subtext)';
-      feedback.innerText = 'بداية جيدة! راجع متى تتطابق المعطيات مع فرض العبارة الشرطية، ومتى لا توجد نتيجة صائبة.';
-    } else {
-      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
-      badge.style.color = 'var(--danger)';
-      feedback.innerText = 'لا بأس، ابدأ بمستوى "سهل جدًا" بدون وقت، وركّز على نمط واحد (قانون الفصل أو قانون القياس) في كل مرة حتى تتقنه.';
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
     }
   }
 
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
   function resetQuiz() {
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('setup-box').style.display = 'block';
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
   }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
 </script>
 
 <!-- SM-AUTO-INJECTED:START:admin-scripts -->
