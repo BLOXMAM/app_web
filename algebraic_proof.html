@@ -17,14 +17,10 @@
       --primary-dark: #4338CA;
       --success: #16A34A;
       --danger: #DC2626;
+      --warn: #D97706;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Tajawal', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
     body {
       background-color: var(--bg);
@@ -39,7 +35,7 @@
     .container {
       background-color: var(--card-bg);
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       border-radius: 24px;
       padding: 32px;
       box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
@@ -48,303 +44,263 @@
       overflow: hidden;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 1.7rem;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
 
-    p.subtitle {
-      text-align: center;
-      color: var(--subtext);
-      font-size: 0.92rem;
-      margin-bottom: 24px;
-      line-height: 1.6;
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
     }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
 
-    .section-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-
-    .mode-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
     .mode-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 12px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.9rem;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
     }
-
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
     .mode-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
       box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
     }
 
-    .cats-container-wrapper {
-      transition: all 0.3s ease;
-    }
-
-    .cats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
     .cat-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 10px 6px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-      font-size: 0.78rem;
-      line-height: 1.4;
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
     }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
 
-    .cat-btn.active {
-      background: var(--primary);
-      border-color: var(--primary-dark);
-      color: #ffffff;
-      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
-    }
-
-    .levels-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
     .level-card {
-      background: var(--w1);
-      border: 2px solid transparent;
-      padding: 14px;
-      border-radius: 14px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s;
-      color: var(--text);
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
     }
-
     .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
     .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
 
-    .level-card.active {
-      background: var(--w2);
-      border-color: var(--primary);
-    }
-
-    .custom-options-box {
-      background: var(--w1);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 28px;
-    }
-
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
     .custom-input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid var(--w2);
-      background: var(--card-bg);
-      color: var(--text);
-      font-family: 'Tajawal', sans-serif;
-      font-size: 1rem;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 16px;
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
     }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
 
-    .custom-input:focus {
-      outline: none;
-      border-color: var(--primary);
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
     }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
 
     .btn-start {
-      width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #ffffff;
-      border: none;
-      padding: 16px;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
       transition: transform 0.1s, box-shadow 0.2s;
     }
-
     .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
 
     .quiz-box { display: none; }
-
     .header-stats {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      background: var(--w1);
-      color: var(--text);
-      padding: 12px 18px;
-      border-radius: 12px;
-      font-size: 0.9rem;
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
     }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
 
-    .cat-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-      background: var(--w2);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 14px;
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
     }
-
-    .timer-bar-container {
-      width: 100%;
-      height: 6px;
-      background: var(--w1);
-      border-radius: 10px;
-      margin-bottom: 24px;
-      overflow: hidden;
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
     }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
 
-    .timer-bar {
-      height: 100%;
-      background: var(--primary);
-      width: 100%;
-      transition: width 0.1s linear;
-    }
-
-    .question-card {
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .question-text {
-      font-size: 2rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: var(--text);
-      word-break: break-word;
-      white-space: pre-line;
-    }
-
-    .question-text.long-text {
-      font-size: 1.1rem;
-      font-weight: 700;
-      line-height: 1.8;
-      text-align: right;
-      white-space: pre-line;
-    }
-
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .options-grid.text-options {
-      grid-template-columns: 1fr;
-    }
-
-    .options-grid.bool-options {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
     .option-btn {
-      background: var(--w1);
-      border: 2px solid transparent;
-      color: var(--text);
-      padding: 18px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      word-break: break-word;
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
     }
-
-    .option-btn.option-text {
-      font-size: 0.95rem;
-      font-weight: 500;
-      text-align: right;
-      padding: 14px 16px;
-    }
-
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
     .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
 
-    .option-btn.correct {
-      background-color: var(--w2) !important;
-      border-color: var(--success) !important;
-      color: var(--success) !important;
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
     }
-
-    .option-btn.wrong {
-      background-color: var(--w2) !important;
-      border-color: var(--danger) !important;
-      color: var(--danger) !important;
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
     }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
 
     .toast {
-      position: fixed;
-      bottom: -80px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #ffffff;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 1000;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      pointer-events: none;
-      max-width: 90%;
-      text-align: center;
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
     }
-
-    .toast.show {
-      bottom: 30px;
-      opacity: 1;
-    }
-
+    .toast.show { bottom: 30px; opacity: 1; }
     .toast.toast-success { background: var(--success); }
     .toast.toast-error { background: var(--danger); }
 
     .result-box { display: none; text-align: center; }
-    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 16px 0; }
-    .badge {
-      display: inline-block;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-weight: bold;
-      margin-bottom: 16px;
-      background: var(--w1);
-      color: var(--success);
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
     }
-    .container { margin: 0 auto; }
-    input { -webkit-user-select: text !important; user-select: text !important; }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+
+    /* ===== البرهان الجبري: كسور وجداول البراهين ===== */
+    .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; font-size: .92em; line-height: 1.2; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; }
+    .fr > span:last-child { padding: 1px 3px 0; }
+    table.pf { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0; }
+    table.pf th { background: var(--w2); padding: 6px 4px; font-weight: 800; border: 1px solid var(--w2); }
+    table.pf td { border: 1px solid var(--w2); padding: 6px 6px; vertical-align: middle; }
+    table.pf td.n { width: 26px; text-align: center; color: var(--subtext); font-weight: 800; padding: 6px 2px; }
+    table.pf td.s { text-align: center; font-weight: 700; direction: ltr; }
+    table.pf td.j { text-align: right; }
+    table.pf .blank { display: inline-block; min-width: 40px; text-align: center; background: var(--w2); color: var(--primary); font-weight: 900; border-radius: 8px; padding: 2px 10px; }
+    table.pf.sm td, table.pf.sm th { padding: 4px 4px; font-size: .82rem; }
+    .given-box { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; font-weight: 700; line-height: 2; text-align: right; font-size: .98rem; }
+    .stmt-list { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; text-align: right; font-weight: 700; line-height: 2.1; }
+    table.pt td { font-size: .86rem; }
+    table.pt td:first-child { font-weight: 800; white-space: nowrap; }
+    table.pt td.eq { direction: rtl; text-align: right; font-weight: 600; }
   </style>
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -543,26 +499,29 @@
 </div>
 <!-- END ADMIN DRAWER -->
 
+
 <div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
   <!-- شاشة الإعدادات -->
   <div id="setup-box">
     <h1>تحدي البرهان الجبري 📐</h1>
-    <p class="subtitle">اختبر فهمك لخصائص المساواة، وتبرير خطوات الحل في البرهان الجبري، وقراءة البرهان ذي العمودين وتطبيقه على القطع المستقيمة والزوايا</p>
+    <p class="subtitle">الدرس ١-٦ • البرهان الجبري<br>اضغط على أيقونة (i) لمراجعة خصائص المساواة وخطوات البرهان ذي العمودين قبل البدء أو أثناء الحل</p>
 
     <div class="section-title">1. اختر نمط التحدي:</div>
-    <div class="mode-grid">
-      <button class="mode-btn active" onclick="setMode('prop', this)">خصائص المساواة 🟰</button>
-      <button class="mode-btn" onclick="setMode('solve', this)">مبررات خطوات الحل 🧮</button>
-      <button class="mode-btn" onclick="setMode('cols', this)">البرهان ذو العمودين 📋</button>
-      <button class="mode-btn" onclick="setMode('geo', this)">البرهان الهندسي 📐</button>
-      <button class="mode-btn" onclick="setMode('mixed', this)" style="grid-column: span 2;">منوع شامل 🧩</button>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="prop" onclick="setMode('prop', this)">خصائص المساواة 🟰<small>أي خاصية تبرر العبارة؟</small></button>
+      <button class="mode-btn" data-mode="solve" onclick="setMode('solve', this)">مبررات خطوات الحل 🧮<small>حل المعادلات خطوة بخطوة</small></button>
+      <button class="mode-btn" data-mode="cols" onclick="setMode('cols', this)">البرهان ذو العمودين 📋<small>العبارات والمبررات</small></button>
+      <button class="mode-btn" data-mode="geo" onclick="setMode('geo', this)">البرهان الهندسي 📐<small>القطع والزوايا</small></button>
+      <button class="mode-btn" data-mode="error" onclick="setMode('error', this)">اكتشف الخطأ 🔍<small>مبرر واحد خاطئ</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وأفكار</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
     </div>
 
-    <div id="cats-wrapper" class="cats-container-wrapper" style="display: none;">
+    <div id="cats-wrapper" style="display: none;">
       <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
-      <div class="cats-grid" id="cats-container">
-        <!-- يتم إنشاؤها عبر JavaScript -->
-      </div>
+      <div class="cats-grid" id="cats-container"></div>
     </div>
 
     <div class="section-title">2. حدد مستواك الحالي:</div>
@@ -573,15 +532,15 @@
       </div>
       <div class="level-card" onclick="selectLevel('good', this)">
         <h4>سهل</h4>
-        <span>10 أسئلة • 20 ثانية/سؤال</span>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('very_good', this)">
         <h4>متوسط</h4>
-        <span>15 سؤال • 15 ثانية/سؤال</span>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
       </div>
       <div class="level-card" onclick="selectLevel('excellent', this)">
         <h4>صعب</h4>
-        <span>20 سؤال • 10 ثواني/سؤال</span>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
       </div>
       <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
         <h4>مخصص ⚙️</h4>
@@ -601,9 +560,14 @@
 
       <div id="custom-time-input-wrapper" style="display: none;">
         <div class="section-title">الوقت بالثواني لكل سؤال:</div>
-        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="15" style="margin-bottom: 0;">
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
       </div>
     </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
 
     <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
   </div>
@@ -612,371 +576,1069 @@
   <div id="quiz-box" class="quiz-box">
     <div class="header-stats">
       <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
-      <span>النقاط: <strong id="score-text">0</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
     </div>
+    <div class="progress-dots" id="progress-dots"></div>
 
     <div class="timer-bar-container" id="timer-container">
       <div class="timer-bar" id="timer-bar"></div>
     </div>
 
     <div class="question-card">
-      <div id="cat-tag" class="cat-tag">خصائص المساواة</div>
-      <div class="question-text" id="question-text">...</div>
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
     </div>
 
-    <div class="options-grid" id="options-container">
-      <!-- خيارات الإجابة -->
-    </div>
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
   </div>
 
   <!-- شاشة النتيجة -->
   <div id="result-box" class="result-box">
     <h2>النتيجة النهائية 🏆</h2>
     <div class="result-score" id="final-percentage">0%</div>
-    <div class="badge" id="level-badge">جاري التقييم...</div>
-    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 24px; line-height: 1.6;"></p>
-    <button class="btn-start" onclick="resetQuiz()">إعادة الاختبار 🔄</button>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ١-٦ البرهان الجبري</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
   </div>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script>
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ٥٣–٥٥) ============
+  const LESSON = {
+    badges: ['🌟 خبير البرهان الجبري', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تعرف خصائص المساواة وتبرر كل خطوة في البرهان الجبري والهندسي بثقة.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. راجع جدول خصائص المساواة، وفرّق بين الجمع والطرح والضرب والقسمة والتعويض والتعدي.',
+      'لا بأس، افتح أيقونة (i) واقرأ خصائص المساواة والأمثلة، ثم جرّب مستوى أسهل.']
+  };
+
+  // ============ كسور وجداول البراهين ============
+  // الصيغة النصية {بسط/مقام} تُعرض كسرًا في HTML وكـ (بسط)/(مقام) في النص العادي
+  const frH = (n, d) => `<span class="fr"><span>${n}</span><span>${d}</span></span>`;
+  const FR_RE = /\{([^{}]+?)\/([^{}]+?)\}/g;
+  const H = s => s.replace(FR_RE, (m, n, d) => frH(n, d));
+  const par = s => (/^\d+$|^[A-Za-z]$/.test(s) ? s : '(' + s + ')');
+  const T = (s) => s.replace(FR_RE, (m, n, d, off, str) => {
+    const f = par(n) + '/' + par(d), prev = off > 0 ? str[off - 1] : ' ';
+    return (prev === ' ' || prev === '(' ) ? f : '(' + f + ')';   // نحيط الكسر بقوسين إذا سبقه رمز أو عدد
+  });
+  const E = s => '<bdi dir="ltr">' + H(s) + '</bdi>';
+
+  const JN = {
+    given: 'معطيات', add: 'خاصية الجمع للمساواة', sub: 'خاصية الطرح للمساواة', mul: 'خاصية الضرب للمساواة', div: 'خاصية القسمة للمساواة',
+    refl: 'خاصية الانعكاس للمساواة', symm: 'خاصية التماثل للمساواة', trans: 'خاصية التعدي للمساواة', subs: 'خاصية التعويض للمساواة',
+    dist: 'خاصية التوزيع', ca: 'خاصية الإبدال للجمع', cm: 'خاصية الإبدال للضرب', aa: 'خاصية التجميع للجمع', am: 'خاصية التجميع للضرب',
+    simp: 'بالتبسيط', defA: 'تعريف تطابق الزوايا', defS: 'تعريف تطابق القطع المستقيمة'
+  };
+  const adg = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  const R = (s, w, j) => ({ s, w, j });
+  // جدول برهان: rows = [{s, w, j}]، الخيارات: blankS / blankJ (رقم الصف الذي تُخفى خانته)، wrongJ = {رقم الصف: مفتاح مبرر خاطئ}
+  function pfTable(rows, o) {
+    o = o || {};
+    let h = '<table class="pf' + (o.sm ? ' sm' : '') + '"><tr><th></th><th>العبارات</th><th>المبررات</th></tr>';
+    rows.forEach((r, i) => {
+      const jk = o.wrongJ && o.wrongJ[i] ? o.wrongJ[i] : r.w;
+      const jt = o.wrongJ && o.wrongJ[i] ? JN[jk] : (r.j || JN[r.w]);
+      h += `<tr><td class="n">${adg(i + 1)}</td><td class="s">${o.blankS === i ? '<span class="blank">؟</span>' : E(r.s)}</td>` +
+        `<td class="j">${o.blankJ === i ? '<span class="blank">؟</span>' : jt}</td></tr>`;
+    });
+    return h + '</table>';
+  }
+  const pfBox = (rows, o) => `<div class="viz-box">${pfTable(rows, o)}</div>`;
+
+  // أمثلة الكتاب
+  const EX1 = [
+    R('−5(x + 4) = 70', 'given', 'المعادلة الأصلية، أو المعطيات'),
+    R('−5·x + (−5)·4 = 70', 'dist'),
+    R('−5x − 20 = 70', 'simp'),
+    R('−5x − 20 + 20 = 70 + 20', 'add'),
+    R('−5x = 90', 'simp'),
+    R('{−5x/−5} = {90/−5}', 'div'),
+    R('x = −18', 'simp')
+  ];
+  const EX2 = [
+    R('C = {5/9}(F − 32)', 'given'),
+    R('{9/5}C = {9/5}·{5/9}(F − 32)', 'mul'),
+    R('{9/5}C = F − 32', 'simp'),
+    R('{9/5}C + 32 = F − 32 + 32', 'add'),
+    R('{9/5}C + 32 = F', 'simp'),
+    R('F = {9/5}C + 32', 'symm')
+  ];
+  const EX3 = [
+    R('∠FGJ ≅ ∠JGK ; ∠JGK ≅ ∠KGH', 'given'),
+    R('m∠FGJ = m∠JGK ; m∠JGK = m∠KGH', 'defA'),
+    R('m∠FGJ = m∠KGH', 'trans'),
+    R('6x + 7 = 8x − 5', 'subs'),
+    R('6x + 7 + 5 = 8x − 5 + 5', 'add'),
+    R('6x + 12 = 8x', 'simp'),
+    R('6x + 12 − 6x = 8x − 6x', 'sub'),
+    R('12 = 2x', 'simp'),
+    R('{12/2} = {2x/2}', 'div'),
+    R('6 = x', 'simp'),
+    R('x = 6', 'symm')
+  ];
+
+  const PR = (name, rule) => `<tr><td>${name}</td><td class="eq">${rule}</td></tr>`;
+
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>الجبر نظام مكوّن من مجموعات من الأعداد، وعمليات عليها، وخصائص تمكّنك من إجراء هذه العمليات. و<b>البرهان الجبري</b> برهان يتكون من سلسلة عبارات جبرية، تُبرَّر كثير من عباراتها بخصائص المساواة. وفي الهندسة نستعمل الخصائص نفسها لأن أطوال القطع المستقيمة وقياسات الزوايا أعداد حقيقية.</p>
+      <h4>كيف تكتب برهانًا جبريًا ذا عمودين؟</h4>
+      <ol class="steps">
+        <li>اكتب <b>المعادلة الأصلية</b> في العبارة الأولى، ومبررها «معطيات».</li>
+        <li>أجرِ خطوة واحدة في كل صف: جمع أو طرح أو ضرب أو قسمة <b>على الطرفين</b>، أو توزيع، أو تعويض.</li>
+        <li>اكتب في عمود <b>المبررات</b> اسم الخاصية المستعملة، أو «بالتبسيط» عند إجراء حساب فقط.</li>
+        <li>انتهِ بالعبارة المطلوبة. وإذا جاء المتغير في الطرف الأيمن (مثل ${E('6 = x')}) فاقلب المعادلة بخاصية <b>التماثل</b>.</li>
+      </ol>
+      <p>العبارات في العمود <b>الأيمن</b> من الجدول، والمبررات في العمود <b>الأيسر</b> الموازي له.</p>
+      <h4>البرهان الهندسي</h4>
+      <p>إذا أُعطيت زاويتان (أو قطعتان) متطابقتين فنحوّل «≅» إلى «=» بـ<b>تعريف التطابق</b>، ثم نستعمل خصائص المساواة: الانعكاس والتماثل والتعدي والتعويض وبقية الخصائص.</p>
+      <p class="note">للتذكر: ما تفعله بأحد طرفي المعادلة افعله بالطرف الآخر. وفي القسمة المقسوم عليه لا يساوي صفرًا.</p>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) لكل خطوة مبرر.</b><br>في البرهان الجبري تُبرَّر كل خطوة بخاصية من خصائص المساواة، أو بخاصية التوزيع، أو بـ«بالتبسيط» عند إجراء حساب فقط.</div>
+      <div class="idea-card"><b>٢) نجري العملية نفسها على الطرفين.</b><br>جمع أو طرح أو ضرب أو قسمة بالعدد نفسه تُبقي المساواة صحيحة، ويُشترط في القسمة أن يكون المقسوم عليه غير صفر.</div>
+      <div class="idea-card"><b>٣) الفرق بين التعدي والتعويض.</b><br>التعدي: ${E('a = b')} و${E('b = c')} فإن ${E('a = c')}. أما التعويض فنضع ${E('b')} مكان ${E('a')} في أي معادلة أو عبارة جبرية تحتوي على ${E('a')}.</div>
+      <div class="idea-card"><b>٤) الانعكاس والتماثل.</b><br>الانعكاس: الشيء يساوي نفسه ${E('a = a')}. التماثل: ${E('a = b')} فإن ${E('b = a')} (نستعمله لقلب المعادلة في آخر البرهان).</div>
+      <div class="idea-card"><b>٥) العبارة الأولى في البرهان</b> هي في الغالب المعادلة المعطاة، ومبررها «معطيات» (أو «المعادلة الأصلية»).</div>
+      <div class="idea-card"><b>٦) في الهندسة تصح خصائص المساواة نفسها</b> لأن أطوال القطع وقياسات الزوايا أعداد حقيقية. و«≅» تُحوَّل إلى «=» بتعريف التطابق.</div>
+      <div class="idea-card"><b>٧) الخوارزمية والبرهان.</b><br>الخوارزمية سلسلة من الخطوات المتبعة لإجراء عملية أو حل مسألة، ويمكن اعتبار البرهان نوعًا منها لأنه يتم خطوة بخطوة.</div>
+      <div class="idea-card"><b>٨) رياضيات ذهنية.</b><br>إذا سمح معلمك يمكنك حذف بعض الخطوات التي تُجرى ذهنيًا. ففي المثال ٢ يمكن حذف العبارتين ٢ و٤، فيصبح مبرر العبارة ٣ «خاصية الضرب للمساواة» ومبرر العبارة ٥ «خاصية الجمع للمساواة».</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">البرهان الجبري</span><span class="en">algebraic proof</span><br>برهان يتكون من سلسلة عبارات جبرية، وتبرر خصائص المساواة كثيرًا من العبارات المستعملة فيه.</div>
+      <div class="def-card"><span class="term">البرهان ذو العمودين</span><span class="en">two-column proof</span><br>برهان تُرتَّب فيه العبارات في عمود، والتبريرات في عمود موازٍ له.</div>
+      <div class="def-card"><span class="term">الجبر</span><br>نظام مكوّن من مجموعات من الأعداد، وعمليات عليها، وخصائص تمكّنك من إجراء هذه العمليات.</div>
+      <div class="def-card"><span class="term">الخوارزمية</span><br>سلسلة من الخطوات المتبعة لإجراء عملية أو حل مسألة ما. ويمكن اعتبار البرهان من أنواع الخوارزميات لأنه يتم خطوة بخطوة.</div>
+      <div class="def-card"><span class="term">البرهان الهندسي</span><br>استعمال خصائص الجبر لإثبات العلاقات بين القطع المستقيمة والزوايا، لأن أطوالها وقياساتها أعداد حقيقية.</div>
+      <div class="def-card"><span class="term">خاصيتا الإبدال والتجميع</span><br>صحيحتان لأي أعداد حقيقية ${E('a, b, c')}: الإبدال ${E('a + b = b + a')} و${E('a·b = b·a')}، والتجميع ${E('(a + b) + c = a + (b + c)')} و${E('(a·b)·c = a·(b·c)')}.</div>` },
+
+    { id: 'props', title: '🟰 خصائص المساواة', html: `
+      <h4>خصائص الأعداد الحقيقية</h4>
+      <p>صحيحة لأي ثلاثة أعداد حقيقية ${E('a, b, c')}:</p>
+      <table class="pf pt">
+        ${PR('الجمع للمساواة', 'إذا كان ' + E('a = b') + '، فإن ' + E('a + c = b + c'))}
+        ${PR('الطرح للمساواة', 'إذا كان ' + E('a = b') + '، فإن ' + E('a − c = b − c'))}
+        ${PR('الضرب للمساواة', 'إذا كان ' + E('a = b') + '، فإن ' + E('a·c = b·c'))}
+        ${PR('القسمة للمساواة', 'إذا كان ' + E('a = b') + ' و' + E('c ≠ 0') + '، فإن ' + E('{a/c} = {b/c}'))}
+        ${PR('الانعكاس للمساواة', E('a = a'))}
+        ${PR('التماثل للمساواة', 'إذا كان ' + E('a = b') + '، فإن ' + E('b = a'))}
+        ${PR('التعدي للمساواة', 'إذا كان ' + E('a = b') + ' و' + E('b = c') + '، فإن ' + E('a = c'))}
+        ${PR('التعويض للمساواة', 'إذا كان ' + E('a = b') + '، فيمكننا أن نضع ' + E('b') + ' مكان ' + E('a') + ' في أي معادلة أو عبارة جبرية تحتوي على ' + E('a'))}
+        ${PR('التوزيع', E('a(b + c) = ab + ac'))}
+      </table>
+      <h4>خاصيتا الإبدال والتجميع</h4>
+      <table class="pf pt">
+        ${PR('الإبدال للجمع', E('a + b = b + a'))}
+        ${PR('الإبدال للضرب', E('a·b = b·a'))}
+        ${PR('التجميع للجمع', E('(a + b) + c = a + (b + c)'))}
+        ${PR('التجميع للضرب', E('(a·b)·c = a·(b·c)'))}
+      </table>
+      <h4>خصائص المساواة في الهندسة</h4>
+      <table class="pf pt">
+        <tr><th>الخاصية</th><th>القطع المستقيمة</th><th>الزوايا</th></tr>
+        <tr><td>الانعكاس</td><td class="eq">${E('AB = AB')}</td><td class="eq">${E('m∠1 = m∠1')}</td></tr>
+        <tr><td>التماثل</td><td class="eq">إذا كان ${E('AB = CD')} فإن ${E('CD = AB')}</td><td class="eq">إذا كان ${E('m∠1 = m∠2')} فإن ${E('m∠2 = m∠1')}</td></tr>
+        <tr><td>التعدي</td><td class="eq">إذا كان ${E('AB = CD')} و${E('CD = EF')} فإن ${E('AB = EF')}</td><td class="eq">إذا كان ${E('m∠1 = m∠2')} و${E('m∠2 = m∠3')} فإن ${E('m∠1 = m∠3')}</td></tr>
+      </table>` },
+
+    { id: 'ex', title: '📖 أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: تبرير كل خطوة عند حل المعادلة</div>
+        أثبت أنه إذا كان ${E('−5(x + 4) = 70')}، فإن ${E('x = −18')}. اكتب تبريرًا لكل خطوة.
+        ${pfBox(EX1, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢: كتابة البرهان الجبري (علوم)</div>
+        إذا كانت الصيغة التي تحول درجات الحرارة من فهرنهايتية إلى سيليزية هي ${E('C = {5/9}(F − 32)')}، فإن الصيغة التي تحول من سيليزية إلى فهرنهايتية هي ${E('F = {9/5}C + 32')}. اكتب برهانًا ذا عمودين.
+        <p class="note">المعطيات: ${E('C = {5/9}(F − 32)')} &nbsp; المطلوب: ${E('F = {9/5}C + 32')}</p>
+        ${pfBox(EX2, { sm: true })}</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: كتابة البرهان الهندسي</div>
+        اكتب برهانًا ذا عمودين لإثبات أنه إذا كانت ${E('∠FGJ ≅ ∠JGK')} و${E('∠JGK ≅ ∠KGH')} و${E('m∠FGJ = (6x + 7)°')} و${E('m∠KGH = (8x − 5)°')} فإن ${E('x = 6')}.
+        ${pfBox(EX3, { sm: true })}</div>` }
+  ];
   // ============ أدوات عامة ============
-  function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-  function shuffleArray(arr) { const r = [...arr]; for (let i = r.length - 1; i > 0; i--) { const j = randInt(0, i); [r[i], r[j]] = [r[j], r[i]]; } return r; }
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
   function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
-  const L = s => '\u2066' + s + '\u2069'; // يحفظ ترتيب الرموز والأرقام داخل النص العربي
-  const decks = {};
-  function draw(key, pool) {
-    if (!decks[key] || !decks[key].length) decks[key] = shuffleArray(pool.map((_, i) => i));
-    return pool[decks[key].pop()];
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
   }
-  function pts(n) { return shuffleArray(['A','B','C','D','E','F','G','H','P','Q','R','X','Y','Z']).slice(0, n); }
-  function mk(catKey, prompt, options, correct, keep) {
-    return { type: 'text', catKey, prompt, options: keep ? options : shuffleArray(options), correct };
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
   }
-  const nv = () => pick(['x', 'y', 'a', 'b', 'n', 't']);
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    prop: { name: 'خصائص المساواة', icon: '🟰' },
+    solve: { name: 'مبررات خطوات الحل', icon: '🧮' },
+    cols: { name: 'البرهان ذو العمودين', icon: '📋' },
+    geo: { name: 'البرهان الهندسي', icon: '📐' },
+    error: { name: 'اكتشف الخطأ', icon: '🔍' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
+  };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const PT = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'P', 'Q', 'R', 'X', 'Y', 'Z'];
+  const pts = n => sample(PT, n);
+
+  // ============ أدوات التنسيق ============
+  const fm = n => (n < 0 ? '−' : '') + Math.abs(n);              // عدد بإشارة − الرياضية
+  const tm = n => (n < 0 ? ` − ${-n}` : ` + ${n}`);              // حد ثابت مسبوق بإشارته
+  const coef = (a, v) => (a === 1 ? '' : a === -1 ? '−' : fm(a)) + v;
+  const V = () => pick(['x', 'y', 'n', 't']);
+  const nz = (lo, hi, ex) => { let r; do { r = randInt(lo, hi); } while (r === 0 || (ex && ex.includes(r))); return r; };
+  const sg = () => pick([1, -1]);
+  const LT = s => L(T(s));                                       // عبارة جبرية نصية داخل نص عربي
+
+  // تقييم عبارة مساواة عددية عند قيم المتغيرات (للتحقق من صحة الخطوات وتصفية المشتتات)
+  function evalStmt(s, vals) {
+    try {
+      let e = s.replace(FR_RE, '(($1)/($2))').replace(/−/g, '-').replace(/·/g, '*');
+      if (/[^0-9a-zA-Z+\-*/().=\s]/.test(e)) return null;
+      Object.keys(vals).forEach(k => { e = e.split(k).join('(' + vals[k] + ')'); });
+      if (/[a-zA-Z]/.test(e)) return null;
+      e = e.replace(/(\d|\))\s*\(/g, '$1*(');
+      const parts = e.split('=');
+      if (parts.length !== 2) return null;
+      const lv = Function('return ' + parts[0])(), rv = Function('return ' + parts[1])();
+      return Math.abs(lv - rv) < 1e-9;
+    } catch (err) { return null; }
+  }
+  // مشتتات: عبارات خاطئة عند حل المسألة، تُشتق بتغيير عدد أو إشارة
+  function mutate(s, vals) {
+    const out = new Set();
+    [...s.matchAll(/\d+/g)].forEach(m => {
+      [1, -1, 2, -2, 10].forEach(dv => { const nv = +m[0] + dv; if (nv >= 0) out.add(s.slice(0, m.index) + nv + s.slice(m.index + m[0].length)); });
+    });
+    for (let i = 0; i < s.length; i++) {
+      if (s[i] === '+') out.add(s.slice(0, i) + '−' + s.slice(i + 1));
+      if (s[i] === '−') out.add(s.slice(0, i) + '+' + s.slice(i + 1));
+    }
+    return [...out].filter(c => c !== s && evalStmt(c, vals) === false);
+  }
+
+  // ============ سلاسل البراهين الجبرية (كلها صحيحة عند الحل) ============
+  function chainA() {            // ك(س + م) = ن  — مثل المثال ١
+    const v = V(), k = pick([-6, -5, -4, -3, -2, 2, 3, 4, 5, 6]), m = randInt(2, 9), s = nz(-9, 9, [-m]);
+    const n = k * (s + m), km = k * m, r2 = n - km;
+    const kp = k < 0 ? `(${fm(k)})` : `${k}`, op = km < 0 ? ` + ${-km}` : ` − ${km}`;
+    const g = `${fm(k)}(${v} + ${m}) = ${fm(n)}`;
+    const rows = [
+      R(g, 'given'),
+      R(`${fm(k)}·${v} + ${kp}·${m} = ${fm(n)}`, 'dist'),
+      R(`${coef(k, v)}${tm(km)} = ${fm(n)}`, 'simp'),
+      R(`${coef(k, v)}${tm(km)}${op} = ${fm(n)}${op}`, km < 0 ? 'add' : 'sub'),
+      R(`${coef(k, v)} = ${fm(r2)}`, 'simp'),
+      R(`{${coef(k, v)}/${fm(k)}} = {${fm(r2)}/${fm(k)}}`, 'div'),
+      R(`${v} = ${fm(s)}`, 'simp')
+    ];
+    return { kind: 'A', rows, given: g, goal: `${v} = ${fm(s)}`, vals: { [v]: s }, v, s };
+  }
+  function chainB() {            // أ س + ب = ج
+    const v = V(), a = pick([-7, -6, -5, -4, -3, -2, 2, 3, 4, 5, 6, 7, 8]), b = randInt(2, 12) * sg(), s = nz(-8, 8), c = a * s + b;
+    const op = b > 0 ? ` − ${b}` : ` + ${-b}`;
+    const g = `${coef(a, v)}${tm(b)} = ${fm(c)}`;
+    const rows = [
+      R(g, 'given'),
+      R(`${coef(a, v)}${tm(b)}${op} = ${fm(c)}${op}`, b > 0 ? 'sub' : 'add'),
+      R(`${coef(a, v)} = ${fm(c - b)}`, 'simp'),
+      R(`{${coef(a, v)}/${fm(a)}} = {${fm(c - b)}/${fm(a)}}`, 'div'),
+      R(`${v} = ${fm(s)}`, 'simp')
+    ];
+    return { kind: 'B', rows, given: g, goal: `${v} = ${fm(s)}`, vals: { [v]: s }, v, s };
+  }
+  function chainC() {            // س/أ + ب = ج
+    const v = V(), a = randInt(2, 9), b = randInt(2, 12) * sg(), t = nz(-6, 8), s = a * t, c = t + b;
+    const op = b > 0 ? ` − ${b}` : ` + ${-b}`, tp = t < 0 ? `(${fm(t)})` : `${t}`;
+    const g = `{${v}/${a}}${tm(b)} = ${fm(c)}`;
+    const rows = [
+      R(g, 'given'),
+      R(`{${v}/${a}}${tm(b)}${op} = ${fm(c)}${op}`, b > 0 ? 'sub' : 'add'),
+      R(`{${v}/${a}} = ${fm(t)}`, 'simp'),
+      R(`${a}·{${v}/${a}} = ${a}·${tp}`, 'mul'),
+      R(`${v} = ${fm(s)}`, 'simp')
+    ];
+    return { kind: 'C', rows, given: g, goal: `${v} = ${fm(s)}`, vals: { [v]: s }, v, s };
+  }
+  function chainD() {            // أ س + ب = ج س + د  — مثل المثال ٣
+    const v = V(); let a, c, b, d, s;
+    do { a = randInt(2, 6); c = a + randInt(2, 5); s = randInt(2, 9); b = randInt(1, 9); d = b - (c - a) * s; } while (d === 0);
+    const bp = b - d, cm = c - a, op = d > 0 ? ` − ${d}` : ` + ${-d}`;
+    const g = `${coef(a, v)}${tm(b)} = ${coef(c, v)}${tm(d)}`;
+    const rows = [
+      R(g, 'given'),
+      R(`${coef(a, v)}${tm(b)}${op} = ${coef(c, v)}${tm(d)}${op}`, d > 0 ? 'sub' : 'add'),
+      R(`${coef(a, v)}${tm(bp)} = ${coef(c, v)}`, 'simp'),
+      R(`${coef(a, v)}${tm(bp)} − ${coef(a, v)} = ${coef(c, v)} − ${coef(a, v)}`, 'sub'),
+      R(`${bp} = ${coef(cm, v)}`, 'simp'),
+      R(`{${bp}/${cm}} = {${coef(cm, v)}/${cm}}`, 'div'),
+      R(`${s} = ${v}`, 'simp'),
+      R(`${v} = ${s}`, 'symm')
+    ];
+    return { kind: 'D', rows, given: g, goal: `${v} = ${s}`, vals: { [v]: s }, v, s, a, b, c, d };
+  }
+  function chainS() {            // حل صيغة لمتغير: ص = أ س + ب
+    const [y, x] = pick([['y', 'x'], ['d', 't'], ['s', 'n'], ['C', 'n']]), a = randInt(2, 9), b = randInt(2, 12) * sg(), xv = nz(-5, 9);
+    const op = b > 0 ? ` − ${b}` : ` + ${-b}`, nb = tm(-b), yv = a * xv + b;
+    const g = `${y} = ${coef(a, x)}${tm(b)}`;
+    const rows = [
+      R(g, 'given'),
+      R(`${y}${op} = ${coef(a, x)}${tm(b)}${op}`, b > 0 ? 'sub' : 'add'),
+      R(`${y}${nb} = ${coef(a, x)}`, 'simp'),
+      R(`{${y}${nb}/${a}} = {${coef(a, x)}/${a}}`, 'div'),
+      R(`{${y}${nb}/${a}} = ${x}`, 'simp'),
+      R(`${x} = {${y}${nb}/${a}}`, 'symm')
+    ];
+    return { kind: 'S', rows, given: g, goal: `${x} = {${y}${nb}/${a}}`, vals: { [x]: xv, [y]: yv }, v: x, formula: true };
+  }
+  function chainEX2() {          // المثال ٢ في الكتاب (تحويل الحرارة)
+    return { kind: 'E2', rows: EX2.map(r => R(r.s, r.w)), given: 'C = {5/9}(F − 32)', goal: 'F = {9/5}C + 32', vals: { F: 50, C: 10 }, v: 'F', formula: true };
+  }
+  const ANG = (p, q, r) => `∠${p}${q}${r}`;
+  function chainG() {            // برهان هندسي بالزوايا — مثل المثال ٣
+    const [p1, p2, p3, p4, vx] = pts(5), dch = chainD(), v = dch.v;
+    const A1 = ANG(p1, vx, p2), A2 = ANG(p2, vx, p3), A3 = ANG(p3, vx, p4);
+    const rows = [
+      R(`${A1} ≅ ${A2} ; ${A2} ≅ ${A3}`, 'given'),
+      R(`m${A1} = m${A2} ; m${A2} = m${A3}`, 'defA'),
+      R(`m${A1} = m${A3}`, 'trans'),
+      R(dch.rows[0].s, 'subs')
+    ].concat(dch.rows.slice(1));
+    const m1 = `m${A1} = (${dch.rows[0].s.split(' = ')[0]})°`, m3 = `m${A3} = (${dch.rows[0].s.split(' = ')[1]})°`;
+    return { kind: 'G', rows, geo: true, givenList: [`${A1} ≅ ${A2}`, `${A2} ≅ ${A3}`, m1, m3], goal: dch.goal, vals: dch.vals, v, s: dch.s, a: dch.a, b: dch.b, c: dch.c, d: dch.d, angs: [A1, A2, A3], val1: dch.a * dch.s + dch.b };
+  }
+  function chainGS() {           // برهان هندسي بالقطع — مثل تحقق ٣ب
+    const [p1, p2, p3, p4] = pts(4), v = pick(['x', 'y', 'n']);
+    let a, b, s, n;
+    do { a = randInt(2, 9); b = randInt(2, 12) * sg(); s = randInt(2, 9); n = a * s + b; } while (n < 3);
+    const S1 = p1 + p2, S2 = p3 + p4, op = b > 0 ? ` − ${b}` : ` + ${-b}`;
+    const rows = [
+      R(`${S1} ≅ ${S2}`, 'given'),
+      R(`${S1} = ${S2}`, 'defS'),
+      R(`${coef(a, v)}${tm(b)} = ${n}`, 'subs'),
+      R(`${coef(a, v)}${tm(b)}${op} = ${n}${op}`, b > 0 ? 'sub' : 'add'),
+      R(`${coef(a, v)} = ${n - b}`, 'simp'),
+      R(`{${coef(a, v)}/${a}} = {${n - b}/${a}}`, 'div'),
+      R(`${v} = ${s}`, 'simp')
+    ];
+    return { kind: 'GS', rows, geo: true, givenList: [`${S1} ≅ ${S2}`, `${S1} = ${coef(a, v)}${tm(b)}`, `${S2} = ${n}`], goal: `${v} = ${s}`, vals: { [v]: s }, v, s, a, b, n, S1, S2 };
+  }
+  const CHAINS = { A: chainA, B: chainB, C: chainC, D: chainD, S: chainS, E2: chainEX2, G: chainG, GS: chainGS };
+  const pickChain = keys => CHAINS[pick(keys)]();
+
+  // نص المعطيات والمطلوب فوق الجدول
+  function givenBox(ch) {
+    if (ch.givenList) return `<div class="given-box">المعطيات: ${ch.givenList.map(g => L(T(g))).join('، ')}<br>المطلوب: ${L(T(ch.goal))}</div>`;
+    return `<div class="given-box">المعطيات: ${L(T(ch.given))}<br>المطلوب: ${L(T(ch.goal))}</div>`;
+  }
+
+  // ============ مبررات: خيارات وتلميحات وشروحات ============
+  const CONF = { simp: ['subs'], subs: ['simp', 'trans'], symm: ['subs', 'trans', 'refl'], trans: ['subs', 'symm'] };
+  const POOL_ALG = ['add', 'sub', 'mul', 'div', 'dist', 'subs', 'simp', 'symm', 'trans', 'refl'];
+  const POOL_GEO = POOL_ALG.concat(['defA', 'defS']);
+  const jWrongs = (key, pool) => shuffle(pool.filter(k => k !== key && !(CONF[key] || []).includes(k)).map(k => JN[k]));
+  const J_HINT = {
+    given: 'هذه العبارة هي ما أُعطي في المسألة.',
+    add: 'انظر إلى الطرفين: ما العدد الذي ظهر فيهما معًا؟ وهل أُضيف أم طُرح؟',
+    sub: 'انظر إلى الطرفين: ما العدد الذي ظهر فيهما معًا؟ وهل أُضيف أم طُرح؟',
+    mul: 'قارن الطرفين: هل ضُربا أم قُسما على العدد نفسه؟',
+    div: 'قارن الطرفين: هل ضُربا أم قُسما على العدد نفسه؟',
+    dist: 'فُتحت الأقواس بضرب العدد الخارجي في كل حد داخلها.',
+    simp: 'لم تُطبَّق خاصية جديدة؛ أُجري حساب بسيط فقط.',
+    subs: 'وُضعت قيمة أو عبارة مكان رمز مساوٍ لها.',
+    symm: 'تبدّل موضع طرفي المعادلة.',
+    trans: 'رُبطت مساواتان تشتركان في عبارة واحدة.',
+    defA: 'الزاويتان المتطابقتان لهما القياس نفسه.',
+    defS: 'القطعتان المتطابقتان لهما الطول نفسه.'
+  };
+  const J_EXPL = {
+    given: 'العبارة الأولى هي المعادلة المعطاة في المسألة.',
+    add: 'أُضيف العدد نفسه إلى طرفي المعادلة فبقيت المساواة صحيحة.',
+    sub: 'طُرح الحد نفسه من طرفي المعادلة فبقيت المساواة صحيحة.',
+    mul: 'ضُرب الطرفان في العدد نفسه.',
+    div: 'قُسم الطرفان على العدد نفسه (غير الصفر).',
+    dist: 'ضُرب العدد الخارجي في كل حد داخل القوسين.',
+    simp: 'لا خاصية جديدة هنا؛ فقط تبسيط حسابي للعبارة السابقة.',
+    subs: 'وُضعت القيمة (أو العبارة) المساوية مكان الرمز.',
+    symm: 'قلبنا طرفي المعادلة: إذا كان a = b فإن b = a.',
+    trans: 'من a = b و b = c نستنتج a = c.',
+    defA: 'الزاويتان المتطابقتان لهما القياس نفسه.',
+    defS: 'القطعتان المتطابقتان لهما الطول نفسه.'
+  };
+  const jExplain = (i, key) => `مبرر العبارة ${digitsAr(i + 1)} هو «${JN[key]}»: ${J_EXPL[key].replace(/a = b/g, L('a = b')).replace(/b = a/g, L('b = a')).replace(/b = c/g, L('b = c')).replace(/a = c/g, L('a = c'))}`;
+
+  // ============ مولّدات الجداول العامة ============
+  // سؤال: ما مبرر العبارة رقم (؟) — الخانة المخفية في عمود المبررات
+  function qBlankJ(cat, d, ch, idxs, pool) {
+    const rows = ch.rows, i = pick(idxs), key = rows[i].w;
+    return build({ cat, d, nOpts: 4,
+      prompt: `أمامك برهان ذو عمودين. ما المبرر الذي يوضع في الخانة (؟) أمام العبارة رقم ${digitsAr(i + 1)}؟`,
+      extra: givenBox(ch) + pfBox(rows, { blankJ: i }),
+      correct: JN[key], wrongs: jWrongs(key, pool), hint: J_HINT[key], explain: jExplain(i, key) });
+  }
+  // سؤال: ما العبارة الناقصة في الصف رقم (؟)
+  function qBlankS(cat, d, ch, idxs) {
+    const rows = ch.rows, ok = idxs.filter(k => evalStmt(rows[k].s, ch.vals) === true), i = pick(ok), key = rows[i].w, st = rows[i].s;
+    const bad = shuffle(mutate(st, ch.vals));
+    return build({ cat, d, nOpts: 4,
+      prompt: `أمامك برهان ذو عمودين. أي العبارات الآتية تكمل الخانة (؟) في الصف رقم ${digitsAr(i + 1)}، علمًا أن مبررها «${JN[key]}»؟`,
+      extra: givenBox(ch) + pfBox(rows, { blankS: i }),
+      correct: LT(st), wrongs: bad.map(LT), hint: 'طبّق الخاصية المذكورة على العبارة التي قبلها، ثم بسّط بعناية.',
+      explain: `العبارة رقم ${digitsAr(i + 1)} هي ${LT(st)}، وتنتج من العبارة السابقة بـ«${JN[key]}». ${J_EXPL[key].replace(/a = b/g, L('a = b')).replace(/b = a/g, L('b = a')).replace(/b = c/g, L('b = c')).replace(/a = c/g, L('a = c'))}` });
+  }
 
   // ============ 1) خصائص المساواة ============
-  const PROPS = {
-    add: 'خاصية الجمع للمساواة', sub: 'خاصية الطرح للمساواة', mul: 'خاصية الضرب للمساواة', div: 'خاصية القسمة للمساواة',
-    refl: 'خاصية الانعكاس للمساواة', symm: 'خاصية التماثل للمساواة', trans: 'خاصية التعدي للمساواة', subs: 'خاصية التعويض للمساواة',
-    dist: 'خاصية التوزيع', ca: 'خاصية الإبدال للجمع', cm: 'خاصية الإبدال للضرب', aa: 'خاصية التجميع للجمع', am: 'خاصية التجميع للضرب'
-  };
-  const CONFLICT = { trans: 'subs', subs: 'trans' };
+  const PROPS = ['add', 'sub', 'mul', 'div', 'refl', 'symm', 'trans', 'subs', 'dist', 'ca', 'cm', 'aa', 'am'];
+  const vv = n => sample(['x', 'y', 'a', 'b', 'n', 't', 'm', 'k', 'z'], n);
+  const IF = (a, b) => `إذا كان ${L(a)}، فإن ${L(b)}.`;
   const propItems = [
-    () => { const v = nv(), a = randInt(2, 12), c = randInt(2, 9); return ['add', `إذا كان ${L(v + ' = ' + a)}، فإن ${L(v + ' + ' + c + ' = ' + a + ' + ' + c)}.`]; },
-    () => { const v = nv(), a = randInt(10, 30), c = randInt(2, 9); return ['sub', `إذا كان ${L(v + ' = ' + a)}، فإن ${L(v + ' − ' + c + ' = ' + a + ' − ' + c)}.`]; },
-    () => { const v = nv(), a = randInt(2, 12), c = randInt(2, 9); return ['mul', `إذا كان ${L(v + ' = ' + a)}، فإن ${L(c + ' · ' + v + ' = ' + c + ' · ' + a)}.`]; },
-    () => { const v = nv(), a = randInt(2, 12), c = randInt(2, 9); return ['div', `إذا كان ${L(v + ' = ' + a)} و${L(c + ' ≠ 0')}، فإن ${L(v + '/' + c + ' = ' + a + '/' + c)}.`]; },
-    () => { const v = nv(); return ['refl', `${L(v + ' = ' + v)}`]; },
-    () => { const v = nv(), a = randInt(2, 9), b = randInt(2, 9); const e = a + v + ' + ' + b; return ['refl', `${L(e + ' = ' + e)}`]; },
-    () => { const v = nv(), w = pick(['m', 'k', 'z']), a = randInt(2, 9), b = randInt(2, 9); return ['symm', `إذا كان ${L(a + v + ' + ' + b + ' = ' + w)}، فإن ${L(w + ' = ' + a + v + ' + ' + b)}.`]; },
-    () => { const v = nv(), a = randInt(2, 30); return ['symm', `إذا كان ${L(v + ' = ' + a)}، فإن ${L(a + ' = ' + v)}.`]; },
-    () => { const v = nv(), w = pick(['m', 'k', 'z']), a = randInt(2, 30); return ['trans', `إذا كان ${L(v + ' = ' + w)} و${L(w + ' = ' + a)}، فإن ${L(v + ' = ' + a)}.`]; },
-    () => { const v = nv(), a = randInt(2, 9), b = randInt(2, 9), x = randInt(2, 9); return ['subs', `إذا كان ${L(v + ' = ' + x)}، فإن ${L(a + v + ' + ' + b + ' = ' + a + '(' + x + ') + ' + b)}.`]; },
-    () => { const v = nv(), c = randInt(2, 9), d = randInt(2, 9); return ['dist', `${L(c + '(' + v + ' + ' + d + ') = ' + c + v + ' + ' + c * d)}`]; },
-    () => { const v = nv(), a = randInt(2, 20); return ['ca', `${L(v + ' + ' + a + ' = ' + a + ' + ' + v)}`]; },
-    () => { const v = nv(), a = randInt(2, 20); return ['cm', `${L(a + ' · ' + v + ' = ' + v + ' · ' + a)}`]; },
-    () => { const v = nv(), a = randInt(2, 9), b = randInt(2, 9); return ['aa', `${L('(' + v + ' + ' + a + ') + ' + b + ' = ' + v + ' + (' + a + ' + ' + b + ')')}`]; },
-    () => { const v = nv(), a = randInt(2, 9), b = randInt(2, 9); return ['am', `${L('(' + a + ' · ' + v + ') · ' + b + ' = ' + a + ' · (' + v + ' · ' + b + ')')}`]; }
+    () => { const [v] = vv(1), a = randInt(2, 12), c = randInt(2, 9); return ['add', IF(`${v} = ${a}`, `${v} + ${c} = ${a} + ${c}`)]; },
+    () => { const [v] = vv(1), a = randInt(10, 30), c = randInt(2, 9); return ['sub', IF(`${v} = ${a}`, `${v} − ${c} = ${a} − ${c}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 12), c = randInt(2, 9); return ['mul', IF(`${v} = ${a}`, `${c}·${v} = ${c}·${a}`)]; },
+    () => { const [v] = vv(1), c = randInt(2, 9), a = c * randInt(2, 6); return ['div', IF(`${v} = ${a}`, `${v}/${c} = ${a}/${c}`)]; },
+    () => { const [p, q, c] = vv(3); return ['add', IF(`${p} = ${q}`, `${p} + ${c} = ${q} + ${c}`)]; },
+    () => { const [p, q, c] = vv(3); return ['sub', IF(`${p} = ${q}`, `${p} − ${c} = ${q} − ${c}`)]; },
+    () => { const [p, q, c] = vv(3); return ['mul', IF(`${p} = ${q}`, `${p}·${c} = ${q}·${c}`)]; },
+    () => { const [p, q, c] = vv(3); return ['div', `إذا كان ${L(p + ' = ' + q)} و${L(c + ' ≠ 0')}، فإن ${L(p + '/' + c + ' = ' + q + '/' + c)}.`]; },
+    () => { const [v] = vv(1); return ['refl', L(`${v} = ${v}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 9), b = randInt(2, 9), e = `${a}${v} + ${b}`; return ['refl', L(`${e} = ${e}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 30); return ['symm', IF(`${v} = ${a}`, `${a} = ${v}`)]; },
+    () => { const [p, q] = vv(2), a = randInt(2, 9), b = randInt(2, 9); return ['symm', IF(`${a}${p} + ${b} = ${q}`, `${q} = ${a}${p} + ${b}`)]; },
+    () => { const [p, q, r] = vv(3); return ['trans', `إذا كان ${L(p + ' = ' + q)} و${L(q + ' = ' + r)}، فإن ${L(p + ' = ' + r)}.`]; },
+    () => { const [p, q, r] = vv(3), a = randInt(2, 9); return ['trans', `إذا كان ${L(a + p + ' = ' + q)} و${L(q + ' = ' + r)}، فإن ${L(a + p + ' = ' + r)}.`]; },
+    () => { const [v] = vv(1), a = randInt(2, 9), b = randInt(2, 9), x = randInt(2, 9); return ['subs', IF(`${v} = ${x}`, `${a}${v} + ${b} = ${a}(${x}) + ${b}`)]; },
+    () => { const [p, q] = vv(2), a = randInt(2, 9), x = randInt(2, 9); return ['subs', `إذا كان ${L(p + ' = ' + q + ' + ' + a)} و${L(q + ' = ' + x)}، فإن ${L(p + ' = ' + x + ' + ' + a)}.`]; },
+    () => { const [v] = vv(1), c = randInt(2, 9), d = randInt(2, 9); return ['dist', L(`${c}(${v} + ${d}) = ${c}${v} + ${c * d}`)]; },
+    () => { const [p, q, r] = vv(3); return ['dist', L(`${p}(${q} + ${r}) = ${p}${q} + ${p}${r}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 20); return ['ca', L(`${v} + ${a} = ${a} + ${v}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 20); return ['cm', L(`${a}·${v} = ${v}·${a}`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 9), b = randInt(2, 9); return ['aa', L(`(${v} + ${a}) + ${b} = ${v} + (${a} + ${b})`)]; },
+    () => { const [v] = vv(1), a = randInt(2, 9), b = randInt(2, 9); return ['am', L(`(${a}·${v})·${b} = ${a}·(${v}·${b})`)]; }
   ];
-  function genProp() {
-    const [k, text] = draw('prop', propItems)();
-    const others = shuffleArray(Object.keys(PROPS).filter(x => x !== k && x !== CONFLICT[k])).slice(0, 3);
-    return mk('prop', `ما الخاصية التي تبرر العبارة الآتية؟\n"${text}"`, [k, ...others].map(x => PROPS[x]), PROPS[k]);
-  }
+  const PK = {};
+  propItems.forEach(f => { const k = f()[0]; (PK[k] = PK[k] || []).push(f); });
+  const PNAME = k => JN[k];
+  const PHINT = {
+    add: 'ماذا حدث للطرفين؟ أُضيف العدد نفسه إليهما.', sub: 'ماذا حدث للطرفين؟ طُرح العدد نفسه منهما.', mul: 'ضُرب الطرفان في العدد نفسه.',
+    div: 'قُسم الطرفان على عدد غير الصفر.', refl: 'الطرفان متماثلان تمامًا: الشيء يساوي نفسه.', symm: 'تبدّل موضع طرفي المعادلة.',
+    trans: 'مساواتان تشتركان في عبارة واحدة تقودان إلى مساواة ثالثة.', subs: 'وُضعت قيمة (أو عبارة) مكان رمز يساويها.',
+    dist: 'العدد الخارجي يُضرب في كل حد داخل القوسين.', ca: 'تبدّل ترتيب الحدين في الجمع.', cm: 'تبدّل ترتيب العاملين في الضرب.',
+    aa: 'تغيّر موضع الأقواس في الجمع دون تغيير ترتيب الحدود.', am: 'تغيّر موضع الأقواس في الضرب دون تغيير ترتيب العوامل.'
+  };
+  const PEXPL = {
+    add: 'أُضيف العدد نفسه إلى طرفي المساواة.', sub: 'طُرح العدد نفسه من طرفي المساواة.', mul: 'ضُرب طرفا المساواة في العدد نفسه.',
+    div: 'قُسم طرفا المساواة على العدد نفسه (غير الصفر).', refl: 'العبارة تساوي نفسها.', symm: 'إذا كانت المساواة صحيحة فيمكن قلب طرفيها.',
+    trans: 'إذا ساوت عبارة عبارة ثانية، وساوت الثانية ثالثة، فالأولى تساوي الثالثة.', subs: 'وضعنا القيمة المساوية مكان الرمز.',
+    dist: 'العدد الخارجي يُوزَّع على كل حد داخل القوسين.', ca: 'ترتيب الحدين في الجمع لا يغيّر الناتج.', cm: 'ترتيب العاملين في الضرب لا يغيّر الناتج.',
+    aa: 'طريقة تجميع الحدود في الجمع لا تغيّر الناتج.', am: 'طريقة تجميع العوامل في الضرب لا تغيّر الناتج.'
+  };
+  const propOthers = (k, n, pool) => sample(pool.filter(x => x !== k && !(CONF[x] || []).includes(k) && !(CONF[k] || []).includes(x)), n);
+  const mkItem = k => pick(PK[k])();
+
+  const GEN_PROP = [
+    { d: 1, w: 3, fn() {
+      const k = pick(['add', 'sub', 'mul', 'div', 'refl', 'symm', 'trans', 'subs', 'dist']), [kk, txt] = mkItem(k);
+      return build({ cat: 'prop', d: 1, prompt: `ما الخاصية التي تبرر العبارة الآتية؟<br>«${txt}»`, correct: PNAME(kk),
+        wrongs: propOthers(kk, 6, ['add', 'sub', 'mul', 'div', 'refl', 'symm', 'trans', 'subs', 'dist']).map(PNAME), hint: PHINT[kk], explain: `${PNAME(kk)}: ${PEXPL[kk]}` });
+    } },
+    { d: 2, w: 2, fn() {
+      const k = pick(['ca', 'cm', 'aa', 'am', 'dist']), [kk, txt] = mkItem(k);
+      return build({ cat: 'prop', d: 2, prompt: `ما الخاصية التي تبرر العبارة الآتية؟<br>«${txt}»`, correct: PNAME(kk),
+        wrongs: ['ca', 'cm', 'aa', 'am', 'dist'].filter(x => x !== kk).map(PNAME), hint: PHINT[kk], explain: `${PNAME(kk)}: ${PEXPL[kk]}` });
+    } },
+    { d: 2, w: 2, fn() {      // عكسي: اختر العبارة التي توضح الخاصية
+      const k = pick(['add', 'sub', 'mul', 'div', 'refl', 'symm', 'trans', 'subs', 'dist', 'ca', 'cm', 'aa', 'am']);
+      const pool = ['add', 'sub', 'mul', 'div', 'refl', 'symm', 'trans', 'subs', 'dist', 'ca', 'cm', 'aa', 'am'];
+      const [, good] = mkItem(k);
+      const others = propOthers(k, 3, pool).map(o => mkItem(o)[1]);
+      return build({ cat: 'prop', d: 2, prompt: `أي العبارات الآتية توضح «${PNAME(k)}»؟`, correct: good, wrongs: others, hint: PHINT[k], explain: `${PNAME(k)}: ${PEXPL[k]}` });
+    } },
+    { d: 3, w: 2, fn() {      // أي العبارات تطبيق خاطئ؟
+      const [p, q] = vv(2), c = randInt(2, 9), a = randInt(2, 12), pool = [];
+      const goods = sample([
+        () => IF(`${p} = ${a}`, `${p} + ${c} = ${a} + ${c}`),
+        () => IF(`${p} = ${a}`, `${p} − ${c} = ${a} − ${c}`),
+        () => IF(`${p} = ${a}`, `${c}·${p} = ${c}·${a}`),
+        () => IF(`${p} = ${q}`, `${q} = ${p}`),
+        () => `إذا كان ${L(p + ' = ' + q)} و${L(q + ' = ' + a)}، فإن ${L(p + ' = ' + a)}.`,
+        () => IF(`${p} = ${a}`, `${c}${p} + 1 = ${c}(${a}) + 1`),
+        () => `إذا كان ${L(p + ' = ' + q)} و${L(c + ' ≠ 0')}، فإن ${L(p + '/' + c + ' = ' + q + '/' + c)}.`
+      ], 3).map(f => f());
+      const bads = [
+        () => IF(`${p} = ${a}`, `${p} + ${c} = ${a} + ${c + 1}`),
+        () => IF(`${p} = ${a}`, `${c}·${p} = ${c + 1}·${a}`),
+        () => IF(`${p} = ${a}`, `${p} − ${c} = ${c} − ${a}`),
+        () => `إذا كان ${L(p + ' = ' + q)}، فإن ${L(p + '/0 = ' + q + '/0')}.`,
+        () => IF(`${p} = ${a}`, `${p} + ${c} = ${a} − ${c}`),
+        () => IF(`${p} = ${a}`, `${c}${p} + 1 = ${c}(${a + 1}) + 1`)
+      ];
+      const bad = pick(bads)(); if (new Set(goods.concat([bad])).size < 4) return this.fn();
+      return build({ cat: 'prop', d: 3, prompt: 'أي العبارات الآتية <b>لا</b> تمثل تطبيقًا صحيحًا لخصائص المساواة؟', correct: bad, wrongs: goods,
+        hint: 'تحقق من أن العملية نفسها أُجريت على الطرفين وبالعدد نفسه، وأن القسمة ليست على صفر.',
+        explain: `العبارة ${bad} خاطئة: لا بد أن نجري العملية نفسها وبالعدد نفسه على طرفي المعادلة (وألا نقسم على صفر).` });
+    } },
+    { d: 3, w: 2, fn() {      // التعدي أم التعويض أم التماثل
+      const k = pick(['trans', 'subs', 'symm', 'trans', 'subs']);
+      const [kk, txt] = mkItem(k);
+      return build({ cat: 'prop', d: 3, prompt: `ما الخاصية التي تبرر العبارة الآتية؟<br>«${txt}»`, correct: PNAME(kk),
+        wrongs: ['trans', 'subs', 'symm', 'refl'].filter(x => x !== kk).map(PNAME).concat(['خاصية الجمع للمساواة']),
+        hint: 'التعدي: مساواتان تعطيان مساواة ثالثة بين الطرفين الخارجيين. التعويض: نضع قيمة مكان رمز داخل عبارة أخرى.',
+        explain: `${PNAME(kk)}: ${PEXPL[kk]}` });
+    } }
+  ];
 
   // ============ 2) مبررات خطوات حل المعادلة ============
-  const OPS = { sub: PROPS.sub, add: PROPS.add, mul: PROPS.mul, div: PROPS.div, dist: PROPS.dist, subs: PROPS.subs };
-  const solveItems = [
-    () => { const x = randInt(2, 12), a = randInt(2, 9), b = randInt(2, 15); return ['sub', `${a}x + ${b} = ${a * x + b}`, `${a}x = ${a * x}`]; },
-    () => { const b = randInt(2, 9), x = randInt(b + 1, 20); return ['add', `x − ${b} = ${x - b}`, `x = ${x}`]; },
-    () => { const x = randInt(2, 12), a = randInt(2, 9); return ['div', `${a}x = ${a * x}`, `x = ${x}`]; },
-    () => { const x = randInt(2, 12), a = randInt(2, 9); return ['mul', `x/${a} = ${x}`, `x = ${a * x}`]; },
-    () => { const x = randInt(2, 9), m = randInt(2, 9), k = randInt(2, 9); return ['dist', `${k}(x + ${m}) = ${k * (x + m)}`, `${k}x + ${k * m} = ${k * (x + m)}`]; },
-    () => { const x = randInt(2, 9), a = randInt(2, 9), b = randInt(2, 9); return ['subs', `x = ${x} و y = ${a}x + ${b}`, `y = ${a}(${x}) + ${b}`]; }
+  const GEN_SOLVE = [
+    { d: 1, w: 3, fn() {      // انتقال بين عبارتين
+      const ch = pickChain(['A', 'B', 'C', 'D']), i = pick(ch.rows.map((r, k) => k).filter(k => k >= 1)), key = ch.rows[i].w;
+      return build({ cat: 'solve', d: 1, nOpts: 4,
+        prompt: `في برهان جبري، انتقلنا من الخطوة:<br>${LT(ch.rows[i - 1].s)}<br>إلى الخطوة:<br>${LT(ch.rows[i].s)}<br>ما مبرر هذا الانتقال؟`,
+        correct: JN[key], wrongs: jWrongs(key, POOL_ALG), hint: J_HINT[key], explain: jExplain(i, key) });
+    } },
+    { d: 1, w: 2, fn() {      // أي خاصية نستعمل لحل المعادلة؟
+      const v = V(), k = randInt(0, 3), b = randInt(2, 12), a = randInt(2, 9), c = randInt(5, 30);
+      const T4 = [
+        { s: `${v} + ${b} = ${c + b}`, w: 'sub', e: `نطرح ${L(String(b))} من الطرفين فتصبح ${L(v + ' = ' + (c))}.` },
+        { s: `${v} − ${b} = ${c}`, w: 'add', e: `نضيف ${L(String(b))} إلى الطرفين فتصبح ${L(v + ' = ' + (c + b))}.` },
+        { s: `${a}${v} = ${a * c}`, w: 'div', e: `نقسم الطرفين على ${L(String(a))} فتصبح ${L(v + ' = ' + c)}.` },
+        { s: `${v}/${a} = ${c}`, w: 'mul', e: `نضرب الطرفين في ${L(String(a))} فتصبح ${L(v + ' = ' + (a * c))}.` }
+      ][k];
+      return build({ cat: 'solve', d: 1, nOpts: 4, fixedOrder: true, order: ['add', 'sub', 'mul', 'div'].map(x => JN[x]),
+        prompt: `لإيجاد قيمة ${L(v)} في المعادلة ${L(T4.s)}، أي خاصية للمساواة نستعمل؟`, correct: JN[T4.w],
+        wrongs: ['add', 'sub', 'mul', 'div'].filter(x => x !== T4.w).map(x => JN[x]), hint: 'استعمل العملية العكسية لما أُجري على المتغير.',
+        explain: `نستعمل «${JN[T4.w]}»: ${T4.e}` });
+    } },
+    { d: 2, w: 3, fn() { const ch = pickChain(['A', 'B', 'C']); return qBlankJ('solve', 2, ch, ch.rows.map((r, i) => i), POOL_ALG); } },
+    { d: 2, w: 2, fn() {      // الناتج النهائي
+      const ch = pickChain(['A', 'B', 'C']), v = ch.v, s = ch.s, vf = n => `${v} = ${fm(n)}`;
+      const cands = [-s, s + 1, s - 1, s + 2, s - 2, 2 * s];
+      return build({ cat: 'solve', d: 2, nOpts: 4, prompt: `ما العبارة الأخيرة في البرهان الجبري لحل المعادلة ${LT(ch.given)}؟`,
+        correct: L(vf(s)), wrongs: numWrongs(s, cands, n => L(vf(n))), hint: 'حلّ المعادلة بالعمليات العكسية خطوة بخطوة، وتحقق بالتعويض.',
+        explain: `بحل المعادلة خطوة بخطوة نحصل على ${L(vf(s))}. وللتحقق نعوّض في المعادلة الأصلية.` });
+    } },
+    { d: 3, w: 3, fn() { const ch = pickChain(['A', 'B', 'C', 'D']); return qBlankS('solve', 3, ch, ch.rows.map((r, i) => i).filter(i => i >= 1)); } },
+    { d: 3, w: 2, fn() { const ch = chainD(); return qBlankJ('solve', 3, ch, ch.rows.map((r, i) => i), POOL_ALG); } }
   ];
-  function genSolve() {
-    const [k, s1, s2] = draw('solve', solveItems)();
-    const others = shuffleArray(Object.keys(OPS).filter(x => x !== k)).slice(0, 3);
-    return mk('solve', `في برهان جبري، انتقلنا من الخطوة:\n${L(s1)}\nإلى الخطوة:\n${L(s2)}\nما مبرر هذا الانتقال؟`, [k, ...others].map(x => OPS[x]), OPS[k]);
-  }
-
   // ============ 3) البرهان ذو العمودين ============
-  const COLT = ['البرهان الجبري', 'البرهان ذو العمودين', 'البرهان الحر', 'الخوارزمية'];
-  const colDefs = [
-    ['البرهان الجبري', 'برهان يتكون من سلسلة عبارات جبرية، وتبرر خصائص المساواة كثيرًا من عباراته.'],
-    ['البرهان الجبري', 'برهان مكوّن من عبارات جبرية متسلسلة، تُبرَّر معظمها بخصائص المساواة.'],
-    ['البرهان ذو العمودين', 'برهان تُرتب فيه العبارات في عمود والمبررات في عمود موازٍ له.'],
-    ['البرهان ذو العمودين', 'برهان يُكتب في جدول: عمود للعبارات المتسلسلة وعمود موازٍ لمبرراتها.'],
-    ['البرهان الحر', 'برهان تُكتب فيه فقرة تفسر أسباب صحة التخمين في موقف معطى.'],
-    ['الخوارزمية', 'سلسلة من الخطوات المتبعة لإجراء عملية أو حل مسألة ما.']
+  const COLQ = [
+    { q: 'ماذا يُكتب في عمود <b>العبارات</b> في البرهان ذي العمودين؟', c: 'المعادلة المعطاة ثم ناتج كل خطوة من خطوات الحل', w: ['أسماء الخصائص فقط', 'النتيجة النهائية فقط', 'المعطيات فقط دون أي خطوات'], h: 'العبارات هي ما نكتبه من معادلات وخطوات.', e: 'عمود العبارات يحتوي على المعادلة المعطاة ثم ناتج كل خطوة، وعمود المبررات يحتوي على أسباب صحتها.' },
+    { q: 'ماذا يُكتب في عمود <b>المبررات</b> في البرهان ذي العمودين؟', c: 'سبب صحة كل عبارة، من تعريف أو خاصية أو مسلّمة أو نظرية', w: ['المعطيات فقط', 'النتيجة النهائية فقط', 'خطوات الحل دون أسباب'], h: 'لكل عبارة مبرر.', e: 'يُكتب في عمود المبررات سبب صحة كل عبارة: تعريف أو خاصية أو مسلّمة أو نظرية.' },
+    { q: 'ما مبرر العبارة الأولى في معظم البراهين ذات العمودين؟', c: 'معطيات', w: ['بالتبسيط', 'خاصية التعدي للمساواة', 'خاصية الانعكاس للمساواة'], h: 'العبارة الأولى هي ما أُعطي في المسألة.', e: 'العبارة الأولى هي المعادلة المعطاة (المعادلة الأصلية)، ومبررها «معطيات».' },
+    { q: 'في جداول البراهين في الكتاب، أي عمود يحتوي على <b>العبارات</b>؟', c: 'العمود الأيمن', w: ['العمود الأيسر', 'العمودان معًا', 'لا يوجد عمود مخصص لها'], h: 'المبررات في العمود الموازي له.', e: 'العبارات في العمود الأيمن، والمبررات في العمود الأيسر الموازي له.' },
+    { q: 'كيف تُرتَّب العبارات والتبريرات في البرهان ذي العمودين؟', c: 'العبارات في عمود، والتبريرات في عمود موازٍ', w: ['العبارات والتبريرات في فقرة واحدة', 'التبريرات أولًا ثم العبارات في الجدول نفسه', 'تُكتب العبارات فقط'], h: 'اسمه يدل على شكله.', e: 'في البرهان ذي العمودين تُرتب العبارات في عمود والتبريرات في عمود موازٍ.' },
+    { q: 'يُكتب البرهان على شكل فقرة تفسر أسباب صحة التخمين. ما اسم هذا النوع من البراهين؟', c: 'البرهان الحر', w: ['البرهان ذو العمودين', 'البرهان الجبري', 'الخوارزمية'], h: 'تذكّر الدرس السابق.', e: 'البرهان الحر تُكتب فيه فقرة تفسر أسباب صحة التخمين، أما البرهان ذو العمودين فعباراته في عمود ومبرراته في عمود موازٍ.' }
   ];
-  const colFixed = [
-    { q: 'ماذا يُكتب في عمود المبررات في البرهان ذي العمودين؟', c: 'سبب صحة كل عبارة، من تعريف أو خاصية أو مسلّمة أو نظرية', o: ['سبب صحة كل عبارة، من تعريف أو خاصية أو مسلّمة أو نظرية', 'المعطيات فقط', 'النتيجة النهائية فقط', 'خطوات الحل دون أسباب'] },
-    { q: 'ما مبرر العبارة الأولى في معظم البراهين ذات العمودين؟', c: 'معطيات', o: ['معطيات', 'بالتبسيط', 'خاصية التعدي للمساواة', 'خاصية الانعكاس للمساواة'] },
-    { q: 'لماذا يمكن استعمال خصائص الجبر في إثبات العلاقات بين القطع المستقيمة والزوايا؟', c: 'لأن أطوال القطع المستقيمة وقياسات الزوايا أعداد حقيقية', o: ['لأن أطوال القطع المستقيمة وقياسات الزوايا أعداد حقيقية', 'لأن القطع المستقيمة متطابقة دائمًا', 'لأن الزوايا متساوية دائمًا', 'لأن الهندسة لا تحتاج إلى مبررات'] }
+  const GEN_COLS = [
+    { d: 1, w: 3, fn() {
+      const c = pick(COLQ);
+      return build({ cat: 'cols', d: 1, prompt: c.q, correct: c.c, wrongs: c.w, hint: c.h, explain: c.e });
+    } },
+    { d: 1, w: 2, fn() {      // قراءة جدول: كم عدد الصفوف التي مبررها كذا؟
+      const ch = pickChain(['A', 'B', 'C', 'D', 'S']);
+      let key = pick(['simp', 'simp', 'div']), cnt = ch.rows.filter(r => r.w === key).length;
+      if (!cnt) { key = 'simp'; cnt = ch.rows.filter(r => r.w === key).length; }
+      return build({ cat: 'cols', d: 1, nOpts: 4, fixedOrder: true, order: [0, 1, 2, 3].map(n => digitsAr(n + 1)),
+        prompt: `كم صفًّا في البرهان الآتي مبرره «${JN[key]}»؟`, extra: givenBox(ch) + pfBox(ch.rows),
+        correct: digitsAr(cnt), wrongs: [1, 2, 3, 4].filter(n => n !== cnt).map(digitsAr), hint: 'عُدّ الصفوف في عمود المبررات.',
+        explain: `يظهر المبرر «${JN[key]}» في ${cnt === 1 ? 'صف واحد' : cnt === 2 ? 'صفين' : digitsAr(cnt) + ' صفوف'}.` });
+    } },
+    { d: 2, w: 3, fn() { const ch = pickChain(['E2', 'S', 'S', 'A', 'B']); return qBlankJ('cols', 2, ch, ch.rows.map((r, i) => i), POOL_ALG); } },
+    { d: 2, w: 2, fn() {      // تقدير ما بعد الحذف الذهني (الأمثلة ٢)
+      const k = randInt(0, 1);
+      const q = k === 0
+        ? { n: '٣', c: JN.mul, w: [JN.add, JN.div, JN.sub], e: 'بعد حذف العبارتين ٢ و٤ يصبح مبرر العبارة ٣ «خاصية الضرب للمساواة»، لأن الضرب في ٩/٥ والتبسيط أُجريا ذهنيًا.' }
+        : { n: '٥', c: JN.add, w: [JN.mul, JN.div, JN.sub], e: 'بعد حذف العبارتين ٢ و٤ يصبح مبرر العبارة ٥ «خاصية الجمع للمساواة»، لأن الجمع والتبسيط أُجريا ذهنيًا.' };
+      return build({ cat: 'cols', d: 2, nOpts: 4, prompt: `إذا سمح المعلم بحذف العبارتين ٢ و٤ من برهان المثال ٢ (حسابات ذهنية)، فما مبرر العبارة ${q.n} حسب ترقيم المثال؟`,
+        extra: givenBox({ given: 'C = {5/9}(F − 32)', goal: 'F = {9/5}C + 32' }) + pfBox(EX2),
+        correct: q.c, wrongs: q.w, hint: 'العبارة التي تُحذف قبلها تُدمج مع التي بعدها؛ فكّر في العملية الأخيرة المنفّذة.', explain: q.e });
+    } },
+    { d: 3, w: 3, fn() {      // ترتيب أربع خطوات متتالية
+      const ch = pickChain(['A', 'B', 'D', 'S']), n = ch.rows.length, st = randInt(1, Math.max(1, n - 4)), win = ch.rows.slice(st, st + 4);
+      if (win.length < 4) throw new Error('short chain');
+      const labs = ['أ', 'ب', 'ج', 'د']; let idxs; do { idxs = shuffle([0, 1, 2, 3]); } while (idxs.every((x, k) => x === k));   // idxs[k] = موضع العبارة المعروضة k في الترتيب الصحيح
+      const correctSeq = [0, 1, 2, 3].map(r => labs[idxs.indexOf(r)]);
+      const seqStr = a => a.join(' ثم ');
+      const perms = [];
+      shuffle([[0, 1, 3, 2], [1, 0, 2, 3], [0, 2, 1, 3], [3, 0, 1, 2], [1, 2, 3, 0], [2, 1, 0, 3], [3, 2, 1, 0], [0, 3, 2, 1]]).forEach(p => {
+        const s = seqStr(p.map(r => labs[idxs.indexOf(r)])); if (s !== seqStr(correctSeq)) perms.push(s);
+      });
+      const list = idxs.map((r, k) => `${labs[k]}) ${E(win[r].s)}`).join('<br>');
+      return build({ cat: 'cols', d: 3, nOpts: 4,
+        prompt: `العبارات الآتية أربع خطوات متتالية من برهان لحل المعادلة ${LT(ch.given)}. ${st === 1 ? '' : `وقد سبقتها العبارة ${LT(ch.rows[st - 1].s)}. `}أي ترتيب لها يمثل برهانًا صحيحًا؟`,
+        extra: `<div class="stmt-list">${list}</div>`,
+        correct: seqStr(correctSeq), wrongs: perms, hint: 'ابدأ بالعبارة الأقرب إلى المعادلة الأصلية، وتنتهي الخطوات بالمتغير وحده.',
+        explain: `الترتيب الصحيح هو ${seqStr(correctSeq)}؛ فكل عبارة تنتج من التي قبلها بخاصية أو بتبسيط.` });
+    } },
+    { d: 3, w: 3, fn() { const ch = pickChain(['E2', 'S', 'A', 'B', 'C']); return qBlankS('cols', 3, ch, ch.rows.map((r, i) => i).filter(i => i >= 1)); } }
   ];
-  function genCols() {
-    const kind = draw('colKind', [0, 0, 1, 2, 3]);
-    if (kind === 0) { const [t, d] = draw('colDefs', colDefs); return mk('cols', `ما المصطلح الذي يوافق التعريف الآتي؟\n"${d}"`, COLT, t); }
-    const f = colFixed[kind - 1];
-    return mk('cols', f.q, f.o, f.c);
-  }
 
   // ============ 4) البرهان الهندسي ============
-  const GP = ['خاصية الانعكاس للمساواة', 'خاصية التماثل للمساواة', 'خاصية التعدي للمساواة', 'خاصية الجمع للمساواة'];
-  const GJ = ['تعريف تطابق الزوايا', 'تعريف تطابق القطع المستقيمة', 'خاصية التعويض للمساواة', 'خاصية الانعكاس للمساواة'];
-  const gq = (txt, i) => mk('geo', `ما الخاصية التي تبرر العبارة الآتية؟\n"${txt}"`, GP, GP[i]);
-  const geoItems = [
-    () => { const [a, b] = pts(2); return gq(L(a + b + ' = ' + a + b), 0); },
-    () => { const n = randInt(1, 4); return gq(L('m∠' + n + ' = m∠' + n), 0); },
-    () => { const [a, b, c, d] = pts(4); return gq(`إذا كان ${L(a + b + ' = ' + c + d)}، فإن ${L(c + d + ' = ' + a + b)}.`, 1); },
-    () => { const [p, q] = pick([[1, 2], [3, 4], [2, 3]]); return gq(`إذا كان ${L('m∠' + p + ' = m∠' + q)}، فإن ${L('m∠' + q + ' = m∠' + p)}.`, 1); },
-    () => { const [a, b, c, d, e, f] = pts(6); return gq(`إذا كان ${L(a + b + ' = ' + c + d)} و${L(c + d + ' = ' + e + f)}، فإن ${L(a + b + ' = ' + e + f)}.`, 2); },
-    () => gq(`إذا كان ${L('m∠1 = m∠2')} و${L('m∠2 = m∠3')}، فإن ${L('m∠1 = m∠3')}.`, 2),
-    () => { const [a, b] = pick([['A', 'B'], ['P', 'Q'], ['X', 'Y']]); return mk('geo', `ما مبرر العبارة المكتوبة في البرهان الهندسي؟\nالمعطى: ${L('∠' + a + ' ≅ ∠' + b)}.\nالعبارة: ${L('m∠' + a + ' = m∠' + b)}.`, GJ, GJ[0], true); },
-    () => { const [a, b, c, d] = pts(4); return mk('geo', `ما مبرر العبارة المكتوبة في البرهان الهندسي؟\nالمعطى: ${L(a + b + ' ≅ ' + c + d)}.\nالعبارة: ${L(a + b + ' = ' + c + d)}.`, GJ, GJ[1], true); },
-    () => { const x = randInt(2, 9), k = randInt(2, 6), b = randInt(2, 9); return mk('geo', `ما مبرر العبارة المكتوبة في البرهان الهندسي؟\nالمعطى: ${L('m∠1 = (' + k + 'x + ' + b + ')°')} و${L('m∠2 = ' + (k * x + b) + '°')} و${L('m∠1 = m∠2')}.\nالعبارة: ${L(k + 'x + ' + b + ' = ' + (k * x + b))}.`, GJ, GJ[2], true); }
-  ];
-  function genGeo() { return draw('geo', geoItems)(); }
-
-  const gens = { prop: genProp, solve: genSolve, cols: genCols, geo: genGeo };
-
-
-  // ============ حالة التطبيق ============
-  let currentMode = 'prop';
-  let selectedCats = ['prop', 'solve', 'cols', 'geo'];
-  let selectedLevel = 'weak';
-  let customHasTime = false;
-
-  let questions = [];
-  let currentQuestionIndex = 0;
-  let score = 0;
-  let timer = null;
-  let timePerQuestion = 0;
-  let isAnswering = false;
-
-  const levelSettings = {
-    weak: { count: 5, time: 0 },
-    good: { count: 10, time: 20 },
-    very_good: { count: 15, time: 15 },
-    excellent: { count: 20, time: 10 }
-  };
-
-  const catLabels = {
-    prop: 'خصائص المساواة',
-    solve: 'مبررات خطوات الحل',
-    cols: 'البرهان ذو العمودين',
-    geo: 'البرهان الهندسي'
-  };
-
-  const catsContainer = document.getElementById('cats-container');
-  Object.keys(catLabels).forEach(key => {
-    const btn = document.createElement('button');
-    btn.className = `cat-btn ${selectedCats.includes(key) ? 'active' : ''}`;
-    btn.innerText = catLabels[key];
-    btn.onclick = () => toggleCat(key, btn);
-    catsContainer.appendChild(btn);
-  });
-
-  function setMode(mode, element) {
-    currentMode = mode;
-    document.querySelectorAll('.mode-grid .mode-btn').forEach(btn => btn.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('cats-wrapper').style.display = (mode === 'mixed') ? 'block' : 'none';
-  }
-
-  function toggleCat(key, btn) {
-    if (selectedCats.includes(key)) {
-      if (selectedCats.length > 1) {
-        selectedCats = selectedCats.filter(c => c !== key);
-        btn.classList.remove('active');
+  const GEO_P = ['refl', 'symm', 'trans', 'add', 'sub', 'mul', 'div'];
+  const geoWr = (key, extra) => jWrongs(key, GEO_P.concat(extra || []));
+  const GEN_GEO = [
+    { d: 1, w: 3, fn() {      // الانعكاس والتماثل والتعدي للقطع والزوايا
+      const k = pick(['refl', 'symm', 'trans']), ang = Math.random() < 0.5;
+      let txt;
+      if (!ang) {
+        const [a, b, c, d, e, f] = pts(6);
+        txt = k === 'refl' ? L(`${a + b} = ${a + b}`)
+          : k === 'symm' ? `إذا كان ${L(a + b + ' = ' + c + d)}، فإن ${L(c + d + ' = ' + a + b)}.`
+            : `إذا كان ${L(a + b + ' = ' + c + d)} و${L(c + d + ' = ' + e + f)}، فإن ${L(a + b + ' = ' + e + f)}.`;
+      } else {
+        const [p, q, r] = sample([1, 2, 3, 4], 3);
+        txt = k === 'refl' ? L(`m∠${p} = m∠${p}`)
+          : k === 'symm' ? `إذا كان ${L(`m∠${p} = m∠${q}`)}، فإن ${L(`m∠${q} = m∠${p}`)}.`
+            : `إذا كان ${L(`m∠${p} = m∠${q}`)} و${L(`m∠${q} = m∠${r}`)}، فإن ${L(`m∠${p} = m∠${r}`)}.`;
       }
-    } else {
-      selectedCats.push(key);
-      btn.classList.add('active');
-    }
+      return build({ cat: 'geo', d: 1, prompt: `ما الخاصية التي تبرر العبارة الآتية؟<br>«${txt}»`, correct: JN[k], wrongs: geoWr(k),
+        hint: PHINT[k], explain: `${JN[k]}: ${PEXPL[k]}` });
+    } },
+    { d: 1, w: 3, fn() {      // تعريف التطابق
+      const ang = Math.random() < 0.5, toEq = Math.random() < 0.7;
+      let a, b, ca, cb, eq, cg;
+      if (ang) { [a, b] = pick([['A', 'B'], ['P', 'Q'], ['X', 'Y'], ['1', '2'], ['3', '4']]); ca = `∠${a}`; cb = `∠${b}`; eq = `m∠${a} = m∠${b}`; cg = `∠${a} ≅ ∠${b}`; }
+      else { const [p, q, r, s] = pts(4); ca = p + q; cb = r + s; eq = `${ca} = ${cb}`; cg = `${ca} ≅ ${cb}`; }
+      const key = ang ? 'defA' : 'defS', other = ang ? 'defS' : 'defA';
+      return build({ cat: 'geo', d: 1, nOpts: 4,
+        prompt: `ما مبرر العبارة المكتوبة في البرهان الهندسي؟<br>المعطى: ${L(toEq ? cg : eq)}.<br>العبارة: ${L(toEq ? eq : cg)}.`,
+        correct: JN[key], wrongs: [JN[other], JN.refl, JN.symm, JN.trans, JN.subs],
+        hint: ang ? 'التطابق في الزوايا يقابله تساوي قياساتها.' : 'التطابق في القطع يقابله تساوي أطوالها.',
+        explain: `«${JN[key]}»: ${J_EXPL[key]}` });
+    } },
+    { d: 2, w: 3, fn() {      // مبرر في جدول هندسي
+      const ch = pickChain(['G', 'G', 'GS']); return qBlankJ('geo', 2, ch, ch.rows.map((r, i) => i), POOL_GEO);
+    } },
+    { d: 2, w: 2, fn() {      // انتقال هندسي بين عبارتين
+      const ch = pickChain(['G', 'GS']), cand = ch.rows.map((r, i) => i).filter(i => i >= 1 && i <= 3), i = pick(cand), key = ch.rows[i].w;
+      return build({ cat: 'geo', d: 2, nOpts: 4,
+        prompt: `في برهان هندسي، انتقلنا من الخطوة:<br>${LT(ch.rows[i - 1].s)}<br>إلى الخطوة:<br>${LT(ch.rows[i].s)}<br>ما مبرر هذا الانتقال؟`,
+        correct: JN[key], wrongs: jWrongs(key, POOL_GEO), hint: J_HINT[key], explain: jExplain(i, key) });
+    } },
+    { d: 2, w: 2, fn() {      // قيمة x من تطابق زاويتين/قطعتين
+      const ch = pickChain(['G', 'GS']), s = ch.s, v = ch.v, vf = n => L(`${v} = ${fm(n)}`);
+      const cands = ch.kind === 'G' ? [-s, s + 1, s - 1, s + 2, ch.c - ch.a, ch.b + ch.d] : [-s, s + 1, s - 1, s + 2, ch.n];
+      const text = ch.kind === 'G'
+        ? `إذا كانت ${L(ch.angs[0] + ' ≅ ' + ch.angs[1])} و${L(ch.angs[1] + ' ≅ ' + ch.angs[2])}، وكان ${L('m' + ch.angs[0] + ' = (' + ch.rows[3].s.split(' = ')[0] + ')°')} و${L('m' + ch.angs[2] + ' = (' + ch.rows[3].s.split(' = ')[1] + ')°')}، فما قيمة ${L(v)}؟`
+        : `إذا كانت ${L(ch.S1 + ' ≅ ' + ch.S2)}، وكان ${L(ch.S1 + ' = ' + T(ch.givenList[1].split(' = ')[1]))} و${L(ch.S2 + ' = ' + ch.n)}، فما قيمة ${L(v)}؟`;
+      return build({ cat: 'geo', d: 2, nOpts: 4, prompt: text, correct: vf(s), wrongs: numWrongs(s, cands, vf),
+        hint: ch.kind === 'G' ? 'من التطابق تتساوى القياسات، ثم ساوِ التعبيرين وحلّ المعادلة.' : 'من التطابق يتساوى الطولان، ثم ساوِ التعبيرين وحلّ المعادلة.',
+        explain: `من تعريف التطابق تتساوى القياسات (أو الأطوال)، ثم نساوي التعبيرين ونحل المعادلة خطوة بخطوة فنجد ${vf(s)}.` });
+    } },
+    { d: 3, w: 3, fn() { const ch = pickChain(['G', 'GS']); return qBlankS('geo', 3, ch, ch.rows.map((r, i) => i).filter(i => i >= 2)); } },
+    { d: 3, w: 2, fn() {      // قياس زاوية بعد إيجاد x
+      const ch = chainG(), s = ch.s, val = ch.val1, f = n => L(n + '°');
+      const cands = [ch.a * s, ch.b, s, ch.c * s, ch.a + ch.b, val + ch.a, val - ch.a, 180 - val];
+      return build({ cat: 'geo', d: 3, nOpts: 4,
+        prompt: `إذا كانت ${L(ch.angs[0] + ' ≅ ' + ch.angs[1])} و${L(ch.angs[1] + ' ≅ ' + ch.angs[2])}، وكان ${L('m' + ch.angs[0] + ' = (' + ch.rows[3].s.split(' = ')[0] + ')°')} و${L('m' + ch.angs[2] + ' = (' + ch.rows[3].s.split(' = ')[1] + ')°')}، فما قياس ${L(ch.angs[0])}؟`,
+        correct: f(val), wrongs: numWrongs(val, cands, f), hint: 'أوجد قيمة المتغير أولًا ثم عوّض بها في تعبير القياس.',
+        explain: `بحل المعادلة نجد ${L(ch.v + ' = ' + s)}، وبالتعويض في التعبير نحصل على ${L('m' + ch.angs[0] + ' = ' + val + '°')}.` });
+    } }
+  ];
+
+  // ============ 5) اكتشف الخطأ ============
+  const WRONG_FOR = {
+    add: ['sub', 'mul', 'div', 'dist'], sub: ['add', 'mul', 'div', 'dist'], mul: ['div', 'add', 'sub', 'dist'], div: ['mul', 'add', 'sub', 'dist'],
+    dist: ['add', 'sub', 'mul', 'div'], simp: ['add', 'sub', 'mul', 'div', 'dist'], symm: ['add', 'mul', 'div', 'dist'], trans: ['add', 'sub', 'mul', 'div', 'symm'],
+    subs: ['add', 'sub', 'mul', 'div', 'dist'], defA: ['defS', 'add', 'sub'], defS: ['defA', 'add', 'sub']
+  };
+  const stepName = n => `الخطوة ${digitsAr(n)}`;
+  // يبني برهانًا فيه مبرر واحد خاطئ ويعيد { ch, i, key, wrongKey }
+  function brokenChain(keys) {
+    const ch = pickChain(keys), cand = ch.rows.map((r, i) => i).filter(i => i >= 1);
+    const i = pick(cand), key = ch.rows[i].w, wrongKey = pick(WRONG_FOR[key]);
+    return { ch, i, key, wrongKey };
+  }
+  const GEN_ERR = [
+    { d: 1, w: 3, fn() {      // صح أم خطأ: مبرر انتقال
+      const ch = pickChain(['A', 'B', 'C', 'D', 'S', 'G', 'GS']), cand = ch.rows.map((r, i) => i).filter(i => i >= 1 && !(ch.geo && i === 0)), i = pick(cand), key = ch.rows[i].w;
+      const ok = Math.random() < 0.5, shown = ok ? key : pick(WRONG_FOR[key]);
+      return build({ cat: 'error', d: 1, nOpts: 2, fixedOrder: true, order: ['صحيح', 'خاطئ'],
+        prompt: `كتب طالب الانتقال الآتي في برهان:<br>من: ${LT(ch.rows[i - 1].s)}<br>إلى: ${LT(ch.rows[i].s)}<br>المبرر: «${JN[shown]}»<br>هل المبرر صحيح؟`,
+        correct: ok ? 'صحيح' : 'خاطئ', wrongs: [ok ? 'خاطئ' : 'صحيح'], hint: J_HINT[key],
+        explain: ok ? `المبرر صحيح: ${jExplain(i - 1, key).replace(/^مبرر العبارة \S+ /, 'مبرر هذا الانتقال ')}` : `المبرر خاطئ؛ المبرر الصحيح هو «${JN[key]}»: ${J_EXPL[key].replace(/a = b/g, L('a = b')).replace(/b = a/g, L('b = a')).replace(/b = c/g, L('b = c')).replace(/a = c/g, L('a = c'))}` });
+    } },
+    ...[[2, ['A', 'B', 'C', 'S']], [3, ['D', 'G', 'GS']]].map(([dd, keys]) => ({ d: dd, w: 3, fn() {
+      const { ch, i, key, wrongKey } = brokenChain(keys), rows = ch.rows;
+      const others = shuffle(rows.map((r, k) => k).filter(k => k !== i && k >= 1)).slice(0, 3);
+      const nums = [i + 1].concat(others.map(k => k + 1)).sort((x, y) => x - y);
+      return build({ cat: 'error', d: dd, nOpts: 4, fixedOrder: true, order: nums.map(stepName),
+        prompt: 'في البرهان الآتي مبرر واحد خاطئ فقط. أي خطوة مبررها خاطئ؟', extra: givenBox(ch) + pfBox(rows, { wrongJ: { [i]: wrongKey } }),
+        correct: stepName(i + 1), wrongs: others.map(k => stepName(k + 1)), hint: 'قارن كل عبارة بالتي قبلها: ما الذي تغيّر؟ وهل يطابق المبرر المكتوب؟',
+        explain: `مبرر ${stepName(i + 1)} الصحيح هو «${JN[key]}» وليس «${JN[wrongKey]}».` });
+    } })),
+    { d: 3, w: 3, fn() {      // ما المبرر الصحيح للخطوة الخاطئة؟
+      const { ch, i, key, wrongKey } = brokenChain(['A', 'B', 'D', 'S', 'G', 'GS']), pool = ch.geo ? POOL_GEO : POOL_ALG;
+      const wr = [JN[wrongKey]].concat(jWrongs(key, pool).filter(x => x !== JN[wrongKey]).slice(0, 2));
+      return build({ cat: 'error', d: 3, nOpts: 4,
+        prompt: 'في البرهان الآتي مبرر واحد خاطئ. ما المبرر الصحيح لتلك الخطوة؟', extra: givenBox(ch) + pfBox(ch.rows, { wrongJ: { [i]: wrongKey } }),
+        correct: JN[key], wrongs: wr, hint: J_HINT[key], explain: `الخطوة الخاطئة هي ${stepName(i + 1)}؛ مبررها الصحيح «${JN[key]}» وليس «${JN[wrongKey]}».` });
+    } }
+  ];
+
+  // ============ 6) مفاهيم ومفردات ============
+  const F = s => L(s);
+  const CONCEPTS = [
+    // سهل
+    { d: 1, q: 'ما <b>البرهان الجبري</b>؟', c: 'برهان يتكون من سلسلة عبارات جبرية، وتبرر خصائص المساواة كثيرًا منها', w: ['برهان تُكتب فيه فقرة تفسر أسباب صحة التخمين', 'تخمين مبني على أنماط', 'مثال مضاد يبيّن خطأ تخمين'], h: 'اسمه يدل على نوع العبارات فيه.', e: 'البرهان الجبري سلسلة عبارات جبرية، وتبرر خصائص المساواة كثيرًا من عباراتها.' },
+    { d: 1, q: 'ما <b>البرهان ذو العمودين</b>؟', c: 'برهان تُرتَّب فيه العبارات في عمود والتبريرات في عمود موازٍ', w: ['برهان يُكتب على شكل فقرة', 'برهان يتكون من عبارتين فقط', 'برهان لا يحتاج إلى مبررات'], h: 'اسمه يصف شكله.', e: 'في البرهان ذي العمودين تُرتب العبارات في عمود والتبريرات في عمود موازٍ.' },
+    { d: 1, q: 'ما <b>الجبر</b> كما ورد في الدرس؟', c: 'نظام مكوّن من مجموعات من الأعداد وعمليات عليها وخصائص تمكّنك من إجراء هذه العمليات', w: ['مجموعة من التخمينات غير المثبتة', 'رسم أشكال هندسية فقط', 'طريقة لقياس درجات الحرارة'], h: 'أعداد وعمليات وخصائص.', e: 'الجبر نظام مكوّن من مجموعات من الأعداد، وعمليات عليها، وخصائص تمكّنك من إجراء هذه العمليات.' },
+    { d: 1, q: 'ما <b>الخوارزمية</b>؟', c: 'سلسلة من الخطوات المتبعة لإجراء عملية أو حل مسألة ما', w: ['عبارة تُقبل صحتها دون برهان', 'مثال مضاد لتخمين', 'خاصية من خصائص المساواة'], h: 'خطوات متتابعة.', e: 'الخوارزمية سلسلة من الخطوات المتبعة لإجراء عملية أو حل مسألة ما.' },
+    { d: 1, q: 'لماذا يمكن اعتبار البرهان نوعًا من الخوارزميات؟', c: 'لأنه يتم خطوة بخطوة', w: ['لأنه يعتمد على مثال واحد', 'لأنه لا يحتاج إلى مبررات', 'لأنه يكتب بالأرقام فقط'], h: 'فكّر في كيفية كتابة البرهان.', e: 'يمكن اعتبار البرهان من أنواع الخوارزميات لأنه يتم خطوة بخطوة.' },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('algebraic proof')}؟`, c: 'البرهان الجبري', w: ['البرهان ذو العمودين', 'البرهان الحر', 'الخوارزمية'], h: 'algebraic = جبري.', e: `${F('algebraic proof')} تعني البرهان الجبري.` },
+    { d: 1, q: `ما المصطلح العربي الذي يقابل ${F('two-column proof')}؟`, c: 'البرهان ذو العمودين', w: ['البرهان الجبري', 'البرهان الحر', 'المسلّمة'], h: 'column = عمود.', e: `${F('two-column proof')} تعني البرهان ذا العمودين.` },
+    { d: 1, q: 'ما نص <b>خاصية الانعكاس للمساواة</b>؟', c: F('a = a'), w: [F('a = b'), `إذا كان ${F('a = b')} فإن ${F('b = a')}`, `إذا كان ${F('a = b')} و${F('b = c')} فإن ${F('a = c')}`], h: 'الشيء يساوي نفسه.', e: `خاصية الانعكاس: ${F('a = a')}.` },
+    { d: 1, q: 'ما نص <b>خاصية التماثل للمساواة</b>؟', c: `إذا كان ${F('a = b')} فإن ${F('b = a')}`, w: [F('a = a'), `إذا كان ${F('a = b')} فإن ${F('a + c = b + c')}`, `إذا كان ${F('a = b')} و${F('b = c')} فإن ${F('a = c')}`], h: 'تبديل طرفي المساواة.', e: `خاصية التماثل: إذا كان ${F('a = b')} فإن ${F('b = a')}.` },
+    { d: 1, q: 'ما نص <b>خاصية التعدي للمساواة</b>؟', c: `إذا كان ${F('a = b')} و${F('b = c')} فإن ${F('a = c')}`, w: [F('a = a'), `إذا كان ${F('a = b')} فإن ${F('b = a')}`, F('a(b + c) = ab + ac')], h: 'مساواتان تقودان إلى ثالثة.', e: `خاصية التعدي: إذا كان ${F('a = b')} و${F('b = c')} فإن ${F('a = c')}.` },
+    { d: 1, q: 'ما الشرط اللازم في <b>خاصية القسمة للمساواة</b>؟', c: F('c ≠ 0'), w: [F('c = 0'), F('c > 0'), F('a = c')], h: 'القسمة على صفر غير معرّفة.', e: `في خاصية القسمة: إذا كان ${F('a = b')} و${F('c ≠ 0')} فإن ${F('a/c = b/c')}.` },
+    { d: 1, q: 'ما درجة تجمد الماء على المقياس <b>الفهرنهايتي</b>؟', c: F('32°'), w: [F('0°'), F('100°'), F('212°')], h: 'درجة تجمد الماء بالسيليزي ٠.', e: `يحدد المقياس الفهرنهايتي درجة تجمد الماء عند ${F('32°')} وغليانه عند ${F('212°')}.` },
+    { d: 1, q: 'ما درجة غليان الماء على المقياس <b>السيليزي</b>؟', c: F('100°'), w: [F('212°'), F('32°'), F('0°')], h: 'درجة التجمد على هذا المقياس ٠.', e: `يحدد المقياس السيليزي درجة تجمد الماء عند ${F('0°')} وغليانه عند ${F('100°')}.` },
+    // متوسط
+    { d: 2, q: 'ما الصيغة التي تحول درجات الحرارة من السيليزية <b>إلى</b> الفهرنهايتية؟', c: F('F = (9/5)C + 32'), w: [F('F = (5/9)C + 32'), F('F = (9/5)(C − 32)'), F('F = (5/9)(C − 32)')], h: 'تضيف ٣٢ بعد الضرب في ٩/٥.', e: `الصيغة هي ${F('F = (9/5)C + 32')}؛ فمثلًا ${F('C = 100')} تعطي ${F('F = 212')}.` },
+    { d: 2, q: 'ما الصيغة التي تحول درجات الحرارة من الفهرنهايتية <b>إلى</b> السيليزية؟', c: F('C = (5/9)(F − 32)'), w: [F('C = (9/5)(F − 32)'), F('C = (5/9)F − 32'), F('C = (9/5)F + 32')], h: 'تطرح ٣٢ أولًا ثم تضرب في ٥/٩.', e: `الصيغة هي ${F('C = (5/9)(F − 32)')}؛ فمثلًا ${F('F = 212')} تعطي ${F('C = 100')}.` },
+    { d: 2, q: 'لماذا يمكننا استعمال خصائص الجبر في إثبات العلاقات بين القطع المستقيمة والزوايا؟', c: 'لأن أطوال القطع المستقيمة وقياسات الزوايا أعداد حقيقية', w: ['لأن القطع المستقيمة متطابقة دائمًا', 'لأن الزوايا متساوية دائمًا', 'لأن الهندسة لا تحتاج إلى مبررات'], h: 'الطول والقياس عددان.', e: 'أطوال القطع المستقيمة وقياسات الزوايا أعداد حقيقية، فتصح عليها خصائص المساواة المستعملة في الجبر.' },
+    { d: 2, q: 'أي العبارات الآتية تمثل <b>خاصية الإبدال للجمع</b>؟', c: F('a + b = b + a'), w: [F('(a + b) + c = a + (b + c)'), F('a·b = b·a'), F('a(b + c) = ab + ac')], h: 'يتبدل ترتيب العددين في الجمع.', e: `الإبدال للجمع: ${F('a + b = b + a')}.` },
+    { d: 2, q: 'أي العبارات الآتية تمثل <b>خاصية التجميع للضرب</b>؟', c: F('(a·b)·c = a·(b·c)'), w: [F('a·b = b·a'), F('(a + b) + c = a + (b + c)'), F('a(b + c) = ab + ac')], h: 'تتغير مواضع الأقواس في الضرب.', e: `التجميع للضرب: ${F('(a·b)·c = a·(b·c)')}.` },
+    { d: 2, q: 'ما الفرق بين خاصيتي الإبدال والتجميع؟', c: 'الإبدال يغيّر ترتيب العددين، والتجميع يغيّر موضع الأقواس', w: ['الإبدال يغيّر موضع الأقواس، والتجميع يغيّر ترتيب العددين', 'الإبدال للجمع فقط والتجميع للضرب فقط', 'لا فرق بينهما'], h: 'انظر إلى ما يتغير في كل صيغة.', e: 'في الإبدال يتبدل ترتيب العددين، وفي التجميع يتغير تجميع الأعداد بالأقواس دون تغيير ترتيبها.' },
+    { d: 2, q: `بعد الوصول إلى ${F('6 = x')} في البرهان، أي خاصية نستعمل لكتابة ${F('x = 6')}؟`, c: JN.symm, w: [JN.refl, JN.trans, JN.dist], h: 'تبديل طرفي المعادلة.', e: `نستعمل «${JN.symm}» لقلب المعادلة.` },
+    { d: 2, q: `ما مبرر الخطوة ${F('70 + 20 = 90')} حين نبسط طرفي المعادلة في البرهان؟`, c: 'بالتبسيط', w: [JN.add, JN.subs, JN.dist], h: 'هل طُبّقت خاصية جديدة أم أُجري حساب فقط؟', e: 'عندما نُجري حسابًا فقط نكتب في المبررات «بالتبسيط».' },
+    { d: 2, q: 'ما أول عبارة تكتبها في برهان جبري لحل معادلة معطاة؟', c: 'المعادلة المعطاة نفسها، ومبررها «معطيات»', w: ['الحل النهائي ومبرره «التماثل»', 'أي معادلة جديدة ومبررها «بالتبسيط»', 'المعادلة بعد تبسيطها ومبررها «التوزيع»'], h: 'ابدأ بما أُعطي.', e: 'تكتب أولًا المعادلة الأصلية المعطاة، ومبررها «معطيات».' },
+    // صعب
+    { d: 3, q: 'ما الذي يميز <b>التعويض</b> عن <b>التعدي</b>؟', c: 'التعويض يضع قيمة (أو عبارة) مكان رمز داخل عبارة، والتعدي يربط مساواتين تشتركان في عبارة', w: ['التعويض يربط مساواتين مشتركتين، والتعدي يضع قيمة مكان رمز', 'التعويض والتعدي هما الخاصية نفسها', 'التعويض للجمع فقط والتعدي للضرب فقط'], h: 'تذكّر المثال: ٣x + ١ ثم ٣(٤) + ١.', e: `التعويض: نضع ${F('b')} مكان ${F('a')} في أي عبارة تحتوي على ${F('a')}. التعدي: ${F('a = b')} و${F('b = c')} فإن ${F('a = c')}.` },
+    { d: 3, q: 'لماذا تُستثنى القسمة على الصفر من خاصية القسمة للمساواة؟', c: 'لأن القسمة على الصفر غير معرّفة', w: ['لأن الناتج يكون صفرًا دائمًا', 'لأن الطرفين يصبحان غير متساويين', 'لأن الصفر ليس عددًا حقيقيًا'], h: 'جرّب أن تحسب ٥ ÷ ٠.', e: 'القسمة على الصفر غير معرّفة في الأعداد الحقيقية، لذلك يشترط في خاصية القسمة أن يكون المقسوم عليه غير صفر.' },
+    { d: 3, q: 'ما العمليات التي تسمح بها خصائص المساواة على طرفي المعادلة؟', c: 'الجمع والطرح والضرب والقسمة (على عدد غير الصفر) بالعدد نفسه على الطرفين', w: ['الجمع فقط على أحد الطرفين', 'الضرب في الطرف الأيمن فقط', 'القسمة على أي عدد حتى الصفر'], h: 'ما نفعله لطرف نفعله للآخر.', e: 'تسمح خصائص المساواة بجمع العدد نفسه أو طرحه أو الضرب فيه أو القسمة عليه (غير الصفر) على طرفي المعادلة معًا.' },
+    { d: 3, q: `لماذا كان مبرر الخطوة ${F('−5x − 20 = 70')} في المثال ١ هو «بالتبسيط»؟`, c: 'لأننا أجرينا حسابًا فقط على العبارة السابقة دون خاصية جديدة', w: ['لأننا جمعنا عددًا إلى طرفي المعادلة', 'لأننا قسمنا الطرفين على العدد نفسه', 'لأنها العبارة المعطاة'], h: 'الخطوة السابقة كانت التوزيع.', e: 'ناتج التوزيع ٥·x + (−٥)·٤ يُبسَّط إلى −٥x − ٢٠ بحساب فقط.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: c.q, correct: c.c, wrongs: c.w, hint: c.h, explain: c.e }) }));
+
+  const GENS = { prop: GEN_PROP, solve: GEN_SOLVE, cols: GEN_COLS, geo: GEN_GEO, error: GEN_ERR, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'patterns', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
   }
 
-  function selectLevel(level, element) {
-    selectedLevel = level;
-    document.querySelectorAll('.level-card').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-    document.getElementById('custom-options').style.display = level === 'custom' ? 'block' : 'none';
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
   }
 
-  function setCustomTimeMode(hasTime) {
-    customHasTime = hasTime;
-    document.getElementById('custom-time-no').classList.toggle('active', !hasTime);
-    document.getElementById('custom-time-yes').classList.toggle('active', hasTime);
-    document.getElementById('custom-time-input-wrapper').style.display = hasTime ? 'block' : 'none';
-  }
-
-  function showToast(message, type) {
-    const toast = document.getElementById('toast');
-    toast.innerText = message;
-    toast.className = `toast toast-${type} show`;
-    setTimeout(() => toast.classList.remove('show'), 1000);
-  }
-
-  function getQuestionCount() {
-    if (selectedLevel === 'custom') {
-      let count = parseInt(document.getElementById('custom-count').value);
-      if (!count || count < 1) count = 10;
-      return count;
-    }
-    return levelSettings[selectedLevel].count;
-  }
-
-  function getTimePerQuestion() {
-    if (selectedLevel === 'custom') {
-      if (!customHasTime) return 0;
-      let secs = parseInt(document.getElementById('custom-time-seconds').value);
-      if (!secs || secs < 1) secs = 15;
-      return secs;
-    }
-    return levelSettings[selectedLevel].time;
-  }
-
-  // كل سؤال يُبنى لحظة توليده بمولّد عشوائي — لا توجد أسئلة مكتوبة سلفًا يتم سحبها
-  function generateQuestions() {
-    const count = getQuestionCount();
-    const cats = currentMode === 'mixed' ? selectedCats : [currentMode];
-    questions = [];
-    for (let i = 0; i < count; i++) {
-      const cat = cats[randInt(0, cats.length - 1)];
-      questions.push(gens[cat]());
-    }
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
   }
 
   function startQuiz() {
-    generateQuestions();
-    currentQuestionIndex = 0;
-    score = 0;
-    timePerQuestion = getTimePerQuestion();
-
-    document.getElementById('setup-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('quiz-box').style.display = 'block';
-    document.getElementById('timer-container').style.display = (timePerQuestion === 0) ? 'none' : 'block';
-
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
     showQuestion();
   }
 
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
   function showQuestion() {
-    clearInterval(timer);
-    isAnswering = false;
-    const q = questions[currentQuestionIndex];
-
-    document.getElementById('current-q').innerText = currentQuestionIndex + 1;
-    document.getElementById('total-q').innerText = questions.length;
-    document.getElementById('score-text').innerText = score;
-    document.getElementById('cat-tag').innerText = catLabels[q.catKey];
-
-    const questionTextEl = document.getElementById('question-text');
-    questionTextEl.classList.add('long-text');
-    questionTextEl.innerText = q.prompt;
-
-    const optionsContainer = document.getElementById('options-container');
-    optionsContainer.innerHTML = '';
-    const isBoolQuestion = q.options.length === 2 && q.options.includes('صائبة') && q.options.includes('خاطئة');
-    optionsContainer.classList.toggle('text-options', !isBoolQuestion);
-    optionsContainer.classList.toggle('bool-options', isBoolQuestion);
-
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'option-btn' + (!isBoolQuestion ? ' option-text' : '');
-      btn.innerText = opt;
-      btn.dataset.value = opt;
-      btn.onclick = () => checkAnswer(opt, btn, q);
-      optionsContainer.appendChild(btn);
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
     });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
 
-    if (timePerQuestion > 0) startTimer(q);
-  }
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
 
-  function startTimer(q) {
-    const timerBar = document.getElementById('timer-bar');
-    timerBar.style.width = '100%';
-
-    const intervalTime = 100;
-    const totalSteps = (timePerQuestion * 1000) / intervalTime;
-    let currentStep = 0;
-
-    timer = setInterval(() => {
-      currentStep++;
-      const percentage = 100 - (currentStep / totalSteps) * 100;
-      timerBar.style.width = `${Math.max(0, percentage)}%`;
-      if (currentStep >= totalSteps) {
-        clearInterval(timer);
-        checkAnswer(null, null, q);
-      }
-    }, intervalTime);
-  }
-
-  function checkAnswer(selected, targetBtn, q) {
-    if (isAnswering) return;
-    isAnswering = true;
-    clearInterval(timer);
-
-    const correct = q.correct;
-    const allOptionBtns = document.querySelectorAll('.option-btn');
-
-    if (selected === correct) {
-      score++;
-      if (targetBtn) targetBtn.classList.add('correct');
-      showToast('أحسنت! 👏', 'success');
-    } else {
-      if (targetBtn) targetBtn.classList.add('wrong');
-      allOptionBtns.forEach(btn => {
-        if (btn.dataset.value === correct) btn.classList.add('correct');
-      });
-      showToast('إجابة غير صحيحة! ❌', 'error');
-    }
-
-    setTimeout(() => {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < questions.length) showQuestion();
-      else endQuiz();
-    }, 1400);
-  }
-
-  function endQuiz() {
-    document.getElementById('quiz-box').style.display = 'none';
-    document.getElementById('result-box').style.display = 'block';
-
-    const percentage = Math.round((score / questions.length) * 100);
-    document.getElementById('final-percentage').innerText = `${percentage}%`;
-
-    const badge = document.getElementById('level-badge');
-    const feedback = document.getElementById('feedback-text');
-
-    if (percentage >= 90) {
-      badge.innerText = 'المستوى الفعلي: خبير البرهان الجبري 🌟';
-      badge.style.color = 'var(--success)';
-      feedback.innerText = 'أداء رائع! تُتقن خصائص المساواة وتبرر كل خطوة في البرهان الجبري والهندسي بثقة.';
-    } else if (percentage >= 75) {
-      badge.innerText = 'المستوى الفعلي: ممتاز 👍';
-      badge.style.color = 'var(--primary-dark)';
-      feedback.innerText = 'ممتاز! فهمك للبرهان الجبري جيد جدًا، وتحتاج فقط لمزيد من التدقيق في التمييز بين الخصائص المتقاربة.';
-    } else if (percentage >= 50) {
-      badge.innerText = 'المستوى الفعلي: جيد 📈';
-      badge.style.color = 'var(--subtext)';
-      feedback.innerText = 'بداية جيدة! راجع جدول خصائص الأعداد الحقيقية، وفرّق بين الجمع والطرح والضرب والقسمة للمساواة.';
-    } else {
-      badge.innerText = 'المستوى الفعلي: تحتاج للممارسة 💡';
-      badge.style.color = 'var(--danger)';
-      feedback.innerText = 'لا بأس، ابدأ بمستوى "سهل جدًا" بدون وقت، وركّز على نمط واحد في كل مرة حتى تحفظ الخصائص.';
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
     }
   }
 
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}${q.extra || ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
   function resetQuiz() {
-    document.getElementById('result-box').style.display = 'none';
-    document.getElementById('setup-box').style.display = 'block';
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
   }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
 </script>
 
 <!-- SM-AUTO-INJECTED:START:admin-scripts -->
