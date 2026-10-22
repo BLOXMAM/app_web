@@ -116,8 +116,8 @@
     "timestamp": 1792689010320
   },
   "rostrick-build/template.zip": {
-    "op": "add",
-    "timestamp": 1791912632865
+    "op": "update",
+    "timestamp": 1792689020525
   },
   "rostrick-build/config.json": {
     "op": "update",
