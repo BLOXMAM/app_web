@@ -123,10 +123,6 @@
     "op": "update",
     "timestamp": 1792689025642
   },
-  "rostrick-build/icon.png": {
-    "op": "update",
-    "timestamp": 1791912972868
-  },
   "segments_relationships.html": {
     "op": "add",
     "timestamp": 1792436666799
