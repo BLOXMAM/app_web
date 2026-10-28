@@ -38,7 +38,7 @@
     "enabled": true,
     "scheme": "maths10",
     "hosts": [
-      "mathsc10.blogspot.com"
+      "mathsc10app.blogspot.com"
     ],
     "verify": false,
     "extra_fingerprints": []
