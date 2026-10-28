@@ -123,6 +123,9 @@ addEventListener('rostrick-link',function(e){log('📩 rostrick-link: '+JSON.str
 addEventListener('rostrick-push',function(e){log('📩 rostrick-push: '+JSON.stringify(e.detail));});
 addEventListener('rostrick-purchase',function(e){log('📩 rostrick-purchase: '+JSON.stringify(e.detail));});
 addEventListener('rostrick-ad',function(e){log('📩 ad: '+JSON.stringify(e.detail));});
+addEventListener('rostrick-unity-ad',function(e){log('📩 Unity: '+JSON.stringify(e.detail));});
+addEventListener('rostrick-fb-ad',function(e){log('📩 Facebook: '+JSON.stringify(e.detail));});
+setTimeout(function(){['RosTrickAds','RosTrickUnityAds','RosTrickFbAds'].forEach(function(n){var o=window[n];if(!o){log('ℹ️ '+n+': غير موجود (غير مفعّل في البناء)');return;}var r='';try{r=' | بيني جاهز='+o.isReady('interstitial')+' مكافأة جاهزة='+o.isReady('rewarded');}catch(e){}log('ℹ️ '+n+': enabled='+o.enabled+r);});},1500);
 
 var tShareText=safe(async function(){
   if(!window.RosTrickShare)return log('❌ RosTrickShare غير موجود');
