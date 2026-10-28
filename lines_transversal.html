@@ -1205,7 +1205,7 @@
   }
   // ============ حالة الاختبار والواجهة ============
   const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
-  let mode = 'patterns', level = 'weak', customTimed = false;
+  let mode = 'par', level = 'weak', customTimed = false;
   const selectedCats = new Set(Object.keys(CAT));
   let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
   let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
