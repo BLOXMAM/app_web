@@ -33,7 +33,11 @@
     "rewarded_id": "BP_Rewarded_Android"
   },
   "facebook_ads": {
-    "enabled": false
+    "enabled": true,
+    "test_mode": true,
+    "banner_id": "12345678912345_6789123456789",
+    "interstitial_id": "12345678912345_6789123456789",
+    "rewarded_id": "12345678912345_6789123456789"
   },
   "firebase": {
     "enabled": true,
@@ -51,7 +55,7 @@
     "hosts": [
       "rostrick.blogspot.com"
     ],
-    "verify": false,
+    "verify": true,
     "extra_fingerprints": []
   },
   "hardware": {
