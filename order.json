@@ -88,6 +88,14 @@
     "searchNames": []
   },
   {
+    "file": "lines_transversal.html",
+    "title": "المستقيمان والقاطع",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "logic.html",
     "title": "المنطق",
     "icon": "fa-solid fa-file",
@@ -114,14 +122,6 @@
   {
     "file": "snake3d.html",
     "title": "snake3d",
-    "icon": "fa-solid fa-file",
-    "hidden": true,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
-    "file": "المستقيمان_والقاطع.html",
-    "title": "المستقيمان_والقاطع",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
