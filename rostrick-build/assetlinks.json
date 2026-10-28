@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.atest.ptest",
+      "sha256_cert_fingerprints": [
+        "05:6A:E3:C8:83:EE:FD:82:FE:4C:A0:93:7F:9D:D2:FA:A2:7E:52:C0:BC:8D:2D:06:14:B0:EF:45:52:95:21:95"
+      ]
+    }
+  }
+]
