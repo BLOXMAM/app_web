@@ -28,9 +28,9 @@
     "enabled": true,
     "test_mode": true,
     "game_id": "800414592",
-    "banner_id": "BP_Banner_Android",
-    "interstitial_id": "BP_Interstitial_Android",
-    "rewarded_id": "BP_Rewarded_Android"
+    "banner_id": "Banner_Android",
+    "interstitial_id": "Interstitial_Android",
+    "rewarded_id": "Rewarded_Android"
   },
   "facebook_ads": {
     "enabled": true,
