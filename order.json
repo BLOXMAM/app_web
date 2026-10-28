@@ -118,5 +118,13 @@
     "hidden": true,
     "searchEnabled": true,
     "searchNames": []
+  },
+  {
+    "file": "المستقيمان_والقاطع.html",
+    "title": "المستقيمان_والقاطع",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
   }
 ]
