@@ -29,8 +29,8 @@
     "test_mode": true,
     "game_id": "800414592",
     "banner_id": "FAU",
-    "interstitial_id": "Interstitial_Android",
-    "rewarded_id": "Rewarded_Android"
+    "interstitial_id": "BP_Interstitial_Android",
+    "rewarded_id": "BP_Rewarded_Android"
   },
   "facebook_ads": {
     "enabled": true,
