@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي ميل المستقيم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF2FF;
+      --card-bg: #FFFFFF;
+      --text: #1E1B4B;
+      --subtext: #64748B;
+      --w1: #F1F5F9;
+      --w2: #E2E8F0;
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --success: #16A34A;
+      --danger: #DC2626;
+      --warn: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
+
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .mode-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
+    }
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
+    .mode-btn.active {
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .cat-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
+    }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
+
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .level-card {
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
+    }
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
+
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
+    .custom-input {
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
+    }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
+    }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
+
+    .btn-start {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
+
+    .quiz-box { display: none; }
+    .header-stats {
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
+    }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
+
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
+    }
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
+    }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
+    .option-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
+    }
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
+    .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
+
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
+    }
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
+    }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
+
+    .toast {
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
+    }
+    .toast.show { bottom: 30px; opacity: 1; }
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    .result-box { display: none; text-align: center; }
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+
+    /* ===== البرهان الجبري: كسور وجداول البراهين ===== */
+    .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; font-size: .92em; line-height: 1.2; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; }
+    .fr > span:last-child { padding: 1px 3px 0; }
+    table.pf { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0; }
+    table.pf th { background: var(--w2); padding: 6px 4px; font-weight: 800; border: 1px solid var(--w2); }
+    table.pf td { border: 1px solid var(--w2); padding: 6px 6px; vertical-align: middle; }
+    table.pf td.n { width: 26px; text-align: center; color: var(--subtext); font-weight: 800; padding: 6px 2px; }
+    table.pf td.s { text-align: center; font-weight: 700; direction: ltr; }
+    table.pf td.s.ar { direction: rtl; }
+    table.pf td.j { text-align: right; }
+    table.pf .blank { display: inline-block; min-width: 40px; text-align: center; background: var(--w2); color: var(--primary); font-weight: 900; border-radius: 8px; padding: 2px 10px; }
+    table.pf.sm td, table.pf.sm th { padding: 4px 4px; font-size: .82rem; }
+    .given-box { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; font-weight: 700; line-height: 2; text-align: right; font-size: .98rem; }
+    .stmt-list { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; text-align: right; font-weight: 700; line-height: 2.1; }
+    table.pt td { font-size: .86rem; }
+    table.pt td:first-child { font-weight: 800; white-space: nowrap; }
+    table.pt td.eq { direction: rtl; text-align: right; font-weight: 600; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<!-- SM-AUTO-INJECTED:START:admin-styles -->
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .sm-search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; box-sizing: border-box; }
+        .sm-search-overlay.open { display: flex; }
+        .sm-search-panel { width: 100%; max-width: 520px; background: var(--drawer-bg, #fff); color: var(--drawer-text, #333); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; max-height: 70vh; display: flex; flex-direction: column; }
+        .sm-search-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .sm-search-bar i.fa-magnifying-glass { color: #3498db; font-size: 1.1rem; }
+        .sm-search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 1rem; color: inherit; }
+        .sm-search-close { background: transparent; border: none; color: inherit; font-size: 1rem; cursor: pointer; opacity: 0.7; padding: 4px; }
+        .sm-search-close:hover { opacity: 1; }
+        .sm-search-results { list-style: none; margin: 0; padding: 6px 0; overflow-y: auto; }
+        .sm-search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background-color 0.15s; }
+        .sm-search-result-item:hover, .sm-search-result-item:active { background-color: rgba(0,0,0,0.06); }
+        .sm-search-result-item i { color: #3498db; width: 20px; text-align: center; }
+        .sm-search-empty { padding: 22px 16px; text-align: center; color: var(--text-muted, #888); font-size: 0.9rem; }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SM-AUTO-INJECTED:END:admin-styles -->
+
+
+
+
+
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"overlay","accent":"#3498db","position":"after-theme"} -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">slope_of_line</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+    </div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">slope_of_line</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<div class="sm-search-overlay" id="smSearchOverlay" onclick="if(event.target===this) smCloseSearchPanel();">
+    <div class="sm-search-panel">
+        <div class="sm-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="smSearchInput" placeholder="ابحث عن صفحة..." oninput="smPerformSearch(this.value)" autocomplete="off">
+            <button type="button" class="sm-search-close" onclick="smCloseSearchPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sm-search-results" id="smSearchResults"></ul>
+    </div>
+</div>
+<!-- END ADMIN DRAWER -->
+
+
+<div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي ميل المستقيم 📈</h1>
+    <p class="subtitle">الدرس ٢-٤ • ميل المستقيم<br>اضغط على أيقونة (i) لمراجعة صيغة الميل وحالاته وشرطي التوازي والتعامد وأمثلة الكتاب قبل البدء أو أثناء الحل</p>
+
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="slope" onclick="setMode('slope', this)">ميل المستقيم 📈<small>من نقطتين أو شكل</small></button>
+      <button class="mode-btn" data-mode="rate" onclick="setMode('rate', this)">معدل التغير 🚀<small>سرعة ونمو ومبيعات</small></button>
+      <button class="mode-btn" data-mode="rel" onclick="setMode('rel', this)">متوازيان أم متعامدان؟ ⟂<small>بمقارنة الميلين</small></button>
+      <button class="mode-btn" data-mode="graph" onclick="setMode('graph', this)">التمثيل البياني 🗺️<small>نقاط وأشكال</small></button>
+      <button class="mode-btn" data-mode="error" onclick="setMode('error', this)">اكتشف الخطأ 🔍<small>فهم أو حل خاطئ</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وشروط</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
+    </div>
+
+    <div id="cats-wrapper" style="display: none;">
+      <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
+      <div class="cats-grid" id="cats-container"></div>
+    </div>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>سهل جدًا</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>سهل</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>متوسط</h4>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>صعب</h4>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="60" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="mode-grid" style="margin-bottom: 16px;">
+        <button type="button" class="mode-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="mode-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
+      </div>
+    </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
+    </div>
+    <div class="progress-dots" id="progress-dots"></div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
+    </div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ٢-٤ ميل المستقيم</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ١٠٩–١١٣) ============
+  const LESSON = {
+    badges: ['🌟 خبير الميل', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تحسب الميل بثقة وتحدد التوازي والتعامد وتستعمل الميل معدلًا للتغير.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. تذكّر: الميل = التغير الرأسي ÷ التغير الأفقي، والمتوازيان لهما الميل نفسه، والمتعامدان حاصل ضرب ميليهما −١.',
+      'لا بأس، افتح أيقونة (i) واقرأ صيغة الميل وحالاته وأمثلة الكتاب، ثم جرّب مستوى أسهل.']
+  };
+  const adg = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  const E = s => '<bdi dir="ltr">' + s + '</bdi>';
+  const svgWrap = (inner, h) => `<svg direction="ltr" viewBox="0 0 320 ${h || 150}" role="img" aria-label="شكل هندسي" style="color:var(--text);width:100%;max-width:340px;display:block;margin:0 auto">${inner}</svg>`;
+  const sTxt = (x, y, t, c, sz) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz || 15}" font-weight="700" font-style="italic" font-family="Georgia,serif" fill="${c || 'currentColor'}">${t}</text>`;
+
+  // مستوى إحداثي: x من −٦ إلى ٦ و y من −٥ إلى ٥. lines: [{p:[x,y], q:[x,y], c}] مستقيمات تمر بنقطتين. pts: [{x,y,t,c}]
+  const gx = x => 160 + x * 24, gy = y => 124 - y * 24;
+  function figGrid(lines, pts) {
+    let s = '<defs><clipPath id="gclip"><rect x="16" y="4" width="288" height="240"/></clipPath></defs>';
+    for (let x = -6; x <= 6; x++) s += `<line x1="${gx(x)}" y1="4" x2="${gx(x)}" y2="244" stroke="currentColor" stroke-opacity="${x === 0 ? 0.9 : 0.16}" stroke-width="${x === 0 ? 1.6 : 1}"/>`;
+    for (let y = -5; y <= 5; y++) s += `<line x1="16" y1="${gy(y)}" x2="304" y2="${gy(y)}" stroke="currentColor" stroke-opacity="${y === 0 ? 0.9 : 0.16}" stroke-width="${y === 0 ? 1.6 : 1}"/>`;
+    s += sTxt(298, gy(0) - 5, 'x', 'currentColor', 12) + sTxt(gx(0) + 9, 14, 'y', 'currentColor', 12) + sTxt(gx(0) - 7, gy(0) + 13, 'O', 'currentColor', 11);
+    (lines || []).forEach(l => {
+      const dx = l.q[0] - l.p[0], dy = l.q[1] - l.p[1], k = 40;
+      s += `<line clip-path="url(#gclip)" x1="${gx(l.p[0] - dx * k)}" y1="${gy(l.p[1] - dy * k)}" x2="${gx(l.p[0] + dx * k)}" y2="${gy(l.p[1] + dy * k)}" stroke="${l.c || 'var(--primary)'}" stroke-width="2.4"/>`;
+    });
+    (pts || []).forEach(p => { s += `<circle cx="${gx(p.x)}" cy="${gy(p.y)}" r="3.6" fill="${p.c || 'var(--danger)'}"/>` + (p.t ? sTxt(gx(p.x) + (p.dx === undefined ? 11 : p.dx), gy(p.y) + (p.dy === undefined ? -7 : p.dy), p.t, p.c || 'var(--danger)', 14) : ''); });
+    return svgWrap(s, 248);
+  }
+  const grid = (lines, pts) => `<div class="viz-box">${figGrid(lines, pts)}</div>`;
+  const pf = rows => '<table class="pf"><tr><th>الخطوة</th><th>المبرر</th></tr>' + rows.map(r => `<tr><td class="eq">${E(r[0])}</td><td>${r[1]}</td></tr>`).join('') + '</table>';
+
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p><b>ميل المستقيم</b> يقيس مقدار انحداره؛ وهو نسبة التغير الرأسي إلى التغير الأفقي بين أي نقطتين عليه. نستعمله لحساب معدل التغير، ولتحديد هل مستقيمان متوازيان أو متعامدان، ولتمثيل مستقيم بيانيًا.</p>
+      <h4>صيغة الميل</h4>
+      <div class="idea-card" style="text-align:center">${E('m = (y₂ − y₁) / (x₂ − x₁)')}، حيث ${E('x₁ ≠ x₂')}<br>الميل = التغير الرأسي ÷ التغير الأفقي</div>
+      <h4>حالات الميل</h4>
+      <table class="pf pt">
+        <tr><td>ميل موجب</td><td>المستقيم للأعلى عند التحرك من اليسار إلى اليمين</td></tr>
+        <tr><td>ميل سالب</td><td>المستقيم للأسفل عند التحرك من اليسار إلى اليمين</td></tr>
+        <tr><td>ميل يساوي صفرًا</td><td>مستقيم أفقي</td></tr>
+        <tr><td>ميل غير معرّف</td><td>مستقيم رأسي (القسمة على ٠ غير معرّفة)</td></tr>
+      </table>
+      <h4>التوازي والتعامد</h4>
+      <ol class="steps">
+        <li><b>مسلّمة ٢.٤:</b> لمستقيمين غير رأسيين الميل نفسه <b>إذا وفقط إذا</b> كانا متوازيين. وجميع المستقيمات الرأسية متوازية.</li>
+        <li><b>مسلّمة ٢.٥:</b> مستقيمان غير رأسيين متعامدان <b>إذا وفقط إذا</b> كان حاصل ضرب ميليهما ${E('−1')}. والمستقيمات الأفقية والرأسية متعامدة.</li>
+      </ol>
+      <h4>معدل التغير</h4>
+      <p>الميل هو معدّل التغير في الكمية ${E('y')} بالنسبة إلى الكمية ${E('x')}. ويمكن استعماله لتعيين إحداثيي نقطة على المستقيم.</p>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) الترتيب:</b> إذا بدأت بالنقطة الأولى في البسط فابدأ بها في المقام أيضًا: ${E('(y₂ − y₁)/(x₂ − x₁)')}. عكس الترتيب في أحدهما يغيّر إشارة الميل.</div>
+      <div class="idea-card"><b>٢) الأفقي والرأسي:</b> الأفقي ميله ${E('0')} لأن البسط ٠. والرأسي ميله غير معرّف لأن المقام ٠. (تنبيه الكتاب: ${E('0 ÷ أي عدد = 0')} أما القسمة على ٠ فغير معرّفة.)</div>
+      <div class="idea-card"><b>٣) إشارة الميل:</b> تدل على اتجاه المستقيم: موجب يصعد، سالب يهبط.</div>
+      <div class="idea-card"><b>٤) معدل التغير:</b> الإشارة السالبة تعني أن الكمية تتناقص مع الزمن (مثل بُعد طائرة تقترب من المدينة).</div>
+      <div class="idea-card"><b>٥) المتوازيان:</b> الميل نفسه تمامًا.</div>
+      <div class="idea-card"><b>٦) المتعامدان:</b> الميلان مقلوبان مع تغيير الإشارة: إذا كان ميل أحدهما ${E('a/b')} فميل العمودي عليه ${E('−b/a')}، لأن ${E('(a/b)(−b/a) = −1')}.</div>
+      <div class="idea-card"><b>٧) التمثيل البياني:</b> ابدأ من نقطة معلومة وتحرّك بحسب الميل: الصعود أو الهبوط للتغير الرأسي، ثم اليمين للتغير الأفقي، وصِل بين النقطتين.</div>
+      <div class="idea-card"><b>٨) لوحات الطرق:</b> انحدار ${E('6%')} يعني ارتفاعًا أو هبوطًا ${E('6 m')} لكل ${E('100 m')} أفقيًا (ميل ${E('6/100')}).</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">الميل</span><span class="en">slope</span><br>نسبة التغير في الإحداثي ${E('y')} إلى التغير في الإحداثي ${E('x')} بين أي نقطتين على المستقيم: ${E('m = (y₂ − y₁)/(x₂ − x₁)')}.</div>
+      <div class="def-card"><span class="term">معدّل التغير</span><span class="en">rate of change</span><br>تغير الكمية ${E('y')} بالنسبة إلى الكمية ${E('x')}؛ ويُفسَّر الميل على أنه معدل التغير.</div>
+      <div class="def-card"><span class="term">التغير الرأسي</span><br>الفرق ${E('y₂ − y₁')} بين الإحداثيين الصادية للنقطتين (الارتفاع أو الهبوط).</div>
+      <div class="def-card"><span class="term">التغير الأفقي</span><br>الفرق ${E('x₂ − x₁')} بين الإحداثيين السينيين للنقطتين (المسافة الأفقية).</div>
+      <div class="def-card"><span class="term">ميلا المستقيمين المتوازيين (٢.٤)</span><br>غير الرأسيين: لهما الميل نفسه إذا وفقط إذا كانا متوازيين. وجميع المستقيمات الرأسية متوازية.</div>
+      <div class="def-card"><span class="term">ميلا المستقيمين المتعامدين (٢.٥)</span><br>غير الرأسيين: متعامدان إذا وفقط إذا كان حاصل ضرب ميليهما ${E('−1')}. والمستقيمات الأفقية والرأسية متعامدة.</div>` },
+
+    { id: 'ex', title: '✅ أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: إيجاد ميل المستقيم</div>
+        <b>(a)</b> ${E('J(−1, −2)')} و${E('K(3, 3)')}:
+        <div style="margin-top:6px">${grid([{ p: [-1, -2], q: [3, 3] }], [{ x: -1, y: -2, t: 'J' }, { x: 3, y: 3, t: 'K' }])}</div>
+        ${pf([['m = (y₂ − y₁)/(x₂ − x₁)', 'صيغة الميل'], ['= (3 − (−2))/(3 − (−1))', 'عوّض'], ['= 5/4', 'بسّط']])}
+        <b>(b)</b> ${E('(−2, 3)')} و${E('(1, −3)')}:
+        ${pf([['m = (−3 − 3)/(1 − (−2))', 'صيغة الميل + عوّض'], ['= −6/3 = −2', 'بسّط']])}
+        <b>(c)</b> ${E('(−4, −3)')} و${E('(3, −3)')}:
+        ${pf([['m = (−3 − (−3))/(3 − (−4))', 'عوّض'], ['= 0/7 = 0', 'بسّط (مستقيم أفقي)']])}
+        <b>(d)</b> ${E('(2, 1)')} و${E('(2, −4)')}:
+        ${pf([['m = (−4 − 1)/(2 − 2)', 'عوّض'], ['= −5/0', 'القسمة على صفر']])}
+        ميل هذا المستقيم <b>غير معرّف</b> (مستقيم رأسي).</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢ من واقع الحياة: الميل معدلًا للتغير</div>
+        طائرة على بُعد ${E('500 km')} من المدينة المنورة بعد ${E('0.5 h')}، وعلى بُعد ${E('152 km')} بعد ${E('1 h')} من مرورها فوق الرياض. ما بُعدها بعد ${E('0.75 h')}؟
+        ${pf([['m = (152 − 500)/(1.0 − 0.5)', 'صيغة الميل'], ['= −348/0.5 = −696 km/h', 'سرعة الطائرة (الإشارة السالبة: المسافة تتناقص)'], ['−696 = (y₂ − 500)/(0.75 − 0.5)', 'عوّض'], ['−696 = (y₂ − 500)/0.25', 'بسّط'], ['−174 = y₂ − 500', 'اضرب في 0.25'], ['326 = y₂', 'أضف 500']])}
+        بعد ${E('0.75 h')} يكون بُعدها ${E('326 km')}. تحقق: التقدير أكثر من ${E('300 km')} قليلًا ✓.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: تحديد علاقات المستقيمات</div>
+        ${E('A(1, 1), B(−1, −5), C(3, 2), D(6, 1)')}: هل ${E('AB, CD')} متوازيان أو متعامدان أو غير ذلك؟
+        ${pf([['ميل AB = (−5 − 1)/(−1 − 1) = −6/−2 = 3', 'الخطوة ١'], ['ميل CD = (1 − 2)/(6 − 3) = −1/3', 'الخطوة ١'], ['3 × (−1/3) = −1', 'الخطوة ٢: حاصل الضرب']])}
+        الميلان مختلفان وحاصل ضربهما ${E('−1')}، إذن المستقيمان <b>متعامدان</b>.
+        <div style="margin-top:6px">${grid([{ p: [1, 1], q: [-1, -5] }, { p: [3, 2], q: [6, 1], c: 'var(--success)' }], [{ x: 1, y: 1, t: 'A' }, { x: -1, y: -5, t: 'B' }, { x: 3, y: 2, t: 'C', c: 'var(--success)' }, { x: 6, y: 1, t: 'D', c: 'var(--success)' }])}</div></div>
+      <div class="ex-card"><div class="ex-t">مثال ٤: التمثيل البياني بالميل</div>
+        مثّل المستقيم المار بالنقطة ${E('A(−3, 0)')} والعمودي على ${E('CD')}، حيث ${E('C(−2, −3)')} و${E('D(2, 0)')}.
+        ${pf([['ميل CD = (0 − (−3))/(2 − (−2)) = 3/4', 'صيغة الميل'], ['ميل العمودي = −4/3', 'لأن (3/4)(−4/3) = −1']])}
+        ابدأ من ${E('A')} وتحرّك ${E('4')} وحدات إلى أسفل ثم ${E('3')} وحدات نحو اليمين لتعيّن ${E('B(0, −4)')}، ثم ارسم ${E('AB')}.
+        <div style="margin-top:6px">${grid([{ p: [-2, -3], q: [2, 0], c: 'var(--success)' }, { p: [-3, 0], q: [0, -4] }], [{ x: -3, y: 0, t: 'A' }, { x: 0, y: -4, t: 'B' }, { x: -2, y: -3, t: 'C', c: 'var(--success)' }, { x: 2, y: 0, t: 'D', c: 'var(--success)' }])}</div></div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    slope: { name: 'ميل المستقيم', icon: '📈' },
+    rate: { name: 'معدل التغير', icon: '🚀' },
+    rel: { name: 'متوازيان أم متعامدان؟', icon: '⟂' },
+    graph: { name: 'التمثيل البياني', icon: '🗺️' },
+    error: { name: 'اكتشف الخطأ', icon: '🔍' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
+  };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const rnd = (lo, hi) => randInt(lo, hi);
+  const MN = '−';
+  const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+  const sgn = n => (n < 0 ? MN : '') + Math.abs(n);
+  const fr = (n, d) => { if (d < 0) { n = -n; d = -d; } const g = gcd(n, d) || 1; n /= g; d /= g; return d === 1 ? sgn(n) : sgn(n) + '/' + d; };
+  const par = n => (n < 0 ? `(${MN}${Math.abs(n)})` : String(n));
+  const pt = (x, y) => `(${sgn(x)}, ${sgn(y)})`;
+  const PT = (x, y) => L(pt(x, y));
+  const Lm = s => L(s);
+  const UND = 'غير معرّف', ZERO = '٠ (صفر)';
+  const nz = n => n !== 0;
+  // أخطاء شائعة لقيمة ميل n/d
+  function slopeWrongs(n, d) {
+    const c = fr(n, d), w = [fr(-n, d)];
+    if (n !== 0) { w.push(fr(d, n), fr(-d, n)); }
+    w.push(fr(n + (d === 1 ? 1 : 0) || n + 1, d), fr(2 * n, d), fr(n, 2 * d), fr(n + 1, d), fr(n - 1, d));
+    return [...new Set(w)].filter(x => x !== c).map(Lm);
+  }
+  const mExplain = (x1, y1, x2, y2) => Lm(`m = (${sgn(y2)} − ${par(y1)})/(${sgn(x2)} − ${par(x1)}) = ${sgn(y2 - y1)}/${sgn(x2 - x1)} = ${fr(y2 - y1, x2 - x1)}`);
+  function twoPts(opts) {
+    for (;;) {
+      const x1 = rnd(-6, 6), y1 = rnd(-6, 6), dx = pick([1, 2, 3, 4, 5]) * pick([1, -1]), dy = rnd(-6, 6);
+      const x2 = x1 + dx, y2 = y1 + dy;
+      if (Math.abs(x2) > 7 || Math.abs(y2) > 7) continue;
+      if (opts && opts.nonzero && dy === 0) continue;
+      return { x1, y1, x2, y2, dx, dy };
+    }
+  }
+  // نقطتان صحيحتان على شبكة الرسم (|x|≤5,|y|≤4)
+  function gridPts() {
+    for (;;) {
+      const x1 = rnd(-5, 5), y1 = rnd(-4, 4), dx = pick([1, 2, 3, 4]) * pick([1, -1]), dy = pick([1, 2, 3, 4, 5]) * pick([1, -1]) * (Math.random() < 0.15 ? 0 : 1);
+      const x2 = x1 + dx, y2 = y1 + dy;
+      if (Math.abs(x2) > 5 || Math.abs(y2) > 4) continue;
+      return { x1, y1, x2, y2, dx, dy };
+    }
+  }
+  const T4 = ['موجب', 'سالب', ZERO, UND];
+
+  // ============ 1) ميل المستقيم ============
+  const GEN_SLOPE = [
+    { d: 1, w: 3, fn() {
+      const t = twoPts({ nonzero: true }), n = t.y2 - t.y1, dd = t.x2 - t.x1;
+      return build({ cat: 'slope', d: 1, nOpts: 4, prompt: `أوجد ميل المستقيم المار بالنقطتين ${PT(t.x1, t.y1)} و${PT(t.x2, t.y2)}.`, correct: Lm(fr(n, dd)), wrongs: slopeWrongs(n, dd),
+        hint: 'الميل = (y₂ − y₁) ÷ (x₂ − x₁): ابدأ بالنقطة نفسها في البسط والمقام.', explain: `${mExplain(t.x1, t.y1, t.x2, t.y2)}.` });
+    } },
+    { d: 1, w: 3, fn() {
+      const t = gridPts(), n = t.dy, dd = t.dx, c = n === 0 ? '0' : fr(n, dd);
+      const wr = n === 0 ? [UND, '1', MN + '1'].map(Lm) : slopeWrongs(n, dd);
+      return build({ cat: 'slope', d: 1, nOpts: 4, prompt: 'ما ميل المستقيم المرسوم في الشكل؟ (اقرأ إحداثيي النقطتين المعلّمتين)', extra: grid([{ p: [t.x1, t.y1], q: [t.x2, t.y2] }], [{ x: t.x1, y: t.y1, t: 'A' }, { x: t.x2, y: t.y2, t: 'B' }]),
+        correct: Lm(c), wrongs: wr, hint: 'اقرأ إحداثيي A وB ثم طبّق صيغة الميل.', explain: `${L('A' + pt(t.x1, t.y1))} و${L('B' + pt(t.x2, t.y2))}: ${n === 0 ? 'مستقيم أفقي فالتغير الرأسي ٠ والميل ٠' : mExplain(t.x1, t.y1, t.x2, t.y2)}.` });
+    } },
+    { d: 1, w: 3, fn() {
+      const k = rnd(0, 3), a = rnd(-5, 5), b = rnd(-5, 5), s = rnd(1, 6);
+      let p1, p2, c;
+      if (k === 0) { p1 = [a, b]; p2 = [a + s, b + rnd(1, 5)]; c = 'موجب'; }
+      else if (k === 1) { p1 = [a, b]; p2 = [a + s, b - rnd(1, 5)]; c = 'سالب'; }
+      else if (k === 2) { p1 = [a, b]; p2 = [a + s * pick([1, -1]), b]; c = ZERO; }
+      else { p1 = [a, b]; p2 = [a, b + s * pick([1, -1])]; c = UND; }
+      const desc = { 'موجب': 'يصعد من اليسار إلى اليمين', 'سالب': 'يهبط من اليسار إلى اليمين', [ZERO]: 'أفقي', [UND]: 'رأسي' }[c];
+      return build({ cat: 'slope', d: 1, nOpts: 4, fixedOrder: true, order: T4, prompt: `ما نوع ميل المستقيم المار بالنقطتين ${PT(p1[0], p1[1])} و${PT(p2[0], p2[1])}؟`, correct: c, wrongs: T4.filter(x => x !== c),
+        hint: 'قارن إحداثيي x وإحداثيي y للنقطتين.', explain: `المستقيم ${desc}؛ ${c === ZERO ? 'التغير الرأسي ٠' : c === UND ? 'التغير الأفقي ٠ والقسمة على ٠ غير معرّفة' : 'ميله ' + c}.` });
+    } },
+    { d: 1, w: 2, fn() {
+      const r = rnd(1, 6), h = rnd(1, 6), up = Math.random() < 0.5, n = up ? r : -r, c = fr(n, h);
+      return build({ cat: 'slope', d: 1, nOpts: 4, prompt: `مستقيم ${up ? 'يرتفع' : 'يهبط'} ${r} وحدات رأسيًا لكل ${h} ${h === 1 ? 'وحدة' : 'وحدات'} أفقية عند التحرك من اليسار إلى اليمين. ما ميله؟`, correct: Lm(c), wrongs: slopeWrongs(n, h),
+        hint: 'الميل = التغير الرأسي ÷ التغير الأفقي، والهبوط سالب.', explain: `${Lm(`m = ${sgn(n)}/${h} = ${c}`)}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const k = Math.random() < 0.5, a = rnd(-6, 6), b = rnd(-6, 6), s = rnd(2, 6) * pick([1, -1]);
+      const p1 = [a, b], p2 = k ? [a + s, b] : [a, b + s], c = k ? '0' : UND, wr = k ? [UND, '1', MN + '1'] : ['0', '1', MN + '1'];
+      return build({ cat: 'slope', d: 2, nOpts: 4, prompt: `ما ميل المستقيم المار بالنقطتين ${PT(p1[0], p1[1])} و${PT(p2[0], p2[1])}؟`, correct: Lm(c), wrongs: wr.map(Lm),
+        hint: k ? 'البسط ٠ (لا تغير رأسي).' : 'المقام ٠ (لا تغير أفقي).', explain: k ? `التغير الرأسي ${Lm(sgn(p2[1]) + ' − ' + par(p1[1]) + ' = 0')}، فالميل ${Lm('0/' + sgn(s) + ' = 0')} (أفقي).` : `التغير الأفقي ${Lm(sgn(p2[0]) + ' − ' + par(p1[0]) + ' = 0')}، والقسمة على ٠ غير معرّفة، فالميل غير معرّف (رأسي).` });
+    } },
+    { d: 3, w: 3, fn() {
+      const t = twoPts({ nonzero: true }), n = t.y2 - t.y1, dd = t.x2 - t.x1, mfr = fr(n, dd);
+      if (Math.random() < 0.5) {
+        const g = gcd(n, dd), sx = dd / g, sy = n / g, j = pick([-2, -1, 1, 2]), x3 = t.x1 + sx * j, y3 = t.y1 + sy * j;
+        return build({ cat: 'slope', d: 3, nOpts: 4, prompt: `مستقيم ميله ${Lm(mfr)} ويمر بالنقطة ${PT(t.x1, t.y1)}. أوجد قيمة ${L('k')} إذا كانت النقطة ${L(`(${sgn(x3)}, k)`)} تقع عليه.`, correct: L(String(y3)), wrongs: numWrongs(y3, [y3 + 1, y3 - 1, t.y1 - (y3 - t.y1), y3 + 2, -y3], x => L(String(x))),
+          hint: 'ميل ثابت: (k − y₁)/(x₂ − x₁) = m.', explain: `${Lm(`(k − ${par(t.y1)})/(${sgn(x3)} − ${par(t.x1)}) = ${mfr}`)} ⟸ ${Lm('k = ' + y3)}.` });
+      }
+      return build({ cat: 'slope', d: 3, nOpts: 4, prompt: `ميل المستقيم المار بالنقطتين ${PT(t.x1, t.y1)} و${L(`(${sgn(t.x2)}, k)`)} يساوي ${Lm(mfr)}. أوجد ${L('k')}.`, correct: L(String(t.y2)), wrongs: numWrongs(t.y2, [t.y2 + 1, t.y2 - 1, t.y1 - n, -t.y2, t.y2 + 2], x => L(String(x))),
+        hint: 'عوّض في صيغة الميل واحسب k.', explain: `${Lm(`(k − ${par(t.y1)})/(${sgn(t.x2)} − ${par(t.x1)}) = ${mfr}`)} ⟸ ${Lm('k = ' + t.y2)}.` });
+    } }
+  ];
+
+  // ============ 2) معدل التغير ============
+  const fm = (n, u) => L(`${sgn(n)} ${u}`);
+  const GEN_RATE = [
+    { d: 1, w: 3, fn() {
+      const p = pick([3, 4, 5, 6, 8, 10, 12]), up = Math.random() < 0.5;
+      return build({ cat: 'rate', d: 1, nOpts: 4, prompt: `لوحة مرورية تشير إلى انحدار ${L(p + '%')}. كم مترًا ${up ? 'يرتفع' : 'يهبط'} الطريق رأسيًا لكل ${L('100 m')} أفقيًا؟`, correct: fm(p, 'm'), wrongs: numWrongs(p, [100, 10 * p, 100 - p, p * 2], x => fm(x, 'm')),
+        hint: 'انحدار ٦٪ يعني ٦ أمتار لكل ١٠٠ متر.', explain: `الانحدار ${L(p + '%')} = ${L(p + '/100')}: ${p} م رأسيًا لكل ١٠٠ م أفقيًا.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const p = pick([4, 5, 6, 8, 10]), k = rnd(2, 5);
+      return build({ cat: 'rate', d: 2, nOpts: 4, prompt: `ينخفض طريق ${L((p * k) + ' m')} رأسيًا لكل ${L((100 * k) + ' m')} أفقيًا. ما نسبة انحداره؟`, correct: L(p + '%'), wrongs: numWrongs(p, [p * k, 100 * k, k, 2 * p], x => L(x + '%')),
+        hint: 'نسبة الانحدار = التغير الرأسي ÷ التغير الأفقي × ١٠٠.', explain: `${Lm(`${p * k}/${100 * k} = ${p}/100 = ${p}%`)}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const r = rnd(40, 120) * pick([1, -1]), t1 = rnd(1, 3), dt = rnd(1, 3), t2 = t1 + dt, d1 = rnd(300, 600), d2 = d1 + r * dt;
+      if (d2 <= 0) return GEN_RATE[2].fn();
+      return build({ cat: 'rate', d: 2, nOpts: 4, prompt: `تسير حافلة بسرعة ثابتة على طريق مستقيم. كان بُعدها عن المدينة ${L(d1 + ' km')} بعد ${L(t1 + ' h')}، و${L(d2 + ' km')} بعد ${L(t2 + ' h')}. ما معدّل تغير البُعد (الميل) بوحدة ${L('km/h')}؟`,
+        correct: fm(r, 'km/h'), wrongs: numWrongs(r, [-r, r + 10, r - 10, Math.round(d2 / t2)], x => fm(x, 'km/h')), hint: 'معدل التغير = تغير المسافة ÷ تغير الزمن.',
+        explain: `${Lm(`m = (${d2} − ${d1})/(${t2} − ${t1}) = ${sgn(d2 - d1)}/${dt} = ${sgn(r)}`)} ${L('km/h')}${r < 0 ? '؛ والإشارة السالبة تعني أن البُعد يتناقص (الحافلة تقترب من المدينة).' : '؛ والبُعد يتزايد.'}` });
+    } },
+    { d: 3, w: 3, fn() {
+      let m, t1, t2, t3, y1, y2, y3;
+      do { m = rnd(20, 90) * pick([1, -1]); t1 = rnd(1, 3); t2 = t1 + rnd(1, 3); t3 = t2 + rnd(1, 3); y1 = rnd(200, 700); y2 = y1 + m * (t2 - t1); y3 = y2 + m * (t3 - t2); } while (y2 <= 0 || y3 <= 0);
+      return build({ cat: 'rate', d: 3, nOpts: 4, prompt: `تحلّق طائرة بسرعة ثابتة على خط مستقيم: بُعدها عن مطار ${L(y1 + ' km')} بعد ${L(t1 + ' h')}، و${L(y2 + ' km')} بعد ${L(t2 + ' h')}. ما بُعدها عن المطار بعد ${L(t3 + ' h')}؟`,
+        correct: fm(y3, 'km'), wrongs: numWrongs(y3, [y2 + m * (t3 - t1), y1 + m * t3, y3 + Math.abs(m), y3 - Math.abs(m), y2 - m * (t3 - t2)].filter(v => v > 0), x => fm(x, 'km')), hint: 'أوجد الميل أولًا ثم استعمله من النقطة الثانية.',
+        explain: `${Lm(`m = (${y2} − ${y1})/(${t2} − ${t1}) = ${sgn(m)}`)}؛ ثم ${Lm(`y = ${y2} + (${sgn(m)})(${t3} − ${t2}) = ${y3}`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const r = rnd(5, 60), y1 = 2016, y2 = y1 + rnd(3, 6), v1 = rnd(10, 50), v2 = v1 + r * (y2 - y1), y3 = y2 + rnd(2, 4), v3 = v2 + r * (y3 - y2);
+      return build({ cat: 'rate', d: 3, nOpts: 4, prompt: `كانت مبيعات مصنع ${L(v1)} مليون علبة عام ${L(y1)}، و${L(v2)} مليون علبة عام ${L(y2)}. إذا حافظ المصنع على المعدل نفسه من الزيادة فكم تكون مبيعاته عام ${L(y3)} (بالمليون)؟`,
+        correct: L(String(v3)), wrongs: numWrongs(v3, [v2 + r * (y3 - y1), v3 + r, v3 - r, v2 + r, v3 + 2 * r].filter(v => v > 0), x => L(String(x))), hint: 'معدل الزيادة السنوي = تغير المبيعات ÷ عدد السنوات.',
+        explain: `${Lm(`m = (${v2} − ${v1})/(${y2} − ${y1}) = ${r}`)} مليون كل سنة؛ ${Lm(`${v2} + ${r}(${y3} − ${y2}) = ${v3}`)}.` });
+    } },
+    { d: 2, w: 2, fn() {
+      const r = pick([0.25, 0.5, 0.75, 1.5, 2]), n = pick([4, 6, 8, 10]), h0 = 0.5, h = +(h0 + r * n).toFixed(2), kind = rnd(0, 1);
+      if (kind === 0) return build({ cat: 'rate', d: 2, nOpts: 4, prompt: `قيس ارتفاع نبتة عند اليوم الأول فكان ${L('0.5 m')}، وبعد ${L(n + ' أيام')} أصبح ${L(h + ' m')}. ما معدل نموها (بالمتر لكل يوم)؟`, correct: L(String(r)), wrongs: numWrongs(r, [h / n, r * 2, r / 2, 0.1, 1], x => L(String(+x.toFixed(3)))).filter(x => x !== L(String(r))),
+        hint: 'معدل النمو = (التغير في الارتفاع) ÷ (عدد الأيام).', explain: `${Lm(`m = (${h} − 0.5)/${n} = ${r}`)} م لكل يوم.` });
+      const m2 = rnd(10, 16);
+      return build({ cat: 'rate', d: 2, nOpts: 4, prompt: `نبتة ارتفاعها ${L('0.5 m')} عند البداية، ومعدل نموها ${L(r + ' m')} لكل يوم. كم يكون ارتفاعها بعد ${L(m2 + ' يومًا')}؟`, correct: L(String(+(0.5 + r * m2).toFixed(2))), wrongs: numWrongs(+(0.5 + r * m2).toFixed(2), [r * m2, 0.5 + r + m2, 0.5 * r * m2, +(0.5 + r * (m2 + 1)).toFixed(2)], x => L(String(+x.toFixed(2)))),
+        hint: 'الارتفاع = الارتفاع الابتدائي + المعدل × الأيام.', explain: `${Lm(`0.5 + ${r} × ${m2} = ${+(0.5 + r * m2).toFixed(2)}`)} م.` });
+    } }
+  ];
+
+  // ============ 3) متوازيان أم متعامدان؟ ============
+  const R3 = ['متوازيان', 'متعامدان', 'لا هذا ولا ذاك'];
+  // متجهات الاتجاه: (dx,dy)
+  const slopeV = v => fr(v[1], v[0]);
+  function vec(dxMax) { for (;;) { const dx = rnd(1, dxMax) * pick([1, -1]), dy = rnd(1, 5) * pick([1, -1]); return [dx, dy]; } }
+  // يعيد خطين AB وCD بحسب العلاقة rel: 'par' | 'perp' | 'none'
+  function twoLines(rel, lim) {
+    lim = lim || 9;
+    for (let t = 0; t < 500; t++) {
+      const v1 = vec(4), k1 = pick([1, 2, -1]);
+      let v2;
+      if (rel === 'par') v2 = [v1[0] * pick([1, 2, -1, -2]), v1[1]];
+      else if (rel === 'perp') v2 = [v1[1] * pick([1, -1]) * -1 * (-1), -v1[0] * pick([1, -1])];
+      else v2 = vec(4);
+      if (rel === 'par') { v2 = [v1[0], v1[1]]; const k = pick([1, 2, -1, -2]); v2 = [v1[0] * k, v1[1] * k]; }
+      if (rel === 'perp') { const k = pick([1, -1]); v2 = [v1[1] * k, -v1[0] * k]; }
+      const cross = v1[0] * v2[1] - v1[1] * v2[0], dot = v1[0] * v2[0] + v1[1] * v2[1];
+      if (rel === 'par' && cross !== 0) continue;
+      if (rel === 'perp' && dot !== 0) continue;
+      if (rel === 'none' && (cross === 0 || dot === 0)) continue;
+      const A = [rnd(-lim + 3, lim - 3), rnd(-lim + 3, lim - 3)], B = [A[0] + v1[0] * k1, A[1] + v1[1] * k1];
+      const C = [rnd(-lim + 3, lim - 3), rnd(-lim + 3, lim - 3)], D = [C[0] + v2[0], C[1] + v2[1]];
+      if ([A, B, C, D].some(p => Math.abs(p[0]) > lim || Math.abs(p[1]) > lim)) continue;
+      if (rel === 'par' && A[0] === C[0] && A[1] === C[1]) continue;
+      return { A, B, C, D, m1: fr(B[1] - A[1], B[0] - A[0]), m2: fr(D[1] - C[1], D[0] - C[0]) };
+    }
+    throw new Error('twoLines failed');
+  }
+  const rnum = (a, b) => ({ n: a, d: b });
+  const GEN_REL = [
+    { d: 1, w: 3, fn() {
+      const rel = pick(['par', 'perp', 'none']); let n = pick([1, 2, 3, 4, 5]) * pick([1, -1]), d = pick([1, 2, 3, 4]);
+      let n2, d2;
+      if (rel === 'par') { n2 = n; d2 = d; } else if (rel === 'perp') { n2 = -d; d2 = n; } else { do { n2 = pick([1, 2, 3, 4, 5]) * pick([1, -1]); d2 = pick([1, 2, 3, 4]); } while (fr(n2, d2) === fr(n, d) || fr(n * n2, d * d2) === MN + '1'); }
+      const c = rel === 'par' ? R3[0] : rel === 'perp' ? R3[1] : R3[2], s1 = fr(n, d), s2 = fr(n2, d2);
+      return build({ cat: 'rel', d: 1, nOpts: 3, fixedOrder: true, order: R3, prompt: `ميل المستقيم الأول ${Lm(s1)} وميل المستقيم الثاني ${Lm(s2)}. ما العلاقة بين المستقيمين؟`, correct: c, wrongs: R3.filter(x => x !== c),
+        hint: 'قارن الميلين، ثم اضرب أحدهما في الآخر.', explain: rel === 'par' ? 'الميلان متساويان، فالمستقيمان متوازيان.' : rel === 'perp' ? `${Lm(`${s1} × (${s2}) = ${MN}1`)}، فالمستقيمان متعامدان.` : `الميلان مختلفان وحاصل ضربهما ${Lm(fr(n * n2, d * d2))} وليس ${L(MN + '1')}، فلا توازي ولا تعامد.` });
+    } },
+    { d: 1, w: 2, fn() {
+      let n, d; do { n = pick([1, 2, 3, 4, 5, 6]) * pick([1, -1]); d = pick([2, 3, 4, 5]); } while (gcd(Math.abs(n), d) !== 1); const perp = Math.random() < 0.5, c = perp ? fr(-d, n) : fr(n, d), m = fr(n, d);
+      const wr = perp ? [fr(n, d), fr(d, n), fr(-n, d), fr(d, -n) === c ? fr(n + d, d) : fr(d, -n)] : [fr(-n, d), fr(d, n), fr(-d, n), fr(n + 1, d)];
+      return build({ cat: 'rel', d: 1, nOpts: 4, prompt: `ميل مستقيم ${Lm(m)}. ما ميل المستقيم ${perp ? 'العمودي' : 'الموازي'} له؟`, correct: Lm(c), wrongs: [...new Set(wr)].filter(x => x !== c).map(Lm),
+        hint: perp ? 'اقلب الكسر وغيّر الإشارة.' : 'الموازي له الميل نفسه.', explain: perp ? `${Lm(`${m} × ${c} = ${MN}1`)}.` : 'المتوازيان لهما الميل نفسه.' });
+    } },
+    { d: 2, w: 4, fn() {
+      const rel = pick(['par', 'perp', 'none']), q = twoLines(rel), c = rel === 'par' ? R3[0] : rel === 'perp' ? R3[1] : R3[2];
+      const nm = (n) => 'ABCD'[n];
+      return build({ cat: 'rel', d: 2, nOpts: 3, fixedOrder: true, order: R3, prompt: `حدّد هل المستقيمان ${L('AB')} و${L('CD')} متوازيان أو متعامدان أو غير ذلك، إذا كانت ${L('A' + pt(...q.A))} و${L('B' + pt(...q.B))} و${L('C' + pt(...q.C))} و${L('D' + pt(...q.D))}.`, correct: c, wrongs: R3.filter(x => x !== c),
+        hint: 'أوجد ميل كل مستقيم ثم قارن.', explain: `ميل ${L('AB')} = ${Lm(q.m1)}، وميل ${L('CD')} = ${Lm(q.m2)}؛ ${rel === 'par' ? 'الميلان متساويان فهما متوازيان.' : rel === 'perp' ? 'حاصل ضربهما ' + L(MN + '1') + ' فهما متعامدان.' : 'الميلان مختلفان وحاصل ضربهما ليس ' + L(MN + '1') + '، فلا توازي ولا تعامد.'}` });
+    } },
+    { d: 2, w: 2, fn() {
+      const k = rnd(0, 2), a = rnd(-6, 6), b = rnd(-6, 6), c = rnd(-6, 6), e = rnd(-6, 6), s = rnd(2, 5), s2 = rnd(2, 5);
+      let A, B, C, D, ans, why;
+      if (k === 0) { A = [a, b]; B = [a, b + s]; C = [c, e]; D = [c + s2, e]; ans = R3[1]; why = 'AB رأسي وCD أفقي، والمستقيم الرأسي والأفقي متعامدان.'; }
+      else if (k === 1) { A = [a, b]; B = [a, b + s]; C = [c, e]; D = [c, e + s2]; if (a === c) C = [c + 1, e], D = [c + 1, e + s2]; ans = R3[0]; why = 'كلاهما رأسي، وجميع المستقيمات الرأسية متوازية.'; }
+      else { A = [a, b]; B = [a + s, b]; C = [c, e]; D = [c + s2, e]; if (b === e) C = [c, e + 1], D = [c + s2, e + 1]; ans = R3[0]; why = 'ميل كل منهما ٠ (أفقيان)، فهما متوازيان.'; }
+      return build({ cat: 'rel', d: 2, nOpts: 3, fixedOrder: true, order: R3, prompt: `ما العلاقة بين ${L('AB')} و${L('CD')} إذا كانت ${L('A' + pt(...A))} و${L('B' + pt(...B))} و${L('C' + pt(...C))} و${L('D' + pt(...D))}؟`, correct: ans, wrongs: R3.filter(x => x !== ans),
+        hint: 'انتبه: قد يكون أحد الميلين غير معرّف أو صفرًا.', explain: why });
+    } },
+    { d: 3, w: 3, fn() {
+      const par_ = Math.random() < 0.5, t = twoPts({ nonzero: true }), n = t.y2 - t.y1, dd = t.x2 - t.x1, g = gcd(n, dd), sx = dd / g, sy = n / g, C = [rnd(-5, 5), rnd(-5, 5)], j = pick([-2, -1, 1, 2]);
+      const Dx = C[0] + (par_ ? sx : sy * (Math.random() < 0.5 ? 1 : 1)) * j * (par_ ? 1 : 1), Dy = par_ ? C[1] + sy * j : C[1] - sx * j;
+      const dxD = Dx - C[0], dyD = Dy - C[1];
+      if (dxD === 0 || dyD === 0 || Math.abs(Dx) > 9 || Math.abs(Dy) > 9) return GEN_REL[4].fn();
+      const mAB = fr(n, dd), mCD = fr(dyD, dxD);
+      return build({ cat: 'rel', d: 3, nOpts: 4, prompt: `أوجد قيمة ${L('k')} التي تجعل ${L('AB')} ${par_ ? 'يوازي' : 'يعامد'} ${L('CD')}، إذا كانت ${L('A' + pt(t.x1, t.y1))} و${L('B' + pt(t.x2, t.y2))} و${L('C' + pt(...C))} و${L(`D(${sgn(Dx)}, k)`)}.`,
+        correct: L(String(Dy)), wrongs: numWrongs(Dy, [C[1] + (par_ ? -sy : sx) * j, Dy + 1, Dy - 1, -Dy, C[1] + n * j], x => L(String(x))), hint: par_ ? 'المتوازيان لهما الميل نفسه.' : 'حاصل ضرب الميلين = −١.',
+        explain: `ميل ${L('AB')} = ${Lm(mAB)}؛ ${par_ ? 'يجب أن يكون ميل ' + L('CD') + ' مساويًا له' : 'يجب أن يكون ميل ' + L('CD') + ' مساويًا ' + Lm(fr(-dd, n))}: ${Lm(`(k − ${par(C[1])})/(${sgn(Dx)} − ${par(C[0])}) = ${mCD}`)} ⟸ ${Lm('k = ' + Dy)}.` });
+    } }
+  ];
+
+  // ============ 4) التمثيل البياني ============
+  const GEN_GRAPH = [
+    { d: 2, w: 3, fn() {
+      const x1 = rnd(-4, 4), y1 = rnd(-3, 3), a = pick([1, 2, 3]) * pick([1, -1]), b = pick([1, 2, 3]), good = [x1 + b, y1 + a];
+      const wr = [[x1 + a, y1 + b], [x1 + b, y1 - a], [x1 - b, y1 + a + 0], [x1 + a, y1 - b], [x1 + b, y1 + a + 1], [x1 + b, y1 + a - 1]].filter(p => !(p[0] === good[0] && p[1] === good[1]));
+      return build({ cat: 'graph', d: 2, nOpts: 4, prompt: `مستقيم يمر بالنقطة ${PT(x1, y1)} وميله ${Lm(fr(a, b))}. أي النقاط الآتية تقع عليه؟`, correct: PT(...good), wrongs: wr.map(p => PT(...p)),
+        hint: 'التغير الرأسي في البسط (فوق/تحت) والتغير الأفقي في المقام (يمين).', explain: `من ${PT(x1, y1)} تحرّك ${Math.abs(a)} ${a > 0 ? 'للأعلى' : 'للأسفل'} و${b} نحو اليمين لتصل إلى ${PT(...good)}.` });
+    } },
+    { d: 2, w: 4, fn() {
+      for (let t = 0; t < 300; t++) {
+        const rel = pick(['par', 'perp', 'none']), q = twoLines(rel, 5);
+        if ([q.A, q.B, q.C, q.D].some(p => Math.abs(p[0]) > 6 || Math.abs(p[1]) > 5)) continue;
+        const c = rel === 'par' ? R3[0] : rel === 'perp' ? R3[1] : R3[2];
+        return build({ cat: 'graph', d: 2, nOpts: 3, fixedOrder: true, order: R3, prompt: `ما العلاقة بين المستقيمين ${L('AB')} و${L('CD')} المرسومين في الشكل؟ (اقرأ إحداثيات النقاط)`,
+          extra: grid([{ p: q.A, q: q.B }, { p: q.C, q: q.D, c: 'var(--success)' }], [{ x: q.A[0], y: q.A[1], t: 'A' }, { x: q.B[0], y: q.B[1], t: 'B' }, { x: q.C[0], y: q.C[1], t: 'C', c: 'var(--success)' }, { x: q.D[0], y: q.D[1], t: 'D', c: 'var(--success)' }]),
+          correct: c, wrongs: R3.filter(x => x !== c), hint: 'احسب ميل كل مستقيم من إحداثيات نقطتين.', explain: `${L('A' + pt(...q.A))} ${L('B' + pt(...q.B))} ⟸ ميل ${L('AB')} = ${Lm(q.m1)}؛ ${L('C' + pt(...q.C))} ${L('D' + pt(...q.D))} ⟸ ميل ${L('CD')} = ${Lm(q.m2)}؛ ${c === R3[0] ? 'متساويان: متوازيان.' : c === R3[1] ? 'حاصل الضرب ' + L(MN + '1') + ': متعامدان.' : 'لا توازي ولا تعامد.'}` });
+      }
+      return GEN_GRAPH[0].fn();
+    } },
+    { d: 2, w: 3, fn() {
+      const q = twoLines('none', 6), n = q.D[1] - q.C[1], dd = q.D[0] - q.C[0], c = fr(-dd, n);
+      return build({ cat: 'graph', d: 2, nOpts: 4, prompt: `ما ميل المستقيم المار بالنقطة ${L('A' + pt(...q.A))} والعمودي على ${L('CD')}، حيث ${L('C' + pt(...q.C))} و${L('D' + pt(...q.D))}؟`, correct: Lm(c), wrongs: slopeWrongs(-dd, n).concat([Lm(fr(n, dd))]).filter(x => x !== Lm(c)),
+        hint: 'أوجد ميل CD ثم اقلبه وغيّر إشارته.', explain: `ميل ${L('CD')} = ${Lm(fr(n, dd))}؛ فميل العمودي ${Lm(c)} لأن ${Lm(`${fr(n, dd)} × ${c} = ${MN}1`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      for (let t = 0; t < 300; t++) {
+        const C = [rnd(-4, 4), rnd(-4, 0)], v = vec(3), D = [C[0] + v[0], C[1] + v[1]], A = [rnd(-4, 1), rnd(-2, 3)], dy = D[1] - C[1], dx = D[0] - C[0];
+        // العمودي: اتجاهه (dy, -dx) أو (-dy, dx)
+        const B = [A[0] + Math.abs(dy), A[1] - Math.sign(dy) * Math.sign(dx) * 0 - dx * Math.sign(dy)];
+        if (Math.abs(B[0]) > 9 || Math.abs(B[1]) > 9) continue;
+        if (B[0] === A[0]) continue;
+        const good = B, wr = [[A[0] + Math.abs(dx), A[1] + dy * Math.sign(dx)], [A[0] - Math.abs(dy), A[1] - (B[1] - A[1])], [A[0] + Math.abs(dy), A[1] + (B[1] - A[1]) * -1], [A[0] + Math.abs(dy) , A[1] + (B[1] - A[1]) + 1]]
+          .filter(p => !(p[0] === good[0] && p[1] === good[1]));
+        const set = new Set(wr.map(p => p.join())); if (set.size < 3) continue;
+        // تحقق: AB عمودي على CD
+        if ((B[0] - A[0]) * dx + (B[1] - A[1]) * dy !== 0) continue;
+        return build({ cat: 'graph', d: 3, nOpts: 4, prompt: `${L('C' + pt(...C))} و${L('D' + pt(...D))}. نريد تمثيل المستقيم المار بالنقطة ${L('A' + pt(...A))} والعمودي على ${L('CD')}. أي النقاط الآتية تقع على هذا المستقيم وإلى يمين ${L('A')}؟`, correct: PT(...good), wrongs: [...set].map(s => s.split(',').map(Number)).map(p => PT(...p)),
+          hint: 'أوجد ميل العمودي أولًا ثم تحرّك بحسبه من A.', explain: `ميل ${L('CD')} = ${Lm(fr(dy, dx))}، وميل العمودي ${Lm(fr(-dx, dy))}؛ من ${PT(...A)} إلى ${PT(...good)} التغير الرأسي ${L(sgn(good[1] - A[1]))} والأفقي ${L(sgn(good[0] - A[0]))}.` });
+      }
+      return GEN_GRAPH[0].fn();
+    } }
+  ];
+
+  // ============ 5) اكتشف الخطأ ============
+  const MIS = [
+    { s: 'ميل المستقيم الأفقي غير معرّف.', c: 'ميل المستقيم الأفقي يساوي صفرًا؛ فالبسط ٠', w: ['ميل المستقيم الأفقي يساوي ١', 'ميل المستقيم الأفقي سالب', 'لا خطأ في العبارة'] },
+    { s: 'ميل المستقيم الرأسي يساوي صفرًا.', c: 'ميل المستقيم الرأسي غير معرّف لأن المقام ٠', w: ['ميل المستقيم الرأسي يساوي ١', 'ميل المستقيم الرأسي سالب', 'لا خطأ في العبارة'] },
+    { s: 'المستقيمان المتعامدان ميلاهما متساويان.', c: 'حاصل ضرب ميلي المتعامدين يساوي −١', w: ['حاصل ضرب ميلي المتعامدين يساوي ١', 'مجموع ميلي المتعامدين يساوي ٠ فقط', 'لا خطأ في العبارة'] },
+    { s: 'المستقيمان المتوازيان (غير الرأسيين) ميلاهما متعاكسان في الإشارة.', c: 'المتوازيان لهما الميل نفسه', w: ['المتوازيان حاصل ضرب ميليهما −١', 'المتوازيان ميلاهما مقلوبان', 'لا خطأ في العبارة'] },
+    { s: 'المستقيم الذي يهبط من اليسار إلى اليمين ميله موجب.', c: 'ميله سالب', w: ['ميله يساوي صفرًا', 'ميله غير معرّف', 'لا خطأ في العبارة'] },
+    { s: 'في صيغة الميل يمكن أن يكون x₁ = x₂ دون مشكلة.', c: 'إذا كان x₁ = x₂ فالمقام ٠ والمستقيم رأسي وميله غير معرّف', w: ['إذا كان x₁ = x₂ فالميل ٠', 'إذا كان x₁ = x₂ فالميل ١', 'لا خطأ في العبارة'] },
+    { s: 'المستقيمان الأفقي والرأسي ليسا متعامدين.', c: 'المستقيمات الأفقية والرأسية متعامدة', w: ['المستقيمان الأفقي والرأسي متوازيان', 'يتعامدان فقط إذا كان ميل كل منهما ١', 'لا خطأ في العبارة'] }
+  ];
+  const GEN_ERR = [
+    { d: 1, w: 3, fn() {
+      const it = pick(MIS);
+      return build({ cat: 'error', d: 1, nOpts: 4, prompt: `قال طالب: «${it.s}»<br>ما الخطأ في كلامه؟`, correct: it.c, wrongs: it.w, hint: 'تذكّر حالات الميل.', explain: it.c + '.' });
+    } },
+    { d: 1, w: 3, fn() {
+      const t = twoPts({ nonzero: true }), n = t.y2 - t.y1, dd = t.x2 - t.x1;
+      return build({ cat: 'error', d: 1, nOpts: 4, prompt: `حسب طالب ميل المستقيم المار بالنقطتين ${PT(t.x1, t.y1)} و${PT(t.x2, t.y2)} فكتب ${Lm(fr(dd, n))}. ما الخطأ؟`, correct: 'قسم التغير الأفقي على التغير الرأسي بدل العكس',
+        wrongs: ['جمع الإحداثيات بدل طرحها', 'استعمل نقطة واحدة فقط', 'لا خطأ في الحل'], hint: 'الميل = رأسي ÷ أفقي.', explain: `الميل الصحيح ${Lm(fr(n, dd))}؛ الصيغة: التغير الرأسي ÷ التغير الأفقي.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const t = twoPts({ nonzero: true }), n = t.y2 - t.y1, dd = t.x2 - t.x1;
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `حسب طالب ميل المستقيم المار بالنقطتين ${PT(t.x1, t.y1)} و${PT(t.x2, t.y2)} فكتب ${Lm(`(${sgn(t.y2)} − ${par(t.y1)})/(${sgn(t.x1)} − ${par(t.x2)}) = ${fr(-n, dd)}`)}. ما الخطأ؟`, extra: '',
+        correct: 'عكس ترتيب النقطتين في المقام فقط فتغيّرت إشارة الميل', wrongs: ['قسم الرأسي على الأفقي بالعكس', 'جمع بدل الطرح', 'لا خطأ في الحل'], hint: 'إذا بدأت بنقطة في البسط فابدأ بها في المقام.', explain: `الميل الصحيح ${Lm(fr(n, dd))}؛ يجب أن يكون ترتيب النقطتين نفسه في البسط والمقام.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const m = rnd(2, 6) * pick([1, -1]);
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `ميلا مستقيمين ${Lm(sgn(m))} و${Lm(sgn(-m))}. قال طالب: «المستقيمان متعامدان لأن ميليهما متعاكسان». ما الخطأ؟`, correct: `حاصل ضرب ميليهما ${Lm(sgn(-m * m))} وليس ${L(MN + '1')}`,
+        wrongs: ['المتعامدان ميلاهما متساويان', 'يجب أن يكون مجموع الميلين ٠ للتعامد', 'لا خطأ في كلامه'], hint: 'شرط التعامد: حاصل الضرب = −١.', explain: `${Lm(`${sgn(m)} × (${sgn(-m)}) = ${sgn(-m * m)}`)}؛ فهما غير متعامدين.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const n = pick([1, 2, 3, 4, 5]), d = pick([2, 3, 4, 5, 6]), sg = pick([1, -1]);
+      if (gcd(n, d) !== 1) return GEN_ERR[4].fn();
+      const m = fr(sg * n, d);
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `ميل مستقيم ${Lm(m)}. كتب طالب أن ميل المستقيم العمودي عليه ${Lm(fr(d, sg * n))}. ما الخطأ؟`, correct: 'قلب الكسر ولم يغيّر الإشارة', wrongs: ['غيّر الإشارة فقط ولم يقلب الكسر', 'العمودي له الميل نفسه', 'لا خطأ في الحل'], hint: 'حاصل ضرب ميلي المتعامدين −١.',
+        explain: `الصحيح ${Lm(fr(-d, sg * n))}؛ لأن ${Lm(`${m} × ${fr(-d, sg * n)} = ${MN}1`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const r = rnd(40, 120), t1 = rnd(1, 2), dt = rnd(1, 3), t2 = t1 + dt, d1 = rnd(400, 700), d2 = d1 - r * dt;
+      if (d2 <= 0) return GEN_ERR[5].fn();
+      return build({ cat: 'error', d: 3, nOpts: 4, prompt: `بُعد طائرة عن مدينة ${L(d1 + ' km')} بعد ${L(t1 + ' h')} و${L(d2 + ' km')} بعد ${L(t2 + ' h')}. حسب طالب الميل فوجد ${Lm(MN + r)} وكتب «الإشارة السالبة خطأ فالسرعة ${r} فقط». ما الخطأ في تفسيره؟`, correct: 'الإشارة السالبة صحيحة وتدل على أن البُعد يتناقص مع الزمن',
+        wrongs: ['الإشارة السالبة تعني أن الطائرة متوقفة', 'السرعة لا تكون سالبة أبدًا فالحل كله خاطئ', 'لا خطأ في تفسيره'], hint: 'ماذا تعني الإشارة السالبة لمعدل التغير؟', explain: `${Lm(`m = (${d2} − ${d1})/(${t2} − ${t1}) = ${MN}${r}`)} ${L('km/h')}: السرعة ${r} والإشارة السالبة تعني أن البُعد عن المدينة يتناقص (الطائرة تقترب منها).` });
+    } }
+  ];
+
+  // ============ 6) مفاهيم ومفردات ============
+  const TERMS = [['slope', 'الميل'], ['rate of change', 'معدّل التغير']];
+  const CONCEPTS = [
+    { d: 1, q: 'ما <b>ميل المستقيم</b> في المستوى الإحداثي؟', c: 'نسبة التغير في الإحداثي y إلى التغير في الإحداثي x بين أي نقطتين عليه', w: ['مجموع الإحداثيين السيني والصادي', 'المسافة بين نقطتين على المستقيم', 'حاصل ضرب الإحداثيين'], h: 'رأسي ÷ أفقي.', e: 'الميل = التغير الرأسي ÷ التغير الأفقي.' },
+    { d: 1, q: 'ما صيغة الميل لمستقيم يحوي النقطتين (x₁, y₁) و(x₂, y₂)؟', c: 'm = (y₂ − y₁) ÷ (x₂ − x₁)', w: ['m = (x₂ − x₁) ÷ (y₂ − y₁)', 'm = (y₂ + y₁) ÷ (x₂ + x₁)', 'm = (y₂ − y₁) × (x₂ − x₁)'], h: 'الرأسي في البسط.', e: 'm = (y₂ − y₁)/(x₂ − x₁) حيث x₁ ≠ x₂.' },
+    { d: 1, q: 'ما ميل المستقيم الأفقي؟', c: 'صفر', w: ['غير معرّف', '١', '−١'], h: 'لا تغير رأسي.', e: 'التغير الرأسي ٠ فالميل ٠.' },
+    { d: 1, q: 'ما ميل المستقيم الرأسي؟', c: 'غير معرّف', w: ['صفر', '١', '−١'], h: 'لا تغير أفقي.', e: 'المقام ٠ والقسمة على ٠ غير معرّفة.' },
+    { d: 1, q: 'ماذا تدل إشارة الميل الموجبة؟', c: 'المستقيم يصعد عند التحرك من اليسار إلى اليمين', w: ['المستقيم يهبط عند التحرك من اليسار إلى اليمين', 'المستقيم أفقي', 'المستقيم رأسي'], h: 'ميل موجب = صعود.', e: 'الميل الموجب: صعود، والسالب: هبوط.' },
+    { d: 2, q: 'ما شرط التوازي لمستقيمين غير رأسيين؟', c: 'أن يكون لهما الميل نفسه', w: ['أن يكون حاصل ضرب ميليهما −١', 'أن يكون ميلاهما متعاكسين', 'أن يكون مجموع ميليهما ٠'], h: 'مسلّمة ٢٫٤.', e: 'المتوازيان لهما الميل نفسه.' },
+    { d: 2, q: 'ما شرط التعامد لمستقيمين غير رأسيين؟', c: 'أن يكون حاصل ضرب ميليهما −١', w: ['أن يكون لهما الميل نفسه', 'أن يكون مجموع ميليهما ١', 'أن يكون ميلاهما موجبين'], h: 'مسلّمة ٢٫٥.', e: 'المتعامدان حاصل ضرب ميليهما −١.' },
+    { d: 2, q: 'ماذا يمثل الميل في الرسم البياني الذي يبين المسافة بالنسبة إلى الزمن؟', c: 'السرعة (معدّل تغير المسافة)', w: ['المسافة الكلية', 'الزمن الكلي', 'المسافة الابتدائية'], h: 'تغير المسافة لكل وحدة زمن.', e: 'الميل هو معدل التغير: km/h في المثال.' },
+    { d: 2, q: 'ماذا تعني الإشارة السالبة لمعدل تغير بُعد طائرة عن مدينة؟', c: 'أن البُعد يتناقص مع مرور الزمن', w: ['أن البُعد يتزايد', 'أن الطائرة متوقفة', 'أن السرعة غير معرّفة'], h: 'مثال الطائرة (−٦٩٦ km/h).', e: 'الإشارة السالبة تشير إلى تناقص المسافة مع الزمن.' },
+    { d: 2, q: 'لوحة طريق تشير إلى انحدار ٦٪. ماذا يعني ذلك؟', c: 'الطريق يرتفع أو يهبط ٦ أمتار رأسيًا لكل ١٠٠ متر أفقيًا', w: ['الطريق يرتفع ١٠٠ متر لكل ٦ أمتار', 'الطريق طوله ٦ كيلومترات', 'الطريق أفقي بنسبة ٦٪'], h: 'ميل = ٦/١٠٠.', e: 'الميل ٦/١٠٠ = ٦٪.' },
+    { d: 3, q: 'ما العلاقة بين المستقيمات الأفقية والمستقيمات الرأسية؟', c: 'متعامدة', w: ['متوازية', 'متخالفة', 'متطابقة'], h: 'ميل أحدهما ٠ والآخر غير معرّف.', e: 'المستقيمات الأفقية والرأسية متعامدة.' },
+    { d: 3, q: 'إذا كان ميل مستقيم a/b فما ميل المستقيم العمودي عليه؟', c: '−b/a', w: ['b/a', '−a/b', 'a/b'], h: 'اقلب وغيّر الإشارة.', e: '(a/b) × (−b/a) = −1.' },
+    { d: 3, q: 'لماذا لا يُحسب ميل مستقيم رأسي بصيغة الميل؟', c: 'لأن x₁ = x₂ فيصبح المقام صفرًا', w: ['لأن y₁ = y₂ فيصبح البسط صفرًا', 'لأن الميل دائمًا موجب', 'لأن المستقيم لا يمر بنقطتين'], h: 'ما قيمة المقام؟', e: 'المقام x₂ − x₁ = ٠ والقسمة على صفر غير معرّفة.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: c.q, correct: c.c, wrongs: c.w, hint: c.h, explain: c.e }) }));
+  GEN_CONCEPTS.push({ d: 1, w: 2, fn() {
+    const t = pick(TERMS), toAr = Math.random() < 0.5, O = TERMS.map(x => x[toAr ? 1 : 0]);
+    return build({ cat: 'concepts', d: 1, nOpts: 2, fixedOrder: true, order: toAr ? O : O.map(L), prompt: toAr ? `ما الترجمة العربية للمصطلح ${L(t[0])}؟` : `ما المصطلح الإنجليزي لـ «${t[1]}»؟`, correct: toAr ? t[1] : L(t[0]), wrongs: [toAr ? TERMS.find(x => x !== t)[1] : L(TERMS.find(x => x !== t)[0])], hint: 'مصطلحان فقط في الدرس.', explain: `${L(t[0])} = ${t[1]}.` });
+  } });
+
+  const GENS = { slope: GEN_SLOPE, rate: GEN_RATE, rel: GEN_REL, graph: GEN_GRAPH, error: GEN_ERR, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'slope', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
+  }
+
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
+  }
+
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
+  }
+
+  function startQuiz() {
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
+    showQuestion();
+  }
+
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
+  function showQuestion() {
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
+    });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
+
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
+
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
+    }
+  }
+
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}${q.extra || ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
+  function resetQuiz() {
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
+</script>
+
+<!-- SM-AUTO-INJECTED:START:admin-scripts -->
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "app_web";
+    const currentFileName = "slope_of_line.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+    let smSearchPagesData = [];
+
+    function smGoToPage(file) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(file);
+        } else {
+            window.location.href = file;
+        }
+    }
+
+    function smNormalizeSearchText(s) {
+        if (!s) return "";
+        return String(s)
+            .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+            .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+            .replace(/[\u064B-\u0652\u0670]/g, "")
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .toLowerCase()
+            .replace(/[\s\-_.,\/]+/g, "")
+            .trim();
+    }
+
+    function smToggleSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (!overlay) return;
+        if (overlay.classList.contains("open")) { smCloseSearchPanel(); return; }
+        overlay.classList.add("open");
+        smPerformSearch("");
+        setTimeout(function () { const inp = document.getElementById("smSearchInput"); if (inp) inp.focus(); }, 50);
+    }
+
+    function smCloseSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (overlay) overlay.classList.remove("open");
+    }
+
+    function smPerformSearch(query) {
+        const resultsEl = document.getElementById("smSearchResults");
+        if (!resultsEl) return;
+        const nq = smNormalizeSearchText(query);
+        const searchable = (smSearchPagesData || []).filter(function (p) { return p.searchEnabled !== false && p.file !== "searchbyrostrick.html"; });
+        let matches;
+        if (!nq) {
+            matches = searchable.filter(function (p) { return !p.hidden; });
+        } else {
+            matches = searchable.filter(function (p) {
+                const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+                return candidates.some(function (c) { return smNormalizeSearchText(c).indexOf(nq) !== -1; });
+            });
+        }
+        if (matches.length === 0) {
+            resultsEl.innerHTML = "<li class=\"sm-search-empty\">لا توجد نتائج مطابقة</li>";
+            return;
+        }
+        resultsEl.innerHTML = matches.map(function (p) {
+            const icon = p.icon || "fa-solid fa-file";
+            const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "<li class=\"sm-search-result-item\" onclick=\"smCloseSearchPanel(); smGoToPage('" + p.file + "');\"><i class=\"" + icon + "\"></i><span>" + title + "</span></li>";
+        }).join("");
+    }
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        smSearchPagesData = Array.isArray(orderedPages) ? orderedPages : [];
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+        smUpdateBottomNavFit();
+    }
+
+    function smUpdateBottomNavFit() {
+        const bottomNavbar = document.getElementById("bottomNavbar");
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (!bottomNavbar || !bottomNavList) return;
+        bottomNavList.classList.remove("sm-nav-fit");
+        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
+        bottomNavList.classList.toggle("sm-nav-fit", fits);
+    }
+    window.addEventListener("resize", smUpdateBottomNavFit);
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+<!-- SM-AUTO-INJECTED:END:admin-scripts -->
+</body>
+</html>
