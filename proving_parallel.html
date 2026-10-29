@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي إثبات توازي مستقيمين</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF2FF;
+      --card-bg: #FFFFFF;
+      --text: #1E1B4B;
+      --subtext: #64748B;
+      --w1: #F1F5F9;
+      --w2: #E2E8F0;
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --success: #16A34A;
+      --danger: #DC2626;
+      --warn: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
+
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .mode-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
+    }
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
+    .mode-btn.active {
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .cat-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
+    }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
+
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .level-card {
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
+    }
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
+
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
+    .custom-input {
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
+    }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
+    }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
+
+    .btn-start {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
+
+    .quiz-box { display: none; }
+    .header-stats {
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
+    }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
+
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
+    }
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
+    }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
+    .option-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
+    }
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
+    .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
+
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
+    }
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
+    }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
+
+    .toast {
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
+    }
+    .toast.show { bottom: 30px; opacity: 1; }
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    .result-box { display: none; text-align: center; }
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+
+    /* ===== البرهان الجبري: كسور وجداول البراهين ===== */
+    .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; font-size: .92em; line-height: 1.2; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; }
+    .fr > span:last-child { padding: 1px 3px 0; }
+    table.pf { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0; }
+    table.pf th { background: var(--w2); padding: 6px 4px; font-weight: 800; border: 1px solid var(--w2); }
+    table.pf td { border: 1px solid var(--w2); padding: 6px 6px; vertical-align: middle; }
+    table.pf td.n { width: 26px; text-align: center; color: var(--subtext); font-weight: 800; padding: 6px 2px; }
+    table.pf td.s { text-align: center; font-weight: 700; direction: ltr; }
+    table.pf td.s.ar { direction: rtl; }
+    table.pf td.j { text-align: right; }
+    table.pf .blank { display: inline-block; min-width: 40px; text-align: center; background: var(--w2); color: var(--primary); font-weight: 900; border-radius: 8px; padding: 2px 10px; }
+    table.pf.sm td, table.pf.sm th { padding: 4px 4px; font-size: .82rem; }
+    .given-box { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; font-weight: 700; line-height: 2; text-align: right; font-size: .98rem; }
+    .stmt-list { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; text-align: right; font-weight: 700; line-height: 2.1; }
+    table.pt td { font-size: .86rem; }
+    table.pt td:first-child { font-weight: 800; white-space: nowrap; }
+    table.pt td.eq { direction: rtl; text-align: right; font-weight: 600; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<!-- SM-AUTO-INJECTED:START:admin-styles -->
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .sm-search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; box-sizing: border-box; }
+        .sm-search-overlay.open { display: flex; }
+        .sm-search-panel { width: 100%; max-width: 520px; background: var(--drawer-bg, #fff); color: var(--drawer-text, #333); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; max-height: 70vh; display: flex; flex-direction: column; }
+        .sm-search-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .sm-search-bar i.fa-magnifying-glass { color: #3498db; font-size: 1.1rem; }
+        .sm-search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 1rem; color: inherit; }
+        .sm-search-close { background: transparent; border: none; color: inherit; font-size: 1rem; cursor: pointer; opacity: 0.7; padding: 4px; }
+        .sm-search-close:hover { opacity: 1; }
+        .sm-search-results { list-style: none; margin: 0; padding: 6px 0; overflow-y: auto; }
+        .sm-search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background-color 0.15s; }
+        .sm-search-result-item:hover, .sm-search-result-item:active { background-color: rgba(0,0,0,0.06); }
+        .sm-search-result-item i { color: #3498db; width: 20px; text-align: center; }
+        .sm-search-empty { padding: 22px 16px; text-align: center; color: var(--text-muted, #888); font-size: 0.9rem; }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SM-AUTO-INJECTED:END:admin-styles -->
+
+
+
+
+
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"overlay","accent":"#3498db","position":"after-theme"} -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">proving_parallel</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+    </div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">proving_parallel</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<div class="sm-search-overlay" id="smSearchOverlay" onclick="if(event.target===this) smCloseSearchPanel();">
+    <div class="sm-search-panel">
+        <div class="sm-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="smSearchInput" placeholder="ابحث عن صفحة..." oninput="smPerformSearch(this.value)" autocomplete="off">
+            <button type="button" class="sm-search-close" onclick="smCloseSearchPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sm-search-results" id="smSearchResults"></ul>
+    </div>
+</div>
+<!-- END ADMIN DRAWER -->
+
+
+<div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي إثبات التوازي 🪜</h1>
+    <p class="subtitle">الدرس ٢-٣ • إثبات توازي مستقيمين<br>اضغط على أيقونة (i) لمراجعة عكوس المسلّمة والنظريات ومسلّمة التوازي والإنشاء الهندسي قبل البدء أو أثناء الحل</p>
+
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="conv" onclick="setMode('conv', this)">العكس والتبرير 🔁<small>أي عكس نستعمل؟</small></button>
+      <button class="mode-btn" data-mode="lines" onclick="setMode('lines', this)">أيّ المستقيمات متوازية؟ 📏<small>شكل بثلاثة مستقيمات</small></button>
+      <button class="mode-btn" data-mode="alg" onclick="setMode('alg', this)">الجبر وإثبات التوازي ✏️<small>أوجد x ليتوازى</small></button>
+      <button class="mode-btn" data-mode="apply" onclick="setMode('apply', this)">مسائل وتطبيقات 🪜<small>سلّم وسياج وهياكل</small></button>
+      <button class="mode-btn" data-mode="error" onclick="setMode('error', this)">اكتشف الخطأ 🔍<small>استنتاج أو حل خاطئ</small></button>
+      <button class="mode-btn" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم وبرهان 💡<small>نصوص وإنشاء</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
+    </div>
+
+    <div id="cats-wrapper" style="display: none;">
+      <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
+      <div class="cats-grid" id="cats-container"></div>
+    </div>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>سهل جدًا</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>سهل</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>متوسط</h4>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>صعب</h4>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="60" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="mode-grid" style="margin-bottom: 16px;">
+        <button type="button" class="mode-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="mode-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
+      </div>
+    </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
+    </div>
+    <div class="progress-dots" id="progress-dots"></div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
+    </div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ٢-٣ إثبات توازي مستقيمين</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ١٠٢–١٠٥) ============
+  const LESSON = {
+    badges: ['🌟 خبير إثبات التوازي', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تعرف أي عكس تستعمل لإثبات التوازي ومتى لا يكفي الدليل.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. تذكّر: متطابقتان (متناظرتان أو متبادلتان) أو متحالفتان متكاملتان ⟸ المستقيمان متوازيان.',
+      'لا بأس، افتح أيقونة (i) واقرأ المسلّمات والنظريات والأمثلة، ثم جرّب مستوى أسهل.']
+  };
+
+  const adg = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  const E = s => '<bdi dir="ltr">' + s + '</bdi>';
+
+  // ============ أشكال (SVG) ============
+  const svgWrap = (inner, h) => `<svg direction="ltr" viewBox="0 0 320 ${h || 150}" role="img" aria-label="شكل هندسي" style="color:var(--text);width:100%;max-width:340px;display:block;margin:0 auto">${inner}</svg>`;
+  const sTxt = (x, y, t, c, sz) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz || 15}" font-weight="700" font-style="italic" font-family="Georgia,serif" fill="${c || 'currentColor'}">${t}</text>`;
+  const sLn = (x1, y1, x2, y2, c, w) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c || 'var(--primary)'}" stroke-width="${w || 2.2}" stroke-linecap="round"/>`;
+
+  // قاطع t لمستقيمين متوازيين q و r. الزوايا القانونية ١–٨: ١ علوية يسار، ٢ علوية يمين، ٣ سفلية يمين، ٤ سفلية يسار (عند q)، و٥–٨ بالترتيب نفسه عند r.
+  // o.ph : اتجاه القاطع (١٢٠ أو ٦٠)، o.map : دالة تعيد نص الزاوية (أو '' للإخفاء)، o.par : رسم رؤوس أسهم التوازي، o.names : أسماء المستقيمات
+  function figPar(hl, o) {
+    hl = hl || []; o = o || {};
+    const nm = Object.assign({ q: 'q', r: 'r', t: 't' }, o.names || {});
+    const map = o.map || (n => String(n)), showPar = o.par !== false;
+    const th = 8 * Math.PI / 180, ph = (o.ph || 120) * Math.PI / 180, C = [160, 82], tx = Math.cos(ph), ty = -Math.sin(ph);
+    const at = yy => { const s = (yy - C[1]) / ty; return [C[0] + s * tx, yy]; };
+    const [qx, qy] = at(48), [rx, ry] = at(118);
+    const yl = (px, py, x) => py - Math.tan(th) * (x - px);
+    let s = `<polygon points="14,${yl(qx, qy, 14)} 306,${yl(qx, qy, 306)} 306,${yl(rx, ry, 306)} 14,${yl(rx, ry, 14)}" fill="var(--success)" fill-opacity=".10"/>`;
+    s += sLn(14, yl(qx, qy, 14), 306, yl(qx, qy, 306), 'var(--primary)', 2.2) + sLn(14, yl(rx, ry, 14), 306, yl(rx, ry, 306), 'var(--primary)', 2.2);
+    if (showPar) {
+      [[qx, qy], [rx, ry]].forEach(([px, py]) => {
+        [262, 248].forEach(x0 => {
+          const y0 = yl(px, py, x0), dx = Math.cos(th), dy = -Math.sin(th), nx = -dy, ny = dx;
+          const tip = [x0 + 7 * dx, y0 + 7 * dy], b1 = [x0 - 4 * dx + 5 * nx, y0 - 4 * dy + 5 * ny], b2 = [x0 - 4 * dx - 5 * nx, y0 - 4 * dy - 5 * ny];
+          s += `<polyline points="${b1[0].toFixed(1)},${b1[1].toFixed(1)} ${tip[0].toFixed(1)},${tip[1].toFixed(1)} ${b2[0].toFixed(1)},${b2[1].toFixed(1)}" fill="none" stroke="var(--danger)" stroke-width="2"/>`;
+        });
+      });
+    }
+    const a = at(8), b = at(150);
+    s += sLn(a[0], a[1], b[0], b[1], 'var(--danger)', 2.4);
+    const lx = (o.ph || 120) === 60 ? b[0] + 12 : a[0] + 12;
+    s += sTxt(300, yl(qx, qy, 300) - 8, nm.q, 'var(--primary)', 14) + sTxt(300, yl(rx, ry, 300) - 8, nm.r, 'var(--primary)', 14);
+    s += sTxt(lx, (o.ph || 120) === 60 ? b[1] - 2 : a[1] + 6, nm.t, 'var(--danger)', 14);
+    const angs = (o.ph || 120) === 60 ? [[1, 124], [2, 34], [3, 304], [4, 214]] : [[1, 154], [2, 64], [3, 334], [4, 244]];
+    [[qx, qy, 0], [rx, ry, 4]].forEach(([cx, cy, off]) => {
+      angs.forEach(([n, deg]) => {
+        const nn = n + off, lab = map(nn);
+        if (lab === '' || lab == null) return;
+        const r0 = 25, x = cx + r0 * Math.cos(deg * Math.PI / 180), y = cy - r0 * Math.sin(deg * Math.PI / 180) + 5;
+        const on = hl.includes(nn);
+        s += sTxt(x.toFixed(1), y.toFixed(1), lab, on ? 'var(--danger)' : 'currentColor', on ? 17 : 13);
+      });
+    });
+    return svgWrap(s, 156);
+  }
+  // قاطع عمودي على مستقيمين متوازيين
+  function figPerp() {
+    let s = `<polygon points="14,48 306,48 306,112 14,112" fill="var(--success)" fill-opacity=".10"/>`;
+    s += sLn(14, 48, 306, 48, 'var(--primary)', 2.2) + sLn(14, 112, 306, 112, 'var(--primary)', 2.2) + sLn(160, 8, 160, 150, 'var(--danger)', 2.4);
+    [48, 112].forEach(y => { [[160, y, -1], [160, y, 1]].forEach(([x, yy, sx]) => [-1, 1].forEach(sy => { s += `<polyline points="${x + sx * 10},${yy} ${x + sx * 10},${yy + sy * 10} ${x},${yy + sy * 10}" fill="none" stroke="currentColor" stroke-width="1.6"/>`; })); });
+    [48, 112].forEach(y => [262, 248].forEach(x => { s += `<polyline points="${x - 4},${y - 5} ${x + 4},${y} ${x - 4},${y + 5}" fill="none" stroke="var(--danger)" stroke-width="2"/>`; }));
+    s += sTxt(296, 40, 'a', 'var(--primary)', 14) + sTxt(296, 104, 'b', 'var(--primary)', 14) + sTxt(174, 20, 't', 'var(--danger)', 14);
+    return svgWrap(s, 156);
+  }
+  // ترقيم أشكال الكتاب (يحوّل الترقيم القانوني إلى ترقيم الكتاب)
+  const BK1 = { 1: '1', 2: '2', 3: '3', 4: '4', 5: '8', 6: '7', 7: '6', 8: '5' };             // شكل المثال ١ (ص ٩٤)
+  const BK3 = { 1: '1', 2: '2', 3: '3', 4: '8', 5: '7', 6: '4', 7: '5', 8: '6' };             // شكل المثال ٣ (ص ٩٦)
+  const bookFig = (m, ph, hl) => figPar(hl, { ph, map: n => m[n] });
+
+  const pf = rows => '<table class="pf"><tr><th>العبارات</th><th>المبررات</th></tr>' + rows.map(r => `<tr><td class="eq">${E(r[0])}</td><td>${r[1]}</td></tr>`).join('') + '</table>';
+
+
+  // ثلاثة مستقيمات يقطعها مستقيم p. tilts: ميل كل مستقيم، labs: [{i, s, t}] أرقام الزوايا (s: ١ يسار علوية، ٢ يمين علوية، ٣ يمين سفلية، ٤ يسار سفلية)
+  function figThree(tilts, labs, o) {
+    o = o || {};
+    const ph = 120 * Math.PI / 180, C = [160, 82], tx = Math.cos(ph), ty = -Math.sin(ph), Y = [44, 88, 132], names = ['ℓ', 'm', 'n'];
+    const xs = Y.map(y => C[0] + ((y - C[1]) / ty) * tx), bis = [154, 64, 334, 244];
+    let s = '';
+    Y.forEach((y, i) => {
+      const t = Math.tan(tilts[i] * Math.PI / 180), yl = x => y - t * (x - xs[i]);
+      s += sLn(14, yl(14).toFixed(1), 306, yl(306).toFixed(1), 'var(--primary)', 2.2) + sTxt(300, (yl(300) - 8).toFixed(1), names[i], 'var(--primary)', 15);
+    });
+    const a = [C[0] + ((2 - C[1]) / ty) * tx, 2], b = [C[0] + ((166 - C[1]) / ty) * tx, 166];
+    s += sLn(a[0].toFixed(1), a[1], b[0].toFixed(1), b[1], 'var(--danger)', 2.4) + sTxt((a[0] + 13).toFixed(1), 13, 'p', 'var(--danger)', 14);
+    labs.forEach(l => {
+      const r0 = 25, d = bis[l.s - 1] * Math.PI / 180, x = xs[l.i] + r0 * Math.cos(d), y = Y[l.i] - r0 * Math.sin(d) + 5;
+      s += sTxt(x.toFixed(1), y.toFixed(1), l.t, l.c || 'var(--danger)', 16);
+    });
+    return svgWrap(s, 172);
+  }
+  const three = (tilts, labs) => `<div class="viz-box">${figThree(tilts, labs)}</div>`;
+
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>في الدرس السابق: مستقيمان متوازيان ⟸ زوايا متطابقة أو متكاملة. وفي هذا الدرس نعكس الاتجاه: إذا وجدنا <b>أزواج زوايا</b> ناتجة عن قاطع <b>متطابقة أو متكاملة</b> بالشكل المطلوب فإن المستقيمين <b>متوازيان</b>. ومنه نثبت التوازي وننشئ مستقيمًا موازيًا لمستقيم معلوم.</p>
+      <h4>مسلّمتا الدرس</h4>
+      <ol class="steps">
+        <li><b>مسلّمة ٢.٢ (عكس المتناظرتين):</b> إذا قطع قاطع مستقيمين في مستوى ونتج زاويتان متناظرتان متطابقتان فالمستقيمان متوازيان. مثال: إذا كان ${E('∠5 ≅ ∠1')} (أو ${E('∠2 ≅ ∠6')} ...) فإن ${E('q ∥ r')}.</li>
+        <li><b>مسلّمة ٢.٣ (التوازي):</b> إذا عُلم مستقيم ونقطة لا تقع عليه فإنه يوجد مستقيم <u>واحد فقط</u> يمر بتلك النقطة ويوازي المستقيم المعلوم.</li>
+      </ol>
+      <h4>النظريات (العكوس)</h4>
+      <div style="margin:6px 0">${figPar([], { par: false })}</div>
+      <ol class="steps">
+        <li><b>٢.٥ (عكس المتبادلتين خارجيًا):</b> ${E('∠1 ≅ ∠7')} أو ${E('∠2 ≅ ∠8')} ⟸ ${E('q ∥ r')}.</li>
+        <li><b>٢.٦ (عكس المتحالفتين):</b> ${E('m∠4 + m∠5 = 180°')} أو ${E('m∠3 + m∠6 = 180°')} ⟸ ${E('q ∥ r')}.</li>
+        <li><b>٢.٧ (عكس المتبادلتين داخليًا):</b> ${E('∠3 ≅ ∠5')} أو ${E('∠4 ≅ ∠6')} ⟸ ${E('q ∥ r')}.</li>
+        <li><b>٢.٨ (عكس القاطع العمودي):</b> مستقيمان في مستوى كل منهما عمودي على القاطع نفسه ⟸ متوازيان.</li>
+      </ol>
+      <p class="note">لا يكفي أن «يبدو» المستقيمان متوازيين. وإذا لم تحقق الزوايا الناتجة الشرط (تطابق أو تكامل بحسب موضعها) فلا يمكن القول إنهما متوازيان.</p>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) الاتجاه معكوس:</b> الدرس السابق: التوازي ⟸ العلاقات. هذا الدرس: العلاقات ⟸ التوازي.</div>
+      <div class="idea-card"><b>٢) ما الذي يثبت التوازي؟</b> متناظرتان متطابقتان، أو متبادلتان (داخليًا أو خارجيًا) متطابقتان، أو متحالفتان متكاملتان، أو مستقيمان عموديان على قاطع واحد.</div>
+      <div class="idea-card"><b>٣) لا يثبت التوازي:</b> المتقابلتان بالرأس، والمتجاورتان على مستقيم؛ فهي علاقات صحيحة دائمًا بغض النظر عن التوازي.</div>
+      <div class="idea-card"><b>٤) تحديد القاطع:</b> إذا وُجدت عدة مستقيمات فحدّد أولًا بالنسبة لأي مستقيمين تقع الزاويتان (مثال ١ ب: ${E('∠2, ∠3')} بالنسبة لـ ${E('ℓ, m')} لا لـ ${E('ℓ, n')}).</div>
+      <div class="idea-card"><b>٥) مسلّمة التوازي:</b> المستقيم الموازي المار بنقطة خارجية <u>وحيد</u>، وإنشاء الكتاب يبيّن أنه موجود.</div>
+      <div class="idea-card"><b>٦) الجبر:</b> لجعل مستقيمين متوازيين اكتب معادلة: <b>تساوٍ</b> للمتطابقتين، أو <b>مجموع = ١٨٠</b> للمتحالفتين، أو <b>= ٩٠</b> للقاطع العمودي.</div>
+      <div class="idea-card"><b>٧) الإنشاء الهندسي:</b> ننقل زاوية بالفرجار لتصبح زاويتين متناظرتين متطابقتين، فيكون المستقيمان متوازيين.</div>
+      <div class="idea-card"><b>٨) من مسلّمات إقليدس:</b> المسلّمة ٢.٣ من مسلّمات إقليدس الخمس الأساسية، وهي ضرورية لبرهنة النظريات في الهندسة.</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">عكس مسلّمة الزاويتين المتناظرتين (٢.٢)</span><span class="en">Converse of the Corresponding Angles Postulate</span><br>إذا قطع قاطع مستقيمين في مستوى، ونتج عن التقاطع زاويتان متناظرتان متطابقتان، فإن المستقيمين متوازيان.</div>
+      <div class="def-card"><span class="term">مسلّمة التوازي (٢.٣)</span><span class="en">Parallel Postulate</span><br>إذا عُلم مستقيم ونقطة لا تقع عليه، فإنه يوجد مستقيم واحد فقط يمر بتلك النقطة ويوازي المستقيم المعلوم.</div>
+      <div class="def-card"><span class="term">عكس نظرية الزاويتين المتبادلتين خارجيًا (٢.٥)</span><br>إذا قطع قاطع مستقيمين في مستوى، ونتج زاويتان متبادلتان خارجيًا متطابقتان، فإن المستقيمين متوازيان.</div>
+      <div class="def-card"><span class="term">عكس نظرية الزاويتين المتحالفتين (٢.٦)</span><br>إذا قطع قاطع مستقيمين في مستوى، ونتج زاويتان متحالفتان متكاملتان، فإن المستقيمين متوازيان.</div>
+      <div class="def-card"><span class="term">عكس نظرية الزاويتين المتبادلتين داخليًا (٢.٧)</span><br>إذا قطع قاطع مستقيمين في مستوى، ونتج زاويتان متبادلتان داخليًا متطابقتان، فإن المستقيمين متوازيان.</div>
+      <div class="def-card"><span class="term">عكس نظرية القاطع العمودي (٢.٨)</span><br>إذا قطع قاطع مستقيمين في مستوى، وكان عموديًا على كل منهما، فإن المستقيمين متوازيان.</div>
+      <div class="def-card"><span class="term">إثبات توازي مستقيمين</span><br>نستعمل العلاقة بين أزواج الزوايا الناتجة عن مستقيمين وقاطع لهما لإثبات أن المستقيمين متوازيان.</div>` },
+
+    { id: 'ex', title: '✅ أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: تعيين المستقيمات المتوازية</div>
+        هل يمكن إثبات أن أيًّا من مستقيمات الشكل متوازية اعتمادًا على المعطيات؟ اذكر المسلّمة أو النظرية.
+        <div style="margin-top:6px">${three([3, 3, 3], [{ i: 0, s: 1, t: '1', c: 'currentColor' }, { i: 0, s: 3, t: '2', c: 'currentColor' }, { i: 1, s: 1, t: '3', c: 'currentColor' }, { i: 1, s: 3, t: '4', c: 'currentColor' }, { i: 2, s: 1, t: '5', c: 'currentColor' }, { i: 2, s: 3, t: '6', c: 'currentColor' }])}</div>
+        <b>(a)</b> ${E('∠1 ≅ ∠6')}: الزاويتان ${E('∠1, ∠6')} متبادلتان خارجيًا بالنسبة للمستقيمين ${E('ℓ, n')}. بما أن ${E('∠1 ≅ ∠6')} فإن ${E('ℓ ∥ n')} بحسب عكس نظرية المتبادلتين خارجيًا.<br>
+        <b>(b)</b> ${E('∠2 ≅ ∠3')}: الزاويتان ${E('∠2, ∠3')} متبادلتان داخليًا بالنسبة للمستقيمين ${E('ℓ, m')}. بما أن ${E('∠3 ≅ ∠2')} فإن ${E('ℓ ∥ m')} بحسب عكس نظرية المتبادلتين داخليًا.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٢ من واقع الحياة: السلّم</div>
+        كل درجة من درجات السلّم عمودية على دعامتيه الرئيسيتين. هل الدعامتان متوازيتان؟ وهل جميع الدرجات متوازية؟<br>
+        بما أن الدعامتين الرئيسيتين عموديتان على كل درجة فهما متوازيتان بحسب <b>عكس نظرية القاطع العمودي</b>. وبما أن أي درجتين عموديتان على كل من الدعامتين فهما متوازيتان أيضًا.</div>
+      <div class="ex-card"><div class="ex-t">إنشاء هندسي: رسم مستقيم يوازي مستقيمًا معلومًا ويمر بنقطة لا تقع عليه</div>
+        <ol class="steps">
+          <li><b>الخطوة ١:</b> ارسم ${E('AB')} بالمسطرة، وعيّن النقطة ${E('C')} التي لا تقع على ${E('AB')}، وارسم ${E('CA')}.</li>
+          <li><b>الخطوة ٢:</b> بالفرجار انقل الزاوية ${E('∠CAB')} بحيث يكون ${E('C')} رأس الزاوية الجديدة: ارسم قوسين من ${E('A')} يقطعان ${E('AC')} و${E('AB')} في ${E('M')} و${E('N')}، وبالفتحة نفسها ارسم قوسًا من ${E('C')} يقطع ${E('AC')} في ${E('E')}، ثم انقل طول ${E('MN')} لتحصل على ${E('D')}.</li>
+          <li><b>الخطوة ٣:</b> ارسم ${E('CD')}. بما أن ${E('∠ECD ≅ ∠CAB')} من الإنشاء وهما متناظرتان فإن ${E('AB ∥ CD')}.</li>
+        </ol></div>` },
+
+    { id: 'proof', title: '🧩 البرهان', html: `
+      <div class="ex-card"><div class="ex-t">برهان النظرية ٢.٥ (تأكد ٥)</div>
+        <b>المعطيات:</b> ${E('∠1 ≅ ∠2')}. <b>المطلوب:</b> ${E('ℓ ∥ m')} (الزاوية ${E('∠3')} تقابل ${E('∠2')} بالرأس).
+        ${pf([['∠1 ≅ ∠2', 'معطى'], ['∠2 ≅ ∠3', 'نظرية الزاويتين المتقابلتين بالرأس'], ['∠1 ≅ ∠3', 'خاصية التعدي للتطابق'], ['ℓ ∥ m', 'عكس مسلّمة الزاويتين المتناظرتين']])}</div>
+      <div class="ex-card"><div class="ex-t">برهان النظرية ٢.٧ (بترقيم شكلنا)</div>
+        <div style="margin-top:6px">${figPar([3, 5, 7], { par: false })}</div>
+        <b>المعطيات:</b> ${E('∠3 ≅ ∠5')}. <b>المطلوب:</b> ${E('q ∥ r')}.
+        ${pf([['∠3 ≅ ∠5', 'معطى'], ['∠5 ≅ ∠7', 'نظرية الزاويتين المتقابلتين بالرأس'], ['∠3 ≅ ∠7', 'خاصية التعدي للتطابق'], ['q ∥ r', 'عكس مسلّمة الزاويتين المتناظرتين']])}</div>
+      <div class="ex-card"><div class="ex-t">برهان النظرية ٢.٦ (بترقيم شكلنا)</div>
+        <b>المعطيات:</b> ${E('m∠4 + m∠5 = 180°')}. <b>المطلوب:</b> ${E('q ∥ r')}.
+        ${pf([['m∠4 + m∠5 = 180°', 'معطى'], ['m∠5 + m∠8 = 180°', 'زاويتان متجاورتان على مستقيم'], ['∠4 ≅ ∠8', 'نظرية تطابق المكمّلات'], ['q ∥ r', 'عكس مسلّمة الزاويتين المتناظرتين']])}</div>
+      <div class="ex-card"><div class="ex-t">برهان النظرية ٢.٨ (بترقيم شكلنا)</div>
+        <b>المعطيات:</b> ${E('t ⊥ q')} و${E('t ⊥ r')}. <b>المطلوب:</b> ${E('q ∥ r')}.
+        ${pf([['t ⊥ q, t ⊥ r', 'معطى'], ['∠1 و∠5 قائمتان', 'تعريف المستقيمين المتعامدين'], ['∠1 ≅ ∠5', 'الزوايا القائمة متطابقة'], ['q ∥ r', 'عكس مسلّمة الزاويتين المتناظرتين']])}</div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    conv: { name: 'العكس والتبرير', icon: '🔁' },
+    lines: { name: 'أيّ المستقيمات متوازية؟', icon: '📏' },
+    alg: { name: 'الجبر وإثبات التوازي', icon: '✏️' },
+    apply: { name: 'مسائل وتطبيقات', icon: '🪜' },
+    error: { name: 'اكتشف الخطأ', icon: '🔍' },
+    concepts: { name: 'مفاهيم وبرهان', icon: '💡' }
+  };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const rnd = (lo, hi) => randInt(lo, hi);
+
+  // ============ نموذج الزوايا الثماني (ترقيم قانوني ١–٨) ============
+  const JR = {
+    co: 'مسلّمة الزاويتين المتناظرتين', ai: 'نظرية الزاويتين المتبادلتين داخليًا', ae: 'نظرية الزاويتين المتبادلتين خارجيًا', ci: 'نظرية الزاويتين المتحالفتين',
+    vert: 'نظرية الزاويتين المتقابلتين بالرأس', lp: 'الزاويتان المتجاورتان على مستقيم متكاملتان'
+  };
+  const TN = { ai: 'متبادلتان داخليًا', ae: 'متبادلتان خارجيًا', ci: 'متحالفتان', co: 'متناظرتان' };
+  const TRP = { ai: [[3, 5], [4, 6]], ae: [[1, 7], [2, 8]], ci: [[4, 5], [3, 6]], co: [[1, 5], [2, 6], [3, 7], [4, 8]] };
+  const VERT = [[1, 3], [2, 4], [5, 7], [6, 8]], LPR = [[1, 2], [2, 3], [3, 4], [4, 1], [5, 6], [6, 7], [7, 8], [8, 5]];
+  const EDGES = [];
+  Object.keys(TRP).forEach(k => TRP[k].forEach(p => EDGES.push({ a: p[0], b: p[1], t: k, eq: k !== 'ci' })));
+  VERT.forEach(p => EDGES.push({ a: p[0], b: p[1], t: 'vert', eq: true }));
+  LPR.forEach(p => EDGES.push({ a: p[0], b: p[1], t: 'lp', eq: false }));
+  const edgeOf = (a, b) => EDGES.find(e => (e.a === a && e.b === b) || (e.a === b && e.b === a));
+  const adjOf = n => EDGES.filter(e => e.a === n || e.b === n).map(e => ({ to: e.a === n ? e.b : e.a, e }));
+  function findPath(a, b) {
+    const prev = {}; prev[a] = null; const q = [a];
+    while (q.length) {
+      const n = q.shift(); if (n === b) break;
+      for (const { to, e } of shuffle(adjOf(n))) if (!(to in prev)) { prev[to] = { from: n, e }; q.push(to); }
+    }
+    const steps = []; let c = b;
+    while (prev[c]) { steps.unshift({ x: prev[c].from, y: c, e: prev[c].e }); c = prev[c].from; }
+    return steps;
+  }
+  const ALLP = []; for (let a = 1; a <= 8; a++) for (let b = a + 1; b <= 8; b++) ALLP.push([a, b]);
+  const NAMED = ALLP.filter(p => edgeOf(p[0], p[1]) && TRP[edgeOf(p[0], p[1]).t]);
+  const CHAIN2 = ALLP.filter(p => findPath(p[0], p[1]).length === 2);
+  const sameVal = (a, b) => a % 2 === b % 2;                 // متطابقتان؟ وإلا متكاملتان
+  const valOf = (n, A, ao) => ((n % 2 === 1) === ao ? A : 180 - A);
+  const shufP = p => (Math.random() < 0.5 ? [p[1], p[0]] : p);
+  const an = n => L('∠' + n), mm = n => L('m∠' + n), dg = v => L(v + '°');
+  const pairTxt = p => `${an(p[0])} و${an(p[1])}`;
+  const pkey = p => p.slice().sort().join();
+  const pfig = (hl, ao, o) => `<div class="viz-box">${figPar(hl, Object.assign({ ph: ao ? 120 : 60 }, o || {}))}</div>`;
+  const stepTxt = s => `${sameVal(s.x, s.y) ? `${an(s.x)} ≅ ${an(s.y)}` : `${an(s.x)} و${an(s.y)} متكاملتان`} (${JR[s.e.t]})`;
+  const A_ = () => rnd(35, 80);
+  const REL4 = ['متطابقتان', 'متكاملتان', 'متتامتان', 'لا يمكن تحديد العلاقة'];
+  const relName = (a, b) => (sameVal(a, b) ? 'متطابقتان' : 'متكاملتان');
+  const GIVEN = L('q ∥ r');
+  const pfRows = rows => '<table class="pf"><tr><th>العبارات</th><th>المبررات</th></tr>' + rows.map(r => `<tr><td class="eq">${L(r[0])}</td><td>${r[1]}</td></tr>`).join('') + '</table>';
+  const T4K = ['co', 'ai', 'ci', 'ae'];
+  const T4J = T4K.map(k => JR[k]);
+
+
+  const JC = { co: 'عكس مسلّمة الزاويتين المتناظرتين', ae: 'عكس نظرية الزاويتين المتبادلتين خارجيًا', ci: 'عكس نظرية الزاويتين المتحالفتين', ai: 'عكس نظرية الزاويتين المتبادلتين داخليًا', pt: 'عكس نظرية القاطع العمودي' };
+  const JC4 = ['co', 'ai', 'ci', 'ae'].map(k => JC[k]);
+  const PAR4 = ['متوازيان', 'متقاطعان', 'متخالفان', 'لا يمكن تحديد العلاقة'];
+  const NMP = { co: 'متناظرتان', ai: 'متبادلتان داخليًا', ae: 'متبادلتان خارجيًا', ci: 'متحالفتان' };
+  const QR = L('q ∥ r');
+  const stmt = (a, b, k) => (k === 'ci' ? L(`m∠${a} + m∠${b} = 180°`) : `${an(a)} ≅ ${an(b)}`);
+  const NOPAR = 'لا يمكن إثبات توازي أي منها';
+  // ============ 3) الجبر والزوايا ============
+  const sg = b => (b < 0 ? '−' : '+');
+  const fm = n => String(n).replace('-', '−');
+  const ex = (a, b) => `${a}x ${sg(b)} ${Math.abs(b)}`;
+  const nw = (c, cands, fmt) => numWrongs(c, cands.filter(v => Number.isFinite(v) && v > 0 && Number.isInteger(v)), fmt || (x => L(String(x))));
+  function mkAlg(kind) {
+    const pool = kind === 'eq' ? NAMED.filter(p => sameVal(p[0], p[1])) : kind === 'supp' ? NAMED.filter(p => !sameVal(p[0], p[1])) : NAMED;
+    for (let t = 0; t < 3000; t++) {
+      const p = shufP(pick(pool)), ao = Math.random() < 0.5, A = rnd(35, 80), v1 = valOf(p[0], A, ao), v2 = valOf(p[1], A, ao), a1 = rnd(2, 7), a2 = rnd(2, 7), eqT = sameVal(p[0], p[1]);
+      if (eqT && a1 === a2) continue;
+      const xs = [];
+      for (let x = 5; x <= 30; x++) { const b1 = v1 - a1 * x, b2 = v2 - a2 * x; if (b1 && b2 && Math.abs(b1) <= 40 && Math.abs(b2) <= 40) xs.push(x); }
+      if (!xs.length) continue;
+      const x = pick(xs);
+      return { p, ao, v1, v2, a1, a2, b1: v1 - a1 * x, b2: v2 - a2 * x, x, eqT, k: edgeOf(p[0], p[1]).t };
+    }
+    throw new Error('mkAlg failed');
+  }
+  const nb = s => '<span style="white-space:nowrap">' + s + '</span>';
+  const angE = (n, a, b) => nb(L(`m∠${n} = (${ex(a, b)})°`));
+  const eqL = m => L(`${ex(m.a1, m.b1)} = ${ex(m.a2, m.b2)}`), sumL = (m, t) => L(`(${ex(m.a1, m.b1)}) + (${ex(m.a2, m.b2)}) = ${t}`);
+  const eqOf = m => nb(eqL(m)), sumOf = (m, t) => nb(sumL(m, t));
+  const solveTxt = m => m.eqT
+    ? `${eqOf(m)} ⟸ ${L(`${m.a1 - m.a2 > 0 ? (m.a1 - m.a2) + 'x' : (m.a2 - m.a1) + 'x'} = ${Math.abs(m.b2 - m.b1)}`)} ⟸ ${L('x = ' + m.x)}`
+    : `${sumOf(m, 180)} ⟸ ${L(`${m.a1 + m.a2}x ${sg(m.b1 + m.b2)} ${Math.abs(m.b1 + m.b2)} = 180`)} ⟸ ${L('x = ' + m.x)}`;
+  const algExtra = m => pfig(m.p, m.ao, { par: false });
+  const algBase = m => `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}، و${angE(m.p[0], m.a1, m.b1)} و${angE(m.p[1], m.a2, m.b2)}`;
+  const xCands = m => [m.v1, Math.round((180 - m.b1 - m.b2) / (m.a1 + m.a2)), Math.round((90 - m.b1 - m.b2) / (m.a1 + m.a2)),
+    m.a1 !== m.a2 ? Math.abs(Math.round((m.b1 + m.b2) / (m.a1 - m.a2))) : 0, m.x + 1, m.x - 1, m.x + 2];
+
+
+  const dgW = (c, cands) => numWrongs(c, cands.filter(v => Number.isFinite(v) && v > 0 && v <= 360), x => dg(x));
+  const noFig = (p, ao) => pfig(p, ao, { par: false });
+  const YN3 = ['نعم، المستقيمان متوازيان', 'لا، المستقيمان غير متوازيين', 'لا يمكن تحديد ذلك'];
+  const sepName = k => (k === 'ci' ? 'مجموع قياسيهما ' + dg(180) : 'تطابقهما');
+
+  // ============ 1) العكس والتبرير ============
+  const GEN_CONV = [
+    { d: 1, w: 3, fn() {
+      const p = shufP(pick(NAMED)), k = edgeOf(p[0], p[1]).t, ao = Math.random() < 0.5;
+      return build({ cat: 'conv', d: 1, nOpts: 4, fixedOrder: true, order: JC4, prompt: `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}. إذا علمت أن ${stmt(p[0], p[1], k)} فما المسلّمة أو النظرية التي تبرّر أن ${QR}؟`, extra: noFig(p, ao),
+        correct: JC[k], wrongs: JC4.filter(x => x !== JC[k]), hint: `${pairTxt(p)}: ما نوعهما؟`, explain: `${pairTxt(p)} ${NMP[k]} و${k === 'ci' ? 'متكاملتان' : 'متطابقتان'}؛ إذن ${QR} بحسب ${JC[k]}.` });
+    } },
+    { d: 1, w: 2, fn() {
+      const k = pick(['co', 'ai', 'ae', 'ci']), nm = { co: 'متناظرتان', ai: 'متبادلتان داخليًا', ae: 'متبادلتان خارجيًا', ci: 'متحالفتان' }, cond = k === 'ci' ? 'متكاملتان' : 'متطابقتان';
+      return build({ cat: 'conv', d: 1, nOpts: 4, fixedOrder: true, order: PAR4, prompt: `قطع قاطع مستقيمين في مستوى، فنتجت زاويتان ${nm[k]} ${cond}. ما العلاقة بين المستقيمين؟`, correct: 'متوازيان', wrongs: PAR4.slice(1),
+        hint: 'عكس المسلّمة أو النظرية.', explain: `${JC[k]}: المستقيمان متوازيان.` });
+    } },
+    { d: 1, w: 2, fn() {
+      const v = rnd(0, 2);
+      if (v === 0) { const O = ['٠', '١', '٢', 'عدد لا نهائي'];
+        return build({ cat: 'conv', d: 1, nOpts: 4, fixedOrder: true, order: O, prompt: `النقطة ${L('P')} لا تقع على المستقيم ${L('m')}. كم مستقيمًا يمر بالنقطة ${L('P')} ويوازي ${L('m')}؟`, correct: '١', wrongs: O.filter(x => x !== '١'), hint: 'مسلّمة التوازي.', explain: 'مسلّمة التوازي ٢٫٣: يوجد مستقيم واحد فقط.' }); }
+      if (v === 1) { const O = ['مسلّمة التوازي', 'عكس مسلّمة الزاويتين المتناظرتين', 'مسلّمة المنقلة', 'مسلّمة جمع قياسات الزوايا'];
+        return build({ cat: 'conv', d: 1, nOpts: 4, fixedOrder: true, order: O, prompt: 'ما اسم المسلّمة: «إذا عُلم مستقيم ونقطة لا تقع عليه فإنه يوجد مستقيم واحد فقط يمر بتلك النقطة ويوازي المستقيم المعلوم»؟', correct: O[0], wrongs: O.slice(1), hint: 'تتحدث عن مستقيم وحيد.', explain: 'هي مسلّمة التوازي (٢٫٣).' }); }
+      return build({ cat: 'conv', d: 1, nOpts: 4, fixedOrder: true, order: PAR4, prompt: `${L('q')} و${L('r')} مستقيمان في مستوى، وكل منهما عمودي على القاطع ${L('t')}. ما العلاقة بين ${L('q')} و${L('r')}؟`, extra: `<div class="viz-box">${figPerp()}</div>`, correct: 'متوازيان', wrongs: PAR4.slice(1),
+        hint: 'عكس نظرية القاطع العمودي.', explain: `${JC.pt} (٢٫٨): المستقيمان العموديان على قاطع واحد متوازيان.` });
+    } },
+    { d: 2, w: 4, fn() {
+      const p = shufP(pick(NAMED)), k = edgeOf(p[0], p[1]).t, ao = Math.random() < 0.5, ok = Math.random() < 0.5, A = rnd(35, 80);
+      let A2 = A + pick([-1, 1]) * rnd(6, 20); if (A2 < 25) A2 = A + 8;
+      const v1 = valOf(p[0], A, ao), v2 = valOf(p[1], ok ? A : A2, ao), c = ok ? YN3[0] : YN3[1];
+      return build({ cat: 'conv', d: 2, nOpts: 3, fixedOrder: true, order: YN3, prompt: `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}، وكان ${L(`m∠${p[0]} = ${v1}°`)} و${L(`m∠${p[1]} = ${v2}°`)}. هل يمكن إثبات أن ${QR}؟`, extra: noFig(p, ao), correct: c, wrongs: YN3.filter(x => x !== c),
+        hint: `${pairTxt(p)} ${NMP[k]}: هل ${k === 'ci' ? 'مجموعهما ١٨٠°' : 'قياساهما متساويان'}؟`,
+        explain: ok ? `${pairTxt(p)} ${NMP[k]} و${k === 'ci' ? L(v1 + '° + ' + v2 + '° = 180°') : L(v1 + '° = ' + v2 + '°')}؛ إذن المستقيمان متوازيان (${JC[k]}).` : `${pairTxt(p)} ${NMP[k]} لكن ${k === 'ci' ? 'مجموعهما ' + dg(v1 + v2) + ' وليس ١٨٠°' : 'قياسيهما ' + dg(v1) + ' و' + dg(v2) + ' غير متساويين'}؛ فالمستقيمان غير متوازيين.` });
+    } },
+    { d: 2, w: 2, fn() {
+      const good = shufP(pick(NAMED.filter(q => sameVal(q[0], q[1])))), ao = Math.random() < 0.5, f = p => `الزاويتان ${pairTxt(p)}`;
+      return build({ cat: 'conv', d: 2, nOpts: 4, prompt: `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}. إذا علمت أن إحدى أزواج الزوايا الآتية متطابقة، فأي زوج منها يكفي لإثبات أن ${QR}؟`, extra: noFig([], ao), correct: f(good), wrongs: shuffle(VERT).slice(0, 3).map(p => f(shufP(p))),
+        hint: 'هل علاقة الزاويتين صحيحة دائمًا حتى دون توازي؟', explain: `${pairTxt(good)} ${NMP[edgeOf(good[0], good[1]).t]}؛ أما الأزواج الأخرى فمتقابلة بالرأس وهي متطابقة دائمًا، فلا تثبت التوازي.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const p = shufP(pick(ALLP.filter(q => !edgeOf(q[0], q[1]) || !TRP[edgeOf(q[0], q[1]).t]).filter(q => (q[0] <= 4) !== (q[1] <= 4)))), ao = Math.random() < 0.5;
+      const O = [JC.co, JC.ai, 'لا يمكن إثبات التوازي من هذا الزوج'];
+      return build({ cat: 'conv', d: 3, nOpts: 3, fixedOrder: true, order: O, prompt: `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}، وعُلم أن ${pairTxt(p)} متطابقتان. ماذا نستنتج عن المستقيمين؟`, extra: noFig(p, ao), correct: O[2], wrongs: O.slice(0, 2),
+        hint: 'هل الزاويتان متناظرتان أو متبادلتان؟', explain: `${pairTxt(p)} ليستا متناظرتين ولا متبادلتين ولا متحالفتين، فلا نستطيع إثبات التوازي.` });
+    } }
+  ];
+
+  // ============ 2) أيّ المستقيمات متوازية؟ ============
+  const LN = ['ℓ', 'm', 'n'], LPAIRS = [[0, 1], [0, 2], [1, 2]];
+  const LOPT = LPAIRS.map(p => L(`${LN[p[0]]} ∥ ${LN[p[1]]}`)).concat([NOPAR]);
+  function tilts3(pr) { const t = pick([-3, 0, 3]), o = t + pick([-9, -7, 7, 9]), r = [0, 0, 0].map(() => o); r[pr[0]] = t; r[pr[1]] = t; return r; }
+  const lab12 = (pr, a, b) => [{ i: pr[0], s: a, t: '1' }, { i: pr[1], s: b - 4, t: '2' }];
+  const GEN_LINES = [
+    { d: 1, w: 2, fn() {
+      const pr = pick(LPAIRS), p = shufP(pick(NAMED.filter(q => q[0] <= 4 && q[1] > 4))), a = Math.min(p[0], p[1]), b = Math.max(p[0], p[1]), k = edgeOf(a, b).t;
+      return build({ cat: 'lines', d: 1, nOpts: 4, fixedOrder: true, order: Object.values(NMP), prompt: `قطع المستقيم ${L('p')} المستقيمين ${L(LN[pr[0]])} و${L(LN[pr[1]])}. ما العلاقة بين ${L('∠1')} و${L('∠2')} في الشكل بالنسبة للمستقيمين ${L(LN[pr[0]])} و${L(LN[pr[1]])}؟`,
+        extra: three(tilts3(pr), lab12(pr, a, b)), correct: NMP[k], wrongs: Object.values(NMP).filter(x => x !== NMP[k]), hint: 'داخلية أم خارجية؟ وفي أي جهة من القاطع؟', explain: `${L('∠1')} و${L('∠2')} ${NMP[k]}.` });
+    } },
+    { d: 2, w: 4, fn() {
+      const pr = pick(LPAIRS), p = pick(NAMED.filter(q => q[0] <= 4 && q[1] > 4)), a = p[0], b = p[1], k = edgeOf(a, b).t, st = k === 'ci' ? L('m∠1 + m∠2 = 180°') : L('∠1 ≅ ∠2'), ans = L(`${LN[pr[0]]} ∥ ${LN[pr[1]]}`);
+      return build({ cat: 'lines', d: 2, nOpts: 4, fixedOrder: true, order: LOPT, prompt: `قطع المستقيم ${L('p')} المستقيمات ${L('ℓ')} و${L('m')} و${L('n')}. إذا علمت أن ${st} (الزاويتان ${L('∠1')} و${L('∠2')} في الشكل)، فأي المستقيمات يمكن إثبات توازيها؟`,
+        extra: three(tilts3(pr), lab12(pr, a, b)), correct: ans, wrongs: LOPT.filter(x => x !== ans), hint: 'حدّد المستقيمين اللذين تقع عندهما الزاويتان.', explain: `${L('∠1')} و${L('∠2')} ${NMP[k]} بالنسبة للمستقيمين ${L(LN[pr[0]])} و${L(LN[pr[1]])}؛ إذن ${ans} بحسب ${JC[k]}.` });
+    } },
+    { d: 2, w: 2, fn() {
+      const pr = pick(LPAIRS), p = pick(NAMED.filter(q => q[0] <= 4 && q[1] > 4)), a = p[0], b = p[1], k = edgeOf(a, b).t, st = k === 'ci' ? L('m∠1 + m∠2 = 180°') : L('∠1 ≅ ∠2');
+      return build({ cat: 'lines', d: 2, nOpts: 4, fixedOrder: true, order: JC4, prompt: `قطع المستقيم ${L('p')} المستقيمات ${L('ℓ, m, n')}. عُلم أن ${st}، فاستنتجنا أن ${L(`${LN[pr[0]]} ∥ ${LN[pr[1]]}`)}. ما المبرر؟`, extra: three(tilts3(pr), lab12(pr, a, b)),
+        correct: JC[k], wrongs: JC4.filter(x => x !== JC[k]), hint: `${L('∠1')} و${L('∠2')} ${NMP[k]}.`, explain: `${NMP[k]}: ${JC[k]}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const pr = pick(LPAIRS), p = pick([[1, 6], [1, 8], [2, 5], [2, 7], [3, 8], [4, 7]]), a = p[0], b = p[1];
+      return build({ cat: 'lines', d: 3, nOpts: 4, fixedOrder: true, order: LOPT, prompt: `قطع المستقيم ${L('p')} المستقيمات ${L('ℓ')} و${L('m')} و${L('n')}. إذا علمت أن ${L('∠1 ≅ ∠2')} (الزاويتان في الشكل)، فأي المستقيمات يمكن إثبات توازيها؟`,
+        extra: three(tilts3(pr), lab12(pr, a, b)), correct: NOPAR, wrongs: LOPT.slice(0, 3), hint: 'هل الزاويتان متناظرتان أو متبادلتان؟', explain: `${L('∠1')} و${L('∠2')} ليستا متناظرتين ولا متبادلتين، فلا نستطيع إثبات توازي أي مستقيمين منها.` });
+    } }
+  ];
+
+  // ============ 3) الجبر وإثبات التوازي ============
+  const GEN_ALG = [
+    { d: 1, w: 3, fn() {
+      const m = mkAlg('eq');
+      return build({ cat: 'alg', d: 1, nOpts: 4, prompt: `${algBase(m)}. أوجد قيمة ${L('x')} التي تجعل ${QR}.`, extra: algExtra(m), correct: L(String(m.x)), wrongs: nw(m.x, xCands(m)),
+        hint: `${pairTxt(m.p)} ${TN[m.k]}: لتوازي المستقيمين يجب أن يتطابقا.`, explain: `${pairTxt(m.p)} ${TN[m.k]}؛ لكي يتوازى المستقيمان (${JC[m.k]}) يجب أن يتساوى قياساهما: ${solveTxt(m)}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const m = mkAlg('supp');
+      return build({ cat: 'alg', d: 2, nOpts: 4, prompt: `${algBase(m)}. أوجد قيمة ${L('x')} التي تجعل ${QR}.`, extra: algExtra(m), correct: L(String(m.x)), wrongs: nw(m.x, xCands(m)),
+        hint: 'المتحالفتان: مجموعهما ١٨٠° ليتوازى المستقيمان.', explain: `${pairTxt(m.p)} متحالفتان؛ لكي يتوازى المستقيمان (${JC.ci}) يجب أن يكون مجموعهما ${L('180°')}: ${solveTxt(m)}.` });
+    } },
+    { d: 2, w: 2, fn() {
+      const m = mkAlg('any');
+      return build({ cat: 'alg', d: 2, nOpts: 4, prompt: `${algBase(m)}. أوجد قيمة ${L('x')} التي تجعل ${QR}، ثم قياس ${mm(m.p[1])}.`, extra: algExtra(m), correct: dg(m.v2), wrongs: dgW(m.v2, [m.x, m.v1, 180 - m.v2, m.v2 + 10, m.v2 - 10]),
+        hint: 'أوجد x أولًا ثم عوّض.', explain: `${solveTxt(m)}؛ ثم ${L(`m∠${m.p[1]} = ${ex(m.a2, m.b2).replace('x', '(' + m.x + ')')} = ${m.v2}°`)}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const m = mkAlg('any'), good = Math.random() < 0.5, n = good ? m.x : m.x + pick([-2, -1, 1, 2]), w1 = m.a1 * n + m.b1, w2 = m.a2 * n + m.b2, hold = m.eqT ? w1 === w2 : w1 + w2 === 180, c = hold ? YN3[0] : YN3[1];
+      return build({ cat: 'alg', d: 2, nOpts: 3, fixedOrder: true, order: YN3, prompt: `${algBase(m)}. إذا كان ${L('x = ' + n)} فهل ${QR}؟`, extra: algExtra(m), correct: c, wrongs: YN3.filter(x => x !== c),
+        hint: 'احسب قياس كل زاوية ثم قارن (تساوٍ أو مجموع ١٨٠).', explain: `${L(`m∠${m.p[0]} = ${w1}°`)} و${L(`m∠${m.p[1]} = ${w2}°`)}؛ ${m.eqT ? (hold ? 'متساويتان' : 'غير متساويتين') : 'مجموعهما ' + dg(w1 + w2) + (hold ? '' : ' وليس ١٨٠°')}، فالمستقيمان ${hold ? 'متوازيان' : 'غير متوازيين'}.` });
+    } },
+    { d: 3, w: 2, fn() {
+      let k, y, b; do { k = rnd(2, 9); y = rnd(6, 20); b = 90 - k * y; } while (!b || Math.abs(b) > 60);
+      return build({ cat: 'alg', d: 3, nOpts: 4, prompt: `${L('t')} عمودي على ${L('q')}، و${nb(L(`m∠5 = (${k}y ${sg(b)} ${Math.abs(b)})°`))} عند تقاطع ${L('t')} مع ${L('r')}. أوجد قيمة ${L('y')} التي تجعل ${QR}.`, extra: `<div class="viz-box">${figPerp()}</div>`, correct: L(String(y)),
+        wrongs: nw(y, [Math.round((180 - b) / k), Math.round(90 / k), y + 1, y - 1, Math.round((90 + b) / k)]), hint: 'يجب أن يكون t عموديًا على r أيضًا (عكس القاطع العمودي).', explain: `يجب أن يكون ${L('t ⊥ r')} فالزاوية قائمة: ${L(`${k}y ${sg(b)} ${Math.abs(b)} = 90`)} ⟸ ${L('y = ' + y)}.` });
+    } },
+    { d: 3, w: 2, fn() {
+      const m = mkAlg('any'), E1 = ex(m.a1, m.b1), E2 = ex(m.a2, m.b2), s = t => L(`(${E1}) + (${E2}) = ${t}`);
+      const good = m.eqT ? L(`${E1} = ${E2}`) : s(180), wr = m.eqT ? [s(180), s(90), L(`(${E1}) − (${E2}) = 180`)] : [L(`${E1} = ${E2}`), s(90), s(360)];
+      return build({ cat: 'alg', d: 3, nOpts: 4, prompt: `${algBase(m)}. أي المعادلات الآتية تعبّر عن شرط ${QR}؟`, extra: algExtra(m), correct: good, wrongs: wr, hint: `${pairTxt(m.p)} ${TN[m.k]}.`, explain: `${TN[m.k]}: ${m.eqT ? 'يجب تطابقهما' : 'يجب أن يكونا متكاملتين'} لإثبات التوازي.` });
+    } }
+  ];
+
+  // ============ 4) مسائل وتطبيقات ============
+  const GEN_APPLY = [
+    { d: 1, w: 3, fn() {
+      const O = ['نعم؛ كلتاهما عمودية على الدعامة نفسها (عكس نظرية القاطع العمودي)', 'لا؛ كل درجة تقطع الدعامة في نقطة مختلفة', 'نعم؛ لأن المتحالفتين متطابقتان', 'لا يمكن الحكم'];
+      return build({ cat: 'apply', d: 1, nOpts: 4, fixedOrder: true, order: O, prompt: 'درجتان من درجات سلّم، كل منهما عمودية على إحدى دعامتيه الرئيسيتين. هل الدرجتان متوازيتان، وما السبب؟', correct: O[0], wrongs: O.slice(1), hint: 'مستقيمان عموديان على مستقيم واحد.', explain: 'مستقيمان في مستوى عموديان على القاطع نفسه فهما متوازيان (٢٫٨).' });
+    } },
+    { d: 1, w: 2, fn() {
+      const O = ['زاويتان متناظرتان متطابقتان (عكس مسلّمة الزاويتين المتناظرتين)', 'زاويتان متقابلتان بالرأس', 'زاويتان متتامتان', 'زاويتان متجاورتان على مستقيم'];
+      return build({ cat: 'apply', d: 1, nOpts: 4, fixedOrder: true, order: O, prompt: 'عند بناء سياج، تُثبّت ألواح خشبية مائلة على الأوتاد بحيث تتساوى الزوايا بين الألواح والأوتاد (زوايا متناظرة). لماذا يجعل هذا الأوتاد متوازية؟', correct: O[0], wrongs: O.slice(1), hint: 'الزوايا متساوية وفي مواضع متناظرة.', explain: 'الزوايا المتناظرة المتطابقة تثبت التوازي بحسب عكس مسلّمة الزاويتين المتناظرتين.' });
+    } },
+    { d: 1, w: 2, fn() {
+      const O = ['٠', '١', '٢', 'عدد لا نهائي'];
+      return build({ cat: 'apply', d: 1, nOpts: 4, fixedOrder: true, order: O, prompt: `ترسم مهندسة مستقيمًا يمر بنقطة ${L('C')} لا تقع على ${L('AB')} ويوازي ${L('AB')}. كم مستقيمًا مختلفًا يمكنها رسمه بهذا الشرط؟`, correct: '١', wrongs: O.filter(x => x !== '١'), hint: 'مسلّمة التوازي.', explain: 'يوجد مستقيم واحد فقط (مسلّمة التوازي ٢٫٣).' });
+    } },
+    { d: 2, w: 3, fn() {
+      const k = pick(['co', 'ai', 'ae', 'ci']), ok = Math.random() < 0.5, v1 = rnd(40, 140), v1b = v1 === 90 ? 70 : v1;
+      const v2 = k === 'ci' ? (ok ? 180 - v1b : v1b) : (ok ? v1b : (v1b + pick([-1, 1]) * rnd(6, 25))), c = ok ? YN3[0] : YN3[1];
+      return build({ cat: 'apply', d: 2, nOpts: 3, fixedOrder: true, order: YN3, prompt: `في هيكل معدني يقطع قضيب مائل قضيبين، وقياس زاويتين ${NMP[k]} هما ${dg(v1b)} و${dg(v2)}. هل القضيبان متوازيان؟`, correct: c, wrongs: YN3.filter(x => x !== c),
+        hint: k === 'ci' ? 'المتحالفتان يلزم أن يكون مجموعهما ١٨٠°.' : 'يلزم تساوي القياسين.', explain: ok ? `${k === 'ci' ? 'المجموع ' + dg(180) : 'القياسان متساويان'}؛ فالقضيبان متوازيان (${JC[k]}).` : `${k === 'ci' ? 'المجموع ' + dg(v1b + v2) + ' وليس ١٨٠°' : 'القياسان غير متساويين'}؛ فالقضيبان غير متوازيين.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const m = mkAlg('eq');
+      return build({ cat: 'apply', d: 3, nOpts: 4, prompt: `ثُبّتت ألواح خشبية بين وتدين فكانت زاويتان ${TN[m.k]} قياساهما ${angE(m.p[0], m.a1, m.b1)} و${angE(m.p[1], m.a2, m.b2)}. أوجد ${L('x')} لتكون الأوتاد متوازية.`, extra: algExtra(m), correct: L(String(m.x)), wrongs: nw(m.x, xCands(m)),
+        hint: 'لتوازي الوتدين يجب أن يتطابق قياسا الزاويتين.', explain: `${solveTxt(m)}.` });
+    } }
+  ];
+
+  // ============ 5) اكتشف الخطأ ============
+  const MIS = [
+    { s: 'إذا كانت الزاويتان المتحالفتان متطابقتين فالمستقيمان متوازيان.', c: 'المتحالفتان يجب أن تكونا متكاملتين (مجموعهما ١٨٠°)', w: ['المتحالفتان يجب أن تكونا متتامتين', 'لا يمكن إثبات التوازي أبدًا بالمتحالفتين', 'لا خطأ في العبارة'] },
+    { s: 'يمكن رسم مستقيمين مختلفين يوازيان مستقيمًا معلومًا ويمران بنقطة لا تقع عليه.', c: 'يوجد مستقيم واحد فقط بهذا الشرط (مسلّمة التوازي)', w: ['يوجد ثلاثة مستقيمات بهذا الشرط', 'لا يوجد أي مستقيم بهذا الشرط', 'لا خطأ في العبارة'] },
+    { s: 'إذا كان مستقيمان عموديين على قاطع واحد فهما متقاطعان.', c: 'يكونان متوازيين (عكس نظرية القاطع العمودي)', w: ['يكونان متخالفين', 'يكونان متطابقين', 'لا خطأ في العبارة'] },
+    { s: 'المستقيمان متوازيان لأنهما يبدوان كذلك في الشكل.', c: 'لإثبات التوازي نحتاج إلى علاقة بين أزواج الزوايا (تطابق أو تكامل)', w: ['يكفي أن يبدو المستقيمان متوازيين في الشكل', 'يكفي أن يكونا متساويي الطول', 'لا خطأ في العبارة'] },
+    { s: 'إذا كانت الزاويتان المتناظرتان متكاملتين فالمستقيمان متوازيان.', c: 'يجب أن تكون المتناظرتان متطابقتين', w: ['يجب أن تكونا متتامتين', 'المتناظرتان لا تثبتان التوازي', 'لا خطأ في العبارة'] },
+    { s: 'بما أن الزاويتين المتقابلتين بالرأس متطابقتان فالمستقيمان متوازيان.', c: 'المتقابلتان بالرأس متطابقتان دائمًا، فلا تثبتان التوازي', w: ['المتقابلتان بالرأس متكاملتان دائمًا', 'المتقابلتان بالرأس تثبتان التوازي عندما تكونان حادتين', 'لا خطأ في العبارة'] },
+    { s: 'عكس نظرية المتبادلتين داخليًا يقول إن المتبادلتين داخليًا متتامتان إذا كان المستقيمان متوازيين.', c: 'المتبادلتان داخليًا متطابقتان (وليستا متتامتين)', w: ['المتبادلتان داخليًا متكاملتان', 'المتبادلتان داخليًا مجموعهما ٣٦٠°', 'لا خطأ في العبارة'] }
+  ];
+  const GEN_ERR = [
+    { d: 1, w: 3, fn() {
+      const p = shufP(pick(NAMED)), k = edgeOf(p[0], p[1]).t, ao = Math.random() < 0.5, ok = Math.random() < 0.5, shown = ok ? k : pick(T4K.filter(x => x !== k));
+      return build({ cat: 'error', d: 1, nOpts: 2, fixedOrder: true, order: ['صحيح', 'خاطئ'], prompt: `عُلم أن ${stmt(p[0], p[1], shown)}. كتب طالب أن ${QR} بحسب ${JC[shown]}. هل المبرر صحيح؟`, extra: noFig(p, ao), correct: ok ? 'صحيح' : 'خاطئ', wrongs: [ok ? 'خاطئ' : 'صحيح'],
+        hint: `${pairTxt(p)}: داخلية أم خارجية؟ وفي أي جهة؟`, explain: ok ? `صحيح: ${pairTxt(p)} ${NMP[k]} (${JC[k]}).` : `خاطئ؛ ${pairTxt(p)} ${NMP[k]}، والمبرر الصحيح ${JC[k]}.` });
+    } },
+    { d: 1, w: 3, fn() {
+      const it = pick(MIS);
+      return build({ cat: 'error', d: 1, nOpts: 4, prompt: `قال طالب: «${it.s}»<br>ما الخطأ في كلامه؟`, correct: it.c, wrongs: it.w, hint: 'تذكّر العكوس والمسلّمات.', explain: it.c + '.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const p = shufP(pick(VERT)), ao = Math.random() < 0.5;
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `كتب طالب: بما أن ${an(p[0])} ≅ ${an(p[1])} فإن ${QR}. ما الخطأ؟`, extra: noFig(p, ao), correct: `${pairTxt(p)} متقابلتان بالرأس فهما متطابقتان دائمًا، ولا تثبتان التوازي`,
+        wrongs: [`${pairTxt(p)} متناظرتان ويثبت تطابقهما التوازي`, 'لا يمكن إثبات التوازي بالزوايا إطلاقًا', 'لا خطأ في استنتاجه'], hint: 'هل تعتمد العلاقة على التوازي؟', explain: 'الزاويتان المتقابلتان بالرأس متطابقتان دائمًا، فلا تعطيان معلومة عن التوازي.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const p = shufP(pick(NAMED)), k = edgeOf(p[0], p[1]).t, ao = Math.random() < 0.5, A = rnd(35, 80), v1 = valOf(p[0], A, ao), ok = Math.random() < 0.5;
+      const v2 = k === 'ci' ? (ok ? 180 - v1 : v1) : (ok ? v1 : v1 + (v1 < 90 ? 12 : -12));
+      return build({ cat: 'error', d: 2, nOpts: 2, fixedOrder: true, order: ['صحيح', 'خاطئ'], prompt: `قطع القاطع ${L('t')} المستقيمين ${L('q')} و${L('r')}، وكان ${L(`m∠${p[0]} = ${v1}°`)} و${L(`m∠${p[1]} = ${v2}°`)}. استنتج طالب أن ${QR}. هل استنتاجه صحيح؟`, extra: noFig(p, ao), correct: ok ? 'صحيح' : 'خاطئ', wrongs: [ok ? 'خاطئ' : 'صحيح'],
+        hint: `${pairTxt(p)} ${NMP[k]}: ${k === 'ci' ? 'يلزم مجموع ١٨٠°' : 'يلزم تساوي القياسين'}.`,
+        explain: ok ? `صحيح: ${pairTxt(p)} ${NMP[k]} ${k === 'ci' ? 'ومجموعهما ' + dg(180) : 'ومتساويتان'}.` : `خاطئ: ${k === 'ci' ? 'المتحالفتان مجموعهما ' + dg(v1 + v2) + ' وليس ١٨٠°' : 'المتبادلتان أو المتناظرتان قياساهما ' + dg(v1) + ' و' + dg(v2) + ' غير متساويين'}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const m = mkAlg('any'), good = m.eqT ? eqL(m) : sumL(m, 180), bad = m.eqT ? sumOf(m, 180) : eqOf(m);
+      return build({ cat: 'error', d: 3, nOpts: 4, prompt: `${algBase(m)}. لإيجاد ${L('x')} الذي يجعل ${QR} كتب طالب المعادلة ${bad}. ما الخطأ؟`, extra: algExtra(m),
+        correct: `${pairTxt(m.p)} ${TN[m.k]}، والشرط الصحيح للتوازي ${m.eqT ? 'التساوي' : 'أن يكون المجموع ١٨٠'}: ${good}`,
+        wrongs: ['الزاويتان متتامتان فمجموعهما ٩٠°', 'يجب طرح التعبيرين وجعل الناتج صفرًا دائمًا', 'لا خطأ في المعادلة'], hint: `${pairTxt(m.p)} ${TN[m.k]}: ما شرط التوازي؟`, explain: `${pairTxt(m.p)} ${TN[m.k]} (${JC[m.k]}).` });
+    } },
+    { d: 3, w: 2, fn() {
+      const m = mkAlg('eq');
+      return build({ cat: 'error', d: 3, nOpts: 4, prompt: `${algBase(m)}. وجد طالب ${L('x = ' + m.x)} وكتب: «إذن ${mm(m.p[1])} = ${m.x}°، والمستقيمان متوازيان». ما الخطأ؟`, extra: algExtra(m), correct: `قياس الزاوية ليس ${L('x')}؛ يجب التعويض بقيمة ${L('x')} في تعبير الزاوية`,
+        wrongs: ['يجب أن يكون مجموع الزاويتين ١٨٠°', 'لا يمكن إثبات التوازي بالجبر', 'لا خطأ في استنتاجه'], hint: 'المطلوب قياس الزاوية.', explain: `${mm(m.p[1])} = ${L('(' + ex(m.a2, m.b2) + ')°')} = ${dg(m.v2)}.` });
+    } }
+  ];
+
+  // ============ 6) مفاهيم وبرهان ============
+  const TERMS = [['Parallel Postulate', 'مسلّمة التوازي'], ['Converse of the Corresponding Angles Postulate', 'عكس مسلّمة الزاويتين المتناظرتين'], ['Converse of the Alternate Exterior Angles Theorem', 'عكس نظرية الزاويتين المتبادلتين خارجيًا'],
+    ['Converse of the Consecutive Interior Angles Theorem', 'عكس نظرية الزاويتين المتحالفتين'], ['Converse of the Alternate Interior Angles Theorem', 'عكس نظرية الزاويتين المتبادلتين داخليًا'], ['Converse of the Perpendicular Transversal Theorem', 'عكس نظرية القاطع العمودي']];
+  const CONCEPTS = [
+    { d: 1, q: 'ما نص <b>عكس مسلّمة الزاويتين المتناظرتين</b>؟', c: 'إذا قطع قاطع مستقيمين ونتجت زاويتان متناظرتان متطابقتان فالمستقيمان متوازيان', w: ['إذا قطع قاطع مستقيمين متوازيين فالمتناظرتان متطابقتان', 'إذا نتجت زاويتان متناظرتان متكاملتان فالمستقيمان متوازيان', 'إذا قطع قاطع مستقيمين فالمتناظرتان متطابقتان دائمًا'], h: 'الاتجاه معكوس: العلاقة ⟸ التوازي.', e: 'مسلّمة ٢٫٢: تطابق المتناظرتين يثبت التوازي.' },
+    { d: 1, q: 'ما نص <b>مسلّمة التوازي</b>؟', c: 'يوجد مستقيم واحد فقط يمر بنقطة لا تقع على مستقيم معلوم ويوازيه', w: ['يوجد مستقيمان يمران بنقطة خارجية ويوازيان المستقيم المعلوم', 'لا يوجد مستقيم يمر بنقطة خارجية ويوازي المستقيم المعلوم', 'كل المستقيمات المارة بالنقطة توازي المستقيم المعلوم'], h: 'مستقيم وحيد.', e: 'المسلّمة ٢٫٣: مستقيم واحد فقط.' },
+    { d: 1, q: 'ما نص <b>عكس نظرية الزاويتين المتحالفتين</b>؟', c: 'إذا نتجت زاويتان متحالفتان متكاملتان فالمستقيمان متوازيان', w: ['إذا نتجت زاويتان متحالفتان متطابقتان فالمستقيمان متوازيان', 'إذا نتجت زاويتان متحالفتان متتامتان فالمستقيمان متوازيان', 'المتحالفتان لا تثبتان التوازي'], h: 'مجموعهما ١٨٠°.', e: 'نظرية ٢٫٦.' },
+    { d: 1, q: 'ما نص <b>عكس نظرية القاطع العمودي</b>؟', c: 'إذا قطع قاطع مستقيمين في مستوى وكان عموديًا على كل منهما فالمستقيمان متوازيان', w: ['إذا كان القاطع عموديًا على أحد المستقيمين فهو يوازي الآخر', 'إذا كان المستقيمان متوازيين فالقاطع عمودي عليهما دائمًا', 'المستقيمان العموديان على قاطع واحد متقاطعان'], h: 'نظرية ٢٫٨.', e: 'مستقيمان عموديان على قاطع واحد في مستوى متوازيان.' },
+    { d: 1, q: 'ما نص <b>عكس نظرية الزاويتين المتبادلتين داخليًا</b>؟', c: 'إذا نتجت زاويتان متبادلتان داخليًا متطابقتان فالمستقيمان متوازيان', w: ['إذا نتجت زاويتان متبادلتان داخليًا متكاملتان فالمستقيمان متوازيان', 'المتبادلتان داخليًا متطابقتان دائمًا', 'إذا نتجت زاويتان متبادلتان داخليًا متتامتان فالمستقيمان متوازيان'], h: 'نظرية ٢٫٧.', e: 'تطابق المتبادلتين داخليًا يثبت التوازي.' },
+    { d: 2, q: 'ما الفرق بين نظرية المتبادلتين داخليًا وعكسها؟', c: 'النظرية تبدأ من التوازي لتستنتج التطابق، والعكس يبدأ من التطابق ليستنتج التوازي', w: ['لا فرق بينهما', 'النظرية تبدأ من التطابق، والعكس يبدأ من التوازي', 'العكس يتحدث عن المتحالفتين فقط'], h: 'ماذا نفترض وماذا نستنتج؟', e: 'العكس يقلب الفرض والنتيجة.' },
+    { d: 2, q: 'أي أزواج الزوايا الآتية لا تفيد في إثبات توازي مستقيمين؟', c: 'الزاويتان المتقابلتان بالرأس', w: ['الزاويتان المتناظرتان', 'الزاويتان المتبادلتان داخليًا', 'الزاويتان المتحالفتان'], h: 'أي علاقة صحيحة دائمًا؟', e: 'المتقابلتان بالرأس متطابقتان دائمًا ولا علاقة لها بالتوازي.' },
+    { d: 2, q: 'ما الأدوات المستعملة في إنشاء مستقيم يوازي مستقيمًا معلومًا ويمر بنقطة خارجه؟', c: 'مسطرة وفرجار', w: ['منقلة فقط', 'مثلث وشاقول', 'ميزان ماء'], h: 'إنشاء هندسي.', e: 'نرسم بالمسطرة وننقل الزاوية بالفرجار.' },
+    { d: 2, q: 'في الإنشاء الهندسي للمستقيم الموازي، ما الزاويتان المتناظرتان اللتان نجعلهما متطابقتين؟', c: `${L('∠ECD')} و${L('∠CAB')}`, w: [`${L('∠ECD')} و${L('∠ACD')}`, `${L('∠CAB')} و${L('∠ABC')}`, `${L('∠MAN')} و${L('∠EDC')}`], h: 'انظر إلى الخطوة ٣.', e: 'ننقل الزاوية CAB إلى C فنحصل على ECD المتناظرة معها.' },
+    { d: 2, q: 'ما المسلّمة التي تبرّر أن ' + L('AB ∥ CD') + ' في الإنشاء الهندسي بعد أن أصبحت ' + L('∠ECD ≅ ∠CAB') + '؟', c: 'عكس مسلّمة الزاويتين المتناظرتين', w: ['مسلّمة التوازي', 'عكس نظرية القاطع العمودي', 'مسلّمة المنقلة'], h: 'الزاويتان متناظرتان ومتطابقتان.', e: 'المتناظرتان المتطابقتان تثبتان التوازي.' },
+    { d: 3, q: 'لماذا توضّح مسلّمة التوازي أن المستقيم الموازي الناتج من الإنشاء وحيد؟', c: 'لأنها تنص على وجود مستقيم واحد فقط يمر بالنقطة ويوازي المستقيم المعلوم', w: ['لأن الإنشاء يعطي نتائج مختلفة في كل مرة', 'لأن النقطة تقع على المستقيم', 'لأن الفرجار يرسم قوسًا واحدًا فقط'], h: 'الإنشاء يبيّن الوجود، والمسلّمة تؤكد الوحدانية.', e: 'الإنشاء يبيّن أن المستقيم الموازي موجود، والمسلّمة ٢٫٣ تؤكد أنه وحيد.' },
+    { d: 3, q: 'هل يكفي أن تكون الزاويتان المتبادلتان داخليًا غير متطابقتين لنقول إن المستقيمين غير متوازيين؟', c: 'نعم؛ لأنه لو كانا متوازيين لتطابقت المتبادلتان داخليًا', w: ['لا؛ فقد يكون المستقيمان متوازيين رغم ذلك', 'نعم؛ لأن المتبادلتين تكونان متتامتين دائمًا', 'لا؛ فالمتبادلتان لا علاقة لهما بالتوازي'], h: 'استعمل نظرية المتبادلتين داخليًا.', e: 'لو كان المستقيمان متوازيين لتطابقت المتبادلتان داخليًا؛ فعدم تطابقهما يدل على عدم التوازي.' },
+    { d: 3, q: 'مسلّمة التوازي ٢٫٣ تُعدّ من مسلّمات من؟', c: 'إقليدس', w: ['فيثاغورس', 'طاليس', 'أرخميدس'], h: 'مؤسس الهندسة الحديثة.', e: 'المسلّمة ٢٫٣ من مسلّمات إقليدس الخمس الأساسية.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: c.q, correct: c.c, wrongs: c.w, hint: c.h, explain: c.e }) }));
+  GEN_CONCEPTS.push({ d: 1, w: 2, fn() {
+    const toAr = Math.random() < 0.5, t = pick(TERMS);
+    return toAr ? build({ cat: 'concepts', d: 1, nOpts: 4, prompt: `ما الترجمة العربية للمصطلح ${L(t[0])}؟`, correct: t[1], wrongs: TERMS.filter(x => x !== t).map(x => x[1]), hint: 'Converse تعني عكس، وPostulate تعني مسلّمة.', explain: `${L(t[0])} = ${t[1]}.` })
+      : build({ cat: 'concepts', d: 1, nOpts: 4, prompt: `ما المصطلح الإنجليزي لـ «${t[1]}»؟`, correct: L(t[0]), wrongs: TERMS.filter(x => x !== t).map(x => L(x[0])), hint: 'Postulate مسلّمة، Theorem نظرية، Converse عكس.', explain: `${t[1]} = ${L(t[0])}.` });
+  } });
+  const PF_POOL = ['معطى', JR.vert, 'خاصية التعدي للتطابق', 'عكس مسلّمة الزاويتين المتناظرتين', 'زاويتان متجاورتان على مستقيم', 'نظرية تطابق المكمّلات', 'تعريف المستقيمين المتعامدين', 'الزوايا القائمة متطابقة'];
+  const CV = 'عكس مسلّمة الزاويتين المتناظرتين';
+  const PROOFS = [
+    { g: 'النظرية ٢٫٧ (عكس المتبادلتين داخليًا)', h: '∠3 ≅ ∠5', rows: [['∠3 ≅ ∠5', 'معطى'], ['∠5 ≅ ∠7', JR.vert], ['∠3 ≅ ∠7', 'خاصية التعدي للتطابق'], ['q ∥ r', CV]], hl: [3, 5, 7] },
+    { g: 'النظرية ٢٫٧ (عكس المتبادلتين داخليًا)', h: '∠4 ≅ ∠6', rows: [['∠4 ≅ ∠6', 'معطى'], ['∠6 ≅ ∠8', JR.vert], ['∠4 ≅ ∠8', 'خاصية التعدي للتطابق'], ['q ∥ r', CV]], hl: [4, 6, 8] },
+    { g: 'النظرية ٢٫٥ (عكس المتبادلتين خارجيًا)', h: '∠1 ≅ ∠7', rows: [['∠1 ≅ ∠7', 'معطى'], ['∠7 ≅ ∠5', JR.vert], ['∠1 ≅ ∠5', 'خاصية التعدي للتطابق'], ['q ∥ r', CV]], hl: [1, 5, 7] },
+    { g: 'النظرية ٢٫٥ (عكس المتبادلتين خارجيًا)', h: '∠2 ≅ ∠8', rows: [['∠2 ≅ ∠8', 'معطى'], ['∠8 ≅ ∠6', JR.vert], ['∠2 ≅ ∠6', 'خاصية التعدي للتطابق'], ['q ∥ r', CV]], hl: [2, 6, 8] },
+    { g: 'النظرية ٢٫٦ (عكس المتحالفتين)', h: 'm∠4 + m∠5 = 180°', rows: [['m∠4 + m∠5 = 180°', 'معطى'], ['m∠5 + m∠8 = 180°', 'زاويتان متجاورتان على مستقيم'], ['∠4 ≅ ∠8', 'نظرية تطابق المكمّلات'], ['q ∥ r', CV]], hl: [4, 5, 8] },
+    { g: 'النظرية ٢٫٦ (عكس المتحالفتين)', h: 'm∠3 + m∠6 = 180°', rows: [['m∠3 + m∠6 = 180°', 'معطى'], ['m∠6 + m∠7 = 180°', 'زاويتان متجاورتان على مستقيم'], ['∠3 ≅ ∠7', 'نظرية تطابق المكمّلات'], ['q ∥ r', CV]], hl: [3, 6, 7] }
+  ];
+  GEN_CONCEPTS.push({ d: 3, w: 4, fn() {
+    const P = pick(PROOFS), ao = Math.random() < 0.5, bl = rnd(1, P.rows.length - 1), correct = P.rows[bl][1];
+    const rows = P.rows.map((r, i) => [r[0], i === bl ? '؟' : r[1]]);
+    return build({ cat: 'concepts', d: 3, nOpts: 4, prompt: `برهان ${P.g}: المعطيات ${L(P.h)}، والمطلوب ${QR}. ما المبرر الذي يكمل الخطوة رقم ${adg(bl + 1)}؟`, extra: `${noFig(P.hl, ao)}${pfRows(rows)}`, correct, wrongs: PF_POOL.filter(x => x !== correct),
+      hint: `انظر إلى العبارة في الخطوة ${adg(bl + 1)}.`, explain: `الخطوة ${adg(bl + 1)}: ${L(P.rows[bl][0])} — ${correct}.` });
+  } });
+
+  const GENS = { conv: GEN_CONV, lines: GEN_LINES, alg: GEN_ALG, apply: GEN_APPLY, error: GEN_ERR, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    return g.fn();
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'conv', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
+  }
+
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
+  }
+
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
+  }
+
+  function startQuiz() {
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
+    showQuestion();
+  }
+
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
+  function showQuestion() {
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
+    });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
+
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
+
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
+    }
+  }
+
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}${q.extra || ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
+  function resetQuiz() {
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
+</script>
+
+<!-- SM-AUTO-INJECTED:START:admin-scripts -->
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "app_web";
+    const currentFileName = "proving_parallel.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+    let smSearchPagesData = [];
+
+    function smGoToPage(file) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(file);
+        } else {
+            window.location.href = file;
+        }
+    }
+
+    function smNormalizeSearchText(s) {
+        if (!s) return "";
+        return String(s)
+            .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+            .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+            .replace(/[\u064B-\u0652\u0670]/g, "")
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .toLowerCase()
+            .replace(/[\s\-_.,\/]+/g, "")
+            .trim();
+    }
+
+    function smToggleSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (!overlay) return;
+        if (overlay.classList.contains("open")) { smCloseSearchPanel(); return; }
+        overlay.classList.add("open");
+        smPerformSearch("");
+        setTimeout(function () { const inp = document.getElementById("smSearchInput"); if (inp) inp.focus(); }, 50);
+    }
+
+    function smCloseSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (overlay) overlay.classList.remove("open");
+    }
+
+    function smPerformSearch(query) {
+        const resultsEl = document.getElementById("smSearchResults");
+        if (!resultsEl) return;
+        const nq = smNormalizeSearchText(query);
+        const searchable = (smSearchPagesData || []).filter(function (p) { return p.searchEnabled !== false && p.file !== "searchbyrostrick.html"; });
+        let matches;
+        if (!nq) {
+            matches = searchable.filter(function (p) { return !p.hidden; });
+        } else {
+            matches = searchable.filter(function (p) {
+                const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+                return candidates.some(function (c) { return smNormalizeSearchText(c).indexOf(nq) !== -1; });
+            });
+        }
+        if (matches.length === 0) {
+            resultsEl.innerHTML = "<li class=\"sm-search-empty\">لا توجد نتائج مطابقة</li>";
+            return;
+        }
+        resultsEl.innerHTML = matches.map(function (p) {
+            const icon = p.icon || "fa-solid fa-file";
+            const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "<li class=\"sm-search-result-item\" onclick=\"smCloseSearchPanel(); smGoToPage('" + p.file + "');\"><i class=\"" + icon + "\"></i><span>" + title + "</span></li>";
+        }).join("");
+    }
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        smSearchPagesData = Array.isArray(orderedPages) ? orderedPages : [];
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+        smUpdateBottomNavFit();
+    }
+
+    function smUpdateBottomNavFit() {
+        const bottomNavbar = document.getElementById("bottomNavbar");
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (!bottomNavbar || !bottomNavList) return;
+        bottomNavList.classList.remove("sm-nav-fit");
+        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
+        bottomNavList.classList.toggle("sm-nav-fit", fits);
+    }
+    window.addEventListener("resize", smUpdateBottomNavFit);
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+<!-- SM-AUTO-INJECTED:END:admin-scripts -->
+</body>
+</html>
