@@ -52,8 +52,27 @@
           "name": "المستقيمان والقاطع",
           "href": "lines_transversal.html",
           "type": "link"
+        },
+        {
+          "name": "الزوايا والمستقيمات المتوازية",
+          "href": "parallel_angles.html",
+          "type": "link"
+        },
+        {
+          "name": "إثبات توازي مستقيمين",
+          "href": "proving_parallel.html",
+          "type": "link"
+        },
+        {
+          "name": "ميل المستقيم",
+          "href": "slope_of_line.html",
+          "type": "link"
         }
       ]
+    },
+    {
+      "title": "فصل جديد",
+      "lessons": []
     }
   ]
 }
