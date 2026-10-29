@@ -24,6 +24,14 @@
     "searchNames": []
   },
   {
+    "file": "a123test.html",
+    "title": "a123test",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "algebraic_proof.html",
     "title": "البرهان الجبري",
     "icon": "fa-solid fa-file",
@@ -98,6 +106,14 @@
   {
     "file": "logic.html",
     "title": "المنطق",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "parallel_angles.html",
+    "title": "الزوايا والمستقيمات المتوازية",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
