@@ -144,6 +144,14 @@
     "searchNames": []
   },
   {
+    "file": "slope_of_line.html",
+    "title": "ميل المستقيم",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "snake3d.html",
     "title": "snake3d",
     "icon": "fa-solid fa-file",
