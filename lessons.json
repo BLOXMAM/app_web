@@ -67,6 +67,16 @@
           "name": "ميل المستقيم",
           "href": "slope_of_line.html",
           "type": "link"
+        },
+        {
+          "name": "صيغ معادلة المستقيم",
+          "href": "eq_of_line.html",
+          "type": "link"
+        },
+        {
+          "name": "الأعمدة والمسافة",
+          "href": "perp_distance.html",
+          "type": "link"
         }
       ]
     }
