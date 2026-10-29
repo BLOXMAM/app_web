@@ -8,6 +8,14 @@
     "searchNames": []
   },
   {
+    "file": "proving_parallel.html",
+    "title": "proving_parallel",
+    "icon": "fa-solid fa-file",
+    "hidden": false,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
