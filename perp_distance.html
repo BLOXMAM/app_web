@@ -1,0 +1,1669 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تحدي الأعمدة والمسافة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #EEF2FF;
+      --card-bg: #FFFFFF;
+      --text: #1E1B4B;
+      --subtext: #64748B;
+      --w1: #F1F5F9;
+      --w2: #E2E8F0;
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --success: #16A34A;
+      --danger: #DC2626;
+      --warn: #D97706;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      width: 100%;
+      max-width: 580px;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(30, 27, 75, 0.12);
+      border: 1px solid var(--w2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    h1 { text-align: center; font-size: 1.7rem; margin-bottom: 8px; color: var(--text); padding: 0 34px; }
+    p.subtitle { text-align: center; color: var(--subtext); font-size: 0.92rem; margin-bottom: 24px; line-height: 1.6; }
+    .section-title { font-size: 1.02rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+
+    /* زر الملخص (i) */
+    .info-btn {
+      position: absolute; top: 16px; left: 16px; z-index: 5;
+      width: 42px; height: 42px; border-radius: 50%;
+      border: 2px solid var(--primary); background: var(--card-bg); color: var(--primary);
+      font-size: 1.25rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .info-btn:hover { background: var(--primary); color: #fff; transform: scale(1.06); }
+    .info-btn .i-glyph { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; line-height: 1; }
+
+    .mode-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .mode-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 12px 8px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s; font-size: 0.9rem;
+    }
+    .mode-btn small { display: block; font-weight: 500; font-size: .7rem; opacity: .75; margin-top: 2px; }
+    .mode-btn.active {
+      background: var(--primary); border-color: var(--primary-dark); color: #ffffff;
+      box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .cats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .cat-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text);
+      padding: 10px 6px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: all 0.2s;
+      font-size: 0.82rem; line-height: 1.4;
+    }
+    .cat-btn.active { background: var(--primary); border-color: var(--primary-dark); color: #fff; box-shadow: 0 0 12px rgba(79, 70, 229, 0.3); }
+
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+    .level-card {
+      background: var(--w1); border: 2px solid transparent; padding: 14px; border-radius: 14px;
+      cursor: pointer; text-align: center; transition: all 0.2s; color: var(--text);
+    }
+    .level-card h4 { font-size: 1rem; margin-bottom: 4px; }
+    .level-card span { font-size: 0.75rem; color: var(--subtext); }
+    .level-card.active { background: var(--w2); border-color: var(--primary); }
+
+    .custom-options-box { background: var(--w1); border-radius: 14px; padding: 16px; margin-bottom: 28px; }
+    .custom-input {
+      width: 100%; padding: 12px; border-radius: 10px; border: 2px solid var(--w2);
+      background: var(--card-bg); color: var(--text); font-size: 1rem; font-weight: bold; text-align: center; margin-bottom: 16px;
+    }
+    .custom-input:focus { outline: none; border-color: var(--primary); }
+    input { -webkit-user-select: text !important; user-select: text !important; }
+
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 22px; font-size: .92rem; font-weight: 700;
+    }
+    .switch { position: relative; width: 46px; height: 26px; flex: none; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .switch span { position: absolute; inset: 0; background: var(--w2); border-radius: 26px; cursor: pointer; transition: .2s; }
+    .switch span::before { content: ""; position: absolute; height: 20px; width: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+    .switch input:checked + span { background: var(--primary); }
+    .switch input:checked + span::before { transform: translateX(-20px); }
+
+    .btn-start {
+      width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff;
+      border: none; padding: 16px; border-radius: 14px; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-start:active { transform: scale(0.98); }
+    .btn-ghost {
+      width: 100%; background: var(--w1); color: var(--text); border: 2px solid var(--w2);
+      padding: 13px; border-radius: 14px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+    }
+
+    .quiz-box { display: none; }
+    .header-stats {
+      display: flex; justify-content: space-between; align-items: center; margin: 44px 0 14px;
+      background: var(--w1); color: var(--text); padding: 12px 18px; border-radius: 12px; font-size: 0.9rem; gap: 8px;
+    }
+    .progress-dots { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+    .dot { flex: 1; min-width: 6px; height: 6px; border-radius: 4px; background: var(--w2); }
+    .dot.cur { background: var(--primary); }
+    .dot.ok { background: var(--success); }
+    .dot.bad { background: var(--danger); }
+
+    .tag-row { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 14px; flex-wrap: wrap; }
+    .cat-tag { font-size: 0.72rem; font-weight: bold; color: var(--primary-dark); background: var(--w2); padding: 4px 12px; border-radius: 20px; }
+    .diff-tag { font-size: 0.72rem; font-weight: bold; color: var(--subtext); background: var(--w1); padding: 4px 12px; border-radius: 20px; }
+
+    .timer-bar-container { width: 100%; height: 6px; background: var(--w1); border-radius: 10px; margin-bottom: 22px; overflow: hidden; }
+    .timer-bar { height: 100%; background: var(--primary); width: 100%; transition: width 0.1s linear; }
+
+    .question-card { text-align: center; margin-bottom: 20px; }
+    .question-text { font-size: 1.12rem; font-weight: 700; line-height: 1.9; color: var(--text); word-break: break-word; text-align: right; }
+    .seq-box {
+      font-size: 1.9rem; font-weight: 900; letter-spacing: 1px; color: var(--text);
+      background: var(--w1); border-radius: 16px; padding: 18px 12px; margin-top: 12px; line-height: 1.7; word-break: break-word;
+    }
+    .seq-box .q { color: var(--primary); }
+    .seq-box.words { font-size: 1.2rem; }
+    .examples-box {
+      margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 12px 16px; text-align: right;
+      font-size: 1.05rem; font-weight: 700; line-height: 2;
+    }
+    .examples-box div { border-bottom: 1px dashed var(--w2); }
+    .examples-box div:last-child { border-bottom: none; }
+    .viz-box { margin-top: 12px; background: var(--w1); border-radius: 14px; padding: 10px; overflow-x: auto; }
+    .viz-box svg { width: 100%; height: auto; display: block; }
+    .viz-box table { width: 100%; border-collapse: collapse; font-size: .9rem; text-align: center; margin-bottom: 8px; }
+    .viz-box th, .viz-box td { padding: 6px 4px; border: 1px solid var(--w2); }
+    .viz-box th { background: var(--w2); }
+
+    .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .options-grid.text-options { grid-template-columns: 1fr; }
+    .option-btn {
+      background: var(--w1); border: 2px solid transparent; color: var(--text); padding: 16px;
+      font-size: 1.2rem; font-weight: bold; border-radius: 16px; cursor: pointer; transition: all 0.2s; word-break: break-word;
+    }
+    .option-btn.option-text { font-size: 0.97rem; font-weight: 500; text-align: right; padding: 14px 16px; line-height: 1.6; }
+    .option-btn:hover { background: var(--w2); }
+    .option-btn:disabled { cursor: default; }
+    .option-btn.correct { background-color: var(--w2) !important; border-color: var(--success) !important; color: var(--success) !important; }
+    .option-btn.wrong { background-color: var(--w2) !important; border-color: var(--danger) !important; color: var(--danger) !important; }
+    .option-btn.dim { opacity: .55; }
+
+    .tools-row { display: flex; gap: 10px; margin-top: 14px; }
+    .hint-btn {
+      flex: 1; background: var(--w1); color: var(--warn); border: 2px dashed var(--warn);
+      padding: 10px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: .92rem;
+    }
+    .hint-btn:disabled { opacity: .4; cursor: default; }
+    .hint-box {
+      margin-top: 12px; background: var(--w1); border-right: 4px solid var(--warn); border-radius: 10px;
+      padding: 10px 14px; font-size: .92rem; line-height: 1.8; display: none;
+    }
+    .feedback {
+      display: none; margin-top: 16px; border-radius: 14px; padding: 14px 16px; background: var(--w1);
+      border-right: 5px solid var(--success); font-size: .95rem; line-height: 1.9;
+    }
+    .feedback.bad { border-right-color: var(--danger); }
+    .feedback b.verdict { display: block; font-size: 1.05rem; margin-bottom: 4px; }
+    .feedback.ok b.verdict { color: var(--success); }
+    .feedback.bad b.verdict { color: var(--danger); }
+    .next-btn { display: none; margin-top: 12px; }
+
+    .toast {
+      position: fixed; bottom: -80px; left: 50%; transform: translateX(-50%); padding: 12px 28px; border-radius: 30px;
+      font-size: 1.05rem; font-weight: bold; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 4000;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center;
+    }
+    .toast.show { bottom: 30px; opacity: 1; }
+    .toast.toast-success { background: var(--success); }
+    .toast.toast-error { background: var(--danger); }
+
+    .result-box { display: none; text-align: center; }
+    .result-box h2 { margin-top: 36px; }
+    .result-score { font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
+    .badge { display: inline-block; padding: 8px 18px; border-radius: 20px; font-weight: bold; margin-bottom: 14px; background: var(--w1); color: var(--success); }
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 8px 0 18px; }
+    .stat { background: var(--w1); border-radius: 12px; padding: 10px 4px; }
+    .stat b { display: block; font-size: 1.3rem; }
+    .stat span { font-size: .72rem; color: var(--subtext); }
+    .cat-bars { text-align: right; margin-bottom: 18px; }
+    .cat-bar-row { display: flex; align-items: center; gap: 8px; font-size: .82rem; margin-bottom: 6px; }
+    .cat-bar-row .nm { width: 130px; flex: none; font-weight: 700; }
+    .cat-bar-row .bar { flex: 1; height: 10px; border-radius: 6px; background: var(--w2); overflow: hidden; }
+    .cat-bar-row .bar i { display: block; height: 100%; background: var(--success); }
+    .cat-bar-row .pc { width: 52px; text-align: left; color: var(--subtext); }
+    .review { text-align: right; margin-bottom: 18px; }
+    .review h3 { font-size: 1rem; margin-bottom: 10px; }
+    .rev-item { background: var(--w1); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: .88rem; line-height: 1.8; border-right: 4px solid var(--danger); }
+    .rev-item .rq { font-weight: 700; margin-bottom: 4px; }
+    .rev-item .yours { color: var(--danger); }
+    .rev-item .right { color: var(--success); }
+
+    /* نافذة ملخص الدرس */
+    .sheet-overlay {
+      position: fixed; inset: 0; background: rgba(15, 23, 42, .55); z-index: 3000; display: none;
+      align-items: flex-end; justify-content: center;
+    }
+    .sheet-overlay.open { display: flex; }
+    .sheet {
+      background: var(--card-bg); color: var(--text); width: 100%; max-width: 640px; max-height: 88vh;
+      border-radius: 24px 24px 0 0; display: flex; flex-direction: column; overflow: hidden;
+      animation: sheetUp .28s ease; border: 1px solid var(--w2);
+    }
+    @keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 8px; }
+    .sheet-head h3 { font-size: 1.1rem; }
+    .sheet-close { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--w1); color: var(--text); font-size: 1.1rem; cursor: pointer; }
+    .sheet-tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 10px; }
+    .sheet-tab {
+      background: var(--w1); color: var(--text); border: 2px solid transparent; border-radius: 20px;
+      padding: 6px 12px; font-size: .85rem; font-weight: 700; cursor: pointer;
+    }
+    .sheet-tab.active { background: var(--primary); color: #fff; }
+    .sheet-body { padding: 4px 20px 24px; overflow-y: auto; line-height: 1.95; font-size: .95rem; }
+    .sheet-body h4 { margin: 14px 0 6px; font-size: 1rem; color: var(--primary); }
+    .sheet-body p { margin-bottom: 8px; }
+    .sheet-body ul, .sheet-body ol { padding-right: 22px; margin-bottom: 8px; }
+    .def-card, .idea-card, .ex-card {
+      background: var(--w1); border-radius: 14px; padding: 12px 14px; margin: 10px 0; border-right: 5px solid var(--primary);
+    }
+    .def-card .term { font-weight: 900; color: var(--primary); font-size: 1.02rem; }
+    .def-card .en { font-size: .75rem; color: var(--subtext); margin-right: 6px; direction: ltr; display: inline-block; }
+    .idea-card { border-right-color: var(--warn); }
+    .idea-card b { color: var(--warn); }
+    .ex-card { border-right-color: var(--success); }
+    .ex-card .ex-t { font-weight: 800; margin-bottom: 4px; }
+    .steps { counter-reset: s; list-style: none; padding: 0 !important; }
+    .steps li { counter-increment: s; position: relative; padding: 8px 46px 8px 8px; background: var(--w1); border-radius: 12px; margin-bottom: 8px; }
+    .steps li::before {
+      content: counter(s, arabic-indic); position: absolute; right: 8px; top: 8px; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800;
+    }
+    .note { font-size: .82rem; color: var(--subtext); }
+
+    @media (max-width: 480px) {
+      .container { padding: 22px 16px; }
+      .seq-box { font-size: 1.45rem; }
+      .cats-grid { grid-template-columns: repeat(2, 1fr); }
+      h1 { font-size: 1.4rem; }
+    }
+
+    /* جداول الصواب وأشكال فن */
+    .tt { width: auto !important; margin: 0 auto 8px; direction: ltr; }
+    .tt th, .tt td { min-width: 52px; font-weight: 800; font-size: 1rem; }
+    .tt td.t { color: var(--success); }
+    .tt td.f { color: var(--danger); }
+    .tt td.qm { background: var(--w2); color: var(--primary); }
+    .tt th { font-family: Georgia, serif; font-style: italic; }
+    .pq-list { text-align: right; line-height: 2; font-weight: 700; font-size: 1.02rem; }
+    .pq-list b { color: var(--primary); font-family: Georgia, serif; font-style: italic; margin-left: 4px; }
+    .tt-mini { display: inline-table; margin: 6px 10px; }
+    .tt { border-collapse: collapse; text-align: center; }
+    .tt th, .tt td { border: 1px solid var(--w2); padding: 6px 8px; }
+    .tt th { background: var(--w2); }
+    .mode-btn.wide { grid-column: span 2; }
+    .venn-note { font-size: .8rem; color: var(--subtext); text-align: center; margin-top: 6px; }
+    .tt.sm th, .tt.sm td { min-width: 34px; padding: 5px 3px; font-size: .82rem; }
+
+    /* ===== البرهان الجبري: كسور وجداول البراهين ===== */
+    .fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 2px; font-size: .92em; line-height: 1.2; }
+    .fr > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px 1px; }
+    .fr > span:last-child { padding: 1px 3px 0; }
+    table.pf { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 4px 0; }
+    table.pf th { background: var(--w2); padding: 6px 4px; font-weight: 800; border: 1px solid var(--w2); }
+    table.pf td { border: 1px solid var(--w2); padding: 6px 6px; vertical-align: middle; }
+    table.pf td.n { width: 26px; text-align: center; color: var(--subtext); font-weight: 800; padding: 6px 2px; }
+    table.pf td.s { text-align: center; font-weight: 700; direction: ltr; }
+    table.pf td.s.ar { direction: rtl; }
+    table.pf td.j { text-align: right; }
+    table.pf .blank { display: inline-block; min-width: 40px; text-align: center; background: var(--w2); color: var(--primary); font-weight: 900; border-radius: 8px; padding: 2px 10px; }
+    table.pf.sm td, table.pf.sm th { padding: 4px 4px; font-size: .82rem; }
+    .given-box { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; font-weight: 700; line-height: 2; text-align: right; font-size: .98rem; }
+    .stmt-list { margin-top: 10px; background: var(--w1); border-radius: 12px; padding: 8px 12px; text-align: right; font-weight: 700; line-height: 2.1; }
+    table.pt td { font-size: .86rem; }
+    table.pt td:first-child { font-weight: 800; white-space: nowrap; }
+    table.pt td.eq { direction: rtl; text-align: right; font-weight: 600; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi+Fun:wght@400;700&display=swap">
+<!-- SM-AUTO-INJECTED:START:admin-styles -->
+<style id="admin-styles">
+        :root {
+            --header-bg-light: #ffffff;
+            --header-text-light: #333333;
+            --header-bg: var(--header-bg-light);
+            --header-text: var(--header-text-light);
+            --drawer-bg-light: #ffffff;
+            --drawer-text-light: #333333;
+            --drawer-bg: var(--drawer-bg-light);
+            --drawer-text: var(--drawer-text-light);
+        --primary: #4f46e5;
+        --primary-dark: #6366f1;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text: #0f172a;
+        --subtext: #64748b;
+        --w1: #f8fafc;
+        --w2: #e2e8f0;
+        }
+        [data-user-theme="dark"] {
+            --header-bg-dark: #1e1e1e;
+            --header-text-dark: #e0e0e0;
+            --header-bg: var(--header-bg-dark);
+            --header-text: var(--header-text-dark);
+            --drawer-bg-dark: #1e1e1e;
+            --drawer-text-dark: #e0e0e0;
+            --drawer-bg: var(--drawer-bg-dark);
+            --drawer-text: var(--drawer-text-dark);
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --success: #10b981;
+        --danger: #ef4444;
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #f8fafc;
+        --subtext: #94a3b8;
+        --w1: #334155;
+        --w2: #1e293b;
+        }
+        html {
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow-x: hidden !important;
+        }
+        * {
+            box-sizing: border-box !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+        }
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            padding-top: 56px !important;
+            width: 100% !important;
+            min-width: 100% !important;
+            max-width: 100% !important;
+            min-height: 100vh !important;
+            overflow-x: hidden !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+        }
+        header { position: fixed; top: 0; left: 0; z-index: 1000; background: var(--header-bg); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; color: var(--header-text); display: flex; align-items: center; justify-content: space-between; width: 100% !important; max-width: 100% !important; min-width: 100% !important; box-sizing: border-box; direction: rtl; gap: 15px; overflow: hidden !important; transition: background-color 0.3s, color 0.3s; }
+        .header-brand { display: flex; align-items: center; gap: 15px; width: auto; text-align: right; }
+        
+        .menu-btn-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            box-sizing: border-box;
+            transition: transform 0.15s ease;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        .menu-btn-container:active {
+            transform: scale(0.85);
+        }
+        .menu-bar-line {
+            width: 100%;
+            height: 3px;
+            background-color: var(--header-text);
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: right center;
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(1) {
+            transform: rotate(-45deg);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+        .menu-btn-container.active-icon .menu-bar-line:nth-child(3) {
+            transform: rotate(45deg);
+        }
+        
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1001; display: none; }
+        .drawer { position: fixed; top: 0; width: 280px; height: 100%; background: var(--drawer-bg); color: var(--drawer-text); z-index: 1002; transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); display: flex; flex-direction: column; right: -280px; }
+        .drawer.open { right: 0; }
+        .drawer-header { background: var(--drawer-bg); color: var(--drawer-text); height: 56px !important; line-height: 56px !important; padding: 0 15px !important; font-weight: bold; text-align: right; box-sizing: border-box; overflow: hidden !important; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .drawer-menu-container { flex: 1; overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+        .drawer-menu-container::-webkit-scrollbar { display: none; }
+        .drawer-menu { list-style: none; padding: 10px 0; margin: 0; direction: rtl; }
+        .drawer-item { padding: 15px 20px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--drawer-text); transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent; }
+        .drawer-item:hover { background-color: rgba(0,0,0,0.05); transform: translateX(-4px); }
+        .drawer-item:active { background-color: rgba(0,0,0,0.1) !important; transform: scale(0.98) !important; transition: transform 0.05s ease; }
+        .drawer-loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--drawer-text); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
+.dl123 {
+    background: transparent; border: none; color: var(--header-text); cursor: pointer;
+    font-size: 1.2rem; width: 38px; height: 38px; border-radius: 8px; display: inline-flex;
+    align-items: center; justify-content: center; transition: background-color 0.2s, transform 0.1s;
+    border: 1px solid rgba(255, 255, 255, 0.15); appearance: none; box-sizing: border-box;
+}
+.dl123:hover { background-color: rgba(0,0,0,0.08); }
+.dl123:active { transform: scale(0.9); }
+        .sm-search-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: none; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; box-sizing: border-box; }
+        .sm-search-overlay.open { display: flex; }
+        .sm-search-panel { width: 100%; max-width: 520px; background: var(--drawer-bg, #fff); color: var(--drawer-text, #333); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); overflow: hidden; max-height: 70vh; display: flex; flex-direction: column; }
+        .sm-search-bar { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.08); }
+        .sm-search-bar i.fa-magnifying-glass { color: #3498db; font-size: 1.1rem; }
+        .sm-search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 1rem; color: inherit; }
+        .sm-search-close { background: transparent; border: none; color: inherit; font-size: 1rem; cursor: pointer; opacity: 0.7; padding: 4px; }
+        .sm-search-close:hover { opacity: 1; }
+        .sm-search-results { list-style: none; margin: 0; padding: 6px 0; overflow-y: auto; }
+        .sm-search-result-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; transition: background-color 0.15s; }
+        .sm-search-result-item:hover, .sm-search-result-item:active { background-color: rgba(0,0,0,0.06); }
+        .sm-search-result-item i { color: #3498db; width: 20px; text-align: center; }
+        .sm-search-empty { padding: 22px 16px; text-align: center; color: var(--text-muted, #888); font-size: 0.9rem; }
+        .bottom-navbar { display: none; }
+        .bottom-navbar-list { list-style: none; margin: 0; padding: 0; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- SM-AUTO-INJECTED:END:admin-styles -->
+
+
+
+
+
+</head>
+<body>
+<!-- START ADMIN DRAWER -->
+<!-- SM-SEARCH-CONFIG:{"enabled":false,"action":"overlay","accent":"#3498db","position":"after-theme"} -->
+<header>
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <button class="menu-btn-container" id="menuBtnToggle" onclick="toggleDrawer()">
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+            <div class="menu-bar-line"></div>
+        </button>
+        <span id="pageMainHeader" style="font-weight:bold; font-size: 1.1rem; display: inline-block; vertical-align: middle;">perp_distance</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 8px;">
+    <div class="dl123" id="userThemeToggleBtn" onclick="toggleUserTheme()"><i class="fa-solid fa-moon"></i></div>
+    </div>
+</header>
+<div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer()"></div>
+<nav class="drawer" id="drawer">
+    <div class="drawer-header" id="drawerSideHeader">perp_distance</div>
+    <div id="drawerLoader" class="drawer-loader"></div>
+    <div class="drawer-menu-container">
+        <ul class="drawer-menu" id="drawerDynamicMenu"></ul>
+    </div>
+</nav>
+<nav class="bottom-navbar" id="bottomNavbar">
+    <ul class="bottom-navbar-list" id="bottomNavbarList"></ul>
+</nav>
+<div class="sm-search-overlay" id="smSearchOverlay" onclick="if(event.target===this) smCloseSearchPanel();">
+    <div class="sm-search-panel">
+        <div class="sm-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="smSearchInput" placeholder="ابحث عن صفحة..." oninput="smPerformSearch(this.value)" autocomplete="off">
+            <button type="button" class="sm-search-close" onclick="smCloseSearchPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <ul class="sm-search-results" id="smSearchResults"></ul>
+    </div>
+</div>
+<!-- END ADMIN DRAWER -->
+
+
+<div class="container">
+  <button class="info-btn" id="info-btn" onclick="openInfo()" aria-label="ملخص الدرس"><span class="i-glyph">i</span></button>
+
+  <!-- شاشة الإعدادات -->
+  <div id="setup-box">
+    <h1>تحدي الأعمدة والمسافة 📏</h1>
+    <p class="subtitle">الدرس ٢-٦ • الأعمدة والمسافة<br>اضغط على أيقونة (i) لمراجعة البعد بين نقطة ومستقيم وبين مستقيمين متوازيين وأمثلة الكتاب قبل البدء أو أثناء الحل</p>
+
+    <div class="section-title">1. اختر نمط التحدي:</div>
+    <div class="mode-grid" id="mode-grid">
+      <button class="mode-btn active" data-mode="dpl" onclick="setMode('dpl', this)">نقطة ومستقيم 📏<small>البعد = العمود</small></button>
+      <button class="mode-btn" data-mode="coord" onclick="setMode('coord', this)">المستوى الإحداثي 📐<small>معادلات وصيغة البعد</small></button>
+      <button class="mode-btn" data-mode="parl" onclick="setMode('parl', this)">مستقيمان متوازيان ↔️<small>المسافة بينهما</small></button>
+      <button class="mode-btn" data-mode="cons" onclick="setMode('cons', this)">الإنشاء والمحل الهندسي 🧭<small>خطوات ونظريات</small></button>
+      <button class="mode-btn" data-mode="apply" onclick="setMode('apply', this)">مسائل حياتية 🏗️<small>أنابيب وممرات</small></button>
+      <button class="mode-btn" data-mode="error" onclick="setMode('error', this)">اكتشف الخطأ 🔍<small>فهم أو حل خاطئ</small></button>
+      <button class="mode-btn wide" data-mode="concepts" onclick="setMode('concepts', this)">مفاهيم ومفردات 💡<small>تعاريف وصيغ</small></button>
+      <button class="mode-btn wide" data-mode="mixed" onclick="setMode('mixed', this)">منوع شامل 🧩<small>اختر الأقسام</small></button>
+    </div>
+
+    <div id="cats-wrapper" style="display: none;">
+      <div class="section-title">1.أ: اختر الأقسام المضمنة في التحدي:</div>
+      <div class="cats-grid" id="cats-container"></div>
+    </div>
+
+    <div class="section-title">2. حدد مستواك الحالي:</div>
+    <div class="levels-grid">
+      <div class="level-card active" onclick="selectLevel('weak', this)">
+        <h4>سهل جدًا</h4>
+        <span>5 أسئلة • وقت مفتوح</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('good', this)">
+        <h4>سهل</h4>
+        <span>10 أسئلة • 25 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('very_good', this)">
+        <h4>متوسط</h4>
+        <span>15 سؤال • 20 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" onclick="selectLevel('excellent', this)">
+        <h4>صعب</h4>
+        <span>20 سؤال • 15 ثانية/سؤال</span>
+      </div>
+      <div class="level-card" style="grid-column: span 2;" onclick="selectLevel('custom', this)">
+        <h4>مخصص ⚙️</h4>
+        <span>اختر عدد الأسئلة والوقت بنفسك</span>
+      </div>
+    </div>
+
+    <div id="custom-options" class="custom-options-box" style="display: none;">
+      <div class="section-title">عدد الأسئلة:</div>
+      <input type="number" id="custom-count" class="custom-input" min="1" max="60" value="10">
+
+      <div class="section-title">هل يوجد وقت محدد لكل سؤال؟</div>
+      <div class="mode-grid" style="margin-bottom: 16px;">
+        <button type="button" class="mode-btn active" id="custom-time-no" onclick="setCustomTimeMode(false)">بدون وقت</button>
+        <button type="button" class="mode-btn" id="custom-time-yes" onclick="setCustomTimeMode(true)">بوقت محدد</button>
+      </div>
+
+      <div id="custom-time-input-wrapper" style="display: none;">
+        <div class="section-title">الوقت بالثواني لكل سؤال:</div>
+        <input type="number" id="custom-time-seconds" class="custom-input" min="1" max="120" value="20" style="margin-bottom: 0;">
+      </div>
+    </div>
+
+    <label class="toggle-row">
+      <span>💡 السماح بالتلميحات أثناء الحل</span>
+      <span class="switch"><input type="checkbox" id="hints-on" checked><span></span></span>
+    </label>
+
+    <button class="btn-start" onclick="startQuiz()">ابدأ الاختبار الآن 🚀</button>
+  </div>
+
+  <!-- شاشة الاختبار -->
+  <div id="quiz-box" class="quiz-box">
+    <div class="header-stats">
+      <span>السؤال: <strong id="current-q">1</strong> من <strong id="total-q">10</strong></span>
+      <span>الصحيحة: <strong id="score-text">0</strong></span>
+    </div>
+    <div class="progress-dots" id="progress-dots"></div>
+
+    <div class="timer-bar-container" id="timer-container">
+      <div class="timer-bar" id="timer-bar"></div>
+    </div>
+
+    <div class="question-card">
+      <div class="tag-row"><span id="cat-tag" class="cat-tag"></span><span id="diff-tag" class="diff-tag"></span></div>
+      <div class="question-text" id="question-text"></div>
+      <div id="question-extra"></div>
+    </div>
+
+    <div class="options-grid" id="options-container"></div>
+
+    <div class="tools-row"><button class="hint-btn" id="hint-btn" onclick="showHint()">💡 أحتاج تلميحًا</button></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="btn-start next-btn" id="next-btn" onclick="nextQuestion()">السؤال التالي ⬅</button>
+  </div>
+
+  <!-- شاشة النتيجة -->
+  <div id="result-box" class="result-box">
+    <h2>النتيجة النهائية 🏆</h2>
+    <div class="result-score" id="final-percentage">0%</div>
+    <div class="badge" id="level-badge"></div>
+    <p id="feedback-text" style="color: var(--subtext); margin-bottom: 18px; line-height: 1.8;"></p>
+    <div class="stat-row" id="stat-row"></div>
+    <div class="cat-bars" id="cat-bars"></div>
+    <div class="review" id="review"></div>
+    <button class="btn-start" onclick="startQuiz()">إعادة بنفس الإعدادات 🔄</button>
+    <button class="btn-ghost" onclick="resetQuiz()">تغيير الإعدادات ⚙️</button>
+    <button class="btn-ghost" onclick="openInfo()">مراجعة ملخص الدرس ℹ️</button>
+  </div>
+</div>
+
+<!-- نافذة ملخص الدرس -->
+<div class="sheet-overlay" id="sheet-overlay" onclick="if(event.target===this)closeInfo()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="ملخص الدرس">
+    <div class="sheet-head">
+      <h3>📘 ٢-٦ الأعمدة والمسافة</h3>
+      <button class="sheet-close" onclick="closeInfo()" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="sheet-tabs" id="sheet-tabs"></div>
+    <div class="sheet-body" id="sheet-body"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  // ============ محتوى ملخص الدرس (من كتاب الطالب ص ١٢٦–١٣١) ============
+  const LESSON = {
+    badges: ['🌟 خبير المسافات', '👏 متقن', '📘 جيد، يحتاج إلى مراجعة', '📝 ابدأ بمراجعة الملخص'],
+    fbs: ['أداء ممتاز! تحسب البعد بين نقطة ومستقيم وبين مستقيمين متوازيين بثقة.',
+      'مستواك قوي. راجع الأسئلة الخاطئة أدناه لتصل إلى الإتقان.',
+      'أنت في الطريق الصحيح. تذكّر: البعد هو طول القطعة العمودية، وصيغة البعد d = √((x₂ − x₁)² + (y₂ − y₁)²).',
+      'لا بأس، افتح أيقونة (i) واقرأ الملخص وأمثلة الكتاب، ثم جرّب مستوى أسهل.']
+  };
+  const adg = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]);
+  const E = s => '<bdi dir="ltr">' + s + '</bdi>';
+  const svgWrap = (inner, h) => `<svg direction="ltr" viewBox="0 0 320 ${h || 150}" role="img" aria-label="شكل هندسي" style="color:var(--text);width:100%;max-width:340px;display:block;margin:0 auto">${inner}</svg>`;
+  const sTxt = (x, y, t, c, sz) => `<text x="${x}" y="${y}" text-anchor="middle" font-size="${sz || 15}" font-weight="700" font-style="italic" font-family="Georgia,serif" fill="${c || 'currentColor'}">${t}</text>`;
+
+  // مستوى إحداثي: x من −٦ إلى ٦ و y من −٥ إلى ٥. lines: [{p:[x,y], q:[x,y], c}] مستقيمات تمر بنقطتين. pts: [{x,y,t,c}]
+  const gx = x => 160 + x * 24, gy = y => 124 - y * 24;
+  function figGrid(lines, pts) {
+    let s = '<defs><clipPath id="gclip"><rect x="16" y="4" width="288" height="240"/></clipPath></defs>';
+    for (let x = -6; x <= 6; x++) s += `<line x1="${gx(x)}" y1="4" x2="${gx(x)}" y2="244" stroke="currentColor" stroke-opacity="${x === 0 ? 0.9 : 0.16}" stroke-width="${x === 0 ? 1.6 : 1}"/>`;
+    for (let y = -5; y <= 5; y++) s += `<line x1="16" y1="${gy(y)}" x2="304" y2="${gy(y)}" stroke="currentColor" stroke-opacity="${y === 0 ? 0.9 : 0.16}" stroke-width="${y === 0 ? 1.6 : 1}"/>`;
+    s += sTxt(298, gy(0) - 5, 'x', 'currentColor', 12) + sTxt(gx(0) + 9, 14, 'y', 'currentColor', 12) + sTxt(gx(0) - 7, gy(0) + 13, 'O', 'currentColor', 11);
+    (lines || []).forEach(l => {
+      const dx = l.q[0] - l.p[0], dy = l.q[1] - l.p[1], k = 40;
+      s += `<line clip-path="url(#gclip)" x1="${gx(l.p[0] - dx * k)}" y1="${gy(l.p[1] - dy * k)}" x2="${gx(l.p[0] + dx * k)}" y2="${gy(l.p[1] + dy * k)}" stroke="${l.c || 'var(--primary)'}" stroke-width="2.4"/>`;
+    });
+    (pts || []).forEach(p => { s += `<circle cx="${gx(p.x)}" cy="${gy(p.y)}" r="3.6" fill="${p.c || 'var(--danger)'}"/>` + (p.t ? sTxt(gx(p.x) + (p.dx === undefined ? 11 : p.dx), gy(p.y) + (p.dy === undefined ? -7 : p.dy), p.t, p.c || 'var(--danger)', 14) : ''); });
+    return svgWrap(s, 248);
+  }
+  const grid = (lines, pts) => `<div class="viz-box">${figGrid(lines, pts)}</div>`;
+  const pf = rows => '<table class="pf"><tr><th>الخطوة</th><th>المبرر</th></tr>' + rows.map(r => `<tr><td class="eq">${E(r[0])}</td><td>${r[1]}</td></tr>`).join('') + '</table>';
+
+
+  // شكل البعد بين نقطة ومستقيم: labels = [يسار, القدم (العمود), يمين]
+  function figDist(theta, sOff, labels) {
+    const u = [Math.cos(theta), Math.sin(theta)], nu = [Math.sin(theta), -Math.cos(theta)], O = [160, 108];
+    const F = [O[0] + sOff * u[0], O[1] + sOff * u[1]], C = [F[0] + 72 * nu[0], F[1] + 72 * nu[1]];
+    const Lp = [F[0] - 70 * u[0], F[1] - 70 * u[1]], Rp = [F[0] + 74 * u[0], F[1] + 74 * u[1]];
+    const A = [O[0] - 148 * u[0], O[1] - 148 * u[1]], B = [O[0] + 148 * u[0], O[1] + 148 * u[1]];
+    const f = n => n.toFixed(1), ln = (p, q, st) => `<line x1="${f(p[0])}" y1="${f(p[1])}" x2="${f(q[0])}" y2="${f(q[1])}" ${st}/>`;
+    let s = ln(A, B, 'stroke="currentColor" stroke-width="2.2"');
+    [Lp, F, Rp].forEach(p => { s += ln(C, p, 'stroke="var(--primary)" stroke-width="1.8" stroke-dasharray="5 4"'); });
+    const q1 = [F[0] + 10 * u[0], F[1] + 10 * u[1]], q2 = [q1[0] + 10 * nu[0], q1[1] + 10 * nu[1]], q3 = [F[0] + 10 * nu[0], F[1] + 10 * nu[1]];
+    s += `<polyline points="${f(q1[0])},${f(q1[1])} ${f(q2[0])},${f(q2[1])} ${f(q3[0])},${f(q3[1])}" fill="none" stroke="var(--danger)" stroke-width="1.6"/>`;
+    [C, Lp, F, Rp].forEach(p => { s += `<circle cx="${f(p[0])}" cy="${f(p[1])}" r="3.4" fill="var(--danger)"/>`; });
+    s += sTxt(C[0] + 12, C[1] - 4, 'C') + sTxt(Lp[0] - 4, Lp[1] + 18, labels[0]) + sTxt(F[0] + 2, F[1] + 18, labels[1]) + sTxt(Rp[0] + 4, Rp[1] + 18, labels[2]);
+    s += sTxt(A[0] + 8, A[1] - 8, 'A') + sTxt(B[0] - 8, B[1] - 8, 'B');
+    return svgWrap(s, 165);
+  }
+  function figParD() {
+    const th = -0.12, u = [Math.cos(th), Math.sin(th)], n = [-Math.sin(th), Math.cos(th)], O1 = [160, 48], D = 74, f = x => x.toFixed(1);
+    let s = '';
+    [0, 1].forEach(k => { const o = [O1[0] + n[0] * D * k, O1[1] + n[1] * D * k]; s += `<line x1="${f(o[0] - 150 * u[0])}" y1="${f(o[1] - 150 * u[1])}" x2="${f(o[0] + 150 * u[0])}" y2="${f(o[1] + 150 * u[1])}" stroke="currentColor" stroke-width="2.2"/>`; });
+    [-85, 0, 85].forEach(sv => {
+      const p = [O1[0] + sv * u[0], O1[1] + sv * u[1]], q = [p[0] + n[0] * D, p[1] + n[1] * D];
+      s += `<line x1="${f(p[0])}" y1="${f(p[1])}" x2="${f(q[0])}" y2="${f(q[1])}" stroke="var(--danger)" stroke-width="1.8" stroke-dasharray="5 4"/>` + sTxt((p[0] + q[0]) / 2 + 12, (p[1] + q[1]) / 2 + 5, 'd', 'var(--danger)', 14);
+    });
+    return svgWrap(s, 130);
+  }
+  const INFO_TABS = [
+    { id: 'sum', title: '📝 الملخص', html: `
+      <h4>ما فكرة الدرس؟</h4>
+      <p>نحسب <b>أقصر مسافة</b> بين نقطة ومستقيم، وبين مستقيمين متوازيين، وذلك باستعمال القطعة المستقيمة <b>العمودية</b>.</p>
+      <h4>البعد بين نقطة ومستقيم</h4>
+      <div class="idea-card">البعد بين مستقيم ونقطة لا تقع عليه هو <b>طول القطعة المستقيمة العمودية</b> على المستقيم من تلك النقطة. وهو أقصر مسافة بينهما.</div>
+      <div class="viz-box">${figDist(-0.1, 6, ['D', 'E', 'F'])}</div>
+      <p style="text-align:center">القطعة ${E('CE')} عمودية على ${E('AB')} فهي تمثل البعد بين ${E('C')} و${E('AB')}.</p>
+      <h4>مسلّمة التعامد (٢.٦)</h4>
+      <div class="idea-card">لأي مستقيم ونقطة لا تقع عليه يوجد <b>مستقيم واحد فقط</b> يمر بالنقطة ويكون عموديًا على المستقيم المعلوم.</div>
+      <h4>البعد في المستوى الإحداثي</h4>
+      <ol class="steps">
+        <li>أوجد معادلة المستقيم ${E('ℓ')} (ابدأ بالميل).</li>
+        <li>اكتب معادلة المستقيم العمودي ${E('w')} على ${E('ℓ')} والمار بالنقطة ${E('P')} (ميله مقلوب ميل ${E('ℓ')} بإشارة معاكسة).</li>
+        <li>حلّ نظام المعادلتين لإيجاد نقطة التقاطع ${E('Q')}.</li>
+        <li>استعمل صيغة البعد بين نقطتين لإيجاد ${E('PQ')}:<div class="idea-card" style="text-align:center">${E('d = √((x₂ − x₁)² + (y₂ − y₁)²)')}</div></li>
+      </ol>
+      <p><b>إرشاد:</b> البعد بين نقطة والمحور ${E('x')} هو القيمة المطلقة لإحداثيها الصادي ${E('|y|')}، وبينها والمحور ${E('y')} هو ${E('|x|')}.</p>
+      <h4>البعد بين مستقيمين متوازيين</h4>
+      <div class="idea-card">هو المسافة العمودية بين أحد المستقيمين وأي نقطة على المستقيم الآخر. وهو <b>ثابت</b> بين أي نقطة على أحدهما والآخر.</div>
+      <div class="viz-box">${figParD()}</div>
+      <h4>نظرية ٢.٩</h4>
+      <div class="idea-card">إذا كان مستقيمان في المستوى نفسه متساويي البعد عن مستقيم ثالث فإنهما متوازيان.</div>
+      <h4>خطوات إنشاء عمود من نقطة لا تقع على المستقيم</h4>
+      <ol class="steps">
+        <li>ضع الفرجار عند ${E('P')} وارسم قوسًا يقطع المستقيم في موقعين مختلفين، وسمّ نقطتي التقاطع ${E('C, D')}.</li>
+        <li>ضع الفرجار عند ${E('C')} وارسم قوسًا بفتحة أكبر من ${E('½CD')}، وبالفتحة نفسها ارسم من ${E('D')} قوسًا آخر يقطع القوس السابق في ${E('Q')}.</li>
+        <li>استعمل المسطرة لرسم ${E('PQ')}.</li>
+      </ol>` },
+
+    { id: 'ideas', title: '⭐ أفكار أساسية', html: `
+      <div class="idea-card"><b>١) أقصر مسافة:</b> البعد بين نقطة ومستقيم هو طول العمود؛ أي قطعة أخرى من النقطة إلى المستقيم أطول منه.</div>
+      <div class="idea-card"><b>٢) عمود واحد فقط:</b> من نقطة خارج مستقيم يوجد مستقيم وحيد عمودي عليه (مسلّمة ٢.٦).</div>
+      <div class="idea-card"><b>٣) أربع خطوات:</b> معادلة ${E('ℓ')} ⟸ معادلة العمودي ${E('w')} ⟸ نقطة التقاطع ${E('Q')} ⟸ صيغة البعد.</div>
+      <div class="idea-card"><b>٤) ميل العمودي:</b> مقلوب الميل بإشارة معاكسة: ميل ${E('ℓ')} هو ${E('−1')} فميل ${E('w')} هو ${E('1')}.</div>
+      <div class="idea-card"><b>٥) المحوران:</b> البعد عن المحور ${E('x')} هو ${E('|y|')} وعن المحور ${E('y')} هو ${E('|x|')}.</div>
+      <div class="idea-card"><b>٦) متوازيان:</b> البعد بينهما ثابت: ${E('AB = CD = EF = GH')} إذا كانت هذه القطع عمودية عليهما.</div>
+      <div class="idea-card"><b>٧) أفقيان أو رأسيان:</b> البعد بين ${E('y = c₁')} و${E('y = c₂')} هو ${E('|c₁ − c₂|')}، وبين ${E('x = a₁')} و${E('x = a₂')} هو ${E('|a₁ − a₂|')}.</div>
+      <div class="idea-card"><b>٨) في الحياة:</b> أقصر أنبوب يصل منزلًا بالأنبوب الرئيس هو العمودي عليه، والخيط الشاقولي يمثل أقصر مسافة إلى الأرض.</div>` },
+
+    { id: 'vocab', title: '📚 المفردات والتعاريف', html: `
+      <div class="def-card"><span class="term">المسافة العمودية</span><span class="en">perpendicular distance</span><br>أقصر مسافة بين نقطة ومستقيم في جميع الحالات، وهي البعد بين النقطة والمستقيم.</div>
+      <div class="def-card"><span class="term">البعد بين نقطة ومستقيم</span><span class="en">distance from a point to a line</span><br>طول القطعة المستقيمة العمودية على المستقيم من النقطة التي لا تقع عليه.</div>
+      <div class="def-card"><span class="term">البعد بين مستقيمين متوازيين</span><br>المسافة العمودية بين أحد المستقيمين وأي نقطة على المستقيم الآخر.</div>
+      <div class="def-card"><span class="term">المحل الهندسي</span><span class="en">locus</span><br>مجموعة النقاط التي تحقق شرطًا معينًا.</div>
+      <div class="def-card"><span class="term">متساوي البعد</span><span class="en">equidistant</span><br>نقاط أو مستقيمات تبعد المسافة نفسها عن شكل معلوم.</div>
+      <div class="def-card"><span class="term">مسلّمة التعامد (٢.٦)</span><br>لأي مستقيم ونقطة لا تقع عليه يوجد مستقيم واحد فقط يمر بالنقطة ويكون عموديًا على المستقيم المعلوم.</div>
+      <div class="def-card"><span class="term">نظرية ٢.٩</span><br>إذا كان مستقيمان في المستوى نفسه متساويي البعد عن مستقيم ثالث فإنهما متوازيان.</div>` },
+
+    { id: 'ex', title: '✅ أمثلة الكتاب', html: `
+      <div class="ex-card"><div class="ex-t">مثال ١: أقصر قطعة بين نقطة ومستقيم (هندسة مدنية)</div>
+        مهندس يريد وصل النقطة ${E('A')} بخط التصريف ${E('m')} بأقصر أنبوب. القطعة العمودية من ${E('A')} على ${E('m')} هي الأقصر:
+        <ol class="steps">
+          <li>ضع رأس الفرجار عند ${E('A')} وارسم قوسًا يقطع ${E('m')} في ${E('B, C')}.</li>
+          <li>ضع الفرجار عند ${E('B')} وارسم قوسًا بفتحة أكبر من ${E('½BC')}، وارسم قوسًا آخر من ${E('C')} بالفتحة نفسها يقطع القوس السابق في ${E('E')}.</li>
+          <li>ارسم ${E('AE')} وسمِّ تقاطعه مع ${E('BC')} بالنقطة ${E('D')}. الطول ${E('AD')} هو أقصر أنبوب.</li>
+        </ol></div>
+      <div class="ex-card"><div class="ex-t">مثال ٢: البعد بين نقطة ومستقيم في المستوى الإحداثي</div>
+        المستقيم ${E('ℓ')} يمر بالنقطتين ${E('(4, −6)')} و${E('(−5, 3)')}. أوجد البعد بين ${E('ℓ')} والنقطة ${E('P(2, 4)')}.
+        ${pf([['m = (−6 − 3)/(4 − (−5)) = −9/9 = −1', 'الخطوة ١: ميل ℓ'], ['−6 = −1(4) + b ⟹ b = −2', 'عوّض النقطة (4, −6)'], ['ℓ: y = −x − 2', 'معادلة ℓ'], ['ميل w = 1', 'العمودي على ℓ'], ['4 = 1(2) + b ⟹ b = 2', 'عوّض P(2, 4)'], ['w: y = x + 2', 'الخطوة ٢: معادلة w']])}
+        الخطوة ٣: نحلّ النظام: ${E('y = −x − 2')} و${E('y = x + 2')}. بالجمع ${E('2y = 0')} ⟸ ${E('y = 0')}، ثم ${E('0 = x + 2')} ⟸ ${E('x = −2')}. نقطة التقاطع ${E('Q(−2, 0)')}.
+        <div style="margin-top:6px">${grid([{ p: [-5, 3], q: [4, -6] }, { p: [2, 4], q: [-2, 0], c: 'var(--success)' }], [{ x: 2, y: 4, t: 'P' }, { x: -2, y: 0, t: 'Q', c: 'var(--success)' }])}</div>
+        الخطوة ٤: ${E('d = √((−2 − 2)² + (0 − 4)²)')} ${E('= √32')} ${E('≈ 5.66')} وحدة.</div>
+      <div class="ex-card"><div class="ex-t">مثال ٣: المسافة بين مستقيمين متوازيين</div>
+        أوجد البعد بين ${E('ℓ: y = 2x + 1')} و${E('m: y = 2x − 3')}.
+        ${pf([['ميل p = −1/2', 'مقلوب ميل m بإشارة معاكسة'], ['p: y = −½x − 3', 'يمر بالنقطة (0, −3) مقطع m'], ['2x + 1 = −½x − 3', 'تقاطع ℓ و p'], ['(5/2)x = −4 ⟹ x = −8/5', 'بسّط'], ['y = −½(−8/5) − 3 = −11/5', 'عوّض'], ['Q(−1.6, −2.2)', 'نقطة التقاطع']])}
+        <div style="margin-top:6px">${grid([{ p: [0, 1], q: [1, 3] }, { p: [0, -3], q: [1, -1], c: 'var(--success)' }, { p: [0, -3], q: [2, -4], c: 'var(--danger)' }], [{ x: 0, y: -3 }, { x: -1.6, y: -2.2 }])}</div>
+        ${E('d = √((−1.6 − 0)² + (−2.2 − (−3))²)')} ${E('≈ 1.8')} وحدة تقريبًا.</div>` }
+  ];
+  // ============ أدوات عامة ============
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+  function pick(arr) { return arr[randInt(0, arr.length - 1)]; }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(0, i); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function sample(arr, n) { return shuffle(arr).slice(0, n); }
+  const AD = '٠١٢٣٤٥٦٧٨٩';
+  // رقم بالأرقام العربية (والفاصلة العشرية العربية والإشارة السالبة) محصور في اتجاه LTR
+  function N(n) {
+    let s = String(n);
+    const neg = s[0] === '-'; if (neg) s = s.slice(1);
+    s = s.replace(/\d/g, d => AD[+d]).replace('.', '٫');
+    return '⁦' + (neg ? '−' : '') + s + '⁩';
+  }
+  function L(s) { return '⁦' + s + '⁩'; }
+  function digitsAr(s) { return String(s).replace(/\d/g, d => AD[+d]); }
+  function isPrime(n) { if (n < 2) return false; for (let i = 2; i * i <= n; i++) if (n % i === 0) return false; return true; }
+  function isSquare(n) { const r = Math.round(Math.sqrt(n)); return r * r === n; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  // يبني سؤالًا نهائيًا: خيار صحيح + مشتتات (غير مكررة) ثم يخلط الخيارات
+  function build(o) {
+    const seen = new Set([o.correct]);
+    const wr = [];
+    for (const w of o.wrongs) { if (!seen.has(w)) { seen.add(w); wr.push(w); } }
+    const need = o.nOpts || 4;
+    if (wr.length < need - 1) throw new Error('not enough distractors: ' + o.prompt);
+    const picked = o.fixedOrder ? wr.slice(0, need - 1) : sample(wr, need - 1);
+    let options = [o.correct, ...picked];
+    if (o.fixedOrder && o.order) options = o.order.slice();
+    else options = shuffle(options);
+    return {
+      cat: o.cat, d: o.d, prompt: o.prompt, seq: o.seq || null, seqWords: !!o.seqWords, extra: o.extra || '',
+      options, correct: options.indexOf(o.correct), hint: o.hint || '', explain: o.explain || ''
+    };
+  }
+
+  // خيارات عددية: الصحيح + مشتتات من قائمة مرشحة، مع تعبئة تلقائية عند النقص
+  function numWrongs(correct, cands, fmt) {
+    const out = [];
+    const add = v => { if (v !== correct && !out.includes(v)) out.push(v); };
+    cands.forEach(add);
+    let k = 1;
+    while (out.length < 6) { add(correct + k); add(correct - k); k++; }
+    return out.map(fmt);
+  }
+
+
+  // نمط الرموز المنطقية (لتغليفها باتجاه LTR داخل النص العربي)
+  const SYM_ATOM = '~?[pqr]';
+  const SYM_GRP = `(?:~\\(${SYM_ATOM}\\s*[∧∨]\\s*${SYM_ATOM}\\)|~\\(~[pqr]\\)|${SYM_ATOM})`;
+  const SYM_RE_SRC = `(?<![A-Za-z])${SYM_GRP}(?:\\s*[→∧∨]\\s*${SYM_GRP})*(?![A-Za-z])`;
+  const CAT = {
+    dpl: { name: 'البعد بين نقطة ومستقيم', icon: '📏' },
+    coord: { name: 'في المستوى الإحداثي', icon: '📐' },
+    parl: { name: 'بين مستقيمين متوازيين', icon: '↔️' },
+    cons: { name: 'الإنشاء والمحل الهندسي', icon: '🧭' },
+    apply: { name: 'مسائل حياتية', icon: '🏗️' },
+    error: { name: 'اكتشف الخطأ', icon: '🔍' },
+    concepts: { name: 'مفاهيم ومفردات', icon: '💡' }
+  };
+  const DIFF_NAME = { 1: 'سهل', 2: 'متوسط', 3: 'صعب' };
+  const rnd = (lo, hi) => randInt(lo, hi);
+  const MN = '−';
+  const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+  const sgn = n => (n < 0 ? MN : '') + Math.abs(n);
+  const fr = (n, d) => { if (d < 0) { n = -n; d = -d; } const g = gcd(n, d) || 1; n /= g; d /= g; return d === 1 ? sgn(n) : sgn(n) + '/' + d; };
+  const red = (n, d) => { if (d < 0) { n = -n; d = -d; } const g = gcd(n, d) || 1; return [n / g, d / g]; };
+  const par = n => (n < 0 ? `(${MN}${Math.abs(n)})` : String(n));
+  const pt = (x, y) => `(${sgn(x)}, ${sgn(y)})`;
+  const PT = (x, y) => L(pt(x, y));
+  const Lm = s => L(s);
+  const uniq = a => [...new Set(a)];
+  // m = n/d  ->  معامل x
+  function coefX(n, d) { if (d === 1) return n === 1 ? '' : n === -1 ? MN : sgn(n); return `(${fr(n, d)})`; }
+  // y = mx + b   (m=n/d, b=bn/bd)
+  function siEq(n, d, bn, bd) {
+    [n, d] = red(n, d); [bn, bd] = red(bn, bd || 1);
+    if (n === 0) return 'y = ' + fr(bn, bd);
+    return 'y = ' + coefX(n, d) + 'x' + (bn === 0 ? '' : (bn < 0 ? ' − ' : ' + ') + fr(Math.abs(bn), bd));
+  }
+  // y − y1 = m(x − x1)
+  function psEq(n, d, x1, y1) {
+    [n, d] = red(n, d);
+    const c = d === 1 ? (n === 1 ? '' : n === -1 ? MN : sgn(n)) : `(${fr(n, d)})`;
+    const yp = y1 === 0 ? 'y' : `y ${y1 < 0 ? '+' : '−'} ${Math.abs(y1)}`, xp = x1 === 0 ? 'x' : `x ${x1 < 0 ? '+' : '−'} ${Math.abs(x1)}`;
+    return `${yp} = ${c}(${xp})`;
+  }
+  // b = y1 − m x1 (نسبي)
+  const bOf = (n, d, x1, y1) => red(y1 * d - n * x1, d);
+  const mStr = (n, d) => fr(n, d);
+  function pickM(allowOne) {
+    if (Math.random() < 0.6) { let n; do { n = rnd(1, 9) * pick([1, -1]); } while (!allowOne && Math.abs(n) === 1); return [n, 1]; }
+    for (;;) { const n = rnd(1, 5) * pick([1, -1]), d = rnd(2, 5); if (gcd(n, d) === 1) return [n, d]; }
+  }
+  function pickFracM() { for (;;) { const n = rnd(1, 5) * pick([1, -1]), d = rnd(2, 5); if (gcd(n, d) === 1) return [n, d]; } }
+  const nzb = () => rnd(1, 9) * pick([1, -1]);
+  const eqsLs = a => uniq(a).map(Lm);
+
+  // تغليف مقاطع اللاتينية/الرموز باتجاه LTR داخل النص العربي (خارج ما غُلِّف مسبقًا)
+  function autoL(str) {
+    return String(str).split(/(\u2066[^\u2069]*\u2069)/).map(seg => seg.startsWith('\u2066') ? seg : seg.replace(/[A-Za-z][^\u0600-\u06FF،؟<>]*/g, m => { const t = m.replace(/[\s.,:;،]+$/, ''); return L(t) + m.slice(t.length); })).join('');
+  }
+
+
+  // ============ أدوات هندسية ============
+  const isSq = n => Number.isInteger(Math.sqrt(n));
+  const distStr = N => (isSq(N) ? String(Math.sqrt(N)) : '√' + N);
+  const DIRS = [[1, 1], [1, -1], [1, 2], [1, -2], [2, 1], [2, -1], [1, 3], [1, -3], [3, 1], [3, -1], [2, 3], [2, -3], [3, 2], [3, -2]];
+  const DIRS1 = DIRS.filter(d => d[0] === 1);
+  // مستقيم ℓ يمر بالنقطة Q واتجاهه (a,b)، والنقطة P = Q + t(−b, a) (العمود)
+  function mkCoord(dirs, lim) {
+    lim = lim || 9;
+    for (let k = 0; k < 400; k++) {
+      const [a, b] = pick(dirs), Q = [rnd(-5, 5), rnd(-5, 5)], t = pick([-2, -1, 1, 2]), P = [Q[0] - b * t, Q[1] + a * t];
+      const j1 = pick([1, 2]), j2 = pick([1, 2]), A = [Q[0] - a * j1, Q[1] - b * j1], B = [Q[0] + a * j2, Q[1] + b * j2];
+      if ([P, A, B].some(p => Math.abs(p[0]) > lim || Math.abs(p[1]) > lim)) continue;
+      return { a, b, Q, t, P, A, B, N: t * t * (a * a + b * b) };
+    }
+    throw new Error('mkCoord');
+  }
+  const inGrid = pts => pts.every(p => Math.abs(p[0]) <= 6 && Math.abs(p[1]) <= 5);
+  const distWrongs = (N, extra) => uniq([N + 1, N + 2, Math.max(1, N - 1), 2 * N, Math.max(1, N - 2), N + 4].concat(extra || []).filter(x => x !== N && x > 0)).map(x => Lm(distStr(x)));
+  const lineEqStr = (a, b, Q) => { const [mn, md] = red(b, a), [bn, bd] = bOf(mn, md, Q[0], Q[1]); return siEq(mn, md, bn, bd); };
+
+  // ============ 1) البعد بين نقطة ومستقيم ============
+  const DS = ['CD', 'CE', 'CF'];
+  function distFig() {
+    const th = (Math.random() * 0.5 - 0.25), off = rnd(-25, 25), perm = shuffle(['D', 'E', 'F']);
+    return { svg: `<div class="viz-box">${figDist(th, off, perm)}</div>`, foot: perm[1] };
+  }
+  const GEN_DPL = [
+    { d: 1, w: 4, fn() {
+      const f = distFig(), c = L('C' + f.foot), all = ['D', 'E', 'F'].map(x => L('C' + x));
+      return build({ cat: 'dpl', d: 1, nOpts: 3, fixedOrder: true, order: all, prompt: `أي القطع المستقيمة المرسومة تمثل البعد بين النقطة ${L('C')} والمستقيم ${L('AB')}؟`, extra: f.svg, correct: c, wrongs: all.filter(x => x !== c),
+        hint: 'ابحث عن القطعة التي تصنع زاوية قائمة مع المستقيم.', explain: `${c} هي العمودية على ${L('AB')} (عليها علامة الزاوية القائمة)، فهي تمثل البعد.` });
+    } },
+    { d: 1, w: 4, fn() {
+      const f = distFig(), c = L('C' + f.foot), all = ['D', 'E', 'F'].map(x => L('C' + x));
+      return build({ cat: 'dpl', d: 1, nOpts: 3, fixedOrder: true, order: all, prompt: `من النقطة ${L('C')} رُسمت ثلاث قطع إلى المستقيم ${L('AB')}. أي هذه القطع هي الأقصر؟`, extra: f.svg, correct: c, wrongs: all.filter(x => x !== c),
+        hint: 'أقصر مسافة بين نقطة ومستقيم هي المسافة العمودية.', explain: `القطعة العمودية ${c} هي الأقصر، وأي قطعة مائلة أطول منها.` });
+    } },
+    { d: 1, w: 3, fn() {
+      const C = 'البعد بين مستقيم ونقطة لا تقع عليه هو طول القطعة المستقيمة العمودية على المستقيم من تلك النقطة';
+      return build({ cat: 'dpl', d: 1, nOpts: 4, prompt: 'ما البعد بين مستقيم ونقطة لا تقع عليه؟', correct: C, wrongs: ['طول أي قطعة تصل النقطة بالمستقيم', 'طول القطعة المارة بنقطة منتصف المستقيم', 'طول القطعة الموازية للمستقيم'], hint: 'المسافة العمودية.', explain: C + '.' });
+    } },
+    { d: 2, w: 4, fn() {
+      const x = rnd(1, 9) * pick([1, -1]), y = rnd(1, 9) * pick([1, -1]), ax = Math.random() < 0.5;
+      return build({ cat: 'dpl', d: 2, nOpts: 4, prompt: `ما بعد النقطة ${PT(x, y)} عن المحور ${L(ax ? 'x' : 'y')}؟`, correct: Lm(String(Math.abs(ax ? y : x))), wrongs: numWrongs(Math.abs(ax ? y : x), [Math.abs(ax ? x : y), ax ? y : x, Math.abs(x) + Math.abs(y), Math.abs(x - y)], v => Lm(sgn(v))).filter(v => !v.includes(MN)),
+        hint: ax ? 'البعد عن المحور x هو القيمة المطلقة للإحداثي الصادي.' : 'البعد عن المحور y هو القيمة المطلقة للإحداثي السيني.', explain: ax ? `البعد عن المحور ${L('x')} هو ${Lm('|y| = ' + Math.abs(y))}.` : `البعد عن المحور ${L('y')} هو ${Lm('|x| = ' + Math.abs(x))}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      const O = ['مستقيم واحد فقط', 'مستقيمان', 'ثلاثة مستقيمات', 'عدد لا نهائي من المستقيمات'];
+      return build({ cat: 'dpl', d: 2, nOpts: 4, fixedOrder: true, order: O, prompt: `كم مستقيمًا في المستوى يمر بالنقطة ${L('P')} (التي لا تقع على المستقيم ${L('m')}) ويكون عموديًا على ${L('m')}؟`, correct: O[0], wrongs: O.slice(1), hint: 'مسلّمة ٢.٦.', explain: 'بحسب مسلّمة التعامد يوجد مستقيم واحد فقط.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const n = rnd(1, 4), O = ['البعد بين النقطة والمستقيم', 'طول أطول قطعة تصل النقطة بالمستقيم', 'نصف طول المستقيم', 'المسافة بين نقطتين على المستقيم'];
+      return build({ cat: 'dpl', d: 2, nOpts: 4, fixedOrder: true, order: O, prompt: `طول القطعة المستقيمة العمودية من نقطة إلى مستقيم لا تقع عليه يمثل ماذا؟`, correct: O[0], wrongs: O.slice(1), hint: 'أقصر مسافة.', explain: 'المسافة العمودية هي البعد بين النقطة والمستقيم.' });
+    } }
+  ];
+
+  // ============ 2) في المستوى الإحداثي ============
+  const GEN_COORD = [
+    { d: 1, w: 3, fn() {
+      let x1, y1, x2, y2; do { x1 = rnd(-6, 6); y1 = rnd(-6, 6); x2 = rnd(-6, 6); y2 = rnd(-6, 6); } while (x1 === x2 && y1 === y2 || x1 === x2 || y1 === y2);
+      const dx = x2 - x1, dy = y2 - y1, N = dx * dx + dy * dy;
+      return build({ cat: 'coord', d: 1, nOpts: 4, prompt: `ما البعد بين النقطتين ${PT(x1, y1)} و${PT(x2, y2)}؟`, correct: Lm(distStr(N)), wrongs: distWrongs(N, [Math.abs(dx) + Math.abs(dy), Math.abs(dx * dx - dy * dy) || N + 3]),
+        hint: 'd = √((x₂ − x₁)² + (y₂ − y₁)²)', explain: `${Lm(`d = √((${sgn(x2)} − ${par(x1)})² + (${sgn(y2)} − ${par(y1)})²) = √(${dx * dx} + ${dy * dy}) = ${distStr(N)}`)}.` });
+    } },
+    { d: 2, w: 4, fn() {
+      const q = mkCoord(DIRS), [mn, md] = red(q.b, q.a), [wn, wd] = red(-q.a, q.b), [bn, bd] = bOf(wn, wd, q.P[0], q.P[1]), c = siEq(wn, wd, bn, bd);
+      const wr = eqsLs([siEq(mn, md, ...bOf(mn, md, q.P[0], q.P[1])), siEq(-wn, wd, ...bOf(-wn, wd, q.P[0], q.P[1])), siEq(md, mn, ...bOf(md, mn, q.P[0], q.P[1])), siEq(wn, wd, ...red(-bn, bd)), siEq(wn, wd, ...red(bn + bd, bd))]).filter(x => x !== Lm(c));
+      if (wr.length < 3) return GEN_COORD[1].fn();
+      return build({ cat: 'coord', d: 2, nOpts: 4, prompt: `المستقيم ${L('ℓ')} يمر بالنقطتين ${PT(...q.A)} و${PT(...q.B)}. اكتب معادلة المستقيم ${L('w')} العمودي على ${L('ℓ')} والمار بالنقطة ${PT(...q.P)}.`, correct: Lm(c), wrongs: wr,
+        hint: 'احسب ميل ℓ، ثم ميل العمودي، ثم عوّض P.', explain: `ميل ${L('ℓ')} = ${Lm(fr(q.b, q.a))}؛ ميل ${L('w')} = ${Lm(fr(-q.a, q.b))}؛ ثم ${Lm('b = ' + fr(bn, bd))} ⟸ ${Lm(c)}.` });
+    } },
+    { d: 2, w: 4, fn() {
+      for (let t = 0; t < 100; t++) {
+        const q = mkCoord(DIRS1, 6); if (!inGrid([q.P, q.A, q.B, q.Q])) continue;
+        const wr = uniq([[q.Q[0] + 1, q.Q[1]], [q.Q[0], q.Q[1] + 1], [q.Q[0] - 1, q.Q[1]], [q.Q[0], q.Q[1] - 1], [q.Q[1], q.Q[0]], [-q.Q[0], q.Q[1]]].filter(p => !(p[0] === q.Q[0] && p[1] === q.Q[1])).map(p => p.join())).map(s => s.split(',').map(Number));
+        return build({ cat: 'coord', d: 2, nOpts: 4, prompt: `في الشكل المستقيم ${L('ℓ')} والنقطة ${L('P')}. ما إحداثيا النقطة ${L('Q')}، وهي نقطة تقاطع ${L('ℓ')} مع العمود المرسوم من ${L('P')} عليه؟`, extra: grid([{ p: q.A, q: q.B }, { p: q.P, q: q.Q, c: 'var(--success)' }], [{ x: q.P[0], y: q.P[1], t: 'P' }, { x: q.Q[0], y: q.Q[1], t: 'Q', c: 'var(--success)' }].filter((_, i) => i === 0)),
+          correct: PT(...q.Q), wrongs: wr.map(p => PT(...p)), hint: 'ميل العمودي مقلوب ميل ℓ بإشارة معاكسة؛ تحرّك من P.', explain: `النقطة ${L('P' + pt(...q.P))}؛ العمود على ${L('ℓ')} يلتقي به في ${PT(...q.Q)}.` });
+      }
+      return GEN_COORD[1].fn();
+    } },
+    { d: 3, w: 4, fn() {
+      const q = mkCoord(DIRS, 9), fig = inGrid([q.P, q.A, q.B, q.Q]);
+      return build({ cat: 'coord', d: 3, nOpts: 4, prompt: `المستقيم ${L('ℓ')} يمر بالنقطتين ${PT(...q.A)} و${PT(...q.B)}. ما البعد بين ${L('ℓ')} والنقطة ${PT(...q.P)}؟`, extra: fig ? grid([{ p: q.A, q: q.B }], [{ x: q.P[0], y: q.P[1], t: 'P' }]) : '', correct: Lm(distStr(q.N)), wrongs: distWrongs(q.N, [q.t * q.t * (q.a + Math.abs(q.b))]),
+        hint: 'معادلة ℓ ثم معادلة العمودي عليه من P ثم نقطة التقاطع ثم صيغة البعد.', explain: `ميل ${L('ℓ')} = ${Lm(fr(q.b, q.a))}، والعمود من ${L('P')} يقطعه في ${PT(...q.Q)}؛ ${Lm(`d = √((${sgn(q.Q[0])} − ${par(q.P[0])})² + (${sgn(q.Q[1])} − ${par(q.P[1])})²) = ${distStr(q.N)}`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const b = pick([1, -1]), Q = [rnd(-5, 5), rnd(-5, 5)], c1 = Q[1] - b * Q[0], c2 = Q[1] + b * Q[0];
+      return build({ cat: 'coord', d: 3, nOpts: 4, prompt: `المستقيمان ${L('ℓ: ' + siEq(b, 1, c1, 1))} و${L('w: ' + siEq(-b, 1, c2, 1))} متعامدان. ما إحداثيا نقطة تقاطعهما ${L('Q')}؟`, correct: PT(...Q), wrongs: uniq([pt(Q[1], Q[0]), pt(-Q[0], Q[1]), pt(Q[0], -Q[1]), pt(Q[0] + 1, Q[1]), pt(Q[0], Q[1] + 1), pt(Q[0] + 2, Q[1]), pt(Q[0], Q[1] - 2)].filter(s => s !== pt(...Q))).map(Lm),
+        hint: 'ساوِ المعادلتين أو اجمعهما.', explain: `${Lm(`${siEq(b, 1, c1, 1).slice(4)} = ${siEq(-b, 1, c2, 1).slice(4)}`)} ⟸ ${Lm('x = ' + Q[0])}، ثم ${Lm('y = ' + Q[1])}.` });
+    } }
+  ];
+
+  // ============ 3) بين مستقيمين متوازيين ============
+  const eqAB = (A, B, C) => `${A === 1 ? '' : A}x ${B < 0 ? '−' : '+'} ${Math.abs(B) === 1 ? '' : Math.abs(B)}y = ${sgn(C)}`;
+  const GEN_PARL = [
+    { d: 1, w: 4, fn() {
+      const hor = Math.random() < 0.5, v = hor ? 'y' : 'x'; let c1, c2; do { c1 = rnd(-9, 9); c2 = rnd(-9, 9); } while (c1 === c2 || (c1 + c2 === 0 && false));
+      const d = Math.abs(c1 - c2);
+      return build({ cat: 'parl', d: 1, nOpts: 4, prompt: `ما البعد بين المستقيمين المتوازيين ${L(v + ' = ' + sgn(c1))} و${L(v + ' = ' + sgn(c2))}؟`, correct: Lm(String(d)), wrongs: numWrongs(d, [Math.abs(c1) + Math.abs(c2) === d ? d + 2 : Math.abs(c1) + Math.abs(c2), Math.abs(Math.abs(c1) - Math.abs(c2)) || d + 1, c1 + c2 === d || !(c1 + c2) ? d + 3 : Math.abs(c1 + c2), d + 1, d - 1], x => Lm(String(x))).filter(x => !x.includes(MN) && x !== Lm('0')),
+        hint: hor ? 'مستقيمان أفقيان: اطرح القيمتين.' : 'مستقيمان رأسيان: اطرح القيمتين.', explain: `${Lm(`|${sgn(c1)} − (${sgn(c2)})| = ${d}`)} وحدة.` });
+    } },
+    { d: 2, w: 4, fn() {
+      for (let t = 0; t < 100; t++) {
+        const q = mkCoord(DIRS1, 8), Pm = q.P; // ℓ تمر بـ Q، m تمر بـ P
+        const e1 = lineEqStr(q.a, q.b, q.Q), e2 = lineEqStr(q.a, q.b, Pm);
+        return build({ cat: 'parl', d: 2, nOpts: 4, prompt: `ما البعد بين المستقيمين المتوازيين ${L('ℓ: ' + e1)} و${L('m: ' + e2)}؟`, correct: Lm(distStr(q.N)), wrongs: distWrongs(q.N, [Math.abs(q.t) ** 2 * (q.a + Math.abs(q.b))]),
+          hint: 'ارسم عمودًا من نقطة على m إلى ℓ، أو استعمل نقطة مقطع m.', explain: `العمود المشترك بين المستقيمين طوله ${Lm(distStr(q.N))}؛ ويمكن إيجاده بكتابة معادلة عمود على ℓ مارٍ بنقطة من m، ثم إيجاد نقطة التقاطع وصيغة البعد.` });
+      }
+    } },
+    { d: 3, w: 4, fn() {
+      const q = mkCoord(DIRS.filter(d => d[0] !== 1), 9), e1 = lineEqStr(q.a, q.b, q.Q), e2 = lineEqStr(q.a, q.b, q.P);
+      return build({ cat: 'parl', d: 3, nOpts: 4, prompt: `أوجد البعد بين المستقيمين المتوازيين ${L('ℓ: ' + e1)} و${L('m: ' + e2)}.`, correct: Lm(distStr(q.N)), wrongs: distWrongs(q.N, [q.t * q.t * (q.a + Math.abs(q.b))]),
+        hint: 'ميل العمودي مقلوب الميل بإشارة معاكسة؛ أوجد نقطة التقاطع ثم البعد.', explain: `ميل المستقيمين ${Lm(fr(q.b, q.a))}؛ العمود المشترك يصل ${PT(...q.Q)} بـ ${PT(...q.P)}، وطوله ${Lm(distStr(q.N))}.` });
+    } },
+    { d: 3, w: 4, fn() {
+      const s = pick([[1, 1], [1, 2], [1, 3], [2, 1], [3, 1]]), a = s[0], b = s[1], k = pick([1, 2, 3]), D = (a * a + b * b) * k, c1 = rnd(-6, 8), c2 = c1 - D, N = (a * a + b * b) * k * k;
+      return build({ cat: 'parl', d: 3, nOpts: 4, prompt: `أوجد البعد بين المستقيمين المتوازيين ${L(eqAB(a, b, c1))} و${L(eqAB(a, b, c2))}.`, correct: Lm(distStr(N)), wrongs: distWrongs(N, [D * D, D]),
+        hint: 'اكتب المعادلتين بصيغة الميل والمقطع ثم أوجد العمود المشترك.', explain: `الاتجاه العمودي ${Lm(`(${a}, ${b})`)}؛ ${Lm(`d = |${c1} − (${c2})| ÷ √${a * a + b * b} = ${D}/√${a * a + b * b} = ${distStr(N)}`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const k = rnd(2, 5), b1 = rnd(-6, 6), db = rnd(2, 8), b2 = b1 - db, d = db / Math.sqrt(k * k + 1), r = v => Math.round(v * 10) / 10, c = r(d);
+      const cands = uniq([r(db), r(db / (k * k + 1)), r(db / k), r(d + 1), r(d + 0.5), r(Math.max(0.1, d - 0.5)), r(db * k)].filter(v => v !== c && v > 0));
+      return build({ cat: 'parl', d: 3, nOpts: 4, prompt: `أوجد البعد (مقرّبًا إلى أقرب عُشر) بين المستقيمين ${L(siEq(k, 1, b1, 1))} و${L(siEq(k, 1, b2, 1))}.`, correct: Lm('≈ ' + c), wrongs: cands.map(v => Lm('≈ ' + v)),
+        hint: 'استعمل مستقيمًا عموديًا يمر بمقطع أحدهما ثم صيغة البعد.', explain: `${Lm(`d = ${db}/√${k * k + 1} ≈ ${c}`)} وحدة تقريبًا.` });
+    } }
+  ];
+
+  // ============ 4) الإنشاء والمحل الهندسي ============
+  const STEPS = ['ضع الفرجار عند النقطة P وارسم قوسًا يقطع المستقيم في موقعين مختلفين C وD', 'ضع الفرجار عند C وارسم قوسًا بفتحة أكبر من نصف CD، وبالفتحة نفسها ارسم من D قوسًا آخر يقطع القوس السابق في Q', 'استعمل المسطرة لرسم PQ'];
+  const GEN_CONS = [
+    { d: 2, w: 4, fn() {
+      const k = rnd(0, 2), names = ['الأولى', 'الثانية', 'الثالثة'], extraW = 'ارسم مثلثًا قائمًا ثم قسّم أحد أضلاعه إلى جزأين متساويين';
+      return build({ cat: 'cons', d: 2, nOpts: 4, prompt: `عند إنشاء مستقيم عمودي على مستقيم معلوم من نقطة ${L('P')} لا تقع عليه، ما الخطوة ${names[k]}؟`, correct: autoL(STEPS[k]), wrongs: STEPS.filter((_, i) => i !== k).map(autoL).concat([extraW]), hint: 'ابدأ بقوس يقطع المستقيم، ثم قوسان متقاطعان، ثم المسطرة.', explain: autoL(STEPS[k]) + '.' });
+    } },
+    { d: 1, w: 3, fn() {
+      const C = 'الفرجار والمسطرة';
+      return build({ cat: 'cons', d: 1, nOpts: 4, prompt: 'ما الأدوات اللازمة لإنشاء مستقيم عمودي على مستقيم من نقطة لا تقع عليه في الدرس؟', correct: C, wrongs: ['المنقلة فقط', 'المسطرة المدرّجة فقط', 'المثلث القائم فقط'], hint: 'أدوات الإنشاء الهندسي.', explain: 'الإنشاء يتم بالفرجار والمسطرة.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const O = ['متوازيان', 'متعامدان', 'يتقاطعان في نقطة واحدة', 'لا يمكن تحديد العلاقة'];
+      return build({ cat: 'cons', d: 2, nOpts: 4, fixedOrder: true, order: O, prompt: `مستقيمان ${L('ℓ')} و${L('m')} في المستوى نفسه، وكلاهما متساوي البعد عن مستقيم ثالث ${L('n')}. ما العلاقة بين ${L('ℓ')} و${L('m')}؟`, correct: O[0], wrongs: O.slice(1), hint: 'نظرية ٢.٩.', explain: 'بحسب النظرية ٢٫٩: المستقيمان المتساويا البعد عن مستقيم ثالث متوازيان.' });
+    } },
+    { d: 1, w: 3, fn() {
+      const C = 'مجموعة النقاط التي تحقق شرطًا معينًا';
+      return build({ cat: 'cons', d: 1, nOpts: 4, prompt: 'ما المحل الهندسي؟', correct: C, wrongs: ['مجموعة النقاط التي تقع على مستقيم واحد دائمًا', 'نقطة تقاطع مستقيمين فقط', 'طول القطعة العمودية على مستقيم'], hint: 'شرط تحققه مجموعة نقاط.', explain: C + '.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const C = 'المسافة العمودية بين أحد المستقيمين وأي نقطة على المستقيم الآخر';
+      return build({ cat: 'cons', d: 2, nOpts: 4, prompt: 'ما البعد بين مستقيمين متوازيين؟', correct: C, wrongs: ['المسافة بين أي نقطتين عليهما', 'طول أطول قطعة تصل بينهما', 'المسافة بين نقطتي تقاطعهما مع مستقيم ثالث'], hint: 'مسافة عمودية.', explain: C + '.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const C = 'البعد بين أي نقطة على أحدهما والمستقيم الآخر ثابت';
+      return build({ cat: 'cons', d: 2, nOpts: 4, prompt: `قطع مستقيمة ${L('AB, CD, EF, GH')} كلها عمودية على مستقيمين متوازيين. ماذا نستنتج؟`, correct: C + ' وتتساوى هذه القطع', wrongs: ['أطوالها تزداد كلما ابتعدنا', 'المستقيمان متقاطعان', 'لا يمكن مقارنة أطوالها'], hint: 'البعد بين متوازيين.', explain: 'البعد بين مستقيمين متوازيين ثابت، فالقطع العمودية متساوية.' });
+    } },
+    { d: 3, w: 3, fn() {
+      const C = 'مستقيم واحد فقط';
+      return build({ cat: 'cons', d: 3, nOpts: 4, prompt: `ماذا تنص مسلّمة التعامد (٢٫٦) على عدد المستقيمات المارة بنقطة لا تقع على مستقيم والعمودية عليه؟`, correct: C, wrongs: ['مستقيمان', 'عدد لا نهائي منها', 'لا يوجد أي مستقيم'], hint: 'مسلّمة ٢.٦.', explain: 'يوجد مستقيم واحد فقط يمر بالنقطة ويكون عموديًا على المستقيم المعلوم.' });
+    } },
+    { d: 3, w: 3, fn() {
+      const C = 'متساوي البعد';
+      return build({ cat: 'cons', d: 3, nOpts: 4, prompt: 'ما المصطلح الذي يصف نقاطًا تبعد المسافة نفسها عن شكل معلوم؟', correct: C, wrongs: ['متعامد', 'متخالف', 'متقاطع'], hint: 'من مفردات الدرس.', explain: 'متساوي البعد (equidistant).' });
+    } }
+  ];
+
+  // ============ 5) مسائل حياتية ============
+  const GEN_APPLY = [
+    { d: 1, w: 4, fn() {
+      const O = ['الممر A', 'الممر B', 'الممر C'];
+      let a; do { a = shuffle([rnd(35, 60), rnd(61, 79), rnd(80, 89)]); } while (new Set(a).size < 3);
+      const best = a.indexOf(Math.max(...a)), c = O[best];
+      return build({ cat: 'apply', d: 1, nOpts: 3, fixedOrder: true, order: O, prompt: `يعبر راشد ساحة مستقيمة الحافة من موقعه إلى حافتها عبر ثلاثة ممرات. الممر ${L('A')} يصنع مع الحافة زاوية ${L(a[0] + '°')}، والممر ${L('B')} ${L(a[1] + '°')}، والممر ${L('C')} ${L(a[2] + '°')}. أي الممرات الثلاثة هو الأقصر؟`, correct: c, wrongs: O.filter(x => x !== c),
+        hint: 'الأقصر هو الأقرب إلى التعامد مع الحافة.', explain: `الأقصر هو العمودي على الحافة، أي الأقرب إلى ${L('90°')}: ${c} (${L(a[best] + '°')}).` });
+    } },
+    { d: 1, w: 3, fn() {
+      const C = 'الأنبوب العمودي على الأنبوب الرئيس';
+      return build({ cat: 'apply', d: 1, nOpts: 4, prompt: 'تريد مؤسسة المياه توصيل منزل بالأنبوب الرئيس في الشارع بأقصر أنبوب ممكن. أي الأنابيب يكون الأقصر؟', correct: C, wrongs: ['الأنبوب المائل بزاوية 45° على الأنبوب الرئيس', 'الأنبوب الموازي للأنبوب الرئيس', 'أي أنبوب يصل إلى الأنبوب الرئيس'], hint: 'أقصر مسافة بين نقطة ومستقيم.', explain: 'أقصر مسافة هي المسافة العمودية، فالأنبوب العمودي هو الأقصر.' });
+    } },
+    { d: 1, w: 2, fn() {
+      const C = 'أقصر مسافة بين نقطة التعليق والأرض';
+      return build({ cat: 'apply', d: 1, nOpts: 4, prompt: 'يُستعمل الخيط الشاقولي لإنشاء خط رأسي. طول الخيط المتدلي بحرية من نقطة التعليق إلى الأرض يمثل ماذا؟', correct: C, wrongs: ['مسافة مائلة بين نقطة التعليق والأرض', 'أطول مسافة بين نقطة التعليق والأرض', 'المسافة بين نقطتين على الأرض'], hint: 'الخيط عمودي على مستوى الأرض.', explain: 'الخيط الشاقولي عمودي على الأرض فهو أقصر مسافة.' });
+    } },
+    { d: 2, w: 3, fn() {
+      const x = rnd(5, 40) * 2;
+      return build({ cat: 'apply', d: 2, nOpts: 4, prompt: `درجات سلم ${L('AB, CD, EF')} عمودية على قضيبين متوازيين، وطول ${L('AB')} يساوي ${L(x + ' cm')}. ما طول ${L('EF')}؟`, correct: Lm(x + ' cm'), wrongs: [Lm(2 * x + ' cm'), Lm(x / 2 + ' cm'), Lm(x + 6 + ' cm')], hint: 'البعد بين متوازيين ثابت.', explain: `البعد بين المستقيمين المتوازيين ثابت، فطول ${L('EF')} = ${L(x + ' cm')}.` });
+    } },
+    { d: 3, w: 4, fn() {
+      const q = mkCoord(DIRS, 9);
+      const ctx = pick([['مدينة', 'طريق سريع مستقيم', 'أقصر طريق'], ['بئر', 'أنبوب رئيس مستقيم', 'أقصر وصلة'], ['منزل', 'كابل كهرباء رئيس مستقيم', 'أقصر وصلة كهربائية']]);
+      return build({ cat: 'apply', d: 3, nOpts: 4, prompt: `على المستوى الإحداثي (الوحدة كيلومتر): ${ctx[0]} عند ${PT(...q.P)}، و${ctx[1]} يمر بالنقطتين ${PT(...q.A)} و${PT(...q.B)}. ما طول ${ctx[2]} يصل ${ctx[0] === 'مدينة' ? 'المدينة' : ctx[0] === 'بئر' ? 'البئر' : 'المنزل'} بالخط؟`, correct: Lm(distStr(q.N) + ' km'), wrongs: distWrongs(q.N, [q.t * q.t * (q.a + Math.abs(q.b))]).map(x => x.replace('⁩', ' km⁩')),
+        hint: 'العمود من النقطة على الخط هو الأقصر.', explain: `الأقصر هي القطعة العمودية: ميل الخط ${Lm(fr(q.b, q.a))} والعمود يقطعه في ${PT(...q.Q)}؛ طولها ${Lm(distStr(q.N) + ' km')}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      let c1, c2; do { c1 = rnd(-9, 9); c2 = rnd(-9, 9); } while (c1 === c2);
+      const hor = Math.random() < 0.5, d = Math.abs(c1 - c2);
+      return build({ cat: 'apply', d: 2, nOpts: 4, prompt: `شارعان مستقيمان متوازيان معادلتاهما ${L((hor ? 'y' : 'x') + ' = ' + sgn(c1))} و${L((hor ? 'y' : 'x') + ' = ' + sgn(c2))} (الوحدة ١٠٠ متر). ما أقصر مسافة (بالوحدات) بين الشارعين؟`, correct: Lm(String(d)), wrongs: numWrongs(d, [Math.abs(c1) + Math.abs(c2) === d ? d + 2 : Math.abs(c1) + Math.abs(c2), d + 1, d - 1, 2 * d], x => Lm(String(x))).filter(x => !x.includes(MN) && x !== Lm('0')),
+        hint: 'البعد بين مستقيمين أفقيين أو رأسيين هو الفرق بين القيمتين.', explain: `${Lm(`|${sgn(c1)} − (${sgn(c2)})| = ${d}`)}.` });
+    } }
+  ];
+
+  // ============ 6) اكتشف الخطأ ============
+  const MIS = [
+    { s: 'البعد بين نقطة ومستقيم هو طول أي قطعة تصل النقطة بالمستقيم.', c: 'هو طول القطعة العمودية فقط', w: ['هو طول أطول قطعة تصل النقطة بالمستقيم', 'هو طول القطعة الموازية للمستقيم', 'لا خطأ في العبارة'] },
+    { s: 'من نقطة لا تقع على مستقيم يمكن رسم عدة مستقيمات عمودية عليه.', c: 'يوجد مستقيم واحد فقط عمودي عليه من النقطة (مسلّمة ٢.٦)', w: ['يوجد مستقيمان فقط', 'لا يوجد أي مستقيم عمودي عليه', 'لا خطأ في العبارة'] },
+    { s: 'البعد بين مستقيمين متوازيين يتغير من نقطة إلى أخرى.', c: 'البعد بين المستقيمين المتوازيين ثابت', w: ['البعد بينهما يتزايد باستمرار', 'البعد بينهما صفر دائمًا', 'لا خطأ في العبارة'] },
+    { s: 'البعد بين مستقيمين متوازيين هو المسافة بين أي نقطتين عليهما.', c: 'هو المسافة العمودية بين أحدهما ونقطة على الآخر', w: ['هو طول القطعة المائلة بينهما', 'هو المسافة بين نقطتين على المستقيم نفسه', 'لا خطأ في العبارة'] },
+    { s: 'إذا كان مستقيمان متساويي البعد عن مستقيم ثالث فإنهما متعامدان.', c: 'يكونان متوازيين (نظرية ٢.٩)', w: ['يكونان متقاطعين دائمًا', 'يكونان متطابقين دائمًا', 'لا خطأ في العبارة'] },
+    { s: 'البعد بين النقطة (3, −5) والمحور x يساوي 3.', c: 'البعد عن المحور x هو |y| = 5', w: ['البعد عن المحور x هو −5', 'البعد عن المحور x هو 8', 'لا خطأ في العبارة'] }
+  ];
+  const GEN_ERR = [
+    { d: 1, w: 3, fn() {
+      const it = pick(MIS);
+      return build({ cat: 'error', d: 1, nOpts: 4, prompt: `قال طالب: «${autoL(it.s)}»<br>ما الخطأ في كلامه؟`, correct: it.c, wrongs: it.w, hint: 'راجع تعريف البعد.', explain: it.c + '.' });
+    } },
+    { d: 2, w: 4, fn() {
+      let a, b; do { a = rnd(2, 9); b = -rnd(2, 9); } while (a === -b);
+      const hor = Math.random() < 0.5, v = hor ? 'y' : 'x', right = a - b, wrong = a + b;
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `حسب طالب البعد بين المستقيمين ${L(v + ' = ' + a)} و${L(v + ' = ' + sgn(b))} فكتب ${L(String(Math.abs(wrong)))}. ما الخطأ؟`, correct: `طرح ${Math.abs(b)} بدل أن يطرح ${sgn(b)}؛ فالبعد هو ${a} − (${sgn(b)}) = ${right}`, wrongs: ['استعمل صيغة البعد بين نقطتين خطأً', 'نسي الجذر التربيعي', 'لا خطأ في الحل'], hint: 'اطرح القيمتين بالإشارتين.', explain: `${Lm(`|${a} − (${sgn(b)})| = ${right}`)}.` });
+    } },
+    { d: 2, w: 3, fn() {
+      let x1, y1, x2, y2; do { x1 = rnd(-6, 6); y1 = rnd(-6, 6); x2 = rnd(-6, 6); y2 = rnd(-6, 6); } while (x1 === x2 || y1 === y2);
+      const dx = x2 - x1, dy = y2 - y1, N = dx * dx + dy * dy;
+      return build({ cat: 'error', d: 2, nOpts: 4, prompt: `حسب طالب البعد بين ${PT(x1, y1)} و${PT(x2, y2)} فكتب ${Lm(`d = √(${sgn(x2)} + ${par(x1)})² + (${sgn(y2)} + ${par(y1)})²)`.replace('√(', '√(('))}. ما الخطأ؟`, correct: 'جمع الإحداثيين بدل أن يطرحهما', wrongs: ['نسي أن يربّع الفرق', 'قسم بدل أن يضرب', 'لا خطأ في الحل'], hint: 'd = √((x₂ − x₁)² + (y₂ − y₁)²).', explain: `الصحيح ${Lm(`d = √(${dx * dx} + ${dy * dy}) = ${distStr(N)}`)}.` });
+    } },
+    { d: 3, w: 3, fn() {
+      const q = mkCoord(DIRS, 9);
+      return build({ cat: 'error', d: 3, nOpts: 4, prompt: `لإيجاد البعد بين ${PT(...q.P)} والمستقيم المار بالنقطتين ${PT(...q.A)} و${PT(...q.B)}، كتب طالب معادلة المستقيم المار بـ ${L('P')} والموازي لهما ثم أوجد نقطة التقاطع. ما الخطأ؟`, correct: 'يجب استعمال المستقيم العمودي على المستقيم المعلوم وليس الموازي له', wrongs: ['يجب استعمال مستقيم ميله ٠', 'يجب أن يمر المستقيم بالنقطة B', 'لا خطأ في الحل'], hint: 'البعد = المسافة العمودية.', explain: 'المستقيمان المتوازيان لا يتقاطعان، والبعد يُقاس على العمود.' });
+    } },
+    { d: 3, w: 3, fn() {
+      const N = pick([32, 18, 50, 20, 45, 8]);
+      return build({ cat: 'error', d: 3, nOpts: 4, prompt: `وجد طالب أن ${Lm('(−2 − 2)² + (0 − 4)² = ' + N)} وكتب أن البعد ${Lm('d = ' + N)}. ما الخطأ؟`.replace('(−2 − 2)² + (0 − 4)² = ' + N, '(x₂ − x₁)² + (y₂ − y₁)² = ' + N), correct: 'نسي أخذ الجذر التربيعي، فالبعد هو ' + '√' + N, wrongs: ['نسي أن يضيف ٢ إلى الناتج', 'استعمل القسمة بدل الجمع', 'لا خطأ في الحل'], hint: 'صيغة البعد فيها جذر تربيعي.', explain: `الصحيح ${Lm('d = √' + N)}.` });
+    } }
+  ];
+
+  // ============ 7) مفاهيم ومفردات ============
+  const TERMS = [['perpendicular distance', 'المسافة العمودية'], ['distance from a point to a line', 'البعد بين نقطة ومستقيم'], ['locus', 'المحل الهندسي'], ['equidistant', 'متساوي البعد']];
+  const CONCEPTS = [
+    { d: 1, q: 'ما <b>المسافة العمودية</b> بين نقطة ومستقيم؟', c: 'أقصر مسافة بين النقطة والمستقيم في جميع الحالات', w: ['أطول مسافة بينهما', 'أي مسافة بينهما', 'المسافة بين نقطتين على المستقيم'], h: 'عمودية = أقصر.', e: 'المسافة العمودية هي البعد بين النقطة والمستقيم.' },
+    { d: 1, q: 'ما <b>المحل الهندسي</b>؟', c: 'مجموعة النقاط التي تحقق شرطًا معينًا', w: ['نقطة تقاطع مستقيمين', 'قطعة مستقيمة عمودية', 'مستقيم يمر بنقطتين'], h: 'شرط تحققه مجموعة نقاط.', e: 'المحل الهندسي: مجموعة نقاط تحقق شرطًا.' },
+    { d: 1, q: 'ما صيغة البعد بين النقطتين (x₁, y₁) و(x₂, y₂)؟', c: 'd = √((x₂ − x₁)² + (y₂ − y₁)²)', w: ['d = (x₂ − x₁) + (y₂ − y₁)', 'd = √((x₂ + x₁)² + (y₂ + y₁)²)', 'd = (x₂ − x₁)² + (y₂ − y₁)²'], h: 'جذر مجموع مربعي الفرقين.', e: 'نربّع فرق الإحداثيين ونجمعهما ثم نأخذ الجذر.' },
+    { d: 2, q: 'ما ميل المستقيم العمودي على مستقيم ميله −١؟', c: '١', w: ['−١', '٠', 'غير معرّف'], h: 'حاصل الضرب −١.', e: '(−١) × ١ = −١.' },
+    { d: 2, q: 'ما الخطوة الأخيرة في إيجاد البعد بين نقطة ومستقيم في المستوى الإحداثي؟', c: 'استعمال صيغة البعد بين النقطة ونقطة التقاطع', w: ['إيجاد ميل المستقيم المعلوم', 'رسم المستقيم الموازي', 'تعيين نقطة المقطع'], h: 'أربع خطوات.', e: 'بعد إيجاد Q نحسب PQ بصيغة البعد.' },
+    { d: 2, q: 'ما العلاقة بين مستقيمين في المستوى متساويي البعد عن مستقيم ثالث؟', c: 'متوازيان', w: ['متعامدان', 'متقاطعان في نقطة واحدة', 'متخالفان'], h: 'نظرية ٢.٩.', e: 'المستقيمان المتساويا البعد عن ثالث متوازيان.' },
+    { d: 2, q: 'ما بعد نقطة عن المحور y؟', c: 'القيمة المطلقة لإحداثيها السيني', w: ['القيمة المطلقة لإحداثيها الصادي', 'مجموع إحداثييها', 'ضعف إحداثيها السيني'], h: 'إرشاد الكتاب.', e: 'البعد عن المحور y هو |x|.' },
+    { d: 3, q: 'ما العدد الذي يعبر عن البعد بين المستقيمين y = 7 و y = −3؟', c: '١٠', w: ['٤', '٧', '٣'], h: '|7 − (−3)|', e: '|٧ − (−٣)| = ١٠.' },
+    { d: 3, q: 'لماذا تتساوى أطوال القطع العمودية بين مستقيمين متوازيين؟', c: 'لأن البعد بين مستقيمين متوازيين ثابت', w: ['لأن المستقيمين متعامدان', 'لأن القطع كلها مائلة', 'لأن المستقيمين يتقاطعان'], h: 'تعريف البعد بين متوازيين.', e: 'البعد بينهما ثابت بين أي نقطة على أحدهما والآخر.' },
+    { d: 3, q: 'ما الذي تنص عليه مسلّمة التعامد (٢٫٦)؟', c: 'لأي مستقيم ونقطة لا تقع عليه يوجد مستقيم واحد فقط يمر بالنقطة ويكون عموديًا عليه', w: ['يوجد عدد لا نهائي من الأعمدة من نقطة على مستقيم', 'المتوازيان لا يتقاطعان أبدًا', 'البعد بين متوازيين دائمًا صفر'], h: 'عمود واحد فقط.', e: 'يوجد مستقيم واحد فقط عمودي.' }
+  ];
+  const GEN_CONCEPTS = CONCEPTS.map(c => ({ d: c.d, fn: () => build({ cat: 'concepts', d: c.d, prompt: autoL(c.q), correct: c.c, wrongs: c.w, hint: c.h, explain: c.e }) }));
+  GEN_CONCEPTS.push({ d: 1, w: 3, fn() {
+    const t = pick(TERMS), toAr = Math.random() < 0.5, others = TERMS.filter(x => x !== t);
+    return build({ cat: 'concepts', d: 1, nOpts: 4, prompt: toAr ? `ما الترجمة العربية للمصطلح ${L(t[0])}؟` : `ما المصطلح الإنجليزي لـ «${t[1]}»؟`, correct: toAr ? t[1] : L(t[0]), wrongs: others.map(x => toAr ? x[1] : L(x[0])), hint: 'من مفردات الدرس.', explain: `${L(t[0])} = ${t[1]}.` });
+  } });
+
+  const GENS = { dpl: GEN_DPL, coord: GEN_COORD, parl: GEN_PARL, cons: GEN_CONS, apply: GEN_APPLY, error: GEN_ERR, concepts: GEN_CONCEPTS };
+  const LEVEL_W = { weak: { 1: 1 }, good: { 1: 3, 2: 2 }, very_good: { 1: 1, 2: 2, 3: 2 }, excellent: { 2: 1, 3: 3 }, custom: { 1: 1, 2: 1, 3: 1 } };
+  function makeQuestion(cat, level) {
+    const w = LEVEL_W[level] || LEVEL_W.custom;
+    let pool = GENS[cat].filter(g => w[g.d]);
+    if (!pool.length) pool = GENS[cat];
+    const weights = pool.map(g => (w[g.d] || 1) * (g.w || 1)), tot = weights.reduce((a, b) => a + b, 0);
+    let r = Math.random() * tot, g = pool[0];
+    for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) { g = pool[i]; break; } }
+    const q = g.fn();
+    q.options = q.options.map(autoL); q.hint = autoL(q.hint); q.explain = autoL(q.explain);
+    return q;
+  }
+  // ============ حالة الاختبار والواجهة ============
+  const LEVELS = { weak: { n: 5, t: 0 }, good: { n: 10, t: 25 }, very_good: { n: 15, t: 20 }, excellent: { n: 20, t: 15 } };
+  let mode = 'dpl', level = 'weak', customTimed = false;
+  const selectedCats = new Set(Object.keys(CAT));
+  let questions = [], idx = 0, score = 0, answers = [], answered = false, hintUsed = false;
+  let perQ = 0, tInterval = null, tEnd = 0, tRemain = 0, tPaused = false;
+  const $ = id => document.getElementById(id);
+
+  function showToast(msg, type) {
+    const t = $('toast'); t.textContent = msg; t.className = 'toast show toast-' + type;
+    clearTimeout(showToast._t); showToast._t = setTimeout(() => t.className = 'toast', 1500);
+  }
+
+  function buildCats() {
+    $('cats-container').innerHTML = '';
+    Object.keys(CAT).forEach(k => {
+      const b = document.createElement('button');
+      b.className = 'cat-btn' + (selectedCats.has(k) ? ' active' : '');
+      b.textContent = CAT[k].icon + ' ' + CAT[k].name;
+      b.onclick = () => {
+        if (selectedCats.has(k)) { if (selectedCats.size === 1) return showToast('اختر قسمًا واحدًا على الأقل', 'error'); selectedCats.delete(k); }
+        else selectedCats.add(k);
+        b.classList.toggle('active', selectedCats.has(k));
+      };
+      $('cats-container').appendChild(b);
+    });
+  }
+  function setMode(m, el) {
+    mode = m;
+    document.querySelectorAll('#mode-grid .mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    $('cats-wrapper').style.display = m === 'mixed' ? 'block' : 'none';
+  }
+  function selectLevel(l, el) {
+    level = l;
+    document.querySelectorAll('.level-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    $('custom-options').style.display = l === 'custom' ? 'block' : 'none';
+  }
+  function setCustomTimeMode(on) {
+    customTimed = on;
+    $('custom-time-yes').classList.toggle('active', on);
+    $('custom-time-no').classList.toggle('active', !on);
+    $('custom-time-input-wrapper').style.display = on ? 'block' : 'none';
+  }
+
+  // ============ توليد الأسئلة ============
+  function generateSet(n, cats, lvl) {
+    const order = [];
+    const bag = shuffle(cats);
+    for (let i = 0; i < n; i++) order.push(bag[i % bag.length]);
+    const seen = new Set(), out = [];
+    shuffle(order).forEach(cat => {
+      let q = null;
+      for (let tries = 0; tries < 40; tries++) {
+        try { q = makeQuestion(cat, lvl); } catch (e) { q = null; continue; }
+        const key = q.prompt + '|' + (q.seq || '') + '|' + q.extra + '|' + q.options[q.correct];
+        if (!seen.has(key)) { seen.add(key); break; }
+      }
+      if (q) out.push(q);
+    });
+    return out;
+  }
+
+  function startQuiz() {
+    let n, t;
+    if (level === 'custom') {
+      n = Math.max(1, Math.min(60, parseInt($('custom-count').value) || 10));
+      t = customTimed ? Math.max(1, Math.min(120, parseInt($('custom-time-seconds').value) || 20)) : 0;
+    } else { n = LEVELS[level].n; t = LEVELS[level].t; }
+    const cats = mode === 'mixed' ? [...selectedCats] : [mode];
+    questions = generateSet(n, cats, level);
+    perQ = t; idx = 0; score = 0; answers = [];
+    $('setup-box').style.display = 'none';
+    $('result-box').style.display = 'none';
+    $('quiz-box').style.display = 'block';
+    $('total-q').textContent = digitsAr(questions.length);
+    $('timer-container').style.display = perQ ? 'block' : 'none';
+    $('progress-dots').innerHTML = questions.map(() => '<div class="dot"></div>').join('');
+    window.scrollTo(0, 0);
+    showQuestion();
+  }
+
+  // ============ المؤقت ============
+  function stopTimer() { clearInterval(tInterval); tInterval = null; }
+  function runTimer() {
+    stopTimer(); tEnd = Date.now() + tRemain;
+    tInterval = setInterval(() => {
+      const left = tEnd - Date.now();
+      $('timer-bar').style.width = Math.max(0, left / (perQ * 1000) * 100) + '%';
+      $('timer-bar').style.background = left < perQ * 1000 * 0.25 ? 'var(--danger)' : 'var(--primary)';
+      if (left <= 0) { stopTimer(); choose(-1); }
+    }, 100);
+  }
+
+  // ============ عرض السؤال ============
+  function showQuestion() {
+    answered = false; hintUsed = false;
+    const q = questions[idx];
+    $('current-q').textContent = digitsAr(idx + 1);
+    $('score-text').textContent = digitsAr(score);
+    [...$('progress-dots').children].forEach((d, i) => {
+      d.className = 'dot' + (i === idx ? ' cur' : answers[i] ? (answers[i].ok ? ' ok' : ' bad') : '');
+    });
+    $('cat-tag').textContent = CAT[q.cat].icon + ' ' + CAT[q.cat].name;
+    $('diff-tag').textContent = DIFF_NAME[q.d];
+    $('question-text').innerHTML = q.prompt;
+    let extra = '';
+    if (q.seq) extra += `<div class="seq-box${q.seqWords ? ' words' : ''}">${q.seq}</div>`;
+    extra += q.extra;
+    $('question-extra').innerHTML = extra;
+
+    const box = $('options-container'); box.innerHTML = '';
+    const long = q.options.some(o => o.length > 14);
+    box.className = 'options-grid' + (long ? ' text-options' : '');
+    q.options.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'option-btn' + (long ? ' option-text' : '');
+      b.textContent = o; b.onclick = () => choose(i);
+      box.appendChild(b);
+    });
+    const hb = $('hint-btn');
+    hb.style.display = ($('hints-on').checked && q.hint) ? 'block' : 'none';
+    hb.disabled = false; hb.parentElement.style.display = hb.style.display;
+    $('hint-box').style.display = 'none';
+    $('feedback').style.display = 'none';
+    $('next-btn').style.display = 'none';
+
+    if (perQ) {
+      tRemain = perQ * 1000; $('timer-bar').style.width = '100%'; $('timer-bar').style.background = 'var(--primary)';
+      if (!isInfoOpen()) runTimer(); else tPaused = true;
+    }
+  }
+
+  function showHint() {
+    const q = questions[idx]; if (answered) return;
+    hintUsed = true; $('hint-box').innerHTML = '💡 ' + esc(q.hint); $('hint-box').style.display = 'block';
+    $('hint-btn').disabled = true;
+  }
+
+  function choose(i) {
+    if (answered) return; answered = true; stopTimer();
+    const q = questions[idx], ok = i === q.correct, timeout = i === -1;
+    if (ok) score++;
+    answers[idx] = { q, chosen: i, ok, hint: hintUsed, timeout };
+    [...$('options-container').children].forEach((b, k) => {
+      b.disabled = true;
+      if (k === q.correct) b.classList.add('correct');
+      else if (k === i) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    $('hint-btn').disabled = true;
+    $('score-text').textContent = digitsAr(score);
+    $('progress-dots').children[idx].className = 'dot ' + (ok ? 'ok' : 'bad');
+    const fb = $('feedback');
+    fb.className = 'feedback ' + (ok ? 'ok' : 'bad');
+    fb.innerHTML = `<b class="verdict">${ok ? '✅ إجابة صحيحة' : timeout ? '⏰ انتهى الوقت' : '❌ إجابة غير صحيحة'}</b>` +
+      (ok ? '' : `الإجابة الصحيحة: <b>${esc(q.options[q.correct])}</b><br>`) + q.explain;
+    fb.style.display = 'block';
+    const nb = $('next-btn'); nb.textContent = idx === questions.length - 1 ? 'عرض النتيجة 🏆' : 'السؤال التالي ⬅'; nb.style.display = 'block';
+    fb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function nextQuestion() {
+    if (!answered) return;
+    if (idx >= questions.length - 1) return showResult();
+    idx++; showQuestion(); window.scrollTo(0, 0);
+  }
+
+  // ============ النتيجة ============
+  function showResult() {
+    stopTimer();
+    $('quiz-box').style.display = 'none'; $('result-box').style.display = 'block';
+    const total = questions.length, pct = Math.round(score / total * 100);
+    $('final-percentage').textContent = digitsAr(pct) + '٪';
+    let badge, fb;
+    if (pct >= 90) { badge = LESSON.badges[0]; fb = LESSON.fbs[0]; }
+    else if (pct >= 75) { badge = LESSON.badges[1]; fb = LESSON.fbs[1]; }
+    else if (pct >= 50) { badge = LESSON.badges[2]; fb = LESSON.fbs[2]; }
+    else { badge = LESSON.badges[3]; fb = LESSON.fbs[3]; }
+    $('level-badge').textContent = badge; $('feedback-text').textContent = fb;
+    const hints = answers.filter(a => a && a.hint).length;
+    $('stat-row').innerHTML = `<div class="stat"><b style="color:var(--success)">${digitsAr(score)}</b><span>صحيحة</span></div>` +
+      `<div class="stat"><b style="color:var(--danger)">${digitsAr(total - score)}</b><span>خاطئة</span></div>` +
+      `<div class="stat"><b>${digitsAr(hints)}</b><span>تلميحات مستخدمة</span></div>`;
+    // الأداء حسب القسم
+    const by = {}; answers.forEach(a => { if (!a) return; const c = a.q.cat; by[c] = by[c] || { t: 0, ok: 0 }; by[c].t++; if (a.ok) by[c].ok++; });
+    const keys = Object.keys(by);
+    $('cat-bars').innerHTML = keys.length > 1 ? '<div class="section-title">الأداء حسب القسم</div>' + keys.map(k => {
+      const p = Math.round(by[k].ok / by[k].t * 100);
+      return `<div class="cat-bar-row"><span class="nm">${CAT[k].icon} ${CAT[k].name}</span><span class="bar"><i style="width:${p}%"></i></span><span class="pc">${digitsAr(by[k].ok)}/${digitsAr(by[k].t)}</span></div>`;
+    }).join('') : '';
+    // مراجعة الأخطاء
+    const wrong = answers.filter(a => a && !a.ok);
+    $('review').innerHTML = wrong.length ? '<h3>🔎 راجع أخطاءك</h3>' + wrong.map(a => {
+      const q = a.q;
+      return `<div class="rev-item"><div class="rq">${q.prompt}${q.seq ? '<br>' + q.seq.replace('<span class="q">؟</span>', '؟') : ''}${q.extra || ''}</div>` +
+        `<div class="yours">إجابتك: ${a.chosen === -1 ? 'لم تجب (انتهى الوقت)' : esc(q.options[a.chosen])}</div>` +
+        `<div class="right">الصحيحة: ${esc(q.options[q.correct])}</div><div>${q.explain}</div></div>`;
+    }).join('') : '<div class="rev-item" style="border-right-color:var(--success)">🎉 لا توجد أخطاء. إجاباتك كلها صحيحة!</div>';
+    window.scrollTo(0, 0);
+  }
+  function resetQuiz() {
+    stopTimer();
+    $('result-box').style.display = 'none'; $('quiz-box').style.display = 'none'; $('setup-box').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // يلفّ الرموز المنطقية (مثل ~p ∧ q) بعنصر LTR حتى لا ينقلب ترتيبها في النص العربي
+  function ltrify(root) {
+    const re = new RegExp(SYM_RE_SRC, 'g');
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (w.nextNode()) nodes.push(w.currentNode);
+    nodes.forEach(n => {
+      if (n.parentNode.closest && n.parentNode.closest('.en,th,td,bdi')) return;
+      const t = n.nodeValue; re.lastIndex = 0; if (!re.test(t)) return; re.lastIndex = 0;
+      const f = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(t))) {
+        f.appendChild(document.createTextNode(t.slice(last, m.index)));
+        const b = document.createElement('bdi'); b.dir = 'ltr'; b.textContent = m[0]; f.appendChild(b); last = m.index + m[0].length;
+      }
+      f.appendChild(document.createTextNode(t.slice(last))); n.parentNode.replaceChild(f, n);
+    });
+  }
+
+  // ============ نافذة ملخص الدرس ============
+  let infoTab = 'sum';
+  function isInfoOpen() { return $('sheet-overlay').classList.contains('open'); }
+  function renderInfo() {
+    $('sheet-tabs').innerHTML = INFO_TABS.map(t => `<button class="sheet-tab${t.id === infoTab ? ' active' : ''}" onclick="setInfoTab('${t.id}')">${t.title}</button>`).join('');
+    $('sheet-body').innerHTML = INFO_TABS.find(t => t.id === infoTab).html;
+    ltrify($('sheet-body'));
+    $('sheet-body').scrollTop = 0;
+  }
+  function setInfoTab(id) { infoTab = id; renderInfo(); }
+  function openInfo() {
+    renderInfo(); $('sheet-overlay').classList.add('open'); document.body.style.overflow = 'hidden';
+    if (tInterval) { tRemain = Math.max(0, tEnd - Date.now()); stopTimer(); tPaused = true; }
+  }
+  function closeInfo() {
+    $('sheet-overlay').classList.remove('open'); document.body.style.overflow = '';
+    if (tPaused && perQ && !answered && $('quiz-box').style.display === 'block') { tPaused = false; runTimer(); }
+    tPaused = false;
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && isInfoOpen()) return closeInfo();
+    if (isInfoOpen() || $('quiz-box').style.display !== 'block') return;
+    if (/^[1-4]$/.test(e.key) && !answered) { const i = +e.key - 1; if (i < questions[idx].options.length) choose(i); }
+    else if ((e.key === 'Enter' || e.key === ' ') && answered) { e.preventDefault(); nextQuestion(); }
+  });
+
+  buildCats();
+</script>
+
+<!-- SM-AUTO-INJECTED:START:admin-scripts -->
+<script id="admin-scripts">
+    const username = "BLOXMAM";
+    const repo = "app_web";
+    const currentFileName = "perp_distance.html";
+    let APP_LOGO_ACTIVE = false;
+    let appLogoLiveHtml = null;
+    let currentPageTitle = null;
+    let smSearchPagesData = [];
+
+    function smGoToPage(file) {
+        if (typeof Android !== "undefined" && Android.openLocalPage) {
+            Android.openLocalPage(file);
+        } else {
+            window.location.href = file;
+        }
+    }
+
+    function smNormalizeSearchText(s) {
+        if (!s) return "";
+        return String(s)
+            .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x0660); })
+            .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x06F0); })
+            .replace(/[\u064B-\u0652\u0670]/g, "")
+            .replace(/[إأآا]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .toLowerCase()
+            .replace(/[\s\-_.,\/]+/g, "")
+            .trim();
+    }
+
+    function smToggleSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (!overlay) return;
+        if (overlay.classList.contains("open")) { smCloseSearchPanel(); return; }
+        overlay.classList.add("open");
+        smPerformSearch("");
+        setTimeout(function () { const inp = document.getElementById("smSearchInput"); if (inp) inp.focus(); }, 50);
+    }
+
+    function smCloseSearchPanel() {
+        const overlay = document.getElementById("smSearchOverlay");
+        if (overlay) overlay.classList.remove("open");
+    }
+
+    function smPerformSearch(query) {
+        const resultsEl = document.getElementById("smSearchResults");
+        if (!resultsEl) return;
+        const nq = smNormalizeSearchText(query);
+        const searchable = (smSearchPagesData || []).filter(function (p) { return p.searchEnabled !== false && p.file !== "searchbyrostrick.html"; });
+        let matches;
+        if (!nq) {
+            matches = searchable.filter(function (p) { return !p.hidden; });
+        } else {
+            matches = searchable.filter(function (p) {
+                const candidates = [p.title, p.file.replace(/\.html$/i, "")].concat(Array.isArray(p.searchNames) ? p.searchNames : []);
+                return candidates.some(function (c) { return smNormalizeSearchText(c).indexOf(nq) !== -1; });
+            });
+        }
+        if (matches.length === 0) {
+            resultsEl.innerHTML = "<li class=\"sm-search-empty\">لا توجد نتائج مطابقة</li>";
+            return;
+        }
+        resultsEl.innerHTML = matches.map(function (p) {
+            const icon = p.icon || "fa-solid fa-file";
+            const title = (p.title || p.file.replace(/\.html$/i, "")).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return "<li class=\"sm-search-result-item\" onclick=\"smCloseSearchPanel(); smGoToPage('" + p.file + "');\"><i class=\"" + icon + "\"></i><span>" + title + "</span></li>";
+        }).join("");
+    }
+
+    function escLogoText(s) {
+        return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function applyPageHeaderState() {
+        const headerEl = document.getElementById("pageMainHeader");
+        if (!headerEl) return;
+        if (APP_LOGO_ACTIVE && appLogoLiveHtml) {
+            headerEl.innerHTML = appLogoLiveHtml;
+        } else if (!APP_LOGO_ACTIVE && currentPageTitle) {
+            headerEl.innerText = currentPageTitle;
+        }
+    }
+
+    function applyAppLogoConfig(cfg) {
+        if (cfg && cfg.enabled && cfg.type === "text" && cfg.text) {
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = escLogoText(cfg.text);
+        } else if (cfg && cfg.enabled && cfg.type === "image" && (cfg.image_uploaded_path || cfg.image_url)) {
+            const src = cfg.image_uploaded_path ? `https://raw.githubusercontent.com/${username}/${repo}/main/${cfg.image_uploaded_path}` : cfg.image_url;
+            APP_LOGO_ACTIVE = true;
+            appLogoLiveHtml = '<img src="' + src + '" alt="Logo" style="max-height:32px; max-width:160px; vertical-align:middle; display:inline-block;">';
+        } else {
+            APP_LOGO_ACTIVE = false;
+            appLogoLiveHtml = null;
+        }
+        applyPageHeaderState();
+    }
+
+    async function fetchAppLogoConfig() {
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("app_logo.json");
+                if (localData && localData.trim() !== "") {
+                    applyAppLogoConfig(JSON.parse(localData));
+                    return;
+                }
+            }
+            const res = await fetch(`app_logo.json?t=${Date.now()}`);
+            if (res.ok) {
+                applyAppLogoConfig(await res.json());
+                return;
+            }
+            throw new Error();
+        } catch(e) {
+            try {
+                const resAlt = await fetch(`https://raw.githubusercontent.com/${username}/${repo}/main/app_logo.json?t=${Date.now()}`);
+                if (resAlt.ok) applyAppLogoConfig(await resAlt.json());
+            } catch(err) { console.log("خطأ في جلب إعدادات لوجو التطبيق"); }
+        }
+    }
+
+    function initUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const saved = localStorage.getItem("user-theme") || "light";
+        if(saved === "dark") {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        } else {
+            document.documentElement.removeAttribute("data-user-theme");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        }
+    }
+
+    function toggleUserTheme() {
+        const toggleBtn = document.getElementById("userThemeToggleBtn");
+        const current = document.documentElement.getAttribute("data-user-theme");
+        if(current === "dark") {
+            document.documentElement.removeAttribute("data-user-theme");
+            localStorage.setItem("user-theme", "light");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        } else {
+            document.documentElement.setAttribute("data-user-theme", "dark");
+            localStorage.setItem("user-theme", "dark");
+            if(toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+    }
+
+    function toggleDrawer() {
+        const drawer = document.getElementById("drawer");
+        const overlay = document.getElementById("drawerOverlay");
+        const menuBtn = document.getElementById("menuBtnToggle");
+        
+        drawer.classList.toggle("open");
+        
+        if(drawer.classList.contains("open")) {
+            overlay.style.display = "block";
+            menuBtn.classList.add("active-icon");
+        } else {
+            overlay.style.display = "none";
+            menuBtn.classList.remove("active-icon");
+        }
+    }
+
+    function renderDrawerContent(orderedPages) {
+        const drawerMenu = document.getElementById("drawerDynamicMenu");
+        drawerMenu.innerHTML = "";
+        smSearchPagesData = Array.isArray(orderedPages) ? orderedPages : [];
+        const currentPageData = orderedPages.find(p => p.file === currentFileName);
+        if (currentPageData && currentPageData.title) {
+            currentPageTitle = currentPageData.title;
+            applyPageHeaderState();
+            if(document.getElementById("drawerSideHeader")) document.getElementById("drawerSideHeader").innerText = currentPageData.title;
+            if(document.getElementById("pageContentTitle")) document.getElementById("pageContentTitle").innerText = currentPageData.title;
+            document.title = currentPageData.title;
+        }
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (bottomNavList) bottomNavList.innerHTML = "";
+        const goToPage = (file) => {
+            if (typeof Android !== "undefined" && Android.openLocalPage) {
+                Android.openLocalPage(file);
+            } else {
+                window.location.href = file;
+            }
+        };
+        orderedPages.forEach(page => {
+            if (page.hidden) return;
+            const isCurrent = (page.file === currentFileName);
+            const li = document.createElement("li");
+            li.className = "drawer-item";
+            li.innerHTML = "<span>" + page.title + "</span>";
+            li.onclick = () => { if (!isCurrent) goToPage(page.file); };
+            drawerMenu.appendChild(li);
+
+            if (bottomNavList) {
+                const navLi = document.createElement("li");
+                navLi.className = "bottom-navbar-item" + (isCurrent ? " active" : "");
+                const iconName = page.icon || "fa-solid fa-file";
+                navLi.innerHTML = "<i class=\"" + iconName + "\"></i><span>" + page.title + "</span>";
+                navLi.onclick = () => { if (!isCurrent) goToPage(page.file); };
+                bottomNavList.appendChild(navLi);
+            }
+        });
+        if (bottomNavList) {
+            const activeNavItem = bottomNavList.querySelector(".bottom-navbar-item.active");
+            if (activeNavItem) {
+                setTimeout(() => {
+                    activeNavItem.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+                }, 0);
+            }
+        }
+        smUpdateBottomNavFit();
+    }
+
+    function smUpdateBottomNavFit() {
+        const bottomNavbar = document.getElementById("bottomNavbar");
+        const bottomNavList = document.getElementById("bottomNavbarList");
+        if (!bottomNavbar || !bottomNavList) return;
+        bottomNavList.classList.remove("sm-nav-fit");
+        const fits = bottomNavList.scrollWidth <= bottomNavbar.clientWidth + 1;
+        bottomNavList.classList.toggle("sm-nav-fit", fits);
+    }
+    window.addEventListener("resize", smUpdateBottomNavFit);
+
+    async function loadGlobalVars() {
+        try {
+            const res = await fetch("var.json");
+            if(res.ok) {
+                const data = await res.json();
+                const styleEl = document.createElement("style");
+                let cssStr = ":root {\n";
+                for(let k in data.light) { cssStr += `  ${k}: ${data.light[k]};\n`; }
+                cssStr += "}\n[data-user-theme='dark'] {\n";
+                for(let k in data.dark) { cssStr += `  ${k}: ${data.dark[k]};\n`; }
+                cssStr += "}";
+                styleEl.innerHTML = cssStr;
+                document.head.appendChild(styleEl);
+            }
+        } catch(e) { console.log("خطأ في تطبيق المتغيرات العامة"); }
+    }
+
+    async function initDrawer() {
+        initUserTheme();
+        await loadGlobalVars();
+        const loader = document.getElementById("drawerLoader");
+        let loadedSuccessfully = false;
+        try {
+            if (typeof Android !== "undefined" && Android.readLocalFile) {
+                const localData = Android.readLocalFile("order.json");
+                if (localData && localData.trim() !== "") {
+                    const orderedPages = JSON.parse(localData);
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                }
+            }
+            if (!loadedSuccessfully) {
+                const res = await fetch(`order.json`);
+                if (res.ok) {
+                    const orderedPages = await res.json();
+                    renderDrawerContent(orderedPages);
+                    loadedSuccessfully = true;
+                } else { throw new Error(); }
+            }
+        } catch(e) { 
+            if (!loadedSuccessfully) {
+                try {
+                    const resAlt = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/order.json`);
+                    const dataAlt = await resAlt.json();
+                    const decodedContent = decodeURIComponent(escape(atob(dataAlt.content.replace(/\s/g, ""))));
+                    renderDrawerContent(JSON.parse(decodedContent));
+                } catch(err) { console.log("خطأ في جلب الهيدر"); }
+            }
+        } finally {
+            if(loader) loader.style.display = "none";
+        }
+    }
+    initDrawer();
+    fetchAppLogoConfig();
+</script>
+<!-- SM-AUTO-INJECTED:END:admin-scripts -->
+</body>
+</html>
