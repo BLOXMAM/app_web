@@ -8,14 +8,6 @@
     "searchNames": []
   },
   {
-    "file": "proving_parallel.html",
-    "title": "proving_parallel",
-    "icon": "fa-solid fa-file",
-    "hidden": false,
-    "searchEnabled": true,
-    "searchNames": []
-  },
-  {
     "file": "Admingames.html",
     "title": "-الإدارة2-",
     "icon": "fa-solid fa-wrench",
@@ -130,6 +122,14 @@
   {
     "file": "postulates_proofs.html",
     "title": "المسلمات والبراهين الحرة",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "proving_parallel.html",
+    "title": "إثبات توازي مستقيمين",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
