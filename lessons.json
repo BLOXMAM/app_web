@@ -44,6 +44,16 @@
           "type": "link"
         }
       ]
+    },
+    {
+      "title": "التوازي والتعامد",
+      "lessons": [
+        {
+          "name": "المستقيمان والقاطع",
+          "href": "lines_transversal.html",
+          "type": "link"
+        }
+      ]
     }
   ]
 }
