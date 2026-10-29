@@ -88,6 +88,14 @@
     "searchNames": []
   },
   {
+    "file": "eq_of_line.html",
+    "title": "eq_of_line",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
     "file": "home.html",
     "title": "الرئيسية",
     "icon": "fa-solid fa-file",
@@ -114,6 +122,14 @@
   {
     "file": "parallel_angles.html",
     "title": "الزوايا والمستقيمات المتوازية",
+    "icon": "fa-solid fa-file",
+    "hidden": true,
+    "searchEnabled": true,
+    "searchNames": []
+  },
+  {
+    "file": "perp_distance.html",
+    "title": "الأعمدة والمسافة",
     "icon": "fa-solid fa-file",
     "hidden": true,
     "searchEnabled": true,
